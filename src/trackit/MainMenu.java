@@ -11,6 +11,7 @@ public class MainMenu extends JFrame {
 
     // <editor-fold defaultstate="collapsed" desc="Private Fields">
     // </editor-fold>
+  
     // <editor-fold defaultstate="collapsed" desc="Components">
     JPanel pnlMain = new JPanel();
     // </editor-fold>
