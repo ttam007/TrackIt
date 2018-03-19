@@ -11,21 +11,22 @@ use TrackItDB;
 DELIMITER ;
 
 /*lookups*/
-ALTER TABLE items DROP FOREIGN KEY fk_items_lookups;
-ALTER TABLE orders DROP FOREIGN KEY fk_orders_lookups;
+ALTER TABLE items DROP FOREIGN KEY fk_items_lookups_sizeUnit;
+ALTER TABLE items DROP FOREIGN KEY fk_items_lookups_itemStatus;
+ALTER TABLE orders DROP FOREIGN KEY fk_orders_lookups_orderStatus;
 DROP TABLE IF EXISTS lookups;
 
 /*suppliers*/
-ALTER TABLE orders DROP FOREIGN KEY fk_orders_suppliers;
+ALTER TABLE orders DROP FOREIGN KEY fk_orders_suppliers_orderedFrom;
 DROP TABLE IF EXISTS suppliers;
 
 /*orders*/
-ALTER TABLE orderItems DROP FOREIGN KEY fk_orderItems_orders;
+ALTER TABLE orderItems DROP FOREIGN KEY fk_orderItems_orders_orderId;
 DROP TABLE IF EXISTS orders;
 
 /*items*/
-ALTER TABLE orderItems DROP FOREIGN KEY fk_orderItems_items;
-ALTER TABLE inventory DROP FOREIGN KEY fk_inventory_items;
+ALTER TABLE orderItems DROP FOREIGN KEY fk_orderItems_items_itemId;
+ALTER TABLE inventory DROP FOREIGN KEY fk_inventory_items_itemId;
 DROP TABLE IF EXISTS items;
 
 /*orderItems*/
@@ -63,8 +64,8 @@ CREATE TABLE orders (
     orderStatus VARCHAR (32) NOT NULL,
     dateExpected DATE NULL,
     PRIMARY KEY (orderId),
-    CONSTRAINT fk_orders_suppliers FOREIGN KEY (orderedFrom) REFERENCES suppliers(supplierId),
-    CONSTRAINT fk_orders_lookups FOREIGN KEY (orderStatus) REFERENCES lookups(listValue)
+    CONSTRAINT fk_orders_suppliers_orderedFrom FOREIGN KEY (orderedFrom) REFERENCES suppliers(supplierId),
+    CONSTRAINT fk_orders_lookups_orderStatus FOREIGN KEY (orderStatus) REFERENCES lookups(listValue)
    );
 
 CREATE TABLE items (
@@ -73,9 +74,11 @@ CREATE TABLE items (
     sku VARCHAR(32) NULL,
     sizeAmount FLOAT(6,2) UNSIGNED NULL,
     sizeUnit VARCHAR(32) NULL,
+    itemStatus VARCHAR(32) NOT NULL,
     isHidden BIT NOT NULL DEFAULT 0,
     PRIMARY KEY (itemId),
-    CONSTRAINT fk_items_lookups FOREIGN KEY (sizeUnit) REFERENCES lookups(listValue)
+    CONSTRAINT fk_items_lookups_sizeUnit FOREIGN KEY (sizeUnit) REFERENCES lookups(listValue),
+    CONSTRAINT fk_items_lookups_itemStatus FOREIGN KEY (itemStatus) REFERENCES lookups(listValue)
     );
     
 CREATE TABLE orderItems (
@@ -84,10 +87,8 @@ CREATE TABLE orderItems (
     itemId INT UNSIGNED NOT NULL,
     quantityOrdered INT UNSIGNED NOT NULL DEFAULT 1,
     PRIMARY KEY (orderItemId),
-    CONSTRAINT fk_orderItems_orders FOREIGN KEY (orderId)
-        REFERENCES orders (orderId),
-    CONSTRAINT fk_orderItems_items FOREIGN KEY (itemId)
-        REFERENCES items (itemId)
+    CONSTRAINT fk_orderItems_orders_orderId FOREIGN KEY (orderId) REFERENCES orders (orderId),
+    CONSTRAINT fk_orderItems_items_itemId FOREIGN KEY (itemId) REFERENCES items (itemId)
 );
 
 CREATE TABLE inventory (
@@ -96,7 +97,7 @@ CREATE TABLE inventory (
     quantity INT UNSIGNED NOT NULL DEFAULT 0,
     expirationDate DATE NULL,
     PRIMARY KEY (inventoryId),
-    CONSTRAINT fk_inventory_items FOREIGN KEY (itemId)
+    CONSTRAINT fk_inventory_items_itemId FOREIGN KEY (itemId)
         REFERENCES items (itemId)
 );
 
@@ -497,6 +498,9 @@ INSERT INTO lookups (listName, listValue) VALUES ('sizeUnits', 'gallon');
 INSERT INTO lookups (listName, listValue) VALUES ('orderStatuses', 'Ordered');
 INSERT INTO lookups (listName, listValue) VALUES ('orderStatuses', 'Shipping');
 INSERT INTO lookups (listName, listValue) VALUES ('orderStatuses', 'Arrived');
+INSERT INTO lookups (listName, listValue) VALUES ('itemStatuses', 'Available');
+INSERT INTO lookups (listName, listValue) VALUES ('itemStatuses', 'Discontinued');
+INSERT INTO lookups (listName, listValue) VALUES ('itemStatuses', 'Do Not Replace');
 
 /*suppliers*/
 INSERT INTO suppliers (nickname, URL) VALUES ('Amazon', 'https://www.amazon.com/');
