@@ -1,4 +1,4 @@
-package trackit.UI;
+package trackit;
 
 import java.awt.*;
 import java.awt.event.*;

@@ -1,29 +1,28 @@
-package trackit.DAL;
+package trackit;
 
 import java.sql.*;
 import java.util.*;
-import trackit.Order;
 
 /**
- * Handles all the CRUD operations for Orders.
+ * Handles all the CRUD operations for Items.
  */
-public class SQLHelperOrders
-        extends SQLHelper<Order>
-        implements ISQLHelper<Order> {
+public class SQLHelperItems
+        extends SQLHelper<Item>
+        implements ISQLHelper<Item> {
 
     /**
      *
      * @return @throws SQLException
      */
     @Override
-    public ArrayList<Order> selectAll()
+    public ArrayList<Item> selectAll()
             throws SQLException {
-        ArrayList<Order> results = new ArrayList<>();
+        ArrayList<Item> results = new ArrayList<>();
 
         HashMap<Integer, String> params = new HashMap<>();
-        ResultSet rs = super.execSproc("sp_Orders_Select", params);
+        ResultSet rs = super.execSproc("sp_Items_Select", params);
         while (rs.next()) {
-            Order anObj = new Order();
+            Item anObj = new Item();
             //Populate anObj properties from rs.
             results.add(anObj);
         }
@@ -32,31 +31,31 @@ public class SQLHelperOrders
     }
 
     @Override
-    public ArrayList<Order> selectOne(Integer primaryKey)
+    public ArrayList<Item> selectOne(Integer primaryKey)
             throws SQLException {
         return new ArrayList<>();
     }
 
     @Override
-    public void insertAll(List<Order> aList)
+    public void insertAll(List<Item> aList)
             throws SQLException {
 
     }
 
     @Override
-    public void insert(Order anObject)
+    public void insert(Item anObject)
             throws SQLException {
 
     }
 
     @Override
-    public void updateAll(List<Order> aList)
+    public void updateAll(List<Item> aList)
             throws SQLException {
 
     }
 
     @Override
-    public void update(Order anObject)
+    public void update(Item anObject)
             throws SQLException {
 
     }

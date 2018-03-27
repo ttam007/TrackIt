@@ -1,24 +1,16 @@
 package trackit;
 
-import trackit.DAL.IDataAwareObject;
-import java.sql.*;
 import java.util.*;
 
 /**
- * BAL Layer that handles the inventory features.
+ * Handles the inventory features.
  */
-public class Inventory
-        implements IDataAwareObject, IItemHandler {
+public class Inventory {
 
     // <editor-fold defaultstate="collapsed" desc="Constants">
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Fields">
-    /**
-     * Can not be final as the primary key is not set until a save is done.
-     */
-    private Integer primaryKey = null;
-
-    private final ArrayList<Item> items = new ArrayList<>();
+    private ArrayList<Item> items = new ArrayList<>();
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -30,64 +22,30 @@ public class Inventory
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
-    @Override
-    public Integer getPrimaryKey() {
-        return this.primaryKey;
-    }
-
-    @Override
-    public void setPrimaryKey(Integer primaryKey)
-            throws IllegalArgumentException {
-        if (this.primaryKey == null) {
-            throw new IllegalArgumentException();
-        }
-        this.primaryKey = primaryKey;
-    }
-
-    @Override
-    public void load()
-            throws IllegalArgumentException, SQLException {
-
-    }
-
-    @Override
-    public void load(Integer primaryKey)
-            //Set primary key property first, then call load().
-            throws IllegalArgumentException, SQLException {
-
-    }
-
-    @Override
-    public void save()
-            throws SQLException {
-        //Saves to database, then sets primaryKey value.
-    }
-
-    @Override
-    public void remove()
-            throws SQLException {
-
-    }
-
-    @Override
+    /**
+     * Adds an item, or updates quantity if already in inventory.
+     *
+     * @param anItem
+     */
     public void addItem(Item anItem) {
 
     }
 
-    @Override
-    public void removeItem(Item anItem) {
-
-    }
-
-    @Override
-    public void reduceItem(Item anItem, Integer quantity)
+    /**
+     * Remove the specified quantity of the specified item.
+     *
+     * @param anItem The item to remove.  If @quantity = 0, then remove all.
+     * @param quantity The amount to remove.  0 = all; > 0 that specific amount.
+     * @throws NegativeAmountException If quantity > 0 and > current item's quantity.
+     */
+    public void removeItem(Item anItem, int quantity)
             throws NegativeAmountException {
 
     }
-
-    public ArrayList<Item> getExpiredItems() {
+    
+    public ArrayList<Item> getExpiredItems(){
         ArrayList<Item> returnValue = new ArrayList<>();
-
+        
         return returnValue;
     }
     // </editor-fold>

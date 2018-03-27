@@ -5,13 +5,13 @@ import java.awt.event.*;
 import javax.swing.*;
 
 /**
- * BAL Layer that handles all things related to the Main Menu.
+ * UI layer that handles all things related to the inventory.
  */
-public class MainMenu extends JFrame {
+public class InventoryUI extends JFrame {
 
     JPanel pnlMain = new JPanel();
 
-    public MainMenu() {
+    public InventoryUI() {
         initializeComponents();
     }
 
@@ -19,12 +19,11 @@ public class MainMenu extends JFrame {
         final int frameWidth = 1200;
         final int frameHeight = 600;
         final Dimension dimFrame = new Dimension(frameWidth, frameHeight);
-        this.setTitle("TrackIt - Main Menu");
+        this.setTitle("TrackIt - Inventory");
         this.setPreferredSize(dimFrame);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        this.addWindowListener(new CloseQuery());
         this.add(this.pnlMain);
         this.pack();
     }
@@ -32,17 +31,5 @@ public class MainMenu extends JFrame {
     public void display() {
         System.out.println("Displaying ...");
         this.setVisible(true);
-    }
-
-    private class CloseQuery extends WindowAdapter {
-
-        @Override
-        public void windowClosing(WindowEvent e) {
-            JFrame frame = (JFrame) e.getSource();
-            int result = JOptionPane.showConfirmDialog(frame, "Are you done with this program?", "Exit Program", JOptionPane.YES_NO_OPTION);
-            if (result == JOptionPane.YES_OPTION) {
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            }
-        }
     }
 }
