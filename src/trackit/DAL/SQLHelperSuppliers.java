@@ -1,28 +1,29 @@
-package trackit;
+package trackit.DAL;
 
 import java.sql.*;
 import java.util.*;
+import trackit.Supplier;
 
 /**
- * Handles all the CRUD operations for Orders.
+ * Handles all the CRUD operations for Suppliers.
  */
-public class SQLHelperOrders
-        extends SQLHelper<Order>
-        implements ISQLHelper<Order> {
+public class SQLHelperSuppliers
+        extends SQLHelper<Supplier>
+        implements ISQLHelper<Supplier> {
 
     /**
      *
      * @return @throws SQLException
      */
     @Override
-    public ArrayList<Order> selectAll()
+    public ArrayList<Supplier> selectAll()
             throws SQLException {
-        ArrayList<Order> results = new ArrayList<>();
+        ArrayList<Supplier> results = new ArrayList<>();
 
         HashMap<Integer, String> params = new HashMap<>();
-        ResultSet rs = super.execSproc("sp_Orders_Select", params);
+        ResultSet rs = super.execSproc("sp_Suppliers_Select", params);
         while (rs.next()) {
-            Order anObj = new Order();
+            Supplier anObj = new Supplier();
             //Populate anObj properties from rs.
             results.add(anObj);
         }
@@ -31,31 +32,31 @@ public class SQLHelperOrders
     }
 
     @Override
-    public ArrayList<Order> selectOne(Integer primaryKey)
+    public ArrayList<Supplier> selectOne(Integer primaryKey)
             throws SQLException {
         return new ArrayList<>();
     }
 
     @Override
-    public void insertAll(List<Order> aList)
+    public void insertAll(List<Supplier> aList)
             throws SQLException {
 
     }
 
     @Override
-    public void insert(Order anObject)
+    public void insert(Supplier anObject)
             throws SQLException {
 
     }
 
     @Override
-    public void updateAll(List<Order> aList)
+    public void updateAll(List<Supplier> aList)
             throws SQLException {
 
     }
 
     @Override
-    public void update(Order anObject)
+    public void update(Supplier anObject)
             throws SQLException {
 
     }

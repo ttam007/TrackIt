@@ -1,4 +1,4 @@
-package trackit;
+package trackit.DAL;
 
 import java.sql.*;
 import java.util.*;

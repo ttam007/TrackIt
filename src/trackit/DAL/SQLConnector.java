@@ -1,4 +1,4 @@
-package trackit;
+package trackit.DAL;
 
 import java.sql.*;
 
@@ -8,7 +8,7 @@ import java.sql.*;
 public class SQLConnector {
 
     // <editor-fold defaultstate="collapsed" desc="Constants">
-    private String DRIVER = "com.mysql.jdbc.Driver";
+    private final String DRIVER = "com.mysql.jdbc.Driver";
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Fields">
     /**
@@ -90,7 +90,7 @@ public class SQLConnector {
      * @return True = the connection string is correct; False = the connection
      * string is incorrect.
      */
-    public boolean validateConnection() {
+    public boolean isValidConnection() {
         boolean isValid = false;
 
         return isValid;

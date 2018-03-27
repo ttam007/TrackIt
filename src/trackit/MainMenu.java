@@ -1,48 +1,49 @@
 package trackit;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
+import java.util.*;
 
 /**
- * BAL Layer that handles all things related to the Main Menu.
+ * BAL layer that handles all aspects of the Main Menu.
  */
-public class MainMenu extends JFrame {
+public class MainMenu {
 
-    JPanel pnlMain = new JPanel();
+    private final ArrayList<Dashboard> dashboards = new ArrayList<>();
 
     public MainMenu() {
-        initializeComponents();
+        createDashboards();
     }
 
-    private void initializeComponents() {
-        final int frameWidth = 1200;
-        final int frameHeight = 600;
-        final Dimension dimFrame = new Dimension(frameWidth, frameHeight);
-        this.setTitle("TrackIt - Main Menu");
-        this.setPreferredSize(dimFrame);
-        this.setLocationRelativeTo(null);
-        this.setResizable(false);
-        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        this.addWindowListener(new CloseQuery());
-        this.add(this.pnlMain);
-        this.pack();
+    /**
+     * Populates ArrayList<Dashboard> dashboards.
+     */
+    private void createDashboards() {
+        //Create objects, then ...
+        refreshDashboards();
     }
 
-    public void display() {
-        System.out.println("Displaying ...");
-        this.setVisible(true);
+    /**
+     * Refreshes the data in the current dashboards.
+     */
+    private void refreshDashboards() {
+
     }
 
-    private class CloseQuery extends WindowAdapter {
+    public ArrayList<Dashboard> getDashboards() {
+        refreshDashboards();
+        return this.dashboards;
+    }
 
-        @Override
-        public void windowClosing(WindowEvent e) {
-            JFrame frame = (JFrame) e.getSource();
-            int result = JOptionPane.showConfirmDialog(frame, "Are you done with this program?", "Exit Program", JOptionPane.YES_NO_OPTION);
-            if (result == JOptionPane.YES_OPTION) {
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            }
-        }
+    /**
+     * Handles the Logout menu command.
+     */
+    public void logout() {
+        Login login = new Login();
+        login.startLogout();
+    }
+
+    /**
+     * Handles the Exit menu command.
+     */
+    public void exit() {
     }
 }
