@@ -75,7 +75,6 @@ CREATE TABLE items (
     sizeAmount FLOAT(6,2) UNSIGNED NULL,
     sizeUnit VARCHAR(32) NULL,
     itemStatus VARCHAR(32) NOT NULL,
-    isHidden BIT NOT NULL DEFAULT 0,
     PRIMARY KEY (itemId),
     CONSTRAINT fk_items_lookups_sizeUnit FOREIGN KEY (sizeUnit) REFERENCES lookups(listValue),
     CONSTRAINT fk_items_lookups_itemStatus FOREIGN KEY (itemStatus) REFERENCES lookups(listValue)
@@ -86,6 +85,8 @@ CREATE TABLE orderItems (
     orderId INT UNSIGNED NOT NULL,
     itemId INT UNSIGNED NOT NULL,
     quantityOrdered INT UNSIGNED NOT NULL DEFAULT 1,
+    price FLOAT(8,4) UNSIGNED NOT NULL DEFAULT 0,
+    extendedPrice FLOAT(10,4) UNSIGNED NOT NULL DEFAULT 0,
     PRIMARY KEY (orderItemId),
     CONSTRAINT fk_orderItems_orders_orderId FOREIGN KEY (orderId) REFERENCES orders (orderId),
     CONSTRAINT fk_orderItems_items_itemId FOREIGN KEY (itemId) REFERENCES items (itemId)
