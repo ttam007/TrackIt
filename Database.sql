@@ -75,7 +75,6 @@ CREATE TABLE items (
     sizeAmount FLOAT(6,2) UNSIGNED NULL,
     sizeUnit VARCHAR(32) NULL,
     itemStatus VARCHAR(32) NOT NULL,
-    isHidden BIT NOT NULL DEFAULT 0,
     PRIMARY KEY (itemId),
     CONSTRAINT fk_items_lookups_sizeUnit FOREIGN KEY (sizeUnit) REFERENCES lookups(listValue),
     CONSTRAINT fk_items_lookups_itemStatus FOREIGN KEY (itemStatus) REFERENCES lookups(listValue)
@@ -86,18 +85,20 @@ CREATE TABLE orderItems (
     orderId INT UNSIGNED NOT NULL,
     itemId INT UNSIGNED NOT NULL,
     quantityOrdered INT UNSIGNED NOT NULL DEFAULT 1,
+    price FLOAT(8,4) UNSIGNED NOT NULL DEFAULT 0,
+    extendedPrice FLOAT(10,4) UNSIGNED NOT NULL DEFAULT 0,
     PRIMARY KEY (orderItemId),
     CONSTRAINT fk_orderItems_orders_orderId FOREIGN KEY (orderId) REFERENCES orders (orderId),
     CONSTRAINT fk_orderItems_items_itemId FOREIGN KEY (itemId) REFERENCES items (itemId)
 );
 
-CREATE TABLE inventory (
-    inventoryId INT UNSIGNED NOT NULL AUTO_INCREMENT,
+CREATE TABLE inventoryItems (
+    inventoryItemId INT UNSIGNED NOT NULL AUTO_INCREMENT,
     itemId INT UNSIGNED NOT NULL,
     quantity INT UNSIGNED NOT NULL DEFAULT 0,
     expirationDate DATE NULL,
-    PRIMARY KEY (inventoryId),
-    CONSTRAINT fk_inventory_items_itemId FOREIGN KEY (itemId)
+    PRIMARY KEY (inventoryItemId),
+    CONSTRAINT fk_inventoryItems_items_itemId FOREIGN KEY (itemId)
         REFERENCES items (itemId)
 );
 
@@ -420,65 +421,65 @@ BEGIN
 	END IF;
 END;;
 
-/*inventory*/
-DROP PROCEDURE IF EXISTS sp_Inventory_Select;;
+/*inventoryItems*/
+DROP PROCEDURE IF EXISTS sp_InventoryItems_Select;;
 CREATE DEFINER = CURRENT_USER 
-PROCEDURE sp_Inventory_Select (
-	IN inventoryId INT UNSIGNED
+PROCEDURE sp_InventoryItems_Select (
+	IN InventoryItemId INT UNSIGNED
 )
 BEGIN
-	IF (inventoryId IS NULL) THEN
+	IF (InventoryItemId IS NULL) THEN
     	SELECT *
-		FROM inventory;
+		FROM InventoryItems;
     ELSE
     	SELECT *
-		FROM inventory
-		WHERE inventory.inventoryId = inventoryId;
+		FROM InventoryItems
+		WHERE InventoryItems.InventoryItemId = inventoryItemId;
 	END IF;
 END;;
 
-DROP PROCEDURE IF EXISTS sp_Inventory_Insert;;
+DROP PROCEDURE IF EXISTS sp_InventoryItems_Insert;;
 CREATE DEFINER = CURRENT_USER 
-PROCEDURE sp_Inventory_Insert (
+PROCEDURE sp_InventoryItems_Insert (
 	IN itemId INT UNSIGNED,
     IN quantity INT UNSIGNED,
     IN expirationDate DATE,
-    OUT inventoryId INT UNSIGNED
+    OUT inventoryItemId INT UNSIGNED
 )
 BEGIN
-	INSERT INTO inventory(itemId, quantity, expirationDate)
+	INSERT INTO inventoryItems(itemId, quantity, expirationDate)
 	VALUES(itemId, quantity, expirationDate);
     
-    SET inventoryId = LAST_INSERT_ID();
+    SET inventoryItemId = LAST_INSERT_ID();
 END;;
 
-DROP PROCEDURE IF EXISTS sp_Inventory_Update;;
+DROP PROCEDURE IF EXISTS sp_InventoryItems_Update;;
 CREATE DEFINER = CURRENT_USER 
-PROCEDURE sp_Inventory_Update (
-	IN inventoryId INT UNSIGNED,
+PROCEDURE sp_InventoryItems_Update (
+	IN InventoryItemId INT UNSIGNED,
 	IN itemId INT UNSIGNED,
     IN quantity INT UNSIGNED,
     IN expirationDate DATE
 )
 BEGIN
-	UPDATE inventory
-    SET inventory.itemId = itemId,
-		inventory.quantity = quantity,
-        inventory.expirationDate = expirationDate
-	WHERE inventory.inventoryId = inventoryId;
+	UPDATE InventoryItems
+    SET inventoryItems.itemId = itemId,
+		inventoryItems.quantity = quantity,
+        inventoryItems.expirationDate = expirationDate
+	WHERE inventoryItems.inventoryItemId = inventoryItemId;
 END;;
 
-DROP PROCEDURE IF EXISTS sp_Inventory_Delete;;
+DROP PROCEDURE IF EXISTS sp_InventoryItems_Delete;;
 CREATE DEFINER = CURRENT_USER 
-PROCEDURE sp_Inventory_Delete (
-	IN inventoryId INT UNSIGNED
+PROCEDURE sp_InventoryItems_Delete (
+	IN inventoryItemId INT UNSIGNED
 )
 BEGIN
-	IF (inventoryId IS NULL) THEN
-		DELETE FROM inventory;
+	IF (inventoryItemId IS NULL) THEN
+		DELETE FROM inventoryItems;
 	ELSE
-		DELETE FROM inventory
-		WHERE inventory.inventoryId = inventoryId;
+		DELETE FROM inventoryItems
+		WHERE inventoryItems.inventoryItemId = inventoryItemId;
 	END IF;
 END;;
 
