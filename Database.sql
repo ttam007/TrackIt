@@ -26,14 +26,14 @@ DROP TABLE IF EXISTS orders;
 
 /*items*/
 ALTER TABLE orderItems DROP FOREIGN KEY fk_orderItems_items_itemId;
-ALTER TABLE inventory DROP FOREIGN KEY fk_inventory_items_itemId;
+ALTER TABLE inventoryItems DROP FOREIGN KEY fk_inventoryItems_items_itemId;
 DROP TABLE IF EXISTS items;
 
 /*orderItems*/
 DROP TABLE IF EXISTS orderItems;
 
-/*inventory*/
-DROP TABLE IF EXISTS inventory;
+/*inventoryItems*/
+DROP TABLE IF EXISTS inventoryItems;
 
 /***********************************************************************
 	Tables
