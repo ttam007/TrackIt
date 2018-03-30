@@ -20,7 +20,9 @@ public class MainMenuUI
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     JPanel pnlMain = new JPanel();
-
+    InventoryItemsUI inventoryTab = new InventoryItemsUI();
+    OrdersUI ordersTab = new OrdersUI();
+    SuppliersUI suppliersTab = new SuppliersUI();
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     public MainMenuUI() {
