@@ -2,7 +2,7 @@
 	Schema
 ***********************************************************************/
 
-CREATE SCHEMA TrackItDB; /*Remove this line from installation script.*/
+CREATE SCHEMA TrackItDB; 
 USE TrackItDB;
 
 /***********************************************************************
