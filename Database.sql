@@ -1,11 +1,12 @@
 /***********************************************************************
-	Header
+	Schema
 ***********************************************************************/
 
-use TrackItDB;
+CREATE SCHEMA TrackItDB; /*Remove this line from installation script.*/
+USE TrackItDB;
 
 /***********************************************************************
-	Drops
+	Drops - Remove this section from installation script.
 ***********************************************************************/
 
 DELIMITER ;
