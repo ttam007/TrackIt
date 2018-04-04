@@ -20,6 +20,12 @@ public class LoginUI
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     JPanel pnlMain = new JPanel();
+    JLabel lblUsername, lblPassword, lblTitle, lblAccess;
+    JTextField tfUsername, tfPassword;
+    JButton btnSubmit;
+    JPanel pnlNorth, pnlSouth, pnlCenter, pnlCentWest, pnlCentCenter, pnlCentSouth;
+    String username, password;
+
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -34,8 +40,8 @@ public class LoginUI
      */
     private void initializeComponents() {
         //Setup main frame
-        int frameWidth = 1200;
-        int frameHeight = 600;
+        int frameWidth = 500;
+        int frameHeight = 150;
         Dimension dimFrame = new Dimension(frameWidth, frameHeight);
         this.setTitle(Utilities.getWindowCaption(WINDOW_NAME));
         this.setPreferredSize(dimFrame);
@@ -43,10 +49,66 @@ public class LoginUI
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new CloseQuery());
+        this.setLayout(new BorderLayout()); 
 
         //Add all components here and set properties.
         this.add(pnlMain);
+        
+        pnlNorth = new JPanel();
+        lblTitle = new JLabel("TrackIt Inventory Management System");
+        pnlNorth.add(lblTitle);
+        add(pnlNorth, BorderLayout.NORTH);
 
+        pnlCenter = new JPanel();
+        add(pnlCenter, BorderLayout.CENTER);
+
+        Box usernameBx = Box.createHorizontalBox();
+        lblUsername = new JLabel("Username: ");
+        usernameBx.add(lblUsername);
+        tfUsername = new JTextField(20);
+        usernameBx.add(tfUsername);
+        Box passwordBx = Box.createHorizontalBox();
+        lblPassword = new JLabel("Password: ");
+        passwordBx.add(lblPassword);
+        tfPassword = new JTextField(20);
+        passwordBx.add(tfPassword);
+        Box submitBx = Box.createHorizontalBox();
+        btnSubmit = new JButton("Log In");
+        submitBx.add(btnSubmit);
+
+        Box combine = Box.createVerticalBox();
+        combine.add(usernameBx);
+        combine.add(passwordBx);
+        combine.add(submitBx);
+
+        pnlCenter.add(combine);
+
+        pnlSouth = new JPanel();
+        lblAccess = new JLabel("");
+        pnlSouth.add(lblAccess);
+        add(lblAccess, BorderLayout.SOUTH);
+
+        btnSubmit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                username = tfUsername.getText().trim();
+                password = tfPassword.getText().trim();
+
+                if ("admin".equals(username) && "pwd".equals(password)) {
+                    lblAccess.setText("Access granted");
+                    setVisible(false);
+                    MainMenuUI newFrame = new MainMenuUI();
+                } else if (!"admin".equals(username)) {
+                    lblAccess.setText("Access denied. Invalid username");
+                } else if (!"pwd".equals(password)) {
+                    lblAccess.setText("Access denied. Invalid password");
+                } else {
+                    lblAccess.setText("Access denied");
+                }
+            }
+        });
+
+        
         //Finalizations
         pack();
     }

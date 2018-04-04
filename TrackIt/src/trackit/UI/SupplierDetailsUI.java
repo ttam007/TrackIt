@@ -36,8 +36,8 @@ public class SupplierDetailsUI
      */
     private void initializeComponents() {
         //Setup main frame
-        int frameWidth = 1200;
-        int frameHeight = 600;
+        int frameWidth = 600;
+        int frameHeight = 400;
         Dimension dimFrame = new Dimension(frameWidth, frameHeight);
         this.setTitle(Utilities.getWindowCaption(WINDOW_NAME));
         this.setPreferredSize(dimFrame);
@@ -45,27 +45,11 @@ public class SupplierDetailsUI
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new CloseQuery());
+        this.setVisible(true);
 
         //Add all components here and set properties.
         this.add(pnlMain);
-        this.add(this.btnOK);
-        this.btnOK.addActionListener((ActionEvent e) -> {
-            if (!bal.save()) {
-                //TODO:  display bal.getErrorMessage();
-            }
-        });
-        this.add(this.btnCancel);
-        this.btnCancel.addActionListener((ActionEvent e) -> {
-            //TODO:  close window and return to prior window.
-        });
-        this.add(this.btnDelete);
-        this.btnDelete.addActionListener((ActionEvent e) -> {
-            if (bal.remove()) {
-                //TODO:  close window and return to prior window.
-            } else {
-                //TODO:  display bal.getErrorMessage() and stay on this window.
-            }
-        });
+        
 
         //Finalizations
         pack();
@@ -96,7 +80,8 @@ public class SupplierDetailsUI
                     JOptionPane.YES_NO_OPTION);
             if (result == JOptionPane.YES_OPTION) {
                 //TODO
-                //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                JOptionPane.showMessageDialog(null, "Successfully Updated");
+                   
             } else {
                 //TODO
             }
