@@ -12,9 +12,9 @@ public class SQLConnector {
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Fields">
     private static SQLConnector singleton = null;
-    private String databaseLocation;
-    private String port;
-    private String databaseName;
+    private String databaseLocation = "localhost";
+    private String port = "3306";
+    private String databaseName = "TrackItDB";
     private String userName;
     private String password;
     // </editor-fold>
@@ -46,13 +46,32 @@ public class SQLConnector {
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
 
-    public void setConnectionString(String databaseLocation, String port,
-            String databaseName, String userName, String password) {
+    public void setConnectionString(String userName) {
+        this.userName = userName;
+    }
+
+    public void setConnectionString(String userName, String password) {
+        this.setConnectionString(userName);
+        this.password = password;
+    }
+
+    public void setConnectionString(
+            String databaseLocation, String port, String databaseName) {
         this.databaseLocation = databaseLocation;
         this.port = port;
         this.databaseName = databaseName;
-        this.userName = userName;
-        this.password = password;
+    }
+
+    public void setConnectionString(String databaseLocation, String port,
+            String databaseName, String userName) {
+        this.setConnectionString(databaseLocation, port, databaseName);
+        this.setConnectionString(userName);
+    }
+
+    public void setConnectionString(String databaseLocation, String port,
+            String databaseName, String userName, String password) {
+        this.setConnectionString(databaseLocation, port, databaseName);
+        this.setConnectionString(userName, password);
     }
 
     public boolean isValidConnection() {
