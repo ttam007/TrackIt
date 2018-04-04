@@ -16,7 +16,7 @@ public class MainMenuUI
     private static final String WINDOW_NAME = "Main Menu";
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
-    private final MainMenu bal = new MainMenu();
+    private final MainMenu bll = new MainMenu();
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     JPanel pnlMain = new JPanel();
@@ -58,7 +58,7 @@ public class MainMenuUI
      * Refreshes the dashboards with current data.
      */
     private void refreshDashBoards() {
-        ArrayList<Dashboard> dashboards = bal.getDashboards();
+        ArrayList<Dashboard> dashboards = bll.getDashboards();
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">

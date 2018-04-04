@@ -67,6 +67,9 @@ public class InventoryItemsUI
      * Refreshes the list of items that are displayed in the grid.
      */
     private void refreshItems() {
+        this.inventoryItems.clear();
+     
+        //TODO:  load items from database.
     }
 
     /**
@@ -75,7 +78,7 @@ public class InventoryItemsUI
      * @param anItem The item to be shown.
      */
     private void showItemDetails(Item anItem) {
-        //bal.showDialog(anItem);    
+        //bll.showDialog(anItem);    
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">

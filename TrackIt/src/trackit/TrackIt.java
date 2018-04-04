@@ -1,6 +1,7 @@
 package trackit;
 
-import trackit.DAL.SQLConnector;
+import trackit.UI.*;
+import trackit.DAL.*;
 
 public class TrackIt {
 
@@ -28,6 +29,8 @@ public class TrackIt {
         }
 
         Login login = new Login();
-        login.startLogin();
+        if (!login.startLogin()) {
+            login.startLogout();
+        }
     }
 }

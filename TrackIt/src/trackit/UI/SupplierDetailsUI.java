@@ -21,8 +21,7 @@ public class SupplierDetailsUI
     JPanel pnlMain = new JPanel();
     JButton btnOK = new JButton();
     JButton btnCancel = new JButton();
-    JButton btnDelete = new JButton();
-
+ 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     public SupplierDetailsUI() {
@@ -58,15 +57,7 @@ public class SupplierDetailsUI
         this.btnCancel.addActionListener((ActionEvent e) -> {
             //TODO:  close window and return to prior window.
         });
-        this.add(this.btnDelete);
-        this.btnDelete.addActionListener((ActionEvent e) -> {
-            if (bal.remove()) {
-                //TODO:  close window and return to prior window.
-            } else {
-                //TODO:  display bal.getErrorMessage() and stay on this window.
-            }
-        });
-
+      
         //Finalizations
         pack();
     }
