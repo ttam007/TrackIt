@@ -1,6 +1,7 @@
 package trackit;
 
-import trackit.DAL.SQLConnector;
+import trackit.UI.*;
+import trackit.DAL.*;
 
 public class TrackIt {
 
@@ -9,11 +10,27 @@ public class TrackIt {
 
     public static void main(String[] args) {
         SQLConnector conn = SQLConnector.getInstance();
-        if (args.length >= 5) {
-            conn.setConnectionString(args[0], args[1], args[2], args[3], args[4]);
+        switch (args.length) {
+            case 5:
+                conn.setConnectionString(args[0], args[1], args[2], args[3], args[4]);
+                break;
+            case 4:
+                conn.setConnectionString(args[0], args[1], args[2], args[3]);
+                break;
+            case 3:
+                conn.setConnectionString(args[0], args[1], args[2]);
+                break;
+            case 2:
+                conn.setConnectionString(args[0], args[1]);
+                break;
+            case 1:
+                conn.setConnectionString(args[0]);
+                break;
         }
-        
+
         Login login = new Login();
-        login.startLogin();
+        if (!login.startLogin()) {
+            login.startLogout();
+        }
     }
 }

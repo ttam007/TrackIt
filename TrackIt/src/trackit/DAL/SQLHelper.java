@@ -56,13 +56,20 @@ public abstract class SQLHelper<T> {
             throws SQLException {
         ResultSet results = null;
         try (Connection myConn = sqlConn.getConnection()) {
-            String sql = buildSprocSyntax(sprocName, parameters);
-            PreparedStatement stmt = myConn.prepareCall(sql);
-            results = stmt.executeQuery();
-        } catch (SQLException exSQL) {
-            throw exSQL;
+            myConn.setAutoCommit(false);
+            try {
+                String sql = buildSprocSyntax(sprocName, parameters);
+                PreparedStatement stmt = myConn.prepareCall(sql);
+                results = stmt.executeQuery();
+
+                myConn.commit();
+            } catch (SQLException exSQL) {
+                myConn.rollback();
+                throw exSQL;
+            }
         }
+
         return results;
     }
-    // </editor-fold>
+// </editor-fold>
 }

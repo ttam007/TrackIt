@@ -5,34 +5,29 @@ import java.util.*;
 import trackit.DAL.*;
 
 /**
- * BAL Layer: Handles all aspects of a single Order.
+ * BAL Layer: Handles all aspects of the Inventory.
  */
-public class Order
+public class Inventory
         extends DatabaseObject
         implements IDataAwareObject {
 
-    private String description;
-    private Supplier orderedFrom;
-    private java.util.Date dateOrdered;
-    private OrderStatusType orderStatus;
-    private java.util.Date dateExpected;
-    private final ArrayList<OrderItem> items = new ArrayList<>();
+    private final ArrayList<InventoryItem> items = new ArrayList<>();
 
     @Override
     public Integer getPrimaryKey() {
-        return this.primaryKey;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public boolean load() {
-        return load(this.primaryKey);
+        //TODO:  load all InventoryItems from database into this.items.
+        //TODO:  catch SQLException.
+        return false;
     }
 
     @Override
     public boolean load(Integer primaryKey) {
-        //TODO:  load all fields from database.
-        //TODO:  catch IllegalArgumentException, SQLException.
-        return false;
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -55,11 +50,10 @@ public class Order
 
     @Override
     public boolean remove() {
-        //TODO:  remove from database.  Catch SQLException.
-        return false;
+        throw new UnsupportedOperationException();
     }
-    
-    public ArrayList<OrderItem> getItems(){
+
+    public ArrayList<InventoryItem> getItems() {
         return this.items;
     }
 }

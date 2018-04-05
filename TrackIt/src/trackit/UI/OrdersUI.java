@@ -18,6 +18,7 @@ public class OrdersUI
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
     private final ArrayList<Order> orders = new ArrayList<>();
+    private final Order bll = new Order();
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     JPanel pnlMain = new JPanel();
@@ -28,6 +29,8 @@ public class OrdersUI
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     public OrdersUI() {
         initializeComponents();
+        
+        getValues();
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
@@ -61,6 +64,13 @@ public class OrdersUI
         //Finalizations
         pack();
     }
+    
+    private void  getValues(){
+        if (bll.load()){
+            //this.orders.addAll(bll.getItems());
+        }
+    }
+    
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
 

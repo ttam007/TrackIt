@@ -18,6 +18,7 @@ public abstract class DatabaseObject {
      * database.
      */
     protected boolean isAlreadyInDatabase() {
+        //TODO:  code this check.  If primary key is already in the database, then return true.
         return false;
     }
 
