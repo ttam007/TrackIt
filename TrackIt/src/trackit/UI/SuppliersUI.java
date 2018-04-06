@@ -7,8 +7,8 @@ import javax.swing.*;
 import trackit.*;
 
 /**
- * UI Layer: Handles all aspects of the Suppliers' UI. TODO: convert to tab
- * panel
+ * UI Layer: Handles all aspects of the Suppliers panel. TODO: convert to
+ * JPanel.
  */
 public class SuppliersUI
         extends JFrame {

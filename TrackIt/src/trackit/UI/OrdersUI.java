@@ -7,8 +7,7 @@ import javax.swing.*;
 import trackit.*;
 
 /**
- * UI Layer: Handles all aspects of the OrderItem's UI. TODO: convert to tab
- * panel
+ * UI Layer: Handles all aspects of the Order panel. TODO: convert to JPanel.
  */
 public class OrdersUI
         extends JFrame {
@@ -29,7 +28,7 @@ public class OrdersUI
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     public OrdersUI() {
         initializeComponents();
-        
+
         getValues();
     }
     // </editor-fold>
@@ -64,16 +63,15 @@ public class OrdersUI
         //Finalizations
         pack();
     }
-    
-    private void  getValues(){
-        if (bll.load()){
+
+    private void getValues() {
+        if (bll.load()) {
             //this.orders.addAll(bll.getItems());
         }
     }
-    
+
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
-
     /**
      * Displays the frame.
      */

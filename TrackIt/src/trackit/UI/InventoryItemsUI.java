@@ -7,8 +7,8 @@ import javax.swing.*;
 import trackit.*;
 
 /**
- * UI Layer: Handles all aspects of the InventoryItem's UI. TODO: convert to tab
- * panel
+ * UI Layer: Handles all aspects of the Inventory panel. TODO: convert to
+ * JPanel.
  */
 public class InventoryItemsUI
         extends JFrame {
@@ -68,7 +68,7 @@ public class InventoryItemsUI
      */
     private void refreshItems() {
         this.inventoryItems.clear();
-     
+
         //TODO:  load items from database.
     }
 

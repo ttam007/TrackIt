@@ -7,7 +7,8 @@ import javax.swing.*;
 import trackit.*;
 
 /**
- * UI Layer: Handles all aspects of the OrderItems's UI.
+ * UI Layer: Handles all aspects of the Order Details dialog. This is a
+ * combination of the Edit Order Details and the OrderItems grid.
  */
 public class OrderItemsUI
         extends JFrame {

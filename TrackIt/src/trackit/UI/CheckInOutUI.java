@@ -7,32 +7,29 @@ import javax.swing.*;
 import trackit.*;
 
 /**
- * UI Layer: Handles all aspects of the Main Menu's UI.
+ * UI Layer: Handles all aspects of the Check In/Out dialog.
  */
-public class MainMenuUI
+public class CheckInOutUI
         extends JFrame {
-
     // <editor-fold defaultstate="collapsed" desc="Constants">
-    private static final String WINDOW_NAME = "Main Menu";
+
+    private static final String WINDOW_NAME = "Check In/Out";
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
-    private final MainMenu bll = new MainMenu();
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     JPanel pnlMain = new JPanel();
-    DashboardUI dashboardTab = new DashboardUI();
-    InventoryItemsUI inventoryTab = new InventoryItemsUI();
-    OrdersUI ordersTab = new OrdersUI();
-    SuppliersUI suppliersTab = new SuppliersUI();
+    JButton btnOK = new JButton();
+    JButton btnCancel = new JButton();
+
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
-    public MainMenuUI() {
+    public CheckInOutUI() {
         initializeComponents();
-
-        refreshDashBoards();
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
+
     /**
      * Sets up all components used in this frame.
      */
@@ -45,21 +42,21 @@ public class MainMenuUI
         this.setPreferredSize(dimFrame);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
-        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        this.addWindowListener(new CloseQuery());
+        this.setDefaultCloseOperation(0);
 
         //Add all components here and set properties.
         this.add(pnlMain);
+        this.add(this.btnOK);
+        this.btnOK.addActionListener((ActionEvent e) -> {
+            //TODO
+        });
+        this.add(this.btnCancel);
+        this.btnCancel.addActionListener((ActionEvent e) -> {
+            //TODO
+        });
 
         //Finalizations
         pack();
-    }
-
-    /**
-     * Refreshes the dashboards with current data.
-     */
-    private void refreshDashBoards() {
-        ArrayList<Dashboard> dashboards = bll.getDashboards();
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
@@ -72,23 +69,5 @@ public class MainMenuUI
         setVisible(true);
     }
 
-    // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="SubClasses">
-    /**
-     * Handles all aspects of closing the program.
-     */
-    private class CloseQuery extends WindowAdapter {
-
-        @Override
-        public void windowClosing(WindowEvent e) {
-            JFrame frame = (JFrame) e.getSource();
-            int result = JOptionPane.showConfirmDialog(frame,
-                    "Are you done with this program?", "Exit Program",
-                    JOptionPane.YES_NO_OPTION);
-            if (result == JOptionPane.YES_OPTION) {
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            }
-        }
-    }
     // </editor-fold>
 }

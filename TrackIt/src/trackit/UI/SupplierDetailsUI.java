@@ -6,7 +6,8 @@ import javax.swing.*;
 import trackit.*;
 
 /**
- * UI Layer: Handles all aspects of the Supplier Details's UI.
+ * UI Layer: Handles all aspects of the Create Supplier and Edit Supplier
+ * dialog.
  */
 public class SupplierDetailsUI
         extends JFrame {
@@ -15,16 +16,18 @@ public class SupplierDetailsUI
     private static final String WINDOW_NAME = "Supplier Details";
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Fields">
-    private final Supplier bal = new Supplier();
+    private final Supplier bll = new Supplier();
+    private final boolean isCreateMode;
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     JPanel pnlMain = new JPanel();
     JButton btnOK = new JButton();
     JButton btnCancel = new JButton();
- 
+
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
-    public SupplierDetailsUI() {
+    public SupplierDetailsUI(boolean useCreateMode) {
+        this.isCreateMode = useCreateMode;
         initializeComponents();
     }
     // </editor-fold>
@@ -49,7 +52,7 @@ public class SupplierDetailsUI
         this.add(pnlMain);
         this.add(this.btnOK);
         this.btnOK.addActionListener((ActionEvent e) -> {
-            if (!bal.save()) {
+            if (!bll.save()) {
                 //TODO:  display bal.getErrorMessage();
             }
         });
@@ -57,7 +60,7 @@ public class SupplierDetailsUI
         this.btnCancel.addActionListener((ActionEvent e) -> {
             //TODO:  close window and return to prior window.
         });
-      
+
         //Finalizations
         pack();
     }
