@@ -10,8 +10,8 @@ USE TrackItDB;
 ***********************************************************************/
 DELIMITER $$
 
-DROP PROCEDURE IF EXISTS DropFK $$ 
-CREATE PROCEDURE DropFK ( 
+DROP PROCEDURE IF EXISTS sp_FK_Drop $$ 
+CREATE PROCEDURE sp_FK_Drop ( 
 	IN parm_table_name VARCHAR(100), 
 	IN parm_key_name VARCHAR(100) 
 ) 
@@ -42,22 +42,22 @@ DELIMITER ; $$
 DELIMITER ;
 
 /*lookups*/
-CALL DropFK('items', 'fk_items_lookups_sizeUnit');
-CALL DropFK('items', 'fk_items_lookups_itemStatus');
-CALL DropFK('orders', 'fk_orders_lookups_orderStatus');
+CALL sp_FK_Drop('items', 'fk_items_lookups_sizeUnit');
+CALL sp_FK_Drop('items', 'fk_items_lookups_itemStatus');
+CALL sp_FK_Drop('orders', 'fk_orders_lookups_orderStatus');
 DROP TABLE IF EXISTS lookups;
 
 /*suppliers*/
-CALL DropFK ('orders', 'fk_orders_suppliers_orderedFrom');
+CALL sp_FK_Drop ('orders', 'fk_orders_suppliers_orderedFrom');
 DROP TABLE IF EXISTS suppliers;
 
 /*orders*/
-CALL DropFK ('orderItems', 'fk_orderItems_orders_orderId');
+CALL sp_FK_Drop ('orderItems', 'fk_orderItems_orders_orderId');
 DROP TABLE IF EXISTS orders;
 
 /*items*/
-CALL DropFK ('orderItems', 'fk_orderItems_items_itemId');
-CALL DropFK ('inventoryItems', 'fk_inventoryItems_items_itemId');
+CALL sp_FK_Drop ('orderItems', 'fk_orderItems_items_itemId');
+CALL sp_FK_Drop ('inventoryItems', 'fk_inventoryItems_items_itemId');
 DROP TABLE IF EXISTS items;
 
 /*orderItems*/
