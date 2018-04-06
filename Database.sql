@@ -2,32 +2,62 @@
 	Schema
 ***********************************************************************/
 
-CREATE SCHEMA TrackItDB; 
+CREATE SCHEMA IF NOT EXISTS TrackItDB; 
 USE TrackItDB;
 
 /***********************************************************************
 	Drops - Remove this section from installation script.
 ***********************************************************************/
+DELIMITER $$
 
+DROP PROCEDURE IF EXISTS DropFK $$ 
+CREATE PROCEDURE DropFK ( 
+	IN parm_table_name VARCHAR(100), 
+	IN parm_key_name VARCHAR(100) 
+) 
+BEGIN 
+	-- Verify the foreign key exists 
+	IF EXISTS (SELECT NULL
+		FROM information_schema.TABLE_CONSTRAINTS
+        WHERE CONSTRAINT_SCHEMA = DATABASE()
+			AND CONSTRAINT_NAME = parm_key_name) THEN
+            
+		-- Turn the parameters into local variables.
+		SET @ParmTable = parm_table_name;
+		SET @ParmKey = parm_key_name;
+
+		-- Create the full statement to execute.
+		SET @StatementToExecute = CONCAT('ALTER TABLE ',@ParmTable,' DROP FOREIGN KEY ',@ParmKey); 
+
+		-- Prepare and execute the statement that was built.
+		PREPARE DynamicStatement FROM @StatementToExecute; 
+		EXECUTE DynamicStatement; 
+
+		-- Cleanup the prepared statement 
+		DEALLOCATE PREPARE DynamicStatement; 
+	END IF; 
+END $$ 
+
+DELIMITER ; $$
 DELIMITER ;
 
 /*lookups*/
-ALTER TABLE items DROP FOREIGN KEY fk_items_lookups_sizeUnit;
-ALTER TABLE items DROP FOREIGN KEY fk_items_lookups_itemStatus;
-ALTER TABLE orders DROP FOREIGN KEY fk_orders_lookups_orderStatus;
+CALL DropFK('items', 'fk_items_lookups_sizeUnit');
+CALL DropFK('items', 'fk_items_lookups_itemStatus');
+CALL DropFK('orders', 'fk_orders_lookups_orderStatus');
 DROP TABLE IF EXISTS lookups;
 
 /*suppliers*/
-ALTER TABLE orders DROP FOREIGN KEY fk_orders_suppliers_orderedFrom;
+CALL DropFK ('orders', 'fk_orders_suppliers_orderedFrom');
 DROP TABLE IF EXISTS suppliers;
 
 /*orders*/
-ALTER TABLE orderItems DROP FOREIGN KEY fk_orderItems_orders_orderId;
+CALL DropFK ('orderItems', 'fk_orderItems_orders_orderId');
 DROP TABLE IF EXISTS orders;
 
 /*items*/
-ALTER TABLE orderItems DROP FOREIGN KEY fk_orderItems_items_itemId;
-ALTER TABLE inventoryItems DROP FOREIGN KEY fk_inventoryItems_items_itemId;
+CALL DropFK ('orderItems', 'fk_orderItems_items_itemId');
+CALL DropFK ('inventoryItems', 'fk_inventoryItems_items_itemId');
 DROP TABLE IF EXISTS items;
 
 /*orderItems*/
@@ -61,8 +91,8 @@ CREATE TABLE orders (
     orderId INT UNSIGNED NOT NULL AUTO_INCREMENT,
     description VARCHAR (64) NOT NULL,
     orderedFrom INT UNSIGNED NOT NULL,
-    dateOrdered DATE NOT NULL,
     orderStatus VARCHAR (32) NOT NULL,
+    dateOrdered DATE NOT NULL,
     dateExpected DATE NULL,
     PRIMARY KEY (orderId),
     CONSTRAINT fk_orders_suppliers_orderedFrom FOREIGN KEY (orderedFrom) REFERENCES suppliers(supplierId),
@@ -73,11 +103,9 @@ CREATE TABLE items (
     itemId INT UNSIGNED NOT NULL AUTO_INCREMENT,
     description VARCHAR (64) NOT NULL,
     sku VARCHAR(32) NULL,
-    sizeAmount FLOAT(6,2) UNSIGNED NULL,
     sizeUnit VARCHAR(32) NULL,
     itemStatus VARCHAR(32) NOT NULL,
     PRIMARY KEY (itemId),
-    CONSTRAINT fk_items_lookups_sizeUnit FOREIGN KEY (sizeUnit) REFERENCES lookups(listValue),
     CONSTRAINT fk_items_lookups_itemStatus FOREIGN KEY (itemStatus) REFERENCES lookups(listValue)
     );
     
@@ -99,8 +127,7 @@ CREATE TABLE inventoryItems (
     quantity INT UNSIGNED NOT NULL DEFAULT 0,
     expirationDate DATE NULL,
     PRIMARY KEY (inventoryItemId),
-    CONSTRAINT fk_inventoryItems_items_itemId FOREIGN KEY (itemId)
-        REFERENCES items (itemId)
+    CONSTRAINT fk_inventoryItems_items_itemId FOREIGN KEY (itemId) REFERENCES items (itemId)
 );
 
 /***********************************************************************
@@ -190,8 +217,8 @@ PROCEDURE sp_Suppliers_Insert (
     OUT supplierId INT UNSIGNED
 )
 BEGIN
-	INSERT INTO suppliers(nickname,URL)
-	VALUES(nickname,URL);
+	INSERT INTO suppliers(nickname, URL)
+	VALUES(nickname, URL);
     
     SET supplierId = LAST_INSERT_ID();
 END;;
@@ -246,14 +273,14 @@ CREATE DEFINER = CURRENT_USER
 PROCEDURE sp_Orders_Insert (
 	IN description VARCHAR (64),
 	IN orderedFrom INT UNSIGNED,
-    IN dateOrdered DATE,
     IN orderStatus VARCHAR (32),
+    IN dateOrdered DATE,
     IN dateExpected DATE,
     OUT orderId INT UNSIGNED
 )
 BEGIN
-	INSERT INTO orders (description, orderedFrom, dateOrdered, orderStatus, dateExpected)
-    VALUES (description, orderedFrom, dateOrdered, orderStatus, dateExpected);
+	INSERT INTO orders (description, orderedFrom, orderStatus, dateOrdered, dateExpected)
+    VALUES (description, orderedFrom, orderStatus, dateOrdered, dateExpected);
     
     SET orderId = LAST_INSERT_ID();
 END;;
@@ -264,16 +291,16 @@ PROCEDURE sp_Orders_Update (
 	IN orderId INT UNSIGNED,
 	IN description VARCHAR (64),
     IN orderedFrom INT UNSIGNED,
-    IN dateOrdered DATE,
     IN orderStatus VARCHAR (32),
+    IN dateOrdered DATE,
     IN dateExpected DATE
 )
 BEGIN
 	UPDATE orders
     SET orders.description = description,
 		orders.orderedFrom = orderedFrom,
-        orders.dateOrdered = dateOrdered,
         orders.orderStatus = orderStatus,
+        orders.dateOrdered = dateOrdered,
         orders.dateExpected = dateExpected
 	WHERE orders.orderId = orderId;
 END;;
@@ -314,14 +341,13 @@ CREATE DEFINER = CURRENT_USER
 PROCEDURE sp_Items_Insert (
 	IN description VARCHAR(64),
     IN sku VARCHAR(32),
-    IN sizeAmount FLOAT(6,2) UNSIGNED,
     IN sizeUnit VARCHAR(32),
-    IN isHidden BIT,
+    IN itemStatus VARCHAR(32),
     OUT itemId INT UNSIGNED
 )
 BEGIN
-	INSERT INTO items (description, sku, sizeAmount, sizeUnit, isHidden)
-    VALUES (description, sku, sizeAmount, sizeUnit, isHidden);
+	INSERT INTO items (description, sku, sizeUnit, itemStatus)
+    VALUES (description, sku, sizeUnit, itemStatus);
     
     SET itemId = LAST_INSERT_ID();
 END;;
@@ -332,17 +358,15 @@ PROCEDURE sp_Items_Update (
 	IN itemId INT UNSIGNED,
 	IN description VARCHAR(64),
     IN sku VARCHAR(32),
-    IN sizeAmount FLOAT(6,2) UNSIGNED,
     IN sizeUnit VARCHAR(32),
-    IN isHidden BIT
+    IN itemStatus VARCHAR(32)
 )
 BEGIN
 	UPDATE items
     SET items.description = description,
 		items.sku = sku,
-        items.sizeAmount = sizeAmount,
         items.sizeUnit = sizeUnit,
-        items.isHidden = isHidden
+        items.itemStatus = itemStatus
 	WHERE items.itemId = itemId;
 END;;
 
@@ -383,11 +407,13 @@ PROCEDURE sp_OrderItems_Insert (
 	IN orderId INT UNSIGNED,
     IN itemId INT UNSIGNED,
     IN quantityOrdered INT UNSIGNED,
+    IN price FLOAT(8,4) UNSIGNED,
+    IN extendedPrice FLOAT(10,4) UNSIGNED,
     OUT orderItemId INT UNSIGNED
 )
 BEGIN
-	INSERT INTO orderItems (orderId, itemId, quantityOrdered)
-    VALUES (orderId, itemId, quantityOrdered);
+	INSERT INTO orderItems (orderId, itemId, quantityOrdered, price, extendedPrice)
+    VALUES (orderId, itemId, quantityOrdered, price, extendedPrice);
     
 	SET orderItemId = LAST_INSERT_ID(); 
 END;;
@@ -398,13 +424,17 @@ PROCEDURE sp_OrderItems_Update (
 	IN orderItemId INT UNSIGNED,
 	IN orderId INT UNSIGNED,
     IN itemId INT UNSIGNED,
-    IN quantityOrdered INT UNSIGNED
+    IN quantityOrdered INT UNSIGNED,
+    IN price FLOAT(8,4) UNSIGNED,
+    IN extendedPrice FLOAT(10,4) UNSIGNED
 )
 BEGIN
 	UPDATE orderitems
     SET orderitems.orderId = orderId,
 		orderitems.itemId = itemId,
-        orderitems.quantityOrdered = quantityOrdered        
+        orderitems.quantityOrdered = quantityOrdered,
+        orderitems.price = price,
+        orderitems.extendedPrice = extendedPrice
 	WHERE orderitems.orderItemId = orderItemId;
 END;;
 
@@ -491,12 +521,6 @@ END;;
 DELIMITER ;
 
 /*lookups*/
-INSERT INTO lookups (listName, listValue) VALUES ('sizeUnits', 'Large');
-INSERT INTO lookups (listName, listValue) VALUES ('sizeUnits', 'Medium');
-INSERT INTO lookups (listName, listValue) VALUES ('sizeUnits', 'Small');
-INSERT INTO lookups (listName, listValue) VALUES ('sizeUnits', 'ounce');
-INSERT INTO lookups (listName, listValue) VALUES ('sizeUnits', 'quart');
-INSERT INTO lookups (listName, listValue) VALUES ('sizeUnits', 'gallon');
 INSERT INTO lookups (listName, listValue) VALUES ('orderStatuses', 'Ordered');
 INSERT INTO lookups (listName, listValue) VALUES ('orderStatuses', 'Shipping');
 INSERT INTO lookups (listName, listValue) VALUES ('orderStatuses', 'Arrived');
