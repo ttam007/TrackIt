@@ -1,6 +1,7 @@
 package trackit.DAL;
 
 import java.sql.*;
+import trackit.*;
 
 /**
  * DAL Layer: Handles the actual connection to the database.
@@ -13,7 +14,7 @@ public class SQLConnector {
     // <editor-fold defaultstate="collapsed" desc="Private Fields">
     private static SQLConnector singleton = null;
     private String databaseLocation = "localhost";
-    private String port = "3306";
+    private Integer port = 3306;
     private String databaseName = "TrackItDB";
     private String userName;
     private String password;
@@ -21,14 +22,25 @@ public class SQLConnector {
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
+    /**
+     * Can not create an instance of this class except via the getInstance()
+     * method.
+     */
     private SQLConnector() {
     }
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
+    /**
+     * Gets the database URL.
+     *
+     * @return A database URL of the form jdbc:subprotocol:subname
+     * @throws SQLException
+     */
     private String getDatabaseURL()
             throws SQLException {
-        return "";
+        return String.format("jdbc:mysql://%s:%d/%s?autoReconnect=true&useSSL=false",
+                this.databaseLocation, this.port, this.databaseName);
     }
 
     // </editor-fold>
@@ -57,19 +69,19 @@ public class SQLConnector {
     }
 
     public void setConnectionString(
-            String databaseLocation, String port, String databaseName) {
+            String databaseLocation, Integer port, String databaseName) {
         this.databaseLocation = databaseLocation;
         this.port = port;
         this.databaseName = databaseName;
     }
 
-    public void setConnectionString(String databaseLocation, String port,
+    public void setConnectionString(String databaseLocation, Integer port,
             String databaseName, String userName) {
         this.setConnectionString(databaseLocation, port, databaseName);
         this.setConnectionString(userName);
     }
 
-    public void setConnectionString(String databaseLocation, String port,
+    public void setConnectionString(String databaseLocation, Integer port,
             String databaseName, String userName, String password) {
         this.setConnectionString(databaseLocation, port, databaseName);
         this.setConnectionString(userName, password);
@@ -78,23 +90,27 @@ public class SQLConnector {
     public boolean isValidConnection() {
         boolean isValid = false;
 
-        try {
-            //TODO:  test connection to see if it's valid.
-            throw new SQLException("Invalid Login."); //remove this line when done coding.
+        try (Connection conn = this.getConnection()) {
+            isValid = true;
+        } catch (ClassNotFoundException exCNF) {
+            this.errorMessage = exCNF.getLocalizedMessage();
         } catch (SQLException exSQL) {
-            this.errorMessage = exSQL.getLocalizedMessage();
+            this.errorMessage = Utilities.buildErrorMessage(exSQL);
         }
-        
+
         return isValid;
     }
 
     /**
      * Gets the connection that will be used for all SQL CRUD operations.
+     *
      * @return A database connection.
-     * @throws SQLException 
+     * @throws ClassNotFoundException If MySQL driver isn't installed.
+     * @throws SQLException If the connection to the database is invalid.
      */
     public Connection getConnection()
-            throws SQLException {
+            throws ClassNotFoundException, SQLException {
+        Class.forName(DRIVER);
         return DriverManager.getConnection(
                 getDatabaseURL(), this.userName, this.password);
     }
@@ -107,12 +123,13 @@ public class SQLConnector {
     public String getErrorMessage() {
         return this.errorMessage;
     }
-    
+
     /**
      * Gets the User Name that was previously set.
+     *
      * @return The User Name.
      */
-    public String getUserName(){
+    public String getUserName() {
         return this.userName;
     }
     // </editor-fold>
