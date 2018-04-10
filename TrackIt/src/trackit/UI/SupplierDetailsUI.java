@@ -76,8 +76,11 @@ public class SupplierDetailsUI
      * Displays the frame.
      */
     public void display() {
-        System.out.println(String.format("Displaying {0}...", WINDOW_NAME));
+        System.out.println(String.format("Displaying %s...", WINDOW_NAME));
         setVisible(true);
+    }
+    public void closeWindow(){
+        //this.closeWindow();
     }
 
     // </editor-fold>
@@ -96,9 +99,10 @@ public class SupplierDetailsUI
             if (result == JOptionPane.YES_OPTION) {
                 //TODO
                 JOptionPane.showMessageDialog(null, "Successfully Updated");
-                   
+                //closeWindow();
             } else {
                 //TODO
+                //closeWindow();
             }
         }
     }

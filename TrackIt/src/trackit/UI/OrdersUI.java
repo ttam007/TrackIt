@@ -10,7 +10,7 @@ import trackit.*;
  * UI Layer: Handles all aspects of the Order panel. TODO: convert to JPanel.
  */
 public class OrdersUI
-        extends JFrame {
+        extends JPanel {
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
     private static final String WINDOW_NAME = "Orders";
@@ -20,50 +20,19 @@ public class OrdersUI
     private final Order bll = new Order();
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
-    JPanel pnlMain = new JPanel();
     JButton btnAddToList = new JButton();
     JButton btnRemoveFromList = new JButton();
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     public OrdersUI() {
-        initializeComponents();
-
+        
         getValues();
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
 
-    /**
-     * Sets up all components used in this frame.
-     */
-    private void initializeComponents() {
-        //Setup main frame
-        int frameWidth = 1200;
-        int frameHeight = 600;
-        Dimension dimFrame = new Dimension(frameWidth, frameHeight);
-        this.setTitle(Utilities.getWindowCaption(WINDOW_NAME));
-        this.setPreferredSize(dimFrame);
-        this.setLocationRelativeTo(null);
-        this.setResizable(false);
-        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        this.addWindowListener(new CloseQuery());
-
-        //Add all components here and set properties.
-        this.add(pnlMain);
-        this.add(this.btnAddToList);
-        this.btnAddToList.addActionListener((ActionEvent e) -> {
-            //TODO
-        });
-        this.add(this.btnRemoveFromList);
-        this.btnRemoveFromList.addActionListener((ActionEvent e) -> {
-            //TODO
-        });
-
-        //Finalizations
-        pack();
-    }
-
+    
     private void getValues() {
         if (bll.load()) {
             //this.orders.addAll(bll.getItems());
