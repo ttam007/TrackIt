@@ -22,10 +22,10 @@ public class SQLHelperInventoryItem
 
     @Override
     public ArrayList<InventoryItem> selectAll()
-            throws SQLException {
+            throws SQLException, Exception {
         ArrayList<InventoryItem> results = new ArrayList<>();
 
-        HashMap<Integer, String> params = new HashMap<>();
+        HashMap<Integer, SprocParameter> params = new HashMap<>();
         ResultSet rs = super.execSproc("sp_Inventorys_Select", params);
         while (rs.next()) {
             InventoryItem anObj = new InventoryItem();

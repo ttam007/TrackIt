@@ -22,10 +22,10 @@ public class SQLHelperSupplier
 
     @Override
     public ArrayList<Supplier> selectAll()
-            throws SQLException {
+            throws SQLException, Exception{
         ArrayList<Supplier> results = new ArrayList<>();
 
-        HashMap<Integer, String> params = new HashMap<>();
+        HashMap<Integer, SprocParameter> params = new HashMap<>();
         ResultSet rs = super.execSproc("sp_Suppliers_Select", params);
         while (rs.next()) {
             Supplier anObj = new Supplier();

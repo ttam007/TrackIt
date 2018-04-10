@@ -23,10 +23,10 @@ public class SQLHelperOrderItem
 
     @Override
     public ArrayList<OrderItem> selectAll()
-            throws SQLException {
+            throws SQLException, Exception{
         ArrayList<OrderItem> results = new ArrayList<>();
 
-        HashMap<Integer, String> params = new HashMap<>();
+        HashMap<Integer, SprocParameter> params = new HashMap<>();
         ResultSet rs = super.execSproc("sp_Orders_Select", params);
         while (rs.next()) {
             OrderItem anObj = new OrderItem();
