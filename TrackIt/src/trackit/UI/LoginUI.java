@@ -23,6 +23,7 @@ public class LoginUI extends JFrame {
     JPanel pnlNorth, pnlSouth, pnlCenter, pnlCentWest, pnlCentCenter, pnlCentSouth;
     JPasswordField pfPassword;
     JButton btnLogin;
+    String username, password;
    
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -96,7 +97,7 @@ public class LoginUI extends JFrame {
         lblAccess = new JLabel("");
         pnlSouth.add(lblAccess);
         add(lblAccess, BorderLayout.SOUTH);
-
+ 
         btnLogin.addActionListener((ActionEvent e) -> {
             if (this.bll.startLogin(this.tfUsername.getText().trim(), this.pfPassword.getText().trim())) {
                 this.dispose();
@@ -109,7 +110,7 @@ public class LoginUI extends JFrame {
                 }
             }
         });
-
+        
         //Finalizations
         this.pack();
     }

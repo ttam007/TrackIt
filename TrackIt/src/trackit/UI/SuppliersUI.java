@@ -9,8 +9,7 @@ import trackit.*;
 /**
  * UI Layer: Handles all aspects of the Suppliers panel. 
  */
-public class SuppliersUI
-        extends JPanel{
+public class SuppliersUI extends JPanel{
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
     private static final String WINDOW_NAME = "Suppliers";
@@ -27,23 +26,7 @@ public class SuppliersUI
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     public SuppliersUI() {
-        initializeComponents();
-    }
-    // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Private Methods">
-
-    /**
-     * Sets up all components used in this frame.
-     */
-    private void initializeComponents() {
-        //Setup main panel
-        
-        this.setLayout(new BorderLayout());
-        
-        JPanel topSup = new JPanel();
-        JLabel lblFilter = new JLabel("Filter");
-        topSup.add(lblFilter);
-        //JDropDownMenu ddFilter = new JDropDownMenu();
+        setLayout(new BorderLayout());
         
         //add data to suppliers arraylist 
         Object[][] suppliersTestData = {{"Amazon", "http://www.amazon.com"}, {"Walmart", "http://www.walmart.com"}, {"Ebay", "http://www.ebay.com"} };
@@ -52,7 +35,7 @@ public class SuppliersUI
         suppliersTable.setFillsViewportHeight(true);
         suppliersTable.setDefaultEditor(Object.class, null);
         
-        this.add(suppliersScrollPane, BorderLayout.CENTER);
+        add(suppliersScrollPane, BorderLayout.CENTER);
         
         JPanel btmSup = new JPanel();
         
@@ -63,7 +46,6 @@ public class SuppliersUI
                 System.out.print("add supply");
                 details = new SupplierDetailsUI(true);
             }
-            
         });
         
         btnEdit = new JButton("Edit");
@@ -72,8 +54,7 @@ public class SuppliersUI
             public void actionPerformed(ActionEvent e) {
                 System.out.print("Edit supply");
                 details = new SupplierDetailsUI(false);
-            }
-            
+            }         
         });
         
         btnRemove = new JButton("Remove");
@@ -82,17 +63,17 @@ public class SuppliersUI
             public void actionPerformed(ActionEvent e) {
                 System.out.print("remove supply");
             }
-            
         });
         
         btmSup.add(btnCreate);
         btmSup.add(btnEdit);
         btmSup.add(btnRemove);
         
-        this.add(btmSup, BorderLayout.SOUTH);
+        add(btmSup, BorderLayout.SOUTH);
         
     }
     // </editor-fold>
+    
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
 
     /**

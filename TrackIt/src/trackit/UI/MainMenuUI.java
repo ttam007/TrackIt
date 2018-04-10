@@ -19,7 +19,10 @@ public class MainMenuUI extends JFrame {
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
 
-    JPanel dashboardTab, inventoryTab, suppliersTab, ordersTab;
+    SuppliersUI suppliersTab = new SuppliersUI();
+    DashboardUI dashboardTab = new DashboardUI();
+    OrdersUI ordersTab = new OrdersUI();
+    InventoryItemsUI inventoryTab = new InventoryItemsUI();
     JTabbedPane tabpane;
     JLabel title;
     JButton btnLogout, btnExit;
