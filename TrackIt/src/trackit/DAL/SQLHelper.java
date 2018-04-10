@@ -36,7 +36,10 @@ public abstract class SQLHelper<T> {
      * value is the value to pass.
      * @return A valid SQL command for running the specified stored procedure.
      */
-    private String buildSprocSyntax(String sprocName, HashMap<Integer, String> parameters) {
+//<<<<<<< enloe-dev
+    private String buildSprocSyntax(String sprocName, HashMap<Integer, SprocParameter> parameters) {
+
+
         StringBuilder sb = new StringBuilder();
         //TODO:  code this
         return sb.toString();
@@ -55,7 +58,9 @@ public abstract class SQLHelper<T> {
      * @throws ClassNotFoundException
      * @throws SQLException
      */
-    protected ResultSet execSproc(String sprocName, HashMap<Integer, String> parameters)
+//<<<<<<< enloe-dev
+    protected ResultSet execSproc(String sprocName, HashMap<Integer, SprocParameter> parameters)
+
             throws ClassNotFoundException, SQLException {
         ResultSet results;
         String sql = buildSprocSyntax(sprocName, parameters);
