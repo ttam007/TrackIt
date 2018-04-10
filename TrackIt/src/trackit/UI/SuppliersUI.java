@@ -7,11 +7,10 @@ import javax.swing.*;
 import trackit.*;
 
 /**
- * UI Layer: Handles all aspects of the Suppliers panel. TODO: convert to
- * JPanel.
+ * UI Layer: Handles all aspects of the Suppliers panel. 
  */
 public class SuppliersUI
-        extends JFrame{
+        extends JPanel{
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
     private static final String WINDOW_NAME = "Suppliers";
@@ -20,9 +19,10 @@ public class SuppliersUI
     private final ArrayList<Supplier> suppliers = new ArrayList<>();
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
-    JPanel pnlMain = new JPanel();
-    JButton btnAddToList = new JButton();
-    JButton btnRemoveFromList = new JButton();
+    JButton btnCreate, btnRemove, btnEdit;
+    String[] suppliersLabel = {"Supplier", "Web Address"};
+    JTable suppliersTable;
+    SupplierDetailsUI details;
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -36,29 +36,61 @@ public class SuppliersUI
      * Sets up all components used in this frame.
      */
     private void initializeComponents() {
-        //Setup main frame
-        int frameWidth = 1200;
-        int frameHeight = 600;
-        Dimension dimFrame = new Dimension(frameWidth, frameHeight);
-        this.setTitle(Utilities.getWindowCaption(WINDOW_NAME));
-        this.setPreferredSize(dimFrame);
-        this.setLocationRelativeTo(null);
-        this.setResizable(false);
-        this.setDefaultCloseOperation(0);
-
-        //Add all components here and set properties.
-        this.add(pnlMain);
-        this.add(this.btnAddToList);
-        this.btnAddToList.addActionListener((ActionEvent e) -> {
-            //TODO
+        //Setup main panel
+        
+        this.setLayout(new BorderLayout());
+        
+        JPanel topSup = new JPanel();
+        JLabel lblFilter = new JLabel("Filter");
+        topSup.add(lblFilter);
+        //JDropDownMenu ddFilter = new JDropDownMenu();
+        
+        //add data to suppliers arraylist 
+        Object[][] suppliersTestData = {{"Amazon", "http://www.amazon.com"}, {"Walmart", "http://www.walmart.com"}, {"Ebay", "http://www.ebay.com"} };
+        suppliersTable = new JTable(suppliersTestData, suppliersLabel);
+        JScrollPane suppliersScrollPane = new JScrollPane(suppliersTable);
+        suppliersTable.setFillsViewportHeight(true);
+        suppliersTable.setDefaultEditor(Object.class, null);
+        
+        this.add(suppliersScrollPane, BorderLayout.CENTER);
+        
+        JPanel btmSup = new JPanel();
+        
+        btnCreate = new JButton("Add");
+        btnCreate.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.print("add supply");
+                details = new SupplierDetailsUI(true);
+            }
+            
         });
-        this.add(this.btnRemoveFromList);
-        this.btnRemoveFromList.addActionListener((ActionEvent e) -> {
-            //TODO
+        
+        btnEdit = new JButton("Edit");
+        btnEdit.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.print("Edit supply");
+                details = new SupplierDetailsUI(false);
+            }
+            
         });
-
-        //Finalizations
-        pack();
+        
+        btnRemove = new JButton("Remove");
+        btnRemove.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.print("remove supply");
+            }
+            
+        });
+        
+        btmSup.add(btnCreate);
+        btmSup.add(btnEdit);
+        btmSup.add(btnRemove);
+        
+        this.add(btmSup, BorderLayout.SOUTH);
+        
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">

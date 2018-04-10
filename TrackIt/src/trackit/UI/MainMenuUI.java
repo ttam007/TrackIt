@@ -19,23 +19,10 @@ public class MainMenuUI extends JFrame {
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
 
-    JPanel pnlMain = new JPanel();
-    DashboardUI dashboardTab = new DashboardUI();
-    InventoryItemsUI inventoryTab = new InventoryItemsUI();
-    OrdersUI ordersTab = new OrdersUI();
-    SuppliersUI suppliersTab = new SuppliersUI();
-
-    //JPanel pnlMain = new JPanel();
-    //InventoryItemsUI inventoryTab = new InventoryItemsUI();
-    //OrdersUI ordersTab = new OrdersUI();
-    SupplierDetailsUI details;
-    
-    JPanel dashboard, inventory, supplies, orders, incomingPurchases, inventoryStats, dashbox4, notifications;
+    JPanel dashboardTab, inventoryTab, suppliersTab, ordersTab;
     JTabbedPane tabpane;
     JLabel title;
-    JButton logout, exit, searchSupplier, addSupplier, removeSupplier, editSupplier, order;
-    String[] suppliersLabel = {"Supplier", "Web Address"};
-    JTable suppliersTable;
+    JButton btnLogout, btnExit;
     
 
     // </editor-fold>
@@ -56,7 +43,6 @@ public class MainMenuUI extends JFrame {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         this.setTitle(WINDOW_NAME);
         this.setSize(screenSize.width, screenSize.height);
-        //this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new CloseQuery());
@@ -64,120 +50,36 @@ public class MainMenuUI extends JFrame {
         setLayout(new BorderLayout());
 
         //Add all components here and set properties.
+        tabpane = new JTabbedPane();
+        tabpane.add("Dashboard", dashboardTab);
+        tabpane.add("Inventory", inventoryTab);
+        tabpane.add("Orders", ordersTab);
+        tabpane.add("Supplies", suppliersTab);
         
-        /****************DASHBOARD START****************/
-        dashboard = new JPanel();
-        dashboard.setLayout(new BorderLayout());
+        add(tabpane, BorderLayout.CENTER);
         
-        JPanel center = new JPanel();
-        JLabel test = new JLabel("words");
-        center.add(test);
-        dashboard.add(center, BorderLayout.CENTER);
-        
-        JPanel btm = new JPanel();
-        logout = new JButton("Log Out");
-        logout.addActionListener(new ActionListener(){
+        JPanel pnlBottom = new JPanel();
+        btnLogout = new JButton("Log Out");
+        btnLogout.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.print("logout");
                 setVisible(false);
                 LoginUI login = new LoginUI();
                 login.display();
             }
             
         });
-        exit = new JButton("Exit");
-        exit.addActionListener(new ActionListener(){
+        btnExit = new JButton("Exit");
+        btnExit.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.print("exit");
                 System.exit(0);
             }
             
         });
-        btm.add(logout);
-        btm.add(exit);
-        dashboard.add(btm, BorderLayout.SOUTH);
-        
-        /****************DASHBOARD END****************/
-        
-        /****************INVENTORY START****************/
-        inventory = new JPanel();
-        
-        
-        /****************INVENTORY END****************/
-        
-        /****************ORDER START****************/
-        orders = new JPanel();
-        
-        
-        /****************ORDER END****************/
-        
-        /****************SUPPLIES START****************/
-        supplies = new JPanel();
-        supplies.setLayout(new BorderLayout());
-        
-        JPanel topSup = new JPanel();
-        JLabel lblFilter = new JLabel("Filter");
-        topSup.add(lblFilter);
-        //JDropDownMenu ddFilter = new JDropDownMenu();
-        
-        Object[][] suppliersTestData = {{"Amazon", "http://www.amazon.com"}, {"Walmart", "http://www.walmart.com"}, {"Ebay", "http://www.ebay.com"} };
-        suppliersTable = new JTable(suppliersTestData, suppliersLabel);
-        JScrollPane suppliersScrollPane = new JScrollPane(suppliersTable);
-        suppliersTable.setFillsViewportHeight(true);
-        suppliersTable.setDefaultEditor(Object.class, null);
-        
-        supplies.add(suppliersScrollPane, BorderLayout.CENTER);
-        
-        JPanel btmSup = new JPanel();
-        
-        addSupplier = new JButton("Add");
-        addSupplier.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.print("add supply");
-                details = new SupplierDetailsUI(true);
-                
-            }
-            
-        });
-        
-        editSupplier = new JButton("Edit");
-        editSupplier.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.print("Edit supply");
-                details = new SupplierDetailsUI(false);
-            }
-            
-        });
-        removeSupplier = new JButton("Remove");
-        removeSupplier.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.print("remove supply");
-                
-            }
-            
-        });
-        
-        btmSup.add(addSupplier);
-        btmSup.add(editSupplier);
-        btmSup.add(removeSupplier);
-        
-        supplies.add(btmSup, BorderLayout.SOUTH);
-        
-        /****************SUPPLIES END****************/
-        
-        
-        tabpane = new JTabbedPane();
-        tabpane.add("Dashboard", dashboard);
-        tabpane.add("Inventory", inventory);
-        tabpane.add("Orders", orders);
-        tabpane.add("Supplies", supplies);
-        
-        add(tabpane, BorderLayout.CENTER);
+        pnlBottom.add(btnLogout);
+        pnlBottom.add(btnExit);
+        add(pnlBottom, BorderLayout.SOUTH);
         
         //Finalizations
         //pack();
@@ -196,7 +98,6 @@ public class MainMenuUI extends JFrame {
      * Displays the frame.
      */
     public void display() {
-        System.out.println(String.format("Displaying %s...", WINDOW_NAME));
         setVisible(true);
     }
 
