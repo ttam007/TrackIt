@@ -11,7 +11,7 @@ import trackit.*;
  * JPanel.
  */
 public class SuppliersUI
-        extends JFrame {
+        extends JFrame{
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
     private static final String WINDOW_NAME = "Suppliers";
