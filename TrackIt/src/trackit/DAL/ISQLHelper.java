@@ -13,7 +13,7 @@ public abstract interface ISQLHelper<T> {
      * @throws SQLException
      */
     public abstract ArrayList<T> selectAll()
-            throws SQLException;
+            throws SQLException, Exception;
 
     /**
      * Gets a single T from database.
@@ -23,7 +23,7 @@ public abstract interface ISQLHelper<T> {
      * @throws SQLException
      */
     public abstract T selectOne(Integer primaryKey)
-            throws SQLException;
+            throws SQLException, Exception;
 
     /**
      * Inserts a list of T's into the database.
@@ -33,7 +33,7 @@ public abstract interface ISQLHelper<T> {
      * @throws SQLException
      */
     public abstract List<Integer> insertAll(List<T> aList)
-            throws SQLException;
+            throws SQLException, Exception;
 
     /**
      * Inserts a single T into the database.
@@ -43,7 +43,7 @@ public abstract interface ISQLHelper<T> {
      * @throws SQLException
      */
     public abstract Integer insert(T anObject)
-            throws SQLException;
+            throws SQLException, Exception;
 
     /**
      * Updates the database with values from a list of T's.
@@ -52,7 +52,7 @@ public abstract interface ISQLHelper<T> {
      * @throws SQLException
      */
     public abstract void updateAll(List<T> aList)
-            throws SQLException;
+            throws SQLException, Exception;
 
     /**
      * Updates the database with values from a single T.
@@ -61,7 +61,7 @@ public abstract interface ISQLHelper<T> {
      * @throws SQLException
      */
     public abstract void update(T anObject)
-            throws SQLException;
+            throws SQLException, Exception;
 
     /**
      * Deletes from the database all T's in the list.
@@ -70,7 +70,7 @@ public abstract interface ISQLHelper<T> {
      * @throws SQLException
      */
     public abstract void deleteAll(List<Integer> aList)
-            throws SQLException;
+            throws SQLException, Exception;
 
     /**
      * Deletes from the database a single T.
@@ -79,5 +79,5 @@ public abstract interface ISQLHelper<T> {
      * @throws SQLException
      */
     public abstract void delete(Integer primaryKey)
-            throws SQLException;
+            throws SQLException, Exception;
 }

@@ -36,8 +36,10 @@ public abstract class SQLHelper<T> {
      * value is the value to pass.
      * @return A valid SQL command for running the specified stored procedure.
      */
-    private String buildSprocSyntax(String sprocName, HashMap<Integer, String> parameters) {
-        return "";
+    private String buildSprocSyntax(String sprocName, HashMap<Integer, SprocParameter> parameters) {
+        StringBuilder sb = new StringBuilder();
+        //TODO:  code this
+        return sb.toString();
     }
 
     // </editor-fold>
@@ -50,19 +52,20 @@ public abstract class SQLHelper<T> {
      * procedure. The key is the order the parameters should be used. The key's
      * value is the value to pass.
      * @return The ResultSet returned from the stored procedure.
+     * @throws ClassNotFoundException
      * @throws SQLException
      */
-    protected ResultSet execSproc(String sprocName, HashMap<Integer, String> parameters)
-            throws SQLException {
-        ResultSet results = null;
-        try (Connection myConn = sqlConn.getConnection()) {
-            String sql = buildSprocSyntax(sprocName, parameters);
-            PreparedStatement stmt = myConn.prepareCall(sql);
+    protected ResultSet execSproc(String sprocName, HashMap<Integer, SprocParameter> parameters)
+            throws ClassNotFoundException, SQLException {
+        ResultSet results;
+        String sql = buildSprocSyntax(sprocName, parameters);
+
+        try (Connection myConn = sqlConn.getConnection();
+                PreparedStatement stmt = myConn.prepareCall(sql)) {
             results = stmt.executeQuery();
-        } catch (SQLException exSQL) {
-            throw exSQL;
         }
+
         return results;
     }
-    // </editor-fold>
+// </editor-fold>
 }
