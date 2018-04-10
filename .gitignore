@@ -1,2 +1,4 @@
 /TrackItTestDriver/build/
 /TrackItTestDriver/nbproject/private/
+*.properties
+*.properties

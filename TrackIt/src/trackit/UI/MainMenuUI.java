@@ -18,17 +18,17 @@ public class MainMenuUI extends JFrame {
     private final MainMenu bll = new MainMenu();
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
-<<<<<<< HEAD
+
     JPanel pnlMain = new JPanel();
     DashboardUI dashboardTab = new DashboardUI();
     InventoryItemsUI inventoryTab = new InventoryItemsUI();
     OrdersUI ordersTab = new OrdersUI();
     SuppliersUI suppliersTab = new SuppliersUI();
-=======
+
     //JPanel pnlMain = new JPanel();
     //InventoryItemsUI inventoryTab = new InventoryItemsUI();
     //OrdersUI ordersTab = new OrdersUI();
-    SupplierDetailsUI suppliersTab = new SupplierDetailsUI();
+    SupplierDetailsUI details;
     
     JPanel dashboard, inventory, supplies, orders, incomingPurchases, inventoryStats, dashbox4, notifications;
     JTabbedPane tabpane;
@@ -37,7 +37,7 @@ public class MainMenuUI extends JFrame {
     String[] suppliersLabel = {"Supplier", "Web Address"};
     JTable suppliersTable;
     
->>>>>>> lagail_dev
+
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     public MainMenuUI() {
@@ -137,7 +137,7 @@ public class MainMenuUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.print("add supply");
-                //AddSupplier add = new AddSupplier();
+                details = new SupplierDetailsUI(true);
                 
             }
             
@@ -148,7 +148,7 @@ public class MainMenuUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.print("Edit supply");
-                SupplierDetailsUI details = new SupplierDetailsUI();
+                details = new SupplierDetailsUI(false);
             }
             
         });

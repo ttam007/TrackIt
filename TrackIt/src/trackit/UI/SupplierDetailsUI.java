@@ -51,7 +51,7 @@ public class SupplierDetailsUI
 
         //Add all components here and set properties.
         this.add(pnlMain);
-<<<<<<< HEAD
+
         this.add(this.btnOK);
         this.btnOK.addActionListener((ActionEvent e) -> {
             if (!bll.save()) {
@@ -62,9 +62,9 @@ public class SupplierDetailsUI
         this.btnCancel.addActionListener((ActionEvent e) -> {
             //TODO:  close window and return to prior window.
         });
-=======
+
         
->>>>>>> lagail_dev
+
 
         //Finalizations
         pack();

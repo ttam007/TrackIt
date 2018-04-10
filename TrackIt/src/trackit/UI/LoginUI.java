@@ -21,18 +21,14 @@ public class LoginUI
     // <editor-fold defaultstate="collapsed" desc="Components">
     JPanel pnlMain = new JPanel();
     JLabel lblUsername, lblPassword, lblTitle, lblAccess;
-<<<<<<< HEAD
-    JTextField tfUsername, tfPassword;
+    JTextField tfUsername;
     JButton btnOK;
     JPanel pnlNorth, pnlSouth, pnlCenter, pnlCentWest, pnlCentCenter, pnlCentSouth;
-=======
-    JTextField tfUsername;
+   
     JPasswordField pfPassword;
     JButton btnSubmit;
-    JPanel pnlNorth, pnlSouth, pnlCenter, pnlCentWest, pnlCentCenter, pnlCentSouth;
     String username, password;
 
->>>>>>> lagail_dev
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -68,11 +64,9 @@ public class LoginUI
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new CloseQuery());
-<<<<<<< HEAD
+
         this.setLayout(new BorderLayout());
-=======
-        this.setLayout(new BorderLayout()); 
->>>>>>> lagail_dev
+
 
         //Add all components here and set properties.
         //this.add(pnlMain);
@@ -164,7 +158,6 @@ public class LoginUI
             
         });
 
-<<<<<<< HEAD
         pnlNorth = new JPanel();
         lblTitle = new JLabel(Utilities.PROGRAM_NAME_LONG);
         pnlNorth.add(lblTitle);
@@ -173,21 +166,21 @@ public class LoginUI
         pnlCenter = new JPanel();
         add(pnlCenter, BorderLayout.CENTER);
 
-        Box usernameBx = Box.createHorizontalBox();
+        usernameBx = Box.createHorizontalBox();
         lblUsername = new JLabel("Username: ");
         usernameBx.add(lblUsername);
         tfUsername = new JTextField(20);
         usernameBx.add(tfUsername);
-        Box passwordBx = Box.createHorizontalBox();
+        passwordBx = Box.createHorizontalBox();
         lblPassword = new JLabel("Password: ");
         passwordBx.add(lblPassword);
-        tfPassword = new JTextField(20);
-        passwordBx.add(tfPassword);
-        Box submitBx = Box.createHorizontalBox();
+        pfPassword = new JPasswordField(20);
+        passwordBx.add(pfPassword);
+        submitBx = Box.createHorizontalBox();
         btnOK = new JButton("Log In");
         submitBx.add(btnOK);
 
-        Box combine = Box.createVerticalBox();
+        combine = Box.createVerticalBox();
         combine.add(usernameBx);
         combine.add(passwordBx);
         combine.add(submitBx);
@@ -200,7 +193,7 @@ public class LoginUI
         add(lblAccess, BorderLayout.SOUTH);
 
         btnOK.addActionListener((ActionEvent e) -> {
-            if (this.bll.startLogin(this.tfUsername.getText().trim(), this.tfPassword.getText().trim())) {
+            if (this.bll.startLogin(this.tfUsername.getText().trim(), this.pfPassword.getText().trim())) {
                 this.dispose();
             } else {
                 JOptionPane.showMessageDialog(this,
@@ -212,9 +205,9 @@ public class LoginUI
             }
         });
 
-=======
+
         
->>>>>>> lagail_dev
+
         //Finalizations
         this.pack();
     }
