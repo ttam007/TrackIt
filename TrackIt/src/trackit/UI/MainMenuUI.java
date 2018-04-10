@@ -46,7 +46,7 @@ public class MainMenuUI extends JFrame {
         //Setup main frame
         
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        this.setTitle(Utilities.getWindowCaption(WINDOW_NAME));
+        this.setTitle(WINDOW_NAME);
         this.setSize(screenSize.width, screenSize.height);
         //this.setLocationRelativeTo(null);
         this.setResizable(false);
@@ -188,7 +188,7 @@ public class MainMenuUI extends JFrame {
      * Displays the frame.
      */
     public void display() {
-        System.out.println(String.format("Displaying {0}...", WINDOW_NAME));
+        System.out.println(String.format("Displaying %s...", WINDOW_NAME));
         setVisible(true);
     }
 

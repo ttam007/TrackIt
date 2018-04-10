@@ -21,7 +21,8 @@ public class LoginUI
     // <editor-fold defaultstate="collapsed" desc="Components">
     JPanel pnlMain = new JPanel();
     JLabel lblUsername, lblPassword, lblTitle, lblAccess;
-    JTextField tfUsername, tfPassword;
+    JTextField tfUsername;
+    JPasswordField pfPassword;
     JButton btnSubmit;
     JPanel pnlNorth, pnlSouth, pnlCenter, pnlCentWest, pnlCentCenter, pnlCentSouth;
     String username, password;
@@ -43,7 +44,7 @@ public class LoginUI
         int frameWidth = 500;
         int frameHeight = 150;
         Dimension dimFrame = new Dimension(frameWidth, frameHeight);
-        this.setTitle(Utilities.getWindowCaption(WINDOW_NAME));
+        this.setTitle(WINDOW_NAME);
         this.setPreferredSize(dimFrame);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
@@ -52,10 +53,10 @@ public class LoginUI
         this.setLayout(new BorderLayout()); 
 
         //Add all components here and set properties.
-        this.add(pnlMain);
+        //this.add(pnlMain);
         
         pnlNorth = new JPanel();
-        lblTitle = new JLabel("TrackIt Inventory Management System");
+        lblTitle = new JLabel("Home Inventory Tracking System");
         pnlNorth.add(lblTitle);
         add(pnlNorth, BorderLayout.NORTH);
 
@@ -70,8 +71,8 @@ public class LoginUI
         Box passwordBx = Box.createHorizontalBox();
         lblPassword = new JLabel("Password: ");
         passwordBx.add(lblPassword);
-        tfPassword = new JTextField(20);
-        passwordBx.add(tfPassword);
+        pfPassword = new JPasswordField(20);
+        passwordBx.add(pfPassword);
         Box submitBx = Box.createHorizontalBox();
         btnSubmit = new JButton("Log In");
         submitBx.add(btnSubmit);
@@ -92,7 +93,7 @@ public class LoginUI
             @Override
             public void actionPerformed(ActionEvent e) {
                 username = tfUsername.getText().trim();
-                password = tfPassword.getText().trim();
+                password = pfPassword.getText().trim();
 
                 if ("admin".equals(username) && "pwd".equals(password)) {
                     lblAccess.setText("Access granted");
@@ -107,6 +108,39 @@ public class LoginUI
                 }
             }
         });
+        
+        btnSubmit.addKeyListener(new KeyListener(){
+            @Override
+            public void keyTyped(KeyEvent e) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode()==KeyEvent.VK_ENTER){
+                    username = tfUsername.getText().trim();
+                    password = pfPassword.getText().trim();
+
+                    if ("admin".equals(username) && "pwd".equals(password)) {
+                        lblAccess.setText("Access granted");
+                        setVisible(false);
+                        MainMenuUI newFrame = new MainMenuUI();
+                    } else if (!"admin".equals(username)) {
+                        lblAccess.setText("Access denied. Invalid username");
+                    } else if (!"pwd".equals(password)) {
+                        lblAccess.setText("Access denied. Invalid password");
+                    } else {
+                        lblAccess.setText("Access denied");
+                    }
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+            
+        });
 
         
         //Finalizations
@@ -119,7 +153,7 @@ public class LoginUI
      * Displays the frame.
      */
     public void display() {
-        System.out.println(String.format("Displaying {0}...", WINDOW_NAME));
+        System.out.println(String.format("Displaying %s...", WINDOW_NAME));
         setVisible(true);
     }
 
