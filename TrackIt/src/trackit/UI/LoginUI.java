@@ -21,9 +21,18 @@ public class LoginUI
     // <editor-fold defaultstate="collapsed" desc="Components">
     JPanel pnlMain = new JPanel();
     JLabel lblUsername, lblPassword, lblTitle, lblAccess;
+<<<<<<< HEAD
     JTextField tfUsername, tfPassword;
     JButton btnOK;
     JPanel pnlNorth, pnlSouth, pnlCenter, pnlCentWest, pnlCentCenter, pnlCentSouth;
+=======
+    JTextField tfUsername;
+    JPasswordField pfPassword;
+    JButton btnSubmit;
+    JPanel pnlNorth, pnlSouth, pnlCenter, pnlCentWest, pnlCentCenter, pnlCentSouth;
+    String username, password;
+
+>>>>>>> lagail_dev
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -53,17 +62,109 @@ public class LoginUI
         int frameWidth = 500;
         int frameHeight = 150;
         Dimension dimFrame = new Dimension(frameWidth, frameHeight);
-        this.setTitle(Utilities.getWindowCaption(WINDOW_NAME));
+        this.setTitle(WINDOW_NAME);
         this.setPreferredSize(dimFrame);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new CloseQuery());
+<<<<<<< HEAD
         this.setLayout(new BorderLayout());
+=======
+        this.setLayout(new BorderLayout()); 
+>>>>>>> lagail_dev
 
         //Add all components here and set properties.
-        this.add(pnlMain);
+        //this.add(pnlMain);
+        
+        pnlNorth = new JPanel();
+        lblTitle = new JLabel("Home Inventory Tracking System");
+        pnlNorth.add(lblTitle);
+        add(pnlNorth, BorderLayout.NORTH);
 
+        pnlCenter = new JPanel();
+        add(pnlCenter, BorderLayout.CENTER);
+
+        Box usernameBx = Box.createHorizontalBox();
+        lblUsername = new JLabel("Username: ");
+        usernameBx.add(lblUsername);
+        tfUsername = new JTextField(20);
+        usernameBx.add(tfUsername);
+        Box passwordBx = Box.createHorizontalBox();
+        lblPassword = new JLabel("Password: ");
+        passwordBx.add(lblPassword);
+        pfPassword = new JPasswordField(20);
+        passwordBx.add(pfPassword);
+        Box submitBx = Box.createHorizontalBox();
+        btnSubmit = new JButton("Log In");
+        submitBx.add(btnSubmit);
+
+        Box combine = Box.createVerticalBox();
+        combine.add(usernameBx);
+        combine.add(passwordBx);
+        combine.add(submitBx);
+
+        pnlCenter.add(combine);
+
+        pnlSouth = new JPanel();
+        lblAccess = new JLabel("");
+        pnlSouth.add(lblAccess);
+        add(lblAccess, BorderLayout.SOUTH);
+
+        btnSubmit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                username = tfUsername.getText().trim();
+                password = pfPassword.getText().trim();
+
+                if ("admin".equals(username) && "pwd".equals(password)) {
+                    lblAccess.setText("Access granted");
+                    setVisible(false);
+                    MainMenuUI newFrame = new MainMenuUI();
+                } else if (!"admin".equals(username)) {
+                    lblAccess.setText("Access denied. Invalid username");
+                } else if (!"pwd".equals(password)) {
+                    lblAccess.setText("Access denied. Invalid password");
+                } else {
+                    lblAccess.setText("Access denied");
+                }
+            }
+        });
+        
+        btnSubmit.addKeyListener(new KeyListener(){
+            @Override
+            public void keyTyped(KeyEvent e) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode()==KeyEvent.VK_ENTER){
+                    username = tfUsername.getText().trim();
+                    password = pfPassword.getText().trim();
+
+                    if ("admin".equals(username) && "pwd".equals(password)) {
+                        lblAccess.setText("Access granted");
+                        setVisible(false);
+                        MainMenuUI newFrame = new MainMenuUI();
+                    } else if (!"admin".equals(username)) {
+                        lblAccess.setText("Access denied. Invalid username");
+                    } else if (!"pwd".equals(password)) {
+                        lblAccess.setText("Access denied. Invalid password");
+                    } else {
+                        lblAccess.setText("Access denied");
+                    }
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+            
+        });
+
+<<<<<<< HEAD
         pnlNorth = new JPanel();
         lblTitle = new JLabel(Utilities.PROGRAM_NAME_LONG);
         pnlNorth.add(lblTitle);
@@ -111,6 +212,9 @@ public class LoginUI
             }
         });
 
+=======
+        
+>>>>>>> lagail_dev
         //Finalizations
         this.pack();
     }
@@ -121,7 +225,7 @@ public class LoginUI
      * Displays the frame.
      */
     public void display() {
-        System.out.println(String.format("Displaying {0}...", WINDOW_NAME));
+        System.out.println(String.format("Displaying %s...", WINDOW_NAME));
         setVisible(true);
     }
 
