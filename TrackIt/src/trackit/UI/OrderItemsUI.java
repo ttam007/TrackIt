@@ -7,7 +7,8 @@ import javax.swing.*;
 import trackit.*;
 
 /**
- * UI Layer: Handles all aspects of the OrderItems's UI.
+ * UI Layer: Handles all aspects of the Order Details dialog. This is a
+ * combination of the Edit Order Details and the OrderItems grid.
  */
 public class OrderItemsUI
         extends JFrame {
@@ -17,6 +18,7 @@ public class OrderItemsUI
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
     private final ArrayList<OrderItem> orderItems = new ArrayList<>();
+    private final Order bll = new Order();
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     JPanel pnlMain = new JPanel();
@@ -30,6 +32,7 @@ public class OrderItemsUI
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     public OrderItemsUI() {
         initializeComponents();
+        getValues();
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
@@ -86,6 +89,12 @@ public class OrderItemsUI
 
         //Finalizations
         pack();
+    }
+
+    private void getValues() {
+        if (bll.load()) {
+            this.orderItems.addAll(bll.getItems());
+        }
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">

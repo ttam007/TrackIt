@@ -5,22 +5,21 @@ import java.util.*;
 import trackit.DAL.*;
 
 /**
- * BAL Layer:  Handles all aspects of a single Item in Inventory.
+ * BAL Layer: Handles all aspects of a single Item in Inventory.
  */
 public class InventoryItem
         extends Item
-        implements IDataAwareObject,
-        IItemHandler {
+        implements IDataAwareObject {
 
     // <editor-fold defaultstate="collapsed" desc="Private Fields">
     private Integer quantity;
     private java.util.Date expirationDate;
     // </editor-fold>
 
-    public InventoryItem(){
-        
+    public InventoryItem() {
+
     }
-    
+
     @Override
     public Integer getPrimaryKey() {
         return this.primaryKey;
@@ -35,6 +34,7 @@ public class InventoryItem
     public boolean load(Integer primaryKey) {
         //TODO:  load all fields from database.
         //TODO:  catch IllegalArgumentException, SQLException.
+        //TODO:  If nothing to load from database, then set fields with default values.
         return false;
     }
 
@@ -44,13 +44,14 @@ public class InventoryItem
         /*
         try {
             if (this.isAlreadyInDatabase()){
-                //TODO:  call Update sproc
+                //TODO:  call Update sproc.
             } else {
-                //TODO:  call Insert sproc
+                //TODO:  call Insert sproc.
+                //TODO:  set primary key from returned value.
             }
             returnValue = true;
         } catch (SQLException exSQL) {
-            //TODO:  set this.errorMessage.
+            this.errorMessage = exSQL.getLocalizedMessage();
         }
          */
         return returnValue;
@@ -62,20 +63,14 @@ public class InventoryItem
         return false;
     }
 
-    @Override
-    public void addItem(Item anItem) {
-    }
-
-    @Override
-    public void removeItem(Item anItem) {
-    }
-
-    @Override
-    public void reduceItem(Item anItem, Integer quantity) throws NegativeAmountException {
-    }
-
     public ArrayList<Item> getExpiredItems() {
         ArrayList<Item> returnValue = new ArrayList<>();
         return returnValue;
+    }
+
+    @Override
+    public void changeQuantity(int amountToChangeBy)
+            throws NegativeAmountException {
+        throw new NegativeAmountException();
     }
 }

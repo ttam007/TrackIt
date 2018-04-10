@@ -9,8 +9,7 @@ import trackit.DAL.*;
  */
 public class OrderItem
         extends Item
-        implements IDataAwareObject,
-        IItemHandler {
+        implements IDataAwareObject {
 
     private Order order;
     private Integer quantityOrdered;
@@ -31,6 +30,7 @@ public class OrderItem
     public boolean load(Integer primaryKey) {
         //TODO:  load all fields from database.
         //TODO:  catch IllegalArgumentException, SQLException.
+        //TODO:  If nothing to load from database, then set fields with default values.
         return false;
     }
 
@@ -59,14 +59,8 @@ public class OrderItem
     }
 
     @Override
-    public void addItem(Item anItem) {
-    }
-
-    @Override
-    public void removeItem(Item anItem) {
-    }
-
-    @Override
-    public void reduceItem(Item anItem, Integer quantity) throws NegativeAmountException {
+    public void changeQuantity(int amountToChangeBy)
+            throws NegativeAmountException {
+        throw new NegativeAmountException();
     }
 }

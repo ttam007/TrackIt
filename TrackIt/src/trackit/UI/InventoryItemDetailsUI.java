@@ -6,7 +6,8 @@ import javax.swing.*;
 import trackit.*;
 
 /**
- * UI Layer: Handles all aspects of the InventoryItem Detail's UI.
+ * UI Layer: Handles all aspects of the Create Inventory Item and Edit Inventory
+ * Item dialog.
  */
 public class InventoryItemDetailsUI
         extends ItemDetailsUI<InventoryItem> {
@@ -14,13 +15,15 @@ public class InventoryItemDetailsUI
 
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
-    // </editor-fold>
+      private final boolean isCreateMode;
+   // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
-    public InventoryItemDetailsUI() {
+    public InventoryItemDetailsUI(boolean useCreateMode) {
         super("Inventory Item Details", new InventoryItem());
-
+  
+        this.isCreateMode = useCreateMode;      
         this.initializeComponents();
     }
     // </editor-fold>
