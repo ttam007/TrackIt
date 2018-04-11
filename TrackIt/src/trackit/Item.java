@@ -10,14 +10,21 @@ public abstract class Item
         extends DatabaseObject
         implements IDataAwareObject {
 
+    // <editor-fold defaultstate="expanded" desc="Private Fields">
     private String description;
     private String sku;
     private Float size;
     private String sizeUnit;
     private ItemStatusType itemStatus;
+    // </editor-fold>
+    // <editor-fold defaultstate="expanded" desc="Constructors">
 
     public Item() {
     }
+    // </editor-fold>
+    // <editor-fold defaultstate="expanded" desc="Setters & Getters">
+    // </editor-fold>
+    // <editor-fold defaultstate="expanded" desc="Public Methods">
 
     public Item(String description, String sku, Float size, String sizeUnit) {
         this();
@@ -28,23 +35,24 @@ public abstract class Item
     }
 
     @Override
-    public Integer getPrimaryKey() {
-        return this.primaryKey;
-    }
-
-    @Override
     public boolean load() {
         return load(this.primaryKey);
     }
 
     @Override
-    public abstract boolean load(Integer primaryKey);
+    public boolean load(Integer primaryKey) {
+        return false;
+    }
 
     @Override
-    public abstract boolean save();
+    public boolean save() {
+        return false;
+    }
 
     @Override
-    public abstract boolean remove();
+    public boolean remove() {
+        return false;
+    }
 
     /**
      * Changes the quantity of this item by the specified amount.
@@ -56,4 +64,5 @@ public abstract class Item
      * quantity below zero, then this error will be thrown.
      */
     abstract void changeQuantity(int amountToChangeBy);
+    // </editor-fold>
 }

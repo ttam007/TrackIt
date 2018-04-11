@@ -9,6 +9,13 @@ import java.sql.*;
 public abstract interface IDataAwareObject {
 
     /**
+     * The setter for the primary key property of this object.
+     *
+     * @param primaryKey The value of the primary key.
+     */
+    public abstract void setPrimaryKey(Integer primaryKey);
+
+    /**
      * The getter for the primary key property of this object.
      *
      * @return The primary key. If negative, then not set in database. If zero,

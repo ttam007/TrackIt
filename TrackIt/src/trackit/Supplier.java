@@ -5,23 +5,59 @@ import java.util.*;
 import trackit.DAL.*;
 
 /**
- * BAL Layer:  Handles all aspects of a single Supplier.
+ * BAL Layer: Handles all aspects of a single Supplier.
  */
 public class Supplier
         extends DatabaseObject
         implements IDataAwareObject {
 
-    private String nickname;
-    private String url;
-  
+    // <editor-fold defaultstate="expanded" desc="Private Fields">
+    private final SQLHelperSupplier helper = new SQLHelperSupplier();
+    private String nickname = null;
+    private String url = null;
+    // </editor-fold>
+    // <editor-fold defaultstate="expanded" desc="Constructors">
+
     public Supplier() {
+        this.primaryKey = SQLHelperSupplier.INVALID_PRIMARY_KEY;
+
     }
 
-    @Override
-    public Integer getPrimaryKey() {
-        return this.primaryKey;
+    public Supplier(String nickname, String url)
+            throws SQLException {
+        this();
+        this.nickname = helper.doNullCheck(helper.COLUMN_NICKNAME, nickname);
+        this.url = helper.doNullCheck(helper.COLUMN_URL, url);
     }
 
+    public Supplier(Integer primaryKey, String nickname, String url)
+            throws SQLException {
+        this(nickname, url);
+        this.primaryKey = helper.doNullCheck(helper.COLUMN_PK, primaryKey);
+    }
+
+    // </editor-fold>
+    // <editor-fold defaultstate="expanded" desc="Setters & Getters">
+    public void setNickname(String nickname)
+            throws SQLException {
+        this.nickname = helper.doNullCheck(helper.COLUMN_NICKNAME, nickname);
+    }
+
+    public String getNickname() {
+        return this.nickname;
+    }
+
+    public void setUrl(String url)
+            throws SQLException {
+        this.url = helper.doNullCheck(helper.COLUMN_URL, url);
+    }
+
+    public String getUrl() {
+        return this.url;
+    }
+
+    // </editor-fold>
+    // <editor-fold defaultstate="expanded" desc="Public Methods">
     @Override
     public boolean load() {
         return load(this.primaryKey);
@@ -57,4 +93,5 @@ public class Supplier
         //TODO:  remove from database.  Catch SQLException.
         return false;
     }
+    // </editor-fold>
 }

@@ -92,10 +92,10 @@ public class SQLConnector {
 
         try (Connection conn = this.getConnection()) {
             isValid = true;
-        } catch (ClassNotFoundException exCNF) {
-            this.errorMessage = exCNF.getLocalizedMessage();
         } catch (SQLException exSQL) {
             this.errorMessage = Utilities.buildErrorMessage(exSQL);
+        } catch (Exception ex) {
+            this.errorMessage = ex.getLocalizedMessage();
         }
 
         return isValid;
@@ -109,8 +109,8 @@ public class SQLConnector {
      * @throws SQLException If the connection to the database is invalid.
      */
     public Connection getConnection()
-            throws ClassNotFoundException, SQLException {
-        Class.forName(DRIVER);
+            throws SQLException, Exception {
+        Class.forName(DRIVER).newInstance();
         return DriverManager.getConnection(
                 getDatabaseURL(), this.userName, this.password);
     }

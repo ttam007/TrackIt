@@ -5,9 +5,9 @@ import java.util.*;
 import trackit.*;
 
 /**
-* DAL Layer: Converts a row in database table Orders into an Order object
- and vice versa.
-  */
+ * DAL Layer: Converts a row in database table Orders into an Order object and
+ * vice versa.
+ */
 public class SQLHelperOrder
         extends SQLHelper<Order>
         implements ISQLHelper<Order> {
@@ -22,12 +22,12 @@ public class SQLHelperOrder
 
     @Override
     public ArrayList<Order> selectAll()
-            throws SQLException {
+            throws SQLException, Exception {
         ArrayList<Order> results = new ArrayList<>();
 
-        HashMap<Integer, String> params = new HashMap<>();
-        ResultSet rs = super.execSproc("sp_Orders_Select", params);
-        while (rs.next()) {
+        HashMap<Integer, SprocParameter> params = new HashMap<>();
+        ResultSet rs = super.execSproc("sp_Orders_Select", params, true);
+        while (rs != null && rs.next()) {
             Order anObj = new Order();
             //Update anObj's properties from the ResultSet.
             results.add(anObj);
@@ -38,41 +38,41 @@ public class SQLHelperOrder
 
     @Override
     public Order selectOne(Integer primaryKey)
-            throws SQLException {
+            throws SQLException, Exception {
         return new Order();
     }
 
     @Override
     public List<Integer> insertAll(List<Order> aList)
-            throws SQLException {
+            throws SQLException, Exception {
         return new ArrayList<>();
     }
 
     @Override
     public Integer insert(Order anObject)
-            throws SQLException {
+            throws SQLException, Exception {
         Integer primaryKey = INVALID_PRIMARY_KEY;
         return primaryKey;
     }
 
     @Override
     public void updateAll(List<Order> aList)
-            throws SQLException {
+            throws SQLException, Exception {
     }
 
     @Override
     public void update(Order anObject)
-            throws SQLException {
+            throws SQLException, Exception {
     }
 
     @Override
     public void deleteAll(List<Integer> primaryKeys)
-            throws SQLException {
+            throws SQLException, Exception {
     }
 
     @Override
     public void delete(Integer primaryKey)
-            throws SQLException {
+            throws SQLException, Exception {
     }
     // </editor-fold>
 }

@@ -86,7 +86,7 @@ CREATE TABLE suppliers (
     PRIMARY KEY (supplierId),
     UNIQUE idx_suppliers_nickname (nickname)
 );
-    
+
 CREATE TABLE orders (
     orderId INT UNSIGNED NOT NULL AUTO_INCREMENT,
     description VARCHAR (64) NOT NULL,
@@ -114,8 +114,8 @@ CREATE TABLE orderItems (
     orderId INT UNSIGNED NOT NULL,
     itemId INT UNSIGNED NOT NULL,
     quantityOrdered INT UNSIGNED NOT NULL DEFAULT 1,
-    price FLOAT(8,4) UNSIGNED NOT NULL DEFAULT 0,
-    extendedPrice FLOAT(10,4) UNSIGNED NOT NULL DEFAULT 0,
+    price DECIMAL(8,4) UNSIGNED NOT NULL DEFAULT 0,
+    extendedPrice DECIMAL(10,4) UNSIGNED NOT NULL DEFAULT 0,
     PRIMARY KEY (orderItemId),
     CONSTRAINT fk_orderItems_orders_orderId FOREIGN KEY (orderId) REFERENCES orders (orderId),
     CONSTRAINT fk_orderItems_items_itemId FOREIGN KEY (itemId) REFERENCES items (itemId)
@@ -212,9 +212,9 @@ END;;
 DROP PROCEDURE IF EXISTS sp_Suppliers_Insert;;
 CREATE DEFINER = CURRENT_USER 
 PROCEDURE sp_Suppliers_Insert (
+    OUT supplierId INT UNSIGNED,
 	IN nickname VARCHAR(32),
-    IN URL VARCHAR(256),
-    OUT supplierId INT UNSIGNED
+    IN URL VARCHAR(256)
 )
 BEGIN
 	INSERT INTO suppliers(nickname, URL)
@@ -271,12 +271,12 @@ END;;
 DROP PROCEDURE IF EXISTS sp_Orders_Insert;;
 CREATE DEFINER = CURRENT_USER 
 PROCEDURE sp_Orders_Insert (
+    OUT orderId INT UNSIGNED,
 	IN description VARCHAR (64),
 	IN orderedFrom INT UNSIGNED,
     IN orderStatus VARCHAR (32),
     IN dateOrdered DATE,
-    IN dateExpected DATE,
-    OUT orderId INT UNSIGNED
+    IN dateExpected DATE
 )
 BEGIN
 	INSERT INTO orders (description, orderedFrom, orderStatus, dateOrdered, dateExpected)
@@ -319,43 +319,61 @@ BEGIN
 	END IF;
 END;;
 
-/*items*/
-DROP PROCEDURE IF EXISTS sp_Items_Select;;
+/*orderItems*/
+DROP PROCEDURE IF EXISTS sp_OrderItems_Select;;
 CREATE DEFINER = CURRENT_USER 
-PROCEDURE sp_Items_Select (
-	IN itemId INT UNSIGNED
+PROCEDURE sp_OrderItems_Select (
+	IN orderItemId INT UNSIGNED
 )
 BEGIN
-	IF (itemId IS NULL) THEN
-    	SELECT *
-		FROM items;
+	IF (orderItemId IS NULL) THEN
+    	SELECT orderItems.orderItemId, orderItems.orderId, orderItems.itemId,
+			orderItems.quantityOrdered, orderItems.price, orderItems.extendedPrice,
+			items.description, items.sku, items.sizeUnit, items.itemStatus
+		FROM orderItems
+			INNER JOIN items ON orderItems.itemId = items.itemId;
     ELSE
-    	SELECT *
-		FROM items
-		WHERE items.itemId = itemId;
+    	SELECT orderItems.orderItemId, orderItems.orderId, orderItems.itemId,
+			orderItems.quantityOrdered, orderItems.price, orderItems.extendedPrice,
+			items.description, items.sku, items.sizeUnit, items.itemStatus 
+		FROM orderItems
+			INNER JOIN items ON orderItems.itemId = items.itemId
+		WHERE orderitems.orderItemId = orderItemId;
 	END IF;
 END;;
 
-DROP PROCEDURE IF EXISTS sp_Items_Insert;;
+DROP PROCEDURE IF EXISTS sp_OrderItems_Insert;;
 CREATE DEFINER = CURRENT_USER 
-PROCEDURE sp_Items_Insert (
-	IN description VARCHAR(64),
+PROCEDURE sp_OrderItems_Insert (
+	OUT orderItemId INT UNSIGNED,
+	IN orderId INT UNSIGNED,
+    IN quantityOrdered INT UNSIGNED,
+    IN price DECIMAL(8,4) UNSIGNED,
+    IN extendedPrice DECIMAL(10,4) UNSIGNED,
+    IN description VARCHAR(64),
     IN sku VARCHAR(32),
     IN sizeUnit VARCHAR(32),
-    IN itemStatus VARCHAR(32),
-    OUT itemId INT UNSIGNED
+    IN itemStatus VARCHAR(32)
 )
 BEGIN
-	INSERT INTO items (description, sku, sizeUnit, itemStatus)
-    VALUES (description, sku, sizeUnit, itemStatus);
+	DECLARE itemId INT UNSIGNED;
     
+    INSERT INTO items (description, sku, sizeUnit, itemStatus)
+    VALUES (description, sku, sizeUnit, itemStatus);
     SET itemId = LAST_INSERT_ID();
+    
+	INSERT INTO orderItems (orderId, itemId, quantityOrdered, price, extendedPrice)
+    VALUES (orderId, itemId, quantityOrdered, price, extendedPrice);
+	SET orderItemId = LAST_INSERT_ID(); 
 END;;
 
-DROP PROCEDURE IF EXISTS sp_Items_Update;;
+DROP PROCEDURE IF EXISTS sp_OrderItems_Update;;
 CREATE DEFINER = CURRENT_USER 
-PROCEDURE sp_Items_Update (
-	IN itemId INT UNSIGNED,
+PROCEDURE sp_OrderItems_Update (
+	IN orderItemId INT UNSIGNED,
+	IN quantityOrdered INT UNSIGNED,
+    IN price DECIMAL(8,4) UNSIGNED,
+    IN extendedPrice DECIMAL(10,4) UNSIGNED,
 	IN description VARCHAR(64),
     IN sku VARCHAR(32),
     IN sizeUnit VARCHAR(32),
@@ -367,72 +385,13 @@ BEGIN
 		items.sku = sku,
         items.sizeUnit = sizeUnit,
         items.itemStatus = itemStatus
-	WHERE items.itemId = itemId;
-END;;
-
-DROP PROCEDURE IF EXISTS sp_Items_Delete;;
-CREATE DEFINER = CURRENT_USER 
-PROCEDURE sp_Items_Delete (
-	IN itemId INT UNSIGNED
-)
-BEGIN
-	IF (itemId IS NULL) THEN
-		DELETE FROM items;
-	ELSE
-		DELETE FROM items
-		WHERE items.itemId = itemId;
-	END IF;
-END;;
-
-/*orderItems*/
-DROP PROCEDURE IF EXISTS sp_OrderItems_Select;;
-CREATE DEFINER = CURRENT_USER 
-PROCEDURE sp_OrderItems_Select (
-	IN orderItemId INT UNSIGNED
-)
-BEGIN
-	IF (orderItemId IS NULL) THEN
-    	SELECT *
-		FROM orderItems;
-    ELSE
-    	SELECT *
+	WHERE items.itemId = (
+		SELECT orderitems.itemId
 		FROM orderitems
-		WHERE orderitems.orderItemId = orderItemId;
-	END IF;
-END;;
+		WHERE orderitems.orderItemId = orderItemId);
 
-DROP PROCEDURE IF EXISTS sp_OrderItems_Insert;;
-CREATE DEFINER = CURRENT_USER 
-PROCEDURE sp_OrderItems_Insert (
-	IN orderId INT UNSIGNED,
-    IN itemId INT UNSIGNED,
-    IN quantityOrdered INT UNSIGNED,
-    IN price FLOAT(8,4) UNSIGNED,
-    IN extendedPrice FLOAT(10,4) UNSIGNED,
-    OUT orderItemId INT UNSIGNED
-)
-BEGIN
-	INSERT INTO orderItems (orderId, itemId, quantityOrdered, price, extendedPrice)
-    VALUES (orderId, itemId, quantityOrdered, price, extendedPrice);
-    
-	SET orderItemId = LAST_INSERT_ID(); 
-END;;
-
-DROP PROCEDURE IF EXISTS sp_OrderItems_Update;;
-CREATE DEFINER = CURRENT_USER 
-PROCEDURE sp_OrderItems_Update (
-	IN orderItemId INT UNSIGNED,
-	IN orderId INT UNSIGNED,
-    IN itemId INT UNSIGNED,
-    IN quantityOrdered INT UNSIGNED,
-    IN price FLOAT(8,4) UNSIGNED,
-    IN extendedPrice FLOAT(10,4) UNSIGNED
-)
-BEGIN
 	UPDATE orderitems
-    SET orderitems.orderId = orderId,
-		orderitems.itemId = itemId,
-        orderitems.quantityOrdered = quantityOrdered,
+    SET orderitems.quantityOrdered = quantityOrdered,
         orderitems.price = price,
         orderitems.extendedPrice = extendedPrice
 	WHERE orderitems.orderItemId = orderItemId;
@@ -444,12 +403,20 @@ PROCEDURE sp_OrderItems_Delete (
 	IN orderItemId INT UNSIGNED
 )
 BEGIN
-	IF (orderItemId IS NULL) THEN
-		DELETE FROM orderitems;
-	ELSE
-		DELETE FROM orderitems
-		WHERE orderitems.orderItemId = orderItemId;
-	END IF;
+	DECLARE itemId INT UNSIGNED;
+    SET itemId = (
+		SELECT orderitems.itemId
+		FROM orderitems
+		WHERE orderitems.orderItemId = orderItemId);
+
+	DELETE FROM orderitems
+	WHERE orderitems.orderItemId = orderItemId;
+
+	DELETE FROM items
+	WHERE items.ItemId = itemId
+		AND items.ItemId NOT IN (
+			SELECT inventoryitems.itemId
+			FROM inventoryitems);
 END;;
 
 /*inventoryItems*/
@@ -460,11 +427,17 @@ PROCEDURE sp_InventoryItems_Select (
 )
 BEGIN
 	IF (InventoryItemId IS NULL) THEN
-    	SELECT *
-		FROM InventoryItems;
+    	SELECT inventoryitems.inventoryItemId, inventoryitems.itemId,
+			inventoryitems.quantity, inventoryitems.expirationDate,
+			items.description, items.sku, items.sizeUnit, items.itemStatus 
+		FROM inventoryItems
+			INNER JOIN items ON inventoryItems.itemId = items.itemId;
     ELSE
-    	SELECT *
-		FROM InventoryItems
+    	SELECT inventoryitems.inventoryItemId, inventoryitems.itemId,
+			inventoryitems.quantity, inventoryitems.expirationDate,
+			items.description, items.sku, items.sizeUnit, items.itemStatus 
+		FROM inventoryItems
+			INNER JOIN items ON inventoryItems.itemId = items.itemId
 		WHERE InventoryItems.InventoryItemId = inventoryItemId;
 	END IF;
 END;;
@@ -472,15 +445,23 @@ END;;
 DROP PROCEDURE IF EXISTS sp_InventoryItems_Insert;;
 CREATE DEFINER = CURRENT_USER 
 PROCEDURE sp_InventoryItems_Insert (
-	IN itemId INT UNSIGNED,
+    OUT inventoryItemId INT UNSIGNED,
     IN quantity INT UNSIGNED,
     IN expirationDate DATE,
-    OUT inventoryItemId INT UNSIGNED
+	IN description VARCHAR(64),
+    IN sku VARCHAR(32),
+    IN sizeUnit VARCHAR(32),
+    IN itemStatus VARCHAR(32)
 )
 BEGIN
-	INSERT INTO inventoryItems(itemId, quantity, expirationDate)
-	VALUES(itemId, quantity, expirationDate);
+	DECLARE itemId INT UNSIGNED;
     
+	INSERT INTO items (description, sku, sizeUnit, itemStatus)
+    VALUES (description, sku, sizeUnit, itemStatus);
+    SET itemId = LAST_INSERT_ID();
+    
+    INSERT INTO inventoryItems(itemId, quantity, expirationDate)
+	VALUES(itemId, quantity, expirationDate);
     SET inventoryItemId = LAST_INSERT_ID();
 END;;
 
@@ -488,11 +469,24 @@ DROP PROCEDURE IF EXISTS sp_InventoryItems_Update;;
 CREATE DEFINER = CURRENT_USER 
 PROCEDURE sp_InventoryItems_Update (
 	IN InventoryItemId INT UNSIGNED,
-	IN itemId INT UNSIGNED,
     IN quantity INT UNSIGNED,
-    IN expirationDate DATE
+    IN expirationDate DATE,
+	IN description VARCHAR(64),
+    IN sku VARCHAR(32),
+    IN sizeUnit VARCHAR(32),
+    IN itemStatus VARCHAR(32)
 )
 BEGIN
+	UPDATE items
+    SET items.description = description,
+		items.sku = sku,
+        items.sizeUnit = sizeUnit,
+        items.itemStatus = itemStatus
+	WHERE items.itemId = (
+		SELECT inventoryitems.itemId
+		FROM inventoryitems
+		WHERE inventoryitems.inventoryItemId = inventoryItemId);
+
 	UPDATE InventoryItems
     SET inventoryItems.itemId = itemId,
 		inventoryItems.quantity = quantity,
@@ -506,12 +500,20 @@ PROCEDURE sp_InventoryItems_Delete (
 	IN inventoryItemId INT UNSIGNED
 )
 BEGIN
-	IF (inventoryItemId IS NULL) THEN
-		DELETE FROM inventoryItems;
-	ELSE
-		DELETE FROM inventoryItems
-		WHERE inventoryItems.inventoryItemId = inventoryItemId;
-	END IF;
+	DECLARE itemId INT UNSIGNED;
+    SET itemId = (
+		SELECT inventoryitems.itemId
+		FROM inventoryitems
+		WHERE inventoryitems.inventoryItemId = inventoryItemId);
+            
+	DELETE FROM inventoryItems
+	WHERE inventoryItems.inventoryItemId = inventoryItemId;
+
+	DELETE FROM items
+	WHERE items.itemId = itemId
+		AND items.ItemId NOT IN (
+			SELECT orderitems.itemId
+			FROM orderitems);
 END;;
 
 /***********************************************************************

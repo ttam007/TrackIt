@@ -11,6 +11,7 @@ public class Order
         extends DatabaseObject
         implements IDataAwareObject {
 
+    // <editor-fold defaultstate="expanded" desc="Private Fields">
     private String description;
     private Supplier orderedFrom;
     private java.util.Date dateOrdered;
@@ -18,11 +19,15 @@ public class Order
     private java.util.Date dateExpected;
     private final ArrayList<OrderItem> items = new ArrayList<>();
 
+    // </editor-fold>
+    // <editor-fold defaultstate="expanded" desc="Setters & Getters">
     @Override
     public Integer getPrimaryKey() {
         return this.primaryKey;
     }
 
+    // </editor-fold>
+    // <editor-fold defaultstate="expanded" desc="Public Methods">
     @Override
     public boolean load() {
         return load(this.primaryKey);
@@ -58,8 +63,9 @@ public class Order
         //TODO:  remove from database.  Catch SQLException.
         return false;
     }
-    
-    public ArrayList<OrderItem> getItems(){
+
+    public ArrayList<OrderItem> getItems() {
         return this.items;
     }
+    // </editor-fold>
 }

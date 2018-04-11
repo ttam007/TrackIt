@@ -15,16 +15,16 @@ public class InventoryItem
     private Integer quantity;
     private java.util.Date expirationDate;
     // </editor-fold>
+    // <editor-fold defaultstate="expanded" desc="Constructors">
 
     public InventoryItem() {
 
     }
+    // </editor-fold>
+    // <editor-fold defaultstate="expanded" desc="Setters & Getters">
 
-    @Override
-    public Integer getPrimaryKey() {
-        return this.primaryKey;
-    }
-
+    // </editor-fold>
+    // <editor-fold defaultstate="expanded" desc="Public Methods">
     @Override
     public boolean load() {
         return load(this.primaryKey);
@@ -32,6 +32,7 @@ public class InventoryItem
 
     @Override
     public boolean load(Integer primaryKey) {
+        super.load();
         //TODO:  load all fields from database.
         //TODO:  catch IllegalArgumentException, SQLException.
         //TODO:  If nothing to load from database, then set fields with default values.
@@ -40,6 +41,7 @@ public class InventoryItem
 
     @Override
     public boolean save() {
+        super.save();
         boolean returnValue = false;
         /*
         try {
@@ -60,6 +62,7 @@ public class InventoryItem
     @Override
     public boolean remove() {
         //TODO:  remove from database.  Catch SQLException.
+        super.remove();
         return false;
     }
 
@@ -73,4 +76,5 @@ public class InventoryItem
             throws NegativeAmountException {
         throw new NegativeAmountException();
     }
+    // </editor-fold>
 }
