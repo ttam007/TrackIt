@@ -19,9 +19,9 @@ BEGIN
 	-- Verify the foreign key exists 
 	IF EXISTS (SELECT NULL
 		FROM information_schema.TABLE_CONSTRAINTS
-        WHERE CONSTRAINT_SCHEMA = DATABASE()
+	   WHERE CONSTRAINT_SCHEMA = DATABASE()
 			AND CONSTRAINT_NAME = parm_key_name) THEN
-            
+		  
 		-- Turn the parameters into local variables.
 		SET @ParmTable = parm_table_name;
 		SET @ParmKey = parm_key_name;
@@ -114,8 +114,8 @@ CREATE TABLE orderItems (
     orderId INT UNSIGNED NOT NULL,
     itemId INT UNSIGNED NOT NULL,
     quantityOrdered INT UNSIGNED NOT NULL DEFAULT 1,
-    price DECIMAL(8,4) UNSIGNED NOT NULL DEFAULT 0,
-    extendedPrice DECIMAL(10,4) UNSIGNED NOT NULL DEFAULT 0,
+    price DOUBLE UNSIGNED NOT NULL DEFAULT 0,
+    extendedPrice DOUBLE UNSIGNED NOT NULL DEFAULT 0,
     PRIMARY KEY (orderItemId),
     CONSTRAINT fk_orderItems_orders_orderId FOREIGN KEY (orderId) REFERENCES orders (orderId),
     CONSTRAINT fk_orderItems_items_itemId FOREIGN KEY (itemId) REFERENCES items (itemId)
@@ -184,12 +184,8 @@ PROCEDURE sp_Lookups_Delete (
 	IN listName VARCHAR(32)
 )
 BEGIN
-	IF (listName IS NULL) THEN
-		DELETE FROM lookups;
-	ELSE
-		DELETE FROM lookups
-		WHERE lookups.listName = listName;
-	END IF;
+	DELETE FROM lookups
+	WHERE lookups.listName = listName;
 END;;
 
 /*suppliers*/
@@ -243,12 +239,8 @@ PROCEDURE sp_Suppliers_Delete (
 	IN supplierId INT UNSIGNED
 )
 BEGIN
-	IF (supplierId IS NULL) THEN
-		DELETE FROM suppliers;
-	ELSE
-		DELETE FROM suppliers
-		WHERE suppliers.supplierId = supplierId;
-	END IF;
+	DELETE FROM suppliers
+	WHERE suppliers.supplierId = supplierId;
 END;;
 
 /*orders*/
@@ -299,9 +291,9 @@ BEGIN
 	UPDATE orders
     SET orders.description = description,
 		orders.orderedFrom = orderedFrom,
-        orders.orderStatus = orderStatus,
-        orders.dateOrdered = dateOrdered,
-        orders.dateExpected = dateExpected
+	   orders.orderStatus = orderStatus,
+	   orders.dateOrdered = dateOrdered,
+	   orders.dateExpected = dateExpected
 	WHERE orders.orderId = orderId;
 END;;
 
@@ -311,12 +303,8 @@ PROCEDURE sp_Orders_Delete (
 	IN orderId INT UNSIGNED
 )
 BEGIN
-	IF (orderId IS NULL) THEN
-		DELETE FROM orders;
-	ELSE
-		DELETE FROM orders
-		WHERE orders.orderId = orderId;
-	END IF;
+	DELETE FROM orders
+	WHERE orders.orderId = orderId;
 END;;
 
 /*orderItems*/
@@ -347,20 +335,14 @@ CREATE DEFINER = CURRENT_USER
 PROCEDURE sp_OrderItems_Insert (
 	OUT orderItemId INT UNSIGNED,
 	IN orderId INT UNSIGNED,
+    IN itemId INT UNSIGNED,
     IN quantityOrdered INT UNSIGNED,
-    IN price DECIMAL(8,4) UNSIGNED,
-    IN extendedPrice DECIMAL(10,4) UNSIGNED,
-    IN description VARCHAR(64),
-    IN sku VARCHAR(32),
-    IN sizeUnit VARCHAR(32),
-    IN itemStatus VARCHAR(32)
+    IN price DOUBLE UNSIGNED
 )
 BEGIN
-	DECLARE itemId INT UNSIGNED;
+    DECLARE extendedPrice DOUBLE UNSIGNED;
     
-    INSERT INTO items (description, sku, sizeUnit, itemStatus)
-    VALUES (description, sku, sizeUnit, itemStatus);
-    SET itemId = LAST_INSERT_ID();
+    SET extendedPrice = (quantityOrdered * price);
     
 	INSERT INTO orderItems (orderId, itemId, quantityOrdered, price, extendedPrice)
     VALUES (orderId, itemId, quantityOrdered, price, extendedPrice);
@@ -372,29 +354,19 @@ CREATE DEFINER = CURRENT_USER
 PROCEDURE sp_OrderItems_Update (
 	IN orderItemId INT UNSIGNED,
 	IN quantityOrdered INT UNSIGNED,
-    IN price DECIMAL(8,4) UNSIGNED,
-    IN extendedPrice DECIMAL(10,4) UNSIGNED,
-	IN description VARCHAR(64),
-    IN sku VARCHAR(32),
-    IN sizeUnit VARCHAR(32),
-    IN itemStatus VARCHAR(32)
+    IN price DOUBLE UNSIGNED
 )
 BEGIN
-	UPDATE items
-    SET items.description = description,
-		items.sku = sku,
-        items.sizeUnit = sizeUnit,
-        items.itemStatus = itemStatus
-	WHERE items.itemId = (
-		SELECT orderitems.itemId
-		FROM orderitems
-		WHERE orderitems.orderItemId = orderItemId);
+    DECLARE extendedPrice DOUBLE UNSIGNED;
+    
+    SET extendedPrice = (quantityOrdered * price);
 
 	UPDATE orderitems
-    SET orderitems.quantityOrdered = quantityOrdered,
-        orderitems.price = price,
-        orderitems.extendedPrice = extendedPrice
-	WHERE orderitems.orderItemId = orderItemId;
+	SET	orderitems.quantityOrdered = quantityOrdered,
+		orderitems.price = price,
+		orderitems.extendedPrice = extendedPrice
+	WHERE
+		orderitems.orderItemId = orderItemId;
 END;;
 
 DROP PROCEDURE IF EXISTS sp_OrderItems_Delete;;
@@ -403,20 +375,8 @@ PROCEDURE sp_OrderItems_Delete (
 	IN orderItemId INT UNSIGNED
 )
 BEGIN
-	DECLARE itemId INT UNSIGNED;
-    SET itemId = (
-		SELECT orderitems.itemId
-		FROM orderitems
-		WHERE orderitems.orderItemId = orderItemId);
-
 	DELETE FROM orderitems
 	WHERE orderitems.orderItemId = orderItemId;
-
-	DELETE FROM items
-	WHERE items.ItemId = itemId
-		AND items.ItemId NOT IN (
-			SELECT inventoryitems.itemId
-			FROM inventoryitems);
 END;;
 
 /*inventoryItems*/
@@ -456,6 +416,14 @@ PROCEDURE sp_InventoryItems_Insert (
 BEGIN
 	DECLARE itemId INT UNSIGNED;
     
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+		ROLLBACK;
+		RESIGNAL;
+    END;
+    
+	START TRANSACTION;
+	
 	INSERT INTO items (description, sku, sizeUnit, itemStatus)
     VALUES (description, sku, sizeUnit, itemStatus);
     SET itemId = LAST_INSERT_ID();
@@ -463,6 +431,8 @@ BEGIN
     INSERT INTO inventoryItems(itemId, quantity, expirationDate)
 	VALUES(itemId, quantity, expirationDate);
     SET inventoryItemId = LAST_INSERT_ID();
+
+	COMMIT WORK;
 END;;
 
 DROP PROCEDURE IF EXISTS sp_InventoryItems_Update;;
@@ -477,11 +447,19 @@ PROCEDURE sp_InventoryItems_Update (
     IN itemStatus VARCHAR(32)
 )
 BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+		ROLLBACK;
+	   RESIGNAL;
+    END;
+    
+	START TRANSACTION;
+	
 	UPDATE items
     SET items.description = description,
 		items.sku = sku,
-        items.sizeUnit = sizeUnit,
-        items.itemStatus = itemStatus
+	   items.sizeUnit = sizeUnit,
+	   items.itemStatus = itemStatus
 	WHERE items.itemId = (
 		SELECT inventoryitems.itemId
 		FROM inventoryitems
@@ -490,8 +468,10 @@ BEGIN
 	UPDATE InventoryItems
     SET inventoryItems.itemId = itemId,
 		inventoryItems.quantity = quantity,
-        inventoryItems.expirationDate = expirationDate
+	   inventoryItems.expirationDate = expirationDate
 	WHERE inventoryItems.inventoryItemId = inventoryItemId;
+
+	COMMIT WORK;
 END;;
 
 DROP PROCEDURE IF EXISTS sp_InventoryItems_Delete;;
@@ -501,11 +481,20 @@ PROCEDURE sp_InventoryItems_Delete (
 )
 BEGIN
 	DECLARE itemId INT UNSIGNED;
+
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+		ROLLBACK;
+	   RESIGNAL;
+    END;
+    
+	START TRANSACTION;
+	
     SET itemId = (
 		SELECT inventoryitems.itemId
 		FROM inventoryitems
 		WHERE inventoryitems.inventoryItemId = inventoryItemId);
-            
+		  
 	DELETE FROM inventoryItems
 	WHERE inventoryItems.inventoryItemId = inventoryItemId;
 
@@ -514,6 +503,8 @@ BEGIN
 		AND items.ItemId NOT IN (
 			SELECT orderitems.itemId
 			FROM orderitems);
+
+	COMMIT WORK;
 END;;
 
 /***********************************************************************
