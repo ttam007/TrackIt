@@ -3,6 +3,8 @@ package trackit.DAL;
 /**
  * DAL Layer: Used to determine the direction of a stored procedure's parameter.
  * Integer conversions match ParameterMetaData.parameterMode* values.
+ *
+ * @author Bond
  */
 public enum ParameterDirection {
     // <editor-fold defaultstate="expanded" desc="Enumeration">

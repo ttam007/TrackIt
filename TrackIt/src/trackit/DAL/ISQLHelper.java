@@ -1,9 +1,14 @@
 package trackit.DAL;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.*;
+import java.util.*;
 
+/**
+ * DAL Layer: Interface for all classes that deal with database access.
+ *
+ * @author Bond
+ * @param <T> The object that needs to interact with the database.
+ */
 public abstract interface ISQLHelper<T> {
 
     /**

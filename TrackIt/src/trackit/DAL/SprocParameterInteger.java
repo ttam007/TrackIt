@@ -4,6 +4,8 @@ import java.sql.*;
 
 /**
  * DAL Layer: Handles a single INTEGER parameter for a stored procedure.
+ *
+ * @author Bond
  */
 public class SprocParameterInteger
         extends SprocParameter {

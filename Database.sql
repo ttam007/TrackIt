@@ -82,7 +82,7 @@ CREATE TABLE lookups (
 CREATE TABLE suppliers (
     supplierId INT UNSIGNED NOT NULL AUTO_INCREMENT,
     nickname VARCHAR(32) NOT NULL,
-    URL VARCHAR(256) NULL,
+    url VARCHAR(256) NULL,
     PRIMARY KEY (supplierId),
     UNIQUE idx_suppliers_nickname (nickname)
 );
@@ -137,20 +137,23 @@ CREATE TABLE inventoryItems (
 DELIMITER ;;
 
 /*lookups*/
+DROP PROCEDURE IF EXISTS sp_Lookups_SelectAll;;
+CREATE DEFINER = CURRENT_USER 
+PROCEDURE sp_Lookups_SelectAll ()
+BEGIN
+   	SELECT *
+	FROM lookups;
+END;;
+
 DROP PROCEDURE IF EXISTS sp_Lookups_Select;;
 CREATE DEFINER = CURRENT_USER 
 PROCEDURE sp_Lookups_Select (
 	IN listName VARCHAR(32)
 )
 BEGIN
-	IF (listName IS NULL) THEN
-    	SELECT *
-		FROM lookups;
-    ELSE
-    	SELECT *
-		FROM lookups
-		WHERE lookups.listName = listName;
-	END IF;
+	SELECT *
+	FROM lookups
+	WHERE lookups.listName = listName;
 END;;
 
 DROP PROCEDURE IF EXISTS sp_Lookups_Insert;;
@@ -189,20 +192,23 @@ BEGIN
 END;;
 
 /*suppliers*/
+DROP PROCEDURE IF EXISTS sp_Suppliers_SelectAll;;
+CREATE DEFINER = CURRENT_USER 
+PROCEDURE sp_Suppliers_SelectAll ()
+BEGIN
+	SELECT *
+	FROM suppliers;
+END;;
+
 DROP PROCEDURE IF EXISTS sp_Suppliers_Select;;
 CREATE DEFINER = CURRENT_USER 
 PROCEDURE sp_Suppliers_Select (
 	IN supplierId INT UNSIGNED
 )
 BEGIN
-	IF (supplierId IS NULL) THEN
-    	SELECT *
-		FROM suppliers;
-    ELSE
-    	SELECT *
-		FROM suppliers
-		WHERE suppliers.supplierId = supplierId;
-	END IF;
+	SELECT *
+	FROM suppliers
+	WHERE suppliers.supplierId = supplierId;
 END;;
 
 DROP PROCEDURE IF EXISTS sp_Suppliers_Insert;;
@@ -210,11 +216,11 @@ CREATE DEFINER = CURRENT_USER
 PROCEDURE sp_Suppliers_Insert (
     OUT supplierId INT UNSIGNED,
 	IN nickname VARCHAR(32),
-    IN URL VARCHAR(256)
+    IN url VARCHAR(256)
 )
 BEGIN
-	INSERT INTO suppliers(nickname, URL)
-	VALUES(nickname, URL);
+	INSERT INTO suppliers(nickname, url)
+	VALUES(nickname, url);
     
     SET supplierId = LAST_INSERT_ID();
 END;;
@@ -224,12 +230,12 @@ CREATE DEFINER = CURRENT_USER
 PROCEDURE sp_Suppliers_Update (
 	IN supplierId INT UNSIGNED,
 	IN nickname VARCHAR(32),
-    IN URL VARCHAR(256)
+    IN url VARCHAR(256)
 )
 BEGIN
 	UPDATE suppliers
     SET suppliers.nickname = nickname,
-		suppliers.URL = URL
+		suppliers.url = url
 	WHERE suppliers.supplierId = supplierId;
 END;;
 
@@ -244,20 +250,23 @@ BEGIN
 END;;
 
 /*orders*/
+DROP PROCEDURE IF EXISTS sp_Orders_SelectAll;;
+CREATE DEFINER = CURRENT_USER 
+PROCEDURE sp_Orders_SelectAll ()
+BEGIN
+	SELECT *
+	FROM orders;
+END;;
+
 DROP PROCEDURE IF EXISTS sp_Orders_Select;;
 CREATE DEFINER = CURRENT_USER 
 PROCEDURE sp_Orders_Select (
 	IN orderId INT UNSIGNED
 )
 BEGIN
-	IF (orderId IS NULL) THEN
-    	SELECT *
-		FROM orders;
-    ELSE
-    	SELECT *
-		FROM orders
-		WHERE orders.orderId = orderId;
-	END IF;
+	SELECT *
+	FROM orders
+	WHERE orders.orderId = orderId;
 END;;
 
 DROP PROCEDURE IF EXISTS sp_Orders_Insert;;
@@ -308,26 +317,29 @@ BEGIN
 END;;
 
 /*orderItems*/
+DROP PROCEDURE IF EXISTS sp_OrderItems_SelectAll;;
+CREATE DEFINER = CURRENT_USER 
+PROCEDURE sp_OrderItems_SelectAll ()
+BEGIN
+	SELECT orderItems.orderItemId, orderItems.orderId, orderItems.itemId,
+		orderItems.quantityOrdered, orderItems.price, orderItems.extendedPrice,
+		items.description, items.sku, items.sizeUnit, items.itemStatus
+	FROM orderItems
+		INNER JOIN items ON orderItems.itemId = items.itemId;
+END;;
+
 DROP PROCEDURE IF EXISTS sp_OrderItems_Select;;
 CREATE DEFINER = CURRENT_USER 
 PROCEDURE sp_OrderItems_Select (
 	IN orderItemId INT UNSIGNED
 )
 BEGIN
-	IF (orderItemId IS NULL) THEN
-    	SELECT orderItems.orderItemId, orderItems.orderId, orderItems.itemId,
-			orderItems.quantityOrdered, orderItems.price, orderItems.extendedPrice,
-			items.description, items.sku, items.sizeUnit, items.itemStatus
-		FROM orderItems
-			INNER JOIN items ON orderItems.itemId = items.itemId;
-    ELSE
-    	SELECT orderItems.orderItemId, orderItems.orderId, orderItems.itemId,
-			orderItems.quantityOrdered, orderItems.price, orderItems.extendedPrice,
-			items.description, items.sku, items.sizeUnit, items.itemStatus 
-		FROM orderItems
-			INNER JOIN items ON orderItems.itemId = items.itemId
-		WHERE orderitems.orderItemId = orderItemId;
-	END IF;
+	SELECT orderItems.orderItemId, orderItems.orderId, orderItems.itemId,
+		orderItems.quantityOrdered, orderItems.price, orderItems.extendedPrice,
+		items.description, items.sku, items.sizeUnit, items.itemStatus 
+	FROM orderItems
+		INNER JOIN items ON orderItems.itemId = items.itemId
+	WHERE orderitems.orderItemId = orderItemId;
 END;;
 
 DROP PROCEDURE IF EXISTS sp_OrderItems_Insert;;
@@ -380,26 +392,29 @@ BEGIN
 END;;
 
 /*inventoryItems*/
+DROP PROCEDURE IF EXISTS sp_InventoryItems_SelectAll;;
+CREATE DEFINER = CURRENT_USER 
+PROCEDURE sp_InventoryItems_SelectAll ()
+BEGIN
+	SELECT inventoryitems.inventoryItemId, inventoryitems.itemId,
+		inventoryitems.quantity, inventoryitems.expirationDate,
+		items.description, items.sku, items.sizeUnit, items.itemStatus 
+	FROM inventoryItems
+		INNER JOIN items ON inventoryItems.itemId = items.itemId;
+END;;
+
 DROP PROCEDURE IF EXISTS sp_InventoryItems_Select;;
 CREATE DEFINER = CURRENT_USER 
 PROCEDURE sp_InventoryItems_Select (
 	IN InventoryItemId INT UNSIGNED
 )
 BEGIN
-	IF (InventoryItemId IS NULL) THEN
-    	SELECT inventoryitems.inventoryItemId, inventoryitems.itemId,
-			inventoryitems.quantity, inventoryitems.expirationDate,
-			items.description, items.sku, items.sizeUnit, items.itemStatus 
-		FROM inventoryItems
-			INNER JOIN items ON inventoryItems.itemId = items.itemId;
-    ELSE
-    	SELECT inventoryitems.inventoryItemId, inventoryitems.itemId,
-			inventoryitems.quantity, inventoryitems.expirationDate,
-			items.description, items.sku, items.sizeUnit, items.itemStatus 
-		FROM inventoryItems
-			INNER JOIN items ON inventoryItems.itemId = items.itemId
-		WHERE InventoryItems.InventoryItemId = inventoryItemId;
-	END IF;
+	SELECT inventoryitems.inventoryItemId, inventoryitems.itemId,
+		inventoryitems.quantity, inventoryitems.expirationDate,
+		items.description, items.sku, items.sizeUnit, items.itemStatus 
+	FROM inventoryItems
+		INNER JOIN items ON inventoryItems.itemId = items.itemId
+	WHERE InventoryItems.InventoryItemId = inventoryItemId;
 END;;
 
 DROP PROCEDURE IF EXISTS sp_InventoryItems_Insert;;
@@ -522,6 +537,6 @@ INSERT INTO lookups (listName, listValue) VALUES ('itemStatuses', 'Discontinued'
 INSERT INTO lookups (listName, listValue) VALUES ('itemStatuses', 'Do Not Replace');
 
 /*suppliers*/
-INSERT INTO suppliers (nickname, URL) VALUES ('Amazon', 'https://www.amazon.com/');
-INSERT INTO suppliers (nickname, URL) VALUES ('Wal-Mart', 'https://www.walmart.com/');
-INSERT INTO suppliers (nickname, URL) VALUES ('Target', 'https://www.target.com/');
+INSERT INTO suppliers (nickname, url) VALUES ('Amazon', 'https://www.amazon.com/');
+INSERT INTO suppliers (nickname, url) VALUES ('Wal-Mart', 'https://www.walmart.com/');
+INSERT INTO suppliers (nickname, url) VALUES ('Target', 'https://www.target.com/');

@@ -5,6 +5,8 @@ import trackit.*;
 
 /**
  * DAL Layer: Handles the actual connection to the database.
+ *
+ * @author Bond
  */
 public class SQLConnector {
 

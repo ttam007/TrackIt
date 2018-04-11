@@ -4,6 +4,8 @@ import java.sql.*;
 
 /**
  * DAL Layer: Handles a single parameter for a stored procedure.
+ *
+ * @author Bond
  */
 public abstract class SprocParameter {
 
@@ -27,14 +29,17 @@ public abstract class SprocParameter {
      * Can not create a default instance as the name and value fields are
      * required.
      *
-     * @param valueType The data type of the parameter as specified by the Types
-     * class.
+     * @param aValueType The data type of the parameter as specified by the
+     * Types class.
      */
-    protected SprocParameter(int valueType) {
-        if (false) {
-            throw new IllegalArgumentException("Parameter valueType must be from Types class.");
+    protected SprocParameter(int aValueType) {
+        if (aValueType != Types.VARCHAR
+                && aValueType != Types.INTEGER
+                && aValueType != Types.DOUBLE
+                && aValueType != Types.DATE) {
+            throw new UnsupportedSQLTypeException(aValueType);
         }
-        this.valueType = valueType;
+        this.valueType = aValueType;
     }
 
     /**
@@ -44,12 +49,13 @@ public abstract class SprocParameter {
      * @param valueType The data type of the parameter as specified by the Types
      * class.
      * @param name The name of the parameter in the sproc.
-     * @param value The value to pass to the sproc.
+     * @param value The value to pass to the sproc. Passing in null will cause
+     * Types.NULL to be used.
      */
     protected SprocParameter(int valueType, String name, String value) {
-        this(Types.VARCHAR);
-        if (name == null || value == null) {
-            throw new IllegalArgumentException("Parameters name and value must not be null.");
+        this(valueType);
+        if (name == null) {
+            throw new IllegalArgumentException("Parameter 'name' must not be null.");
         }
         this.name = name;
         this.value = value;
@@ -69,43 +75,6 @@ public abstract class SprocParameter {
         this(valueType, name, value);
         this.direction = direction;
     }
-    // <*/editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="Public Static Methods">
-    /**
-     * Sets the parameter value in the stored procedure. The assumption is that
-     * the calling code will control the order the parameter is set in the
-     * CallableStatment.
-     *
-     * @param stmt The Callable Statement (sproc) that that needs the value set.
-     * @param aParam The parameter object that has the value to be used.
-     * @throws SQLException
-     */
-    public static void setStatement(CallableStatement stmt, SprocParameter aParam)
-            throws SQLException {
-        if (aParam.isNull()) {
-            stmt.setNull(aParam.getName(), aParam.getValueType());
-        } else {
-            switch (aParam.getValueType()) {
-                case Types.DATE:
-                    stmt.setDate(aParam.getName(), Date.valueOf(aParam.getValue()));
-                    break;
-                case Types.DECIMAL:
-                    Double aNumber = Double.valueOf(aParam.getValue());
-                    stmt.setBigDecimal(aParam.getName(), java.math.BigDecimal.valueOf(aNumber));
-                    break;
-                case Types.INTEGER:
-                    stmt.setInt(aParam.getName(), Integer.valueOf(aParam.getValue()));
-                    break;
-                case Types.VARCHAR:
-                    stmt.setString(aParam.getName(), aParam.getValue());
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
     public boolean isNull() {

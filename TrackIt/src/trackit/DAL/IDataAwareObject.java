@@ -5,6 +5,8 @@ import java.sql.*;
 /**
  * DAL Layer: All objects that interact with the database should use this
  * interface.
+ *
+ * @author Bond
  */
 public abstract interface IDataAwareObject {
 

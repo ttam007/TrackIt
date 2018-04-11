@@ -4,6 +4,8 @@ import java.sql.*;
 
 /**
  * DAL Layer: Handles a single DATE parameter for a stored procedure.
+ *
+ * @author Bond
  */
 public class SprocParameterDate
         extends SprocParameter {

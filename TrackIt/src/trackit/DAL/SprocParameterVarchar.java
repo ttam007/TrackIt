@@ -4,6 +4,8 @@ import java.sql.*;
 
 /**
  * DAL Layer: Handles a single VARCHAR parameter for a stored procedure.
+ *
+ * @author Bond
  */
 public class SprocParameterVarchar
         extends SprocParameter {

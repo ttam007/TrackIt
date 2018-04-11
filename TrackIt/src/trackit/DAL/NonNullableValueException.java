@@ -4,6 +4,8 @@ import java.sql.*;
 
 /**
  * Handles null value exceptions.
+ *
+ * @author Bond
  */
 public class NonNullableValueException
         extends SQLException {
