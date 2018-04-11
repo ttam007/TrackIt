@@ -75,6 +75,7 @@ public class SupplierDetailsUI
         this.btnOK.addActionListener((ActionEvent e) -> {
             if (!bll.save()) {
                 //TODO:  display bal.getErrorMessage();
+                
             }
         });
         

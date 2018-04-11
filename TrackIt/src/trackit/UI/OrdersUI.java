@@ -1,11 +1,13 @@
 package trackit.UI;
 
+import java.awt.BorderLayout;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 import trackit.*;
 
 /**
+ * @author Douglas
  * UI Layer: Handles all aspects of the Order panel. TODO: convert to JPanel.
  */
 public class OrdersUI
@@ -19,15 +21,75 @@ public class OrdersUI
     private final Order bll = new Order();
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
-    JButton btnAddToList = new JButton();
-    JButton btnRemoveFromList = new JButton();
-
+    JButton btnCreate, btnRemove, btnEdit;
+    String[] ordersLabel = {"Order Date", "Order Number", "Supplier", "Status", "Total"};
+    JTable ordersTable;
+    OrderItemsUI details;
+    int selectedRow;
+    
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     public OrdersUI() {
+        setLayout(new BorderLayout());
         
-        getValues();
+        //add data to suppliers arraylist 
+        Object[][] ordersTestData = {{"Amazon", "http://www.amazon.com"}, {"Walmart", "http://www.walmart.com"}, {"Ebay", "http://www.ebay.com"} };
+        ordersTable = new JTable(ordersTestData, ordersLabel);
+        JScrollPane suppliersScrollPane = new JScrollPane(ordersTable);
+        ordersTable.setFillsViewportHeight(true);
+        ordersTable.setDefaultEditor(Object.class, null);
+        
+        add(suppliersScrollPane, BorderLayout.CENTER);
+        
+        JPanel btmSup = new JPanel();
+        
+        btnCreate = new JButton("Create");
+        btnCreate.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.print("create order");
+                details = new OrderItemsUI();
+            }
+        });
+        
+        btnEdit = new JButton("Edit");
+        btnEdit.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.print("Edit order");
+                //if list item selected edit item else select item
+                selectedRow = ordersTable.getSelectedRow();
+                if(selectedRow < 0){
+                    JOptionPane.showMessageDialog(null, "Select item to edit");
+                }else{
+                    details = new OrderItemsUI();
+                    //TODO: enter item info of selected item
+                }
+            }         
+        });
+        
+        btnRemove = new JButton("Remove");
+        btnRemove.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.print("remove order");
+                selectedRow = ordersTable.getSelectedRow();
+                if(selectedRow < 0){
+                    JOptionPane.showMessageDialog(null, "Select item to remove");
+                }else{
+                    //TODO: remove item from db
+                    JOptionPane.showMessageDialog(null, "Item removed");
+                }
+            }
+        });
+        
+        btmSup.add(btnCreate);
+        btmSup.add(btnEdit);
+        btmSup.add(btnRemove);
+        
+        add(btmSup, BorderLayout.SOUTH);
     }
+    
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
 
@@ -47,7 +109,7 @@ public class OrdersUI
         System.out.println(String.format("Displaying {0}...", WINDOW_NAME));
         setVisible(true);
     }
-
+    
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="SubClasses">
     /**
