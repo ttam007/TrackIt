@@ -1,4 +1,4 @@
-package trackit.UI;
+ package trackit.UI;
 
 import java.awt.BorderLayout;
 import java.awt.event.*;
@@ -33,13 +33,13 @@ public class OrdersUI
         setLayout(new BorderLayout());
         
         //add data to suppliers arraylist 
-        Object[][] ordersTestData = {{"Amazon", "http://www.amazon.com"}, {"Walmart", "http://www.walmart.com"}, {"Ebay", "http://www.ebay.com"} };
-        ordersTable = new JTable(ordersTestData, ordersLabel);
-        JScrollPane suppliersScrollPane = new JScrollPane(ordersTable);
+        Object[][] suppliersTestData = {{"12MAY2018", "019645232", "Walmart", "in transit", "$128.34"}, {"12MAY2018", "019645232", "Walmart", "in transit", "$128.34"}, {"12MAY2018", "019645232", "Walmart", "in transit", "$128.34"} };
+        ordersTable = new JTable(suppliersTestData, ordersLabel);
+        JScrollPane scrollPane = new JScrollPane(ordersTable);
         ordersTable.setFillsViewportHeight(true);
         ordersTable.setDefaultEditor(Object.class, null);
         
-        add(suppliersScrollPane, BorderLayout.CENTER);
+        add(scrollPane, BorderLayout.CENTER);
         
         JPanel btmSup = new JPanel();
         
@@ -47,7 +47,7 @@ public class OrdersUI
         btnCreate.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.print("create order");
+                System.out.print("create supply");
                 details = new OrderItemsUI();
             }
         });
@@ -56,7 +56,7 @@ public class OrdersUI
         btnEdit.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.print("Edit order");
+                System.out.print("Edit supply");
                 //if list item selected edit item else select item
                 selectedRow = ordersTable.getSelectedRow();
                 if(selectedRow < 0){
@@ -72,13 +72,13 @@ public class OrdersUI
         btnRemove.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.print("remove order");
+                System.out.print("remove supply");
                 selectedRow = ordersTable.getSelectedRow();
                 if(selectedRow < 0){
                     JOptionPane.showMessageDialog(null, "Select item to remove");
                 }else{
                     //TODO: remove item from db
-                    JOptionPane.showMessageDialog(null, "Item removed");
+                    JOptionPane.showMessageDialog(null, "Item successfully removed");
                 }
             }
         });
@@ -88,6 +88,7 @@ public class OrdersUI
         btmSup.add(btnRemove);
         
         add(btmSup, BorderLayout.SOUTH);
+        
     }
     
     // </editor-fold>
@@ -106,7 +107,7 @@ public class OrdersUI
      * Displays the frame.
      */
     public void display() {
-        System.out.println(String.format("Displaying {0}...", WINDOW_NAME));
+        System.out.println(String.format("Displaying %s...", WINDOW_NAME));
         setVisible(true);
     }
     
