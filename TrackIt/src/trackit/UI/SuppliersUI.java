@@ -22,6 +22,7 @@ public class SuppliersUI extends JPanel{
     String[] suppliersLabel = {"Supplier", "Web Address"};
     JTable suppliersTable;
     SupplierDetailsUI details;
+    int selectedRow;
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -39,11 +40,11 @@ public class SuppliersUI extends JPanel{
         
         JPanel btmSup = new JPanel();
         
-        btnCreate = new JButton("Add");
+        btnCreate = new JButton("Create");
         btnCreate.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.print("add supply");
+                System.out.print("create supply");
                 details = new SupplierDetailsUI(true);
             }
         });
@@ -53,7 +54,15 @@ public class SuppliersUI extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.print("Edit supply");
-                details = new SupplierDetailsUI(false);
+                //if list item selected edit item else select item
+                selectedRow = suppliersTable.getSelectedRow();
+                if(selectedRow < 0){
+                    JOptionPane.showMessageDialog(null, "Select item to edit");
+                }else{
+                    details = new SupplierDetailsUI(false);
+                    //TODO: enter item info of selected item
+                }
+                
             }         
         });
         
@@ -62,6 +71,13 @@ public class SuppliersUI extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.print("remove supply");
+                selectedRow = suppliersTable.getSelectedRow();
+                if(selectedRow < 0){
+                    JOptionPane.showMessageDialog(null, "Select item to remove");
+                }else{
+                    //TODO: remove item from db
+                    JOptionPane.showMessageDialog(null, "Item removed");
+                }
             }
         });
         

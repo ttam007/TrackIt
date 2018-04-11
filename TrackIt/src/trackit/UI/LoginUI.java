@@ -7,6 +7,7 @@ import javax.swing.*;
 import trackit.*;
 
 /**
+ * @author Douglas
  * UI Layer: Handles all aspects of the Login's UI.
  */
 public class LoginUI extends JFrame {

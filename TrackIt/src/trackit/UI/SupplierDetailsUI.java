@@ -6,6 +6,7 @@ import javax.swing.*;
 import trackit.*;
 
 /**
+ * @author Douglas
  * UI Layer: Handles all aspects of the Create Supplier and Edit Supplier
  * dialog.
  */
@@ -20,7 +21,9 @@ public class SupplierDetailsUI
     private final boolean isCreateMode;
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
-    JPanel pnlMain = new JPanel();
+    JPanel pnlCenter;
+    JLabel lblName, lblAddress;
+    JTextField tfName, tfAddress;
     JButton btnOK = new JButton();
     JButton btnCancel = new JButton();
 
@@ -38,8 +41,8 @@ public class SupplierDetailsUI
      */
     private void initializeComponents() {
         //Setup main frame
-        int frameWidth = 600;
-        int frameHeight = 400;
+        int frameWidth = 500;
+        int frameHeight = 110;
         Dimension dimFrame = new Dimension(frameWidth, frameHeight);
         this.setTitle(Utilities.getWindowCaption(WINDOW_NAME));
         this.setPreferredSize(dimFrame);
@@ -50,22 +53,46 @@ public class SupplierDetailsUI
         this.setVisible(true);
 
         //Add all components here and set properties.
-        this.add(pnlMain);
+        Box nameBx, addressBx, submitBx, combine;
+        
+        pnlCenter = new JPanel();
+        add(pnlCenter, BorderLayout.CENTER);
 
-        this.add(this.btnOK);
+        nameBx = Box.createHorizontalBox();
+        lblName = new JLabel("Supplier Name:   ");
+        nameBx.add(lblName);
+        tfName = new JTextField(20);
+        nameBx.add(tfName);
+        addressBx = Box.createHorizontalBox();
+        lblAddress = new JLabel("Website Address:");
+        addressBx.add(lblAddress);
+        tfAddress = new JTextField(20);
+        addressBx.add(tfAddress);
+        submitBx = Box.createHorizontalBox();
+        btnOK = new JButton("OK");
+        submitBx.add(btnOK);
+        
         this.btnOK.addActionListener((ActionEvent e) -> {
             if (!bll.save()) {
                 //TODO:  display bal.getErrorMessage();
             }
         });
-        this.add(this.btnCancel);
+        
+        btnCancel = new JButton("Cancel");
+        submitBx.add(btnCancel);
+        
         this.btnCancel.addActionListener((ActionEvent e) -> {
             //TODO:  close window and return to prior window.
         });
+        combine = Box.createVerticalBox();
+        combine.add(nameBx);
+        combine.add(addressBx);
+        combine.add(submitBx);
+
+        pnlCenter.add(combine);
 
         
-
-
+        
         //Finalizations
         pack();
     }
@@ -80,7 +107,7 @@ public class SupplierDetailsUI
         setVisible(true);
     }
     public void closeWindow(){
-        //this.closeWindow();
+        this.setVisible(false);
     }
 
     // </editor-fold>
@@ -99,10 +126,10 @@ public class SupplierDetailsUI
             if (result == JOptionPane.YES_OPTION) {
                 //TODO
                 JOptionPane.showMessageDialog(null, "Successfully Updated");
-                //closeWindow();
+                closeWindow();
             } else {
                 //TODO
-                //closeWindow();
+                closeWindow();
             }
         }
     }

@@ -7,6 +7,7 @@ import javax.swing.*;
 import trackit.*;
 
 /**
+ * @author Douglas
  * UI Layer: Handles all aspects of the Main Menu's UI.
  */
 public class MainMenuUI extends JFrame {
@@ -42,10 +43,8 @@ public class MainMenuUI extends JFrame {
      */
     private void initializeComponents() {
         //Setup main frame
-        
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         this.setTitle(WINDOW_NAME);
-        this.setSize(screenSize.width, screenSize.height);
+        this.setSize(1280, 786);
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new CloseQuery());
