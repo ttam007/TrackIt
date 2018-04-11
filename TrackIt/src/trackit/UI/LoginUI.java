@@ -7,10 +7,10 @@ import javax.swing.*;
 import trackit.*;
 
 /**
+ * @author Douglas
  * UI Layer: Handles all aspects of the Login's UI.
  */
-public class LoginUI
-        extends JFrame {
+public class LoginUI extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
     private static final String WINDOW_NAME = "Login";
@@ -19,12 +19,13 @@ public class LoginUI
     private final Login bll = new Login();
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
-    JPanel pnlMain = new JPanel();
     JLabel lblUsername, lblPassword, lblTitle, lblAccess;
-    JTextField tfUsername, tfPassword;
-    JButton btnOK;
+    JTextField tfUsername;
     JPanel pnlNorth, pnlSouth, pnlCenter, pnlCentWest, pnlCentCenter, pnlCentSouth;
-
+    JPasswordField pfPassword;
+    JButton btnLogin;
+    String username, password;
+   
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     public LoginUI() {
@@ -53,7 +54,7 @@ public class LoginUI
         int frameWidth = 500;
         int frameHeight = 150;
         Dimension dimFrame = new Dimension(frameWidth, frameHeight);
-        this.setTitle(Utilities.getWindowCaption(WINDOW_NAME));
+        this.setTitle(WINDOW_NAME);
         this.setPreferredSize(dimFrame);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
@@ -62,8 +63,8 @@ public class LoginUI
         this.setLayout(new BorderLayout());
 
         //Add all components here and set properties.
-        this.add(pnlMain);
-
+        Box usernameBx, passwordBx, submitBx, combine;
+        
         pnlNorth = new JPanel();
         lblTitle = new JLabel(Utilities.PROGRAM_NAME_LONG);
         pnlNorth.add(lblTitle);
@@ -72,21 +73,21 @@ public class LoginUI
         pnlCenter = new JPanel();
         add(pnlCenter, BorderLayout.CENTER);
 
-        Box usernameBx = Box.createHorizontalBox();
+        usernameBx = Box.createHorizontalBox();
         lblUsername = new JLabel("Username: ");
         usernameBx.add(lblUsername);
         tfUsername = new JTextField(20);
         usernameBx.add(tfUsername);
-        Box passwordBx = Box.createHorizontalBox();
+        passwordBx = Box.createHorizontalBox();
         lblPassword = new JLabel("Password: ");
         passwordBx.add(lblPassword);
-        tfPassword = new JTextField(20);
-        passwordBx.add(tfPassword);
-        Box submitBx = Box.createHorizontalBox();
-        btnOK = new JButton("Log In");
-        submitBx.add(btnOK);
+        pfPassword = new JPasswordField(20);
+        passwordBx.add(pfPassword);
+        submitBx = Box.createHorizontalBox();
+        btnLogin = new JButton("Log In");
+        submitBx.add(btnLogin);
 
-        Box combine = Box.createVerticalBox();
+        combine = Box.createVerticalBox();
         combine.add(usernameBx);
         combine.add(passwordBx);
         combine.add(submitBx);
@@ -97,9 +98,9 @@ public class LoginUI
         lblAccess = new JLabel("");
         pnlSouth.add(lblAccess);
         add(lblAccess, BorderLayout.SOUTH);
-
-        btnOK.addActionListener((ActionEvent e) -> {
-            if (this.bll.startLogin(this.tfUsername.getText().trim(), this.tfPassword.getText().trim())) {
+ 
+        btnLogin.addActionListener((ActionEvent e) -> {
+            if (this.bll.startLogin(this.tfUsername.getText().trim(), this.pfPassword.getText().trim())) {
                 this.dispose();
             } else {
                 JOptionPane.showMessageDialog(this,
@@ -110,7 +111,7 @@ public class LoginUI
                 }
             }
         });
-
+        
         //Finalizations
         this.pack();
     }
@@ -121,7 +122,6 @@ public class LoginUI
      * Displays the frame.
      */
     public void display() {
-        System.out.println(String.format("Displaying {0}...", WINDOW_NAME));
         setVisible(true);
     }
 

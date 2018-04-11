@@ -1,3 +1,8 @@
 /TrackItTestDriver/build/
 /TrackItTestDriver/nbproject/private/
+<<<<<<< HEAD
 /TrackItTestDriver/dist/
+=======
+*.properties
+*.properties
+>>>>>>> bdb23d81bb2f0c9d6282fb60c934649f88d11b12
