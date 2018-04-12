@@ -7,9 +7,10 @@ import javax.swing.*;
 import trackit.*;
 
 /**
- * @author Douglas
  * UI Layer: Handles all aspects of the Order Details dialog. This is a
  * combination of the Edit Order Details and the OrderItems grid.
+ *
+ * @author Douglas
  */
 public class OrderItemsUI
         extends JFrame {
@@ -22,7 +23,7 @@ public class OrderItemsUI
     private final Order bll = new Order();
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
-    
+
     JButton btnCheckIn, btnCheckInAll, btnCreate, btnEdit, btnRemove, btnOK, btnAddItem, btnCancel;
     JPanel pnlTop, pnlCenter, pnlBtm;
     JLabel lblOrderNumber, lblSupplier, lblStatus, lblOrderDate, lblExpectedDate;
@@ -31,7 +32,6 @@ public class OrderItemsUI
     JTable ordersTable;
     OrderItemDetailsUI details;
     int selectedRow;
-
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -60,78 +60,78 @@ public class OrderItemsUI
 
         //Add all components here and set properties.
         setLayout(new BorderLayout());
-        
+
         pnlTop = new JPanel();
         //layGroup order-details
-        
+
         lblOrderNumber = new JLabel("Order Number");
         pnlTop.add(lblOrderNumber);
         tfOrderNumber = new JTextField(20);
         pnlTop.add(tfOrderNumber);
-        
+
         lblSupplier = new JLabel("Supplier");
         pnlTop.add(lblSupplier);
         tfSupplier = new JTextField(20);
         pnlTop.add(tfSupplier);
-        
+
         lblOrderDate = new JLabel("Order Date");
         pnlTop.add(lblOrderDate);
         tfOrderDate = new JTextField(20);
         pnlTop.add(tfOrderDate);
-        
+
         lblStatus = new JLabel("Status");
         pnlTop.add(lblStatus);
         tfStatus = new JTextField(20);
         pnlTop.add(tfStatus);
-        
+
         lblExpectedDate = new JLabel("Expected Date");
         pnlTop.add(lblExpectedDate);
         tfExpectedDate = new JTextField(20);
         pnlTop.add(tfExpectedDate);
-        
+
         btnCheckIn = new JButton("Check In");
         pnlTop.add(btnCheckIn);
         btnCheckIn.addActionListener((ActionEvent e) -> {
             //TODO
         });
-        
+
         btnCheckInAll = new JButton("Check In All");
         pnlTop.add(btnCheckInAll);
         btnCheckInAll.addActionListener((ActionEvent e) -> {
             //TODO
         });
-        
+
         add(pnlTop, BorderLayout.NORTH);
-        
+
         //add data to suppliers arraylist 
-        Object[][] suppliersTestData = {{"paper", "pk", "12-34563487-0", "7", "$12.95", "276.23"}, {"paper", "pk", "12-34563487-0", "7", "$12.95", "276.23"}, {"paper", "pk", "12-34563487-0", "7", "$12.95", "276.23"} };
+        Object[][] suppliersTestData = {{"paper", "pk", "12-34563487-0", "7", "$12.95", "276.23"}, {"paper", "pk", "12-34563487-0", "7", "$12.95", "276.23"}, {"paper", "pk", "12-34563487-0", "7", "$12.95", "276.23"}};
         ordersTable = new JTable(suppliersTestData, ordersLabel);
         JScrollPane scrollPane = new JScrollPane(ordersTable);
         ordersTable.setFillsViewportHeight(true);
         ordersTable.setDefaultEditor(Object.class, null);
-        
+
         add(scrollPane, BorderLayout.CENTER);
-        
+
         pnlBtm = new JPanel();
-        
+
         btnAddItem = new JButton("Add Item");
         pnlBtm.add(btnAddItem);
         btnAddItem.addActionListener((ActionEvent e) -> {
             //TODO
         });
-        
+
         btnCreate = new JButton("Create");
         pnlBtm.add(btnCreate);
         btnCreate.addActionListener((ActionEvent e) -> {
             //TODO
         });
-        
+
         btnEdit = new JButton("Edit");
         pnlBtm.add(btnEdit);
         btnEdit.addActionListener((ActionEvent e) -> {
             //TODO
         });
-        
+
         btnRemove = new JButton("Remove");
         pnlBtm.add(btnRemove);
         btnRemove.addActionListener((ActionEvent e) -> {
@@ -144,7 +144,7 @@ public class OrderItemsUI
             }
              */
         });
-        
+
         btnOK = new JButton("OK");
         pnlBtm.add(btnOK);
         btnOK.addActionListener((ActionEvent e) -> {
@@ -155,13 +155,13 @@ public class OrderItemsUI
             }
              */
         });
-        
+
         btnCancel = new JButton("Cancel");
         pnlBtm.add(btnCancel);
         btnCancel.addActionListener((ActionEvent e) -> {
             //TODO:  close window and return to prior window.
         });
-        
+
         //Finalizations
         pack();
     }

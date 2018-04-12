@@ -1,14 +1,11 @@
 package trackit.UI;
 
-import java.awt.*;
-import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 import trackit.*;
 
 /**
- * UI Layer: Handles all aspects of the Inventory panel. TODO: convert to
- * JPanel.
+ * UI Layer: Handles all aspects of the Inventory panel.
  */
 public class InventoryItemsUI
         extends JPanel {
