@@ -86,6 +86,7 @@ public class LoginUI extends JFrame {
         submitBx = Box.createHorizontalBox();
         btnLogin = new JButton("Log In");
         submitBx.add(btnLogin);
+        this.getRootPane().setDefaultButton(btnLogin);
 
         combine = Box.createVerticalBox();
         combine.add(usernameBx);
