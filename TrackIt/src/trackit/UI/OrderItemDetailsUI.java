@@ -1,6 +1,5 @@
 package trackit.UI;
 
-import javax.swing.JFrame;
 import trackit.*;
 
 /**

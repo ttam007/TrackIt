@@ -6,9 +6,10 @@ import javax.swing.*;
 import trackit.*;
 
 /**
- * @author Douglas
  * UI Layer: Handles all aspects of the Create Supplier and Edit Supplier
  * dialog.
+ *
+ * @author Douglas
  */
 public class SupplierDetailsUI
         extends JFrame {
@@ -53,7 +54,7 @@ public class SupplierDetailsUI
 
         //Add all components here and set properties.
         Box nameBx, addressBx, submitBx, combine;
-        
+
         pnlCenter = new JPanel();
         add(pnlCenter, BorderLayout.CENTER);
 
@@ -70,17 +71,17 @@ public class SupplierDetailsUI
         submitBx = Box.createHorizontalBox();
         btnOK = new JButton("OK");
         submitBx.add(btnOK);
-        
+
         this.btnOK.addActionListener((ActionEvent e) -> {
             if (!bll.save()) {
                 //TODO:  display bal.getErrorMessage();
-                
+
             }
         });
-        
+
         btnCancel = new JButton("Cancel");
         submitBx.add(btnCancel);
-        
+
         this.btnCancel.addActionListener((ActionEvent e) -> {
             //TODO:  close window and return to prior window.
         });
@@ -91,8 +92,6 @@ public class SupplierDetailsUI
 
         pnlCenter.add(combine);
 
-        
-        
         //Finalizations
         pack();
     }
@@ -106,7 +105,8 @@ public class SupplierDetailsUI
         System.out.println(String.format("Displaying %s...", WINDOW_NAME));
         setVisible(true);
     }
-    public void closeWindow(){
+
+    public void closeWindow() {
         this.setVisible(false);
     }
 
