@@ -1,0 +1,722 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="TrackIt">
+  <ClassDiagramComponents>
+    <Class name="SQLConnector" package="trackit.DAL" visibility="public" xPosition="700.0" yPosition="554.0">
+      <Fields>
+        <Field name="DRIVER" type="String" visibility="private" isFinal="true"/>
+        <Field name="singleton" type="SQLConnector" visibility="private" isStatic="true"/>
+        <Field name="databaseLocation" type="String" visibility="private"/>
+        <Field name="port" type="String" visibility="private"/>
+        <Field name="databaseName" type="String" visibility="private"/>
+        <Field name="userName" type="String" visibility="private"/>
+        <Field name="password" type="String" visibility="private"/>
+        <Field name="errorMessage" type="String" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="private"/>
+      </Constructors>
+      <Methods>
+        <Method name="getDatabaseURL" returnType="String" visibility="private"/>
+        <Method name="getInstance" returnType="SQLConnector" visibility="public" isStatic="true"/>
+        <Method name="setConnectionString" returnType="void" visibility="public">
+          <Argument type="String" name="userName"/>
+        </Method>
+        <Method name="setConnectionString" returnType="void" visibility="public">
+          <Argument type="String" name="userName"/>
+          <Argument type="String" name="password"/>
+        </Method>
+        <Method name="setConnectionString" returnType="void" visibility="public">
+          <Argument type="String" name="databaseLocation"/>
+          <Argument type="String" name="port"/>
+          <Argument type="String" name="databaseName"/>
+        </Method>
+        <Method name="setConnectionString" returnType="void" visibility="public">
+          <Argument type="String" name="databaseLocation"/>
+          <Argument type="String" name="port"/>
+          <Argument type="String" name="databaseName"/>
+          <Argument type="String" name="userName"/>
+        </Method>
+        <Method name="setConnectionString" returnType="void" visibility="public">
+          <Argument type="String" name="databaseLocation"/>
+          <Argument type="String" name="port"/>
+          <Argument type="String" name="databaseName"/>
+          <Argument type="String" name="userName"/>
+          <Argument type="String" name="password"/>
+        </Method>
+        <Method name="isValidConnection" returnType="boolean" visibility="public"/>
+        <Method name="getConnection" returnType="Connection" visibility="public"/>
+        <Method name="getErrorMessage" returnType="String" visibility="public"/>
+        <Method name="getUserName" returnType="String" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="SQLHelper" package="trackit.DAL" visibility="public" isAbstract="true" xPosition="1528.0" yPosition="699.0">
+      <Fields>
+        <Field name="INVALID_PRIMARY_KEY" type="Integer" visibility="public" isStatic="true" isFinal="true"/>
+        <Field name="sqlConn" type="SQLConnector" visibility="private" isFinal="true"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="buildSprocSyntax" returnType="String" visibility="private">
+          <Argument type="String" name="sprocName"/>
+          <Argument type="HashMap&lt;Integer, String&gt;" name="parameters"/>
+        </Method>
+        <Method name="execSproc" returnType="ResultSet" visibility="protected">
+          <Argument type="String" name="sprocName"/>
+          <Argument type="HashMap&lt;Integer, String&gt;" name="parameters"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="SQLHelperInventoryItem" package="trackit.DAL" visibility="public" xPosition="1882.0" yPosition="1245.0">
+      <Fields/>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="selectAll" returnType="ArrayList&lt;InventoryItem&gt;" visibility="public"/>
+        <Method name="selectOne" returnType="InventoryItem" visibility="public">
+          <Argument type="Integer" name="primaryKey"/>
+        </Method>
+        <Method name="insertAll" returnType="List&lt;Integer&gt;" visibility="public">
+          <Argument type="List&lt;InventoryItem&gt;" name="aList"/>
+        </Method>
+        <Method name="insert" returnType="Integer" visibility="public">
+          <Argument type="InventoryItem" name="anObject"/>
+        </Method>
+        <Method name="updateAll" returnType="void" visibility="public">
+          <Argument type="List&lt;InventoryItem&gt;" name="aList"/>
+        </Method>
+        <Method name="update" returnType="void" visibility="public">
+          <Argument type="InventoryItem" name="anObject"/>
+        </Method>
+        <Method name="deleteAll" returnType="void" visibility="public">
+          <Argument type="List&lt;Integer&gt;" name="primaryKeys"/>
+        </Method>
+        <Method name="delete" returnType="void" visibility="public">
+          <Argument type="Integer" name="primaryKey"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="SQLHelperOrder" package="trackit.DAL" visibility="public" xPosition="2449.0" yPosition="1296.0">
+      <Fields/>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="selectAll" returnType="ArrayList&lt;Order&gt;" visibility="public"/>
+        <Method name="selectOne" returnType="Order" visibility="public">
+          <Argument type="Integer" name="primaryKey"/>
+        </Method>
+        <Method name="insertAll" returnType="List&lt;Integer&gt;" visibility="public">
+          <Argument type="List&lt;Order&gt;" name="aList"/>
+        </Method>
+        <Method name="insert" returnType="Integer" visibility="public">
+          <Argument type="Order" name="anObject"/>
+        </Method>
+        <Method name="updateAll" returnType="void" visibility="public">
+          <Argument type="List&lt;Order&gt;" name="aList"/>
+        </Method>
+        <Method name="update" returnType="void" visibility="public">
+          <Argument type="Order" name="anObject"/>
+        </Method>
+        <Method name="deleteAll" returnType="void" visibility="public">
+          <Argument type="List&lt;Integer&gt;" name="primaryKeys"/>
+        </Method>
+        <Method name="delete" returnType="void" visibility="public">
+          <Argument type="Integer" name="primaryKey"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="SQLHelperOrderItem" package="trackit.DAL" visibility="public" xPosition="3201.0" yPosition="1173.0">
+      <Fields/>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="selectAll" returnType="ArrayList&lt;OrderItem&gt;" visibility="public"/>
+        <Method name="selectOne" returnType="OrderItem" visibility="public">
+          <Argument type="Integer" name="primaryKey"/>
+        </Method>
+        <Method name="insertAll" returnType="List&lt;Integer&gt;" visibility="public">
+          <Argument type="List&lt;OrderItem&gt;" name="aList"/>
+        </Method>
+        <Method name="insert" returnType="Integer" visibility="public">
+          <Argument type="OrderItem" name="anObject"/>
+        </Method>
+        <Method name="updateAll" returnType="void" visibility="public">
+          <Argument type="List&lt;OrderItem&gt;" name="aList"/>
+        </Method>
+        <Method name="update" returnType="void" visibility="public">
+          <Argument type="OrderItem" name="anObject"/>
+        </Method>
+        <Method name="deleteAll" returnType="void" visibility="public">
+          <Argument type="List&lt;Integer&gt;" name="primaryKeys"/>
+        </Method>
+        <Method name="delete" returnType="void" visibility="public">
+          <Argument type="Integer" name="primaryKey"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="SQLHelperSupplier" package="trackit.DAL" visibility="public" xPosition="3641.0" yPosition="1017.0">
+      <Fields/>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="selectAll" returnType="ArrayList&lt;Supplier&gt;" visibility="public"/>
+        <Method name="selectOne" returnType="Supplier" visibility="public">
+          <Argument type="Integer" name="primaryKey"/>
+        </Method>
+        <Method name="insertAll" returnType="List&lt;Integer&gt;" visibility="public">
+          <Argument type="List&lt;Supplier&gt;" name="aList"/>
+        </Method>
+        <Method name="insert" returnType="Integer" visibility="public">
+          <Argument type="Supplier" name="anObject"/>
+        </Method>
+        <Method name="updateAll" returnType="void" visibility="public">
+          <Argument type="List&lt;Supplier&gt;" name="aList"/>
+        </Method>
+        <Method name="update" returnType="void" visibility="public">
+          <Argument type="Supplier" name="anObject"/>
+        </Method>
+        <Method name="deleteAll" returnType="void" visibility="public">
+          <Argument type="List&lt;Integer&gt;" name="primaryKeys"/>
+        </Method>
+        <Method name="delete" returnType="void" visibility="public">
+          <Argument type="Integer" name="primaryKey"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="Dashboard" package="trackit" visibility="public" xPosition="550.0" yPosition="1550.0">
+      <Fields>
+        <Field name="type" type="DashboardType" visibility="private" isFinal="true"/>
+        <Field name="title" type="String" visibility="private"/>
+        <Field name="count" type="Integer" visibility="private"/>
+        <Field name="description" type="String" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="DashboardType" name="type"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="getType" returnType="DashboardType" visibility="public"/>
+        <Method name="refresh" returnType="void" visibility="public"/>
+        <Method name="toString" returnType="String" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="DatabaseObject" package="trackit" visibility="public" isAbstract="true" xPosition="2502.0" yPosition="650.0">
+      <Fields>
+        <Field name="primaryKey" type="Integer" visibility="protected"/>
+        <Field name="errorMessage" type="String" visibility="private"/>
+      </Fields>
+      <Constructors/>
+      <Methods>
+        <Method name="isAlreadyInDatabase" returnType="boolean" visibility="protected"/>
+        <Method name="getErrorMessage" returnType="String" visibility="protected"/>
+      </Methods>
+    </Class>
+    <Class name="Inventory" package="trackit" visibility="public" xPosition="1517.0" yPosition="1582.0">
+      <Fields>
+        <Field name="items" type="ArrayList&lt;InventoryItem&gt;" visibility="private" isFinal="true"/>
+      </Fields>
+      <Constructors/>
+      <Methods>
+        <Method name="getPrimaryKey" returnType="Integer" visibility="public"/>
+        <Method name="load" returnType="boolean" visibility="public"/>
+        <Method name="load" returnType="boolean" visibility="public">
+          <Argument type="Integer" name="primaryKey"/>
+        </Method>
+        <Method name="save" returnType="boolean" visibility="public"/>
+        <Method name="remove" returnType="boolean" visibility="public"/>
+        <Method name="getItems" returnType="ArrayList&lt;InventoryItem&gt;" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="InventoryItem" package="trackit" visibility="public" xPosition="2079.0" yPosition="1588.0">
+      <Fields>
+        <Field name="quantity" type="Integer" visibility="private"/>
+        <Field name="expirationDate" type="java.util.Date" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="getPrimaryKey" returnType="Integer" visibility="public"/>
+        <Method name="load" returnType="boolean" visibility="public"/>
+        <Method name="load" returnType="boolean" visibility="public">
+          <Argument type="Integer" name="primaryKey"/>
+        </Method>
+        <Method name="save" returnType="boolean" visibility="public"/>
+        <Method name="remove" returnType="boolean" visibility="public"/>
+        <Method name="getExpiredItems" returnType="ArrayList&lt;Item&gt;" visibility="public"/>
+        <Method name="changeQuantity" returnType="void" visibility="public">
+          <Argument type="int" name="amountToChangeBy"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="Item" package="trackit" visibility="public" isAbstract="true" xPosition="1184.0" yPosition="1127.0">
+      <Fields>
+        <Field name="description" type="String" visibility="private"/>
+        <Field name="sku" type="String" visibility="private"/>
+        <Field name="size" type="Float" visibility="private"/>
+        <Field name="sizeUnit" type="String" visibility="private"/>
+        <Field name="itemStatus" type="ItemStatusType" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+        <Constructor visibility="public">
+          <Argument type="String" name="description"/>
+          <Argument type="String" name="sku"/>
+          <Argument type="Float" name="size"/>
+          <Argument type="String" name="sizeUnit"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="getPrimaryKey" returnType="Integer" visibility="public"/>
+        <Method name="load" returnType="boolean" visibility="public"/>
+        <Method name="load" returnType="boolean" visibility="public" isAbstract="true">
+          <Argument type="Integer" name="primaryKey"/>
+        </Method>
+        <Method name="save" returnType="boolean" visibility="public" isAbstract="true"/>
+        <Method name="remove" returnType="boolean" visibility="public" isAbstract="true"/>
+        <Method name="changeQuantity" returnType="void" visibility="package" isAbstract="true">
+          <Argument type="int" name="amountToChangeBy"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="Login" package="trackit" visibility="public" xPosition="281.0" yPosition="1017.0">
+      <Fields>
+        <Field name="MAX_LOGIN_ATTEMPTS" type="int" visibility="private" isFinal="true"/>
+        <Field name="errorMessage" type="String" visibility="private"/>
+        <Field name="loginAttempts" type="int" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="startLogin" returnType="boolean" visibility="public">
+          <Argument type="String" name="userName"/>
+          <Argument type="String" name="password"/>
+        </Method>
+        <Method name="startLogin" returnType="boolean" visibility="public"/>
+        <Method name="startLogout" returnType="void" visibility="public"/>
+        <Method name="isTooManyLoginAttempts" returnType="boolean" visibility="public"/>
+        <Method name="getErrorMessage" returnType="String" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="MainMenu" package="trackit" visibility="public" xPosition="883.0" yPosition="1512.0">
+      <Fields>
+        <Field name="dashboards" type="ArrayList&lt;Dashboard&gt;" visibility="private" isFinal="true"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="createDashboards" returnType="void" visibility="private"/>
+        <Method name="refreshDashboards" returnType="void" visibility="private"/>
+        <Method name="getDashboards" returnType="ArrayList&lt;Dashboard&gt;" visibility="public"/>
+        <Method name="logout" returnType="void" visibility="public"/>
+        <Method name="exit" returnType="void" visibility="public"/>
+        <Method name="start" returnType="void" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="NegativeAmountException" package="trackit" visibility="public" xPosition="393.0" yPosition="629.0">
+      <Fields>
+        <Field name="MSG_TEMPLATE_GENERIC" type="String" visibility="private" isFinal="true"/>
+        <Field name="MSG_TEMPLATE_SPECIFIC" type="String" visibility="private" isFinal="true"/>
+        <Field name="errorMessage" type="String" visibility="private" isFinal="true"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+        <Constructor visibility="public">
+          <Argument type="Float" name="amount"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="getLocalizedMessage" returnType="String" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="Order" package="trackit" visibility="public" xPosition="2755.0" yPosition="1582.0">
+      <Fields>
+        <Field name="description" type="String" visibility="private"/>
+        <Field name="orderedFrom" type="Supplier" visibility="private"/>
+        <Field name="dateOrdered" type="java.util.Date" visibility="private"/>
+        <Field name="orderStatus" type="OrderStatusType" visibility="private"/>
+        <Field name="dateExpected" type="java.util.Date" visibility="private"/>
+        <Field name="items" type="ArrayList&lt;OrderItem&gt;" visibility="private" isFinal="true"/>
+      </Fields>
+      <Constructors/>
+      <Methods>
+        <Method name="getPrimaryKey" returnType="Integer" visibility="public"/>
+        <Method name="load" returnType="boolean" visibility="public"/>
+        <Method name="load" returnType="boolean" visibility="public">
+          <Argument type="Integer" name="primaryKey"/>
+        </Method>
+        <Method name="save" returnType="boolean" visibility="public"/>
+        <Method name="remove" returnType="boolean" visibility="public"/>
+        <Method name="getItems" returnType="ArrayList&lt;OrderItem&gt;" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="OrderItem" package="trackit" visibility="public" xPosition="3160.0" yPosition="1474.0">
+      <Fields>
+        <Field name="order" type="Order" visibility="private"/>
+        <Field name="quantityOrdered" type="Integer" visibility="private"/>
+        <Field name="price" type="Float" visibility="private"/>
+        <Field name="extendedPrice" type="Float" visibility="private"/>
+      </Fields>
+      <Constructors/>
+      <Methods>
+        <Method name="getPrimaryKey" returnType="Integer" visibility="public"/>
+        <Method name="load" returnType="boolean" visibility="public"/>
+        <Method name="load" returnType="boolean" visibility="public">
+          <Argument type="Integer" name="primaryKey"/>
+        </Method>
+        <Method name="save" returnType="boolean" visibility="public"/>
+        <Method name="remove" returnType="boolean" visibility="public"/>
+        <Method name="changeQuantity" returnType="void" visibility="public">
+          <Argument type="int" name="amountToChangeBy"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="Supplier" package="trackit" visibility="public" xPosition="3696.0" yPosition="1607.0">
+      <Fields>
+        <Field name="nickname" type="String" visibility="private"/>
+        <Field name="url" type="String" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="getPrimaryKey" returnType="Integer" visibility="public"/>
+        <Method name="load" returnType="boolean" visibility="public"/>
+        <Method name="load" returnType="boolean" visibility="public">
+          <Argument type="Integer" name="primaryKey"/>
+        </Method>
+        <Method name="save" returnType="boolean" visibility="public"/>
+        <Method name="remove" returnType="boolean" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="TrackIt" package="trackit" visibility="public" xPosition="32.0" yPosition="1017.0">
+      <Fields/>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="main" returnType="void" visibility="public" isStatic="true">
+          <Argument type="String[]" name="args"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="InventoryItemDetailsUI" package="trackit.UI" visibility="public" xPosition="1670.0" yPosition="2252.0">
+      <Fields/>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="initializeComponents" returnType="void" visibility="protected"/>
+        <Method name="actionOK" returnType="void" visibility="protected"/>
+        <Method name="actionCancel" returnType="void" visibility="protected"/>
+      </Methods>
+    </Class>
+    <Class name="InventoryItemsUI" package="trackit.UI" visibility="public" xPosition="1258.0" yPosition="2111.0">
+      <Fields>
+        <Field name="WINDOW_NAME" type="String" visibility="private" isStatic="true" isFinal="true"/>
+        <Field name="inventoryItems" type="ArrayList&lt;InventoryItem&gt;" visibility="private" isFinal="true"/>
+        <Field name="pnlMain" type="JPanel" visibility="package"/>
+        <Field name="btnAddToList" type="JButton" visibility="package"/>
+        <Field name="btnRemoveFromList" type="JButton" visibility="package"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="initializeComponents" returnType="void" visibility="private"/>
+        <Method name="refreshItems" returnType="void" visibility="private"/>
+        <Method name="showItemDetails" returnType="void" visibility="private">
+          <Argument type="Item" name="anItem"/>
+        </Method>
+        <Method name="display" returnType="void" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="ItemDetailsUI" package="trackit.UI" visibility="public" isAbstract="true" xPosition="2097.0" yPosition="2193.0">
+      <Fields>
+        <Field name="WINDOW_NAME" type="String" visibility="protected" isFinal="true"/>
+        <Field name="bal" type="T" visibility="protected"/>
+        <Field name="pnlMain" type="JPanel" visibility="protected"/>
+        <Field name="btnOK" type="JButton" visibility="protected"/>
+        <Field name="btnCancel" type="JButton" visibility="protected"/>
+        <Field name="btnDelete" type="JButton" visibility="protected"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="protected">
+          <Argument type="String" name="windowName"/>
+          <Argument type="T" name="balLayer"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="initializeComponents" returnType="void" visibility="private"/>
+        <Method name="finalizeComponents" returnType="void" visibility="protected"/>
+        <Method name="actionSave" returnType="void" visibility="protected" isAbstract="true"/>
+        <Method name="actionCancel" returnType="void" visibility="protected" isAbstract="true"/>
+        <Method name="actionDelete" returnType="void" visibility="protected" isAbstract="true"/>
+        <Method name="display" returnType="void" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="LoginUI" package="trackit.UI" visibility="public" xPosition="257.0" yPosition="1640.0">
+      <Fields>
+        <Field name="WINDOW_NAME" type="String" visibility="private" isStatic="true" isFinal="true"/>
+        <Field name="bll" type="Login" visibility="private" isFinal="true"/>
+        <Field name="pnlMain" type="JPanel" visibility="package"/>
+        <Field name="lblUsername" type="JLabel" visibility="package"/>
+        <Field name="tfUsername" type="JTextField" visibility="package"/>
+        <Field name="btnOK" type="JButton" visibility="package"/>
+        <Field name="pnlNorth" type="JPanel" visibility="package"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+        <Constructor visibility="public">
+          <Argument type="String" name="userName"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="initializeComponents" returnType="void" visibility="private"/>
+        <Method name="display" returnType="void" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="MainMenuUI" package="trackit.UI" visibility="public" xPosition="912.0" yPosition="1829.0">
+      <Fields>
+        <Field name="WINDOW_NAME" type="String" visibility="private" isStatic="true" isFinal="true"/>
+        <Field name="bll" type="MainMenu" visibility="private" isFinal="true"/>
+        <Field name="pnlMain" type="JPanel" visibility="package"/>
+        <Field name="inventoryTab" type="InventoryItemsUI" visibility="package"/>
+        <Field name="ordersTab" type="OrdersUI" visibility="package"/>
+        <Field name="suppliersTab" type="SuppliersUI" visibility="package"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="initializeComponents" returnType="void" visibility="private"/>
+        <Method name="refreshDashBoards" returnType="void" visibility="private"/>
+        <Method name="display" returnType="void" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="OrderItemDetailsUI" package="trackit.UI" visibility="public" xPosition="2601.0" yPosition="2252.0">
+      <Fields/>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="initializeComponents" returnType="void" visibility="protected"/>
+        <Method name="actionOK" returnType="void" visibility="protected"/>
+        <Method name="actionCancel" returnType="void" visibility="protected"/>
+      </Methods>
+    </Class>
+    <Class name="OrderItemsUI" package="trackit.UI" visibility="public" xPosition="3125.0" yPosition="1855.0">
+      <Fields>
+        <Field name="WINDOW_NAME" type="String" visibility="private" isStatic="true" isFinal="true"/>
+        <Field name="orderItems" type="ArrayList&lt;OrderItem&gt;" visibility="private" isFinal="true"/>
+        <Field name="bll" type="Order" visibility="private" isFinal="true"/>
+        <Field name="pnlMain" type="JPanel" visibility="package"/>
+        <Field name="btnOK" type="JButton" visibility="package"/>
+        <Field name="btnCancel" type="JButton" visibility="package"/>
+        <Field name="btnDelete" type="JButton" visibility="package"/>
+        <Field name="btnAddToList" type="JButton" visibility="package"/>
+        <Field name="btnRemoveFromList" type="JButton" visibility="package"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="initializeComponents" returnType="void" visibility="private"/>
+        <Method name="getValues" returnType="void" visibility="private"/>
+        <Method name="display" returnType="void" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="OrdersUI" package="trackit.UI" visibility="public" xPosition="2388.0" yPosition="1766.0">
+      <Fields>
+        <Field name="WINDOW_NAME" type="String" visibility="private" isStatic="true" isFinal="true"/>
+        <Field name="orders" type="ArrayList&lt;Order&gt;" visibility="private" isFinal="true"/>
+        <Field name="bll" type="Order" visibility="private" isFinal="true"/>
+        <Field name="pnlMain" type="JPanel" visibility="package"/>
+        <Field name="btnAddToList" type="JButton" visibility="package"/>
+        <Field name="btnRemoveFromList" type="JButton" visibility="package"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="initializeComponents" returnType="void" visibility="private"/>
+        <Method name="getValues" returnType="void" visibility="private"/>
+        <Method name="display" returnType="void" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="SupplierDetailsUI" package="trackit.UI" visibility="public" xPosition="4083.0" yPosition="1747.0">
+      <Fields>
+        <Field name="WINDOW_NAME" type="String" visibility="private" isStatic="true" isFinal="true"/>
+        <Field name="bal" type="Supplier" visibility="private" isFinal="true"/>
+        <Field name="pnlMain" type="JPanel" visibility="package"/>
+        <Field name="btnOK" type="JButton" visibility="package"/>
+        <Field name="btnCancel" type="JButton" visibility="package"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="initializeComponents" returnType="void" visibility="private"/>
+        <Method name="display" returnType="void" visibility="public"/>
+        <Method name="actionOK" returnType="void" visibility="private"/>
+        <Method name="actionCancel" returnType="void" visibility="private"/>
+      </Methods>
+    </Class>
+    <Class name="SuppliersUI" package="trackit.UI" visibility="public" xPosition="3590.0" yPosition="2149.0">
+      <Fields>
+        <Field name="WINDOW_NAME" type="String" visibility="private" isStatic="true" isFinal="true"/>
+        <Field name="suppliers" type="ArrayList&lt;Supplier&gt;" visibility="private" isFinal="true"/>
+        <Field name="pnlMain" type="JPanel" visibility="package"/>
+        <Field name="btnAddToList" type="JButton" visibility="package"/>
+        <Field name="btnRemoveFromList" type="JButton" visibility="package"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="initializeComponents" returnType="void" visibility="private"/>
+        <Method name="display" returnType="void" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="Utilities" package="trackit" visibility="public" xPosition="22.0" yPosition="678.0">
+      <Fields>
+        <Field name="TEAM_NAME" type="String" visibility="public" isStatic="true" isFinal="true"/>
+        <Field name="PROGRAM_NAME_SHORT" type="String" visibility="public" isStatic="true" isFinal="true"/>
+        <Field name="PROGRAM_NAME_LONG" type="String" visibility="public" isStatic="true" isFinal="true"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="private"/>
+      </Constructors>
+      <Methods>
+        <Method name="getWindowCaption" returnType="String" visibility="public" isStatic="true">
+          <Argument type="String" name="windowName"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Interface name="IDataAwareObject" package="trackit.DAL" visibility="public" xPosition="2101.0" yPosition="659.0">
+      <Methods>
+        <Method name="getPrimaryKey" returnType="Integer" visibility="public" isAbstract="true"/>
+        <Method name="load" returnType="boolean" visibility="public" isAbstract="true"/>
+        <Method name="load" returnType="boolean" visibility="public" isAbstract="true">
+          <Argument type="Integer" name="primaryKey"/>
+        </Method>
+        <Method name="save" returnType="boolean" visibility="public" isAbstract="true"/>
+        <Method name="remove" returnType="boolean" visibility="public" isAbstract="true"/>
+      </Methods>
+    </Interface>
+    <Interface name="ISQLHelper" package="trackit.DAL" visibility="public" xPosition="2913.0" yPosition="655.0">
+      <Methods>
+        <Method name="selectAll" returnType="ArrayList&lt;T&gt;" visibility="public" isAbstract="true"/>
+        <Method name="selectOne" returnType="T" visibility="public" isAbstract="true">
+          <Argument type="Integer" name="primaryKey"/>
+        </Method>
+        <Method name="insertAll" returnType="List&lt;Integer&gt;" visibility="public" isAbstract="true">
+          <Argument type="List&lt;T&gt;" name="aList"/>
+        </Method>
+        <Method name="insert" returnType="Integer" visibility="public" isAbstract="true">
+          <Argument type="T" name="anObject"/>
+        </Method>
+        <Method name="updateAll" returnType="void" visibility="public" isAbstract="true">
+          <Argument type="List&lt;T&gt;" name="aList"/>
+        </Method>
+        <Method name="update" returnType="void" visibility="public" isAbstract="true">
+          <Argument type="T" name="anObject"/>
+        </Method>
+        <Method name="deleteAll" returnType="void" visibility="public" isAbstract="true">
+          <Argument type="List&lt;Integer&gt;" name="aList"/>
+        </Method>
+        <Method name="delete" returnType="void" visibility="public" isAbstract="true">
+          <Argument type="Integer" name="primaryKey"/>
+        </Method>
+      </Methods>
+    </Interface>
+    <Enum name="DashboardType" package="trackit" visibility="public" xPosition="552.0" yPosition="1874.0">
+      <Literals>
+        <Literal name="COUNT_ITEMS_OUT_OF_STOCK"/>
+        <Literal name="DATE_NEXT_ITEM_EXPIRES"/>
+        <Literal name="DATE_NEXT_ORDER_ARRIVES"/>
+        <Literal name="MONEY_SPENT_LAST_30_DAYS"/>
+      </Literals>
+    </Enum>
+    <Enum name="ItemStatusType" package="trackit" visibility="public" xPosition="883.0" yPosition="1236.0">
+      <Literals>
+        <Literal name="AVAILABLE"/>
+        <Literal name="DISCONTINUED"/>
+        <Literal name="DO_NOT_ORDER"/>
+      </Literals>
+    </Enum>
+    <Enum name="OrderStatusType" package="trackit" visibility="public" xPosition="2755.0" yPosition="1973.0">
+      <Literals>
+        <Literal name="ORDERED"/>
+        <Literal name="BEINGSHIPPED"/>
+        <Literal name="DELIVERED"/>
+      </Literals>
+    </Enum>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations>
+    <HasRelation name="sqlConn" source="trackit.DAL.SQLHelper" target="trackit.DAL.SQLConnector" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="trackit.InventoryItem" target="trackit.Item"/>
+    <HasRelation name="dashboards" source="trackit.MainMenu" target="trackit.Dashboard" type="Aggregation" sourceCardinality="1..1" targetCardinality="0..*" collectionType="ArrayList&lt;Dashboard&gt;"/>
+    <IsRelation name="is" source="trackit.Order" target="trackit.DatabaseObject"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="trackit.DAL.SQLHelperOrder" target="trackit.DAL.ISQLHelper"/>
+    <IsRelation name="is" source="trackit.Supplier" target="trackit.DatabaseObject"/>
+    <IsRelation name="is" source="trackit.UI.InventoryItemDetailsUI" target="trackit.UI.ItemDetailsUI"/>
+    <HasRelation name="items" source="trackit.Order" target="trackit.OrderItem" type="Aggregation" sourceCardinality="1..1" targetCardinality="0..*" collectionType="ArrayList&lt;OrderItem&gt;"/>
+    <HasRelation name="orderItems" source="trackit.UI.OrderItemsUI" target="trackit.OrderItem" type="Aggregation" sourceCardinality="1..1" targetCardinality="0..*" collectionType="ArrayList&lt;OrderItem&gt;"/>
+    <HasRelation name="bll" source="trackit.UI.OrdersUI" target="trackit.Order" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="trackit.Supplier" target="trackit.DAL.IDataAwareObject"/>
+    <UseRelation source="trackit.InventoryItem" target="trackit.Item" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="trackit.DAL.SQLHelperOrderItem" target="trackit.DAL.SQLHelper"/>
+    <HasRelation name="bll" source="trackit.UI.LoginUI" target="trackit.Login" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="trackit.MainMenu" target="trackit.Dashboard" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="trackit.Inventory" target="trackit.DAL.IDataAwareObject"/>
+    <IsRelation name="is" source="trackit.DAL.SQLHelperOrder" target="trackit.DAL.SQLHelper"/>
+    <UseRelation source="trackit.UI.InventoryItemsUI" target="trackit.Item" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="trackit.DAL.SQLHelperInventoryItem" target="trackit.Item" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="trackit.DAL.SQLHelperSupplier" target="trackit.DAL.ISQLHelper"/>
+    <IsRelation name="is" source="trackit.Item" target="trackit.DatabaseObject"/>
+    <UseRelation source="trackit.Dashboard" target="trackit.DashboardType" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="order" source="trackit.OrderItem" target="trackit.Order" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="bll" source="trackit.UI.MainMenuUI" target="trackit.MainMenu" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="trackit.Item" target="trackit.DAL.IDataAwareObject"/>
+    <HasRelation name="bll" source="trackit.UI.OrderItemsUI" target="trackit.Order" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="orders" source="trackit.UI.OrdersUI" target="trackit.Order" type="Aggregation" sourceCardinality="1..1" targetCardinality="0..*" collectionType="ArrayList&lt;Order&gt;"/>
+    <HasRelation name="bal" source="trackit.UI.SupplierDetailsUI" target="trackit.Supplier" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="trackit.Order" target="trackit.DAL.IDataAwareObject"/>
+    <HasRelation name="orderedFrom" source="trackit.Order" target="trackit.Supplier" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="trackit.DAL.SQLHelperInventoryItem" target="trackit.DAL.ISQLHelper"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="trackit.InventoryItem" target="trackit.DAL.IDataAwareObject"/>
+    <HasRelation name="singleton" source="trackit.DAL.SQLConnector" target="trackit.DAL.SQLConnector" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="inventoryItems" source="trackit.UI.InventoryItemsUI" target="trackit.InventoryItem" type="Aggregation" sourceCardinality="1..1" targetCardinality="0..*" collectionType="ArrayList&lt;InventoryItem&gt;"/>
+    <IsRelation name="is" source="trackit.Inventory" target="trackit.DatabaseObject"/>
+    <UseRelation source="trackit.DAL.SQLConnector" target="trackit.DAL.SQLConnector" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="trackit.DAL.SQLHelperSupplier" target="trackit.DAL.SQLHelper"/>
+    <IsRelation name="is" source="trackit.DAL.SQLHelperInventoryItem" target="trackit.DAL.SQLHelper"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="trackit.OrderItem" target="trackit.DAL.IDataAwareObject"/>
+    <HasRelation name="itemStatus" source="trackit.Item" target="trackit.ItemStatusType" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="suppliers" source="trackit.UI.SuppliersUI" target="trackit.Supplier" type="Aggregation" sourceCardinality="1..1" targetCardinality="0..*" collectionType="ArrayList&lt;Supplier&gt;"/>
+    <IsRelation name="is" source="trackit.OrderItem" target="trackit.Item"/>
+    <HasRelation name="type" source="trackit.Dashboard" target="trackit.DashboardType" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="trackit.DAL.SQLHelperOrder" target="trackit.Order" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="orderStatus" source="trackit.Order" target="trackit.OrderStatusType" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="trackit.Inventory" target="trackit.Item" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="inventoryTab" source="trackit.UI.MainMenuUI" target="trackit.UI.InventoryItemsUI" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="ordersTab" source="trackit.UI.MainMenuUI" target="trackit.UI.OrdersUI" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="trackit.DAL.SQLHelperOrderItem" target="trackit.DAL.ISQLHelper"/>
+    <HasRelation name="suppliersTab" source="trackit.UI.MainMenuUI" target="trackit.UI.SuppliersUI" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="trackit.Order" target="trackit.OrderItem" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="trackit.DAL.SQLHelperSupplier" target="trackit.Supplier" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="trackit.DAL.SQLHelperOrderItem" target="trackit.OrderItem" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="items" source="trackit.Inventory" target="trackit.InventoryItem" type="Aggregation" sourceCardinality="1..1" targetCardinality="0..*" collectionType="ArrayList&lt;InventoryItem&gt;"/>
+    <IsRelation name="is" source="trackit.UI.OrderItemDetailsUI" target="trackit.UI.ItemDetailsUI"/>
+  </ClassDiagramRelations>
+</ClassDiagram>
