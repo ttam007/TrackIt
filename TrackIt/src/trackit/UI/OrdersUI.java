@@ -1,16 +1,17 @@
 package trackit.UI;
 
-import java.awt.*;
+import java.awt.BorderLayout;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 import trackit.*;
 
 /**
+ * @author Douglas
  * UI Layer: Handles all aspects of the Order panel. TODO: convert to JPanel.
  */
 public class OrdersUI
-        extends JFrame {
+        extends JPanel {
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
     private static final String WINDOW_NAME = "Orders";
@@ -20,50 +21,80 @@ public class OrdersUI
     private final Order bll = new Order();
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
-    JPanel pnlMain = new JPanel();
-    JButton btnAddToList = new JButton();
-    JButton btnRemoveFromList = new JButton();
-
+    JButton btnCreate, btnRemove, btnEdit;
+    String[] ordersLabel = {"Order Date", "Order Number", "Supplier", "Status", "Total"};
+    JTable ordersTable;
+    OrderItemsUI details;
+    int selectedRow;
+    
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     public OrdersUI() {
-        initializeComponents();
-
-        getValues();
+        setLayout(new BorderLayout());
+        
+        //add data to suppliers arraylist 
+        Object[][] suppliersTestData = {{"12MAY2018", "019645232", "Walmart", "in transit", "$128.34"}, {"12MAY2018", "019645232", "Walmart", "in transit", "$128.34"}, {"12MAY2018", "019645232", "Walmart", "in transit", "$128.34"} };
+        ordersTable = new JTable(suppliersTestData, ordersLabel);
+        JScrollPane scrollPane = new JScrollPane(ordersTable);
+        ordersTable.setFillsViewportHeight(true);
+        ordersTable.setDefaultEditor(Object.class, null);
+        
+        add(scrollPane, BorderLayout.CENTER);
+        
+        JPanel btmSup = new JPanel();
+        
+        btnCreate = new JButton("Create");
+        btnCreate.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.print("create supply");
+                details = new OrderItemsUI();
+            }
+        });
+        
+        btnEdit = new JButton("Edit");
+        btnEdit.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.print("Edit supply");
+                //if list item selected edit item else select item
+                selectedRow = ordersTable.getSelectedRow();
+                if(selectedRow < 0){
+                    JOptionPane.showMessageDialog(null, "Select item to edit");
+                }else{
+                    details = new OrderItemsUI();
+                    //TODO: enter item info of selected item
+                }
+            }         
+        });
+        
+        btnRemove = new JButton("Remove");
+        btnRemove.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.print("remove supply");
+                selectedRow = ordersTable.getSelectedRow();
+                if(selectedRow < 0){
+                    JOptionPane.showMessageDialog(null, "Select item to remove");
+                }else{
+                    //TODO: remove item from db
+                    JOptionPane.showMessageDialog(null, "Item successfully removed");
+                }
+            }
+        });
+        
+        btmSup.add(btnCreate);
+        btmSup.add(btnEdit);
+        btmSup.add(btnRemove);
+        
+        add(btmSup, BorderLayout.SOUTH);
+        
     }
+    
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
 
-    /**
-     * Sets up all components used in this frame.
-     */
-    private void initializeComponents() {
-        //Setup main frame
-        int frameWidth = 1200;
-        int frameHeight = 600;
-        Dimension dimFrame = new Dimension(frameWidth, frameHeight);
-        this.setTitle(Utilities.getWindowCaption(WINDOW_NAME));
-        this.setPreferredSize(dimFrame);
-        this.setLocationRelativeTo(null);
-        this.setResizable(false);
-        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        this.addWindowListener(new CloseQuery());
-
-        //Add all components here and set properties.
-        this.add(pnlMain);
-        this.add(this.btnAddToList);
-        this.btnAddToList.addActionListener((ActionEvent e) -> {
-            //TODO
-        });
-        this.add(this.btnRemoveFromList);
-        this.btnRemoveFromList.addActionListener((ActionEvent e) -> {
-            //TODO
-        });
-
-        //Finalizations
-        pack();
-    }
-
+    
     private void getValues() {
         if (bll.load()) {
             //this.orders.addAll(bll.getItems());
@@ -76,10 +107,10 @@ public class OrdersUI
      * Displays the frame.
      */
     public void display() {
-        System.out.println(String.format("Displaying {0}...", WINDOW_NAME));
+        System.out.println(String.format("Displaying %s...", WINDOW_NAME));
         setVisible(true);
     }
-
+    
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="SubClasses">
     /**
