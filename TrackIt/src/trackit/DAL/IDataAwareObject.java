@@ -5,8 +5,17 @@ import java.sql.*;
 /**
  * DAL Layer: All objects that interact with the database should use this
  * interface.
+ *
+ * @author Bond
  */
 public abstract interface IDataAwareObject {
+
+    /**
+     * The setter for the primary key property of this object.
+     *
+     * @param primaryKey The value of the primary key.
+     */
+    public abstract void setPrimaryKey(Integer primaryKey);
 
     /**
      * The getter for the primary key property of this object.

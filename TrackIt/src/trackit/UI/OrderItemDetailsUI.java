@@ -1,12 +1,10 @@
 package trackit.UI;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
 import trackit.*;
 
 /**
- * UI Layer: Handles all aspects of the OrderItem Detail's UI.
+ * UI Layer: Handles all aspects of the Add Item to Order and Edit Order Item
+ * dialog.
  */
 public class OrderItemDetailsUI
         extends ItemDetailsUI<OrderItem> {
@@ -14,13 +12,16 @@ public class OrderItemDetailsUI
 
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
+    private final boolean isCreateMode;
+
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
-    public OrderItemDetailsUI() {
+    public OrderItemDetailsUI(boolean useCreateMode) {
         super("Order Item Details", new OrderItem());
-        
+
+        this.isCreateMode = useCreateMode;
         this.initializeComponents();
     }
 

@@ -8,21 +8,27 @@ import trackit.*;
 
 /**
  * UI Layer: Handles all aspects of the Main Menu's UI.
+ *
+ * @author Douglas
  */
-public class MainMenuUI
-        extends JFrame {
+public class MainMenuUI extends JFrame {
 
     // <editor-fold defaultstate="collapsed" desc="Constants">
     private static final String WINDOW_NAME = "Main Menu";
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
-    private final MainMenu bal = new MainMenu();
+    private final MainMenu bll = new MainMenu();
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
-    JPanel pnlMain = new JPanel();
-    InventoryItemsUI inventoryTab = new InventoryItemsUI();
-    OrdersUI ordersTab = new OrdersUI();
+
     SuppliersUI suppliersTab = new SuppliersUI();
+    DashboardUI dashboardTab = new DashboardUI();
+    OrdersUI ordersTab = new OrdersUI();
+    InventoryItemsUI inventoryTab = new InventoryItemsUI();
+    JTabbedPane tabpane;
+    JLabel title;
+    JButton btnLogout, btnExit;
+
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     public MainMenuUI() {
@@ -30,6 +36,7 @@ public class MainMenuUI
 
         refreshDashBoards();
     }
+
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
     /**
@@ -37,28 +44,55 @@ public class MainMenuUI
      */
     private void initializeComponents() {
         //Setup main frame
-        int frameWidth = 1200;
-        int frameHeight = 600;
-        Dimension dimFrame = new Dimension(frameWidth, frameHeight);
-        this.setTitle(Utilities.getWindowCaption(WINDOW_NAME));
-        this.setPreferredSize(dimFrame);
-        this.setLocationRelativeTo(null);
+        this.setTitle(WINDOW_NAME);
+        this.setSize(1280, 786);
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new CloseQuery());
+        setVisible(true);
+        setLayout(new BorderLayout());
 
         //Add all components here and set properties.
-        this.add(pnlMain);
+        tabpane = new JTabbedPane();
+        tabpane.add("Dashboard", dashboardTab);
+        tabpane.add("Inventory", inventoryTab);
+        tabpane.add("Orders", ordersTab);
+        tabpane.add("Supplies", suppliersTab);
+
+        add(tabpane, BorderLayout.CENTER);
+
+        JPanel pnlBottom = new JPanel();
+        btnLogout = new JButton("Log Out");
+        btnLogout.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false);
+                LoginUI login = new LoginUI();
+                login.display();
+            }
+
+        });
+        btnExit = new JButton("Exit");
+        btnExit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+
+        });
+        pnlBottom.add(btnLogout);
+        pnlBottom.add(btnExit);
+        add(pnlBottom, BorderLayout.SOUTH);
 
         //Finalizations
-        pack();
+        //pack();
     }
 
     /**
      * Refreshes the dashboards with current data.
      */
     private void refreshDashBoards() {
-        ArrayList<Dashboard> dashboards = bal.getDashboards();
+        ArrayList<Dashboard> dashboards = bll.getDashboards();
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
@@ -67,7 +101,6 @@ public class MainMenuUI
      * Displays the frame.
      */
     public void display() {
-        System.out.println(String.format("Displaying {0}...", WINDOW_NAME));
         setVisible(true);
     }
 

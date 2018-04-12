@@ -4,20 +4,27 @@ import java.sql.*;
 import trackit.DAL.*;
 
 /**
- * BAL Layer:  Handles all aspects of a single Item.
+ * BAL Layer: Handles all aspects of a single Item.
  */
-public class Item
+public abstract class Item
         extends DatabaseObject
         implements IDataAwareObject {
 
+    // <editor-fold defaultstate="expanded" desc="Private Fields">
     private String description;
     private String sku;
     private Float size;
     private String sizeUnit;
     private ItemStatusType itemStatus;
+    // </editor-fold>
+    // <editor-fold defaultstate="expanded" desc="Constructors">
 
     public Item() {
     }
+    // </editor-fold>
+    // <editor-fold defaultstate="expanded" desc="Setters & Getters">
+    // </editor-fold>
+    // <editor-fold defaultstate="expanded" desc="Public Methods">
 
     public Item(String description, String sku, Float size, String sizeUnit) {
         this();
@@ -28,43 +35,34 @@ public class Item
     }
 
     @Override
-    public Integer getPrimaryKey() {
-        return this.primaryKey;
-    }
-
-    @Override
     public boolean load() {
         return load(this.primaryKey);
     }
 
     @Override
     public boolean load(Integer primaryKey) {
-        //TODO:  load all fields from database.
-        //TODO:  catch IllegalArgumentException, SQLException.
         return false;
     }
 
     @Override
     public boolean save() {
-        boolean returnValue = false;
-        /*
-        try {
-            if (this.isAlreadyInDatabase()){
-                //TODO:  call Update sproc
-            } else {
-                //TODO:  call Insert sproc
-            }
-            returnValue = true;
-        } catch (SQLException exSQL) {
-            //TODO:  set this.errorMessage.
-        }
-         */
-        return returnValue;
+        return false;
     }
 
     @Override
     public boolean remove() {
-        //TODO:  remove from database.  Catch SQLException.
         return false;
     }
+
+    /**
+     * Changes the quantity of this item by the specified amount.
+     *
+     * @param amountToChangeBy The amount the quantity should change by. A
+     * negative number reduces the quantity while a positive number increases
+     * it.
+     * @throws NegativeAmountException If the @amountToChangeBy reduces the
+     * quantity below zero, then this error will be thrown.
+     */
+    abstract void changeQuantity(int amountToChangeBy);
+    // </editor-fold>
 }

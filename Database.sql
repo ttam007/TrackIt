@@ -2,32 +2,62 @@
 	Schema
 ***********************************************************************/
 
-CREATE SCHEMA TrackItDB; 
+CREATE SCHEMA IF NOT EXISTS TrackItDB; 
 USE TrackItDB;
 
 /***********************************************************************
 	Drops - Remove this section from installation script.
 ***********************************************************************/
+DELIMITER $$
 
+DROP PROCEDURE IF EXISTS sp_FK_Drop $$ 
+CREATE PROCEDURE sp_FK_Drop ( 
+	IN parm_table_name VARCHAR(100), 
+	IN parm_key_name VARCHAR(100) 
+) 
+BEGIN 
+	-- Verify the foreign key exists 
+	IF EXISTS (SELECT NULL
+		FROM information_schema.TABLE_CONSTRAINTS
+	   WHERE CONSTRAINT_SCHEMA = DATABASE()
+			AND CONSTRAINT_NAME = parm_key_name) THEN
+		  
+		-- Turn the parameters into local variables.
+		SET @ParmTable = parm_table_name;
+		SET @ParmKey = parm_key_name;
+
+		-- Create the full statement to execute.
+		SET @StatementToExecute = CONCAT('ALTER TABLE ',@ParmTable,' DROP FOREIGN KEY ',@ParmKey); 
+
+		-- Prepare and execute the statement that was built.
+		PREPARE DynamicStatement FROM @StatementToExecute; 
+		EXECUTE DynamicStatement; 
+
+		-- Cleanup the prepared statement 
+		DEALLOCATE PREPARE DynamicStatement; 
+	END IF; 
+END $$ 
+
+DELIMITER ; $$
 DELIMITER ;
 
 /*lookups*/
-ALTER TABLE items DROP FOREIGN KEY fk_items_lookups_sizeUnit;
-ALTER TABLE items DROP FOREIGN KEY fk_items_lookups_itemStatus;
-ALTER TABLE orders DROP FOREIGN KEY fk_orders_lookups_orderStatus;
+CALL sp_FK_Drop('items', 'fk_items_lookups_sizeUnit');
+CALL sp_FK_Drop('items', 'fk_items_lookups_itemStatus');
+CALL sp_FK_Drop('orders', 'fk_orders_lookups_orderStatus');
 DROP TABLE IF EXISTS lookups;
 
 /*suppliers*/
-ALTER TABLE orders DROP FOREIGN KEY fk_orders_suppliers_orderedFrom;
+CALL sp_FK_Drop ('orders', 'fk_orders_suppliers_orderedFrom');
 DROP TABLE IF EXISTS suppliers;
 
 /*orders*/
-ALTER TABLE orderItems DROP FOREIGN KEY fk_orderItems_orders_orderId;
+CALL sp_FK_Drop ('orderItems', 'fk_orderItems_orders_orderId');
 DROP TABLE IF EXISTS orders;
 
 /*items*/
-ALTER TABLE orderItems DROP FOREIGN KEY fk_orderItems_items_itemId;
-ALTER TABLE inventoryItems DROP FOREIGN KEY fk_inventoryItems_items_itemId;
+CALL sp_FK_Drop ('orderItems', 'fk_orderItems_items_itemId');
+CALL sp_FK_Drop ('inventoryItems', 'fk_inventoryItems_items_itemId');
 DROP TABLE IF EXISTS items;
 
 /*orderItems*/
@@ -52,17 +82,17 @@ CREATE TABLE lookups (
 CREATE TABLE suppliers (
     supplierId INT UNSIGNED NOT NULL AUTO_INCREMENT,
     nickname VARCHAR(32) NOT NULL,
-    URL VARCHAR(256) NULL,
+    url VARCHAR(256) NULL,
     PRIMARY KEY (supplierId),
     UNIQUE idx_suppliers_nickname (nickname)
 );
-    
+
 CREATE TABLE orders (
     orderId INT UNSIGNED NOT NULL AUTO_INCREMENT,
     description VARCHAR (64) NOT NULL,
     orderedFrom INT UNSIGNED NOT NULL,
-    dateOrdered DATE NOT NULL,
     orderStatus VARCHAR (32) NOT NULL,
+    dateOrdered DATE NOT NULL,
     dateExpected DATE NULL,
     PRIMARY KEY (orderId),
     CONSTRAINT fk_orders_suppliers_orderedFrom FOREIGN KEY (orderedFrom) REFERENCES suppliers(supplierId),
@@ -73,11 +103,9 @@ CREATE TABLE items (
     itemId INT UNSIGNED NOT NULL AUTO_INCREMENT,
     description VARCHAR (64) NOT NULL,
     sku VARCHAR(32) NULL,
-    sizeAmount FLOAT(6,2) UNSIGNED NULL,
     sizeUnit VARCHAR(32) NULL,
     itemStatus VARCHAR(32) NOT NULL,
     PRIMARY KEY (itemId),
-    CONSTRAINT fk_items_lookups_sizeUnit FOREIGN KEY (sizeUnit) REFERENCES lookups(listValue),
     CONSTRAINT fk_items_lookups_itemStatus FOREIGN KEY (itemStatus) REFERENCES lookups(listValue)
     );
     
@@ -86,8 +114,8 @@ CREATE TABLE orderItems (
     orderId INT UNSIGNED NOT NULL,
     itemId INT UNSIGNED NOT NULL,
     quantityOrdered INT UNSIGNED NOT NULL DEFAULT 1,
-    price FLOAT(8,4) UNSIGNED NOT NULL DEFAULT 0,
-    extendedPrice FLOAT(10,4) UNSIGNED NOT NULL DEFAULT 0,
+    price DOUBLE UNSIGNED NOT NULL DEFAULT 0,
+    extendedPrice DOUBLE UNSIGNED NOT NULL DEFAULT 0,
     PRIMARY KEY (orderItemId),
     CONSTRAINT fk_orderItems_orders_orderId FOREIGN KEY (orderId) REFERENCES orders (orderId),
     CONSTRAINT fk_orderItems_items_itemId FOREIGN KEY (itemId) REFERENCES items (itemId)
@@ -99,8 +127,7 @@ CREATE TABLE inventoryItems (
     quantity INT UNSIGNED NOT NULL DEFAULT 0,
     expirationDate DATE NULL,
     PRIMARY KEY (inventoryItemId),
-    CONSTRAINT fk_inventoryItems_items_itemId FOREIGN KEY (itemId)
-        REFERENCES items (itemId)
+    CONSTRAINT fk_inventoryItems_items_itemId FOREIGN KEY (itemId) REFERENCES items (itemId)
 );
 
 /***********************************************************************
@@ -110,20 +137,23 @@ CREATE TABLE inventoryItems (
 DELIMITER ;;
 
 /*lookups*/
+DROP PROCEDURE IF EXISTS sp_Lookups_SelectAll;;
+CREATE DEFINER = CURRENT_USER 
+PROCEDURE sp_Lookups_SelectAll ()
+BEGIN
+   	SELECT *
+	FROM lookups;
+END;;
+
 DROP PROCEDURE IF EXISTS sp_Lookups_Select;;
 CREATE DEFINER = CURRENT_USER 
 PROCEDURE sp_Lookups_Select (
 	IN listName VARCHAR(32)
 )
 BEGIN
-	IF (listName IS NULL) THEN
-    	SELECT *
-		FROM lookups;
-    ELSE
-    	SELECT *
-		FROM lookups
-		WHERE lookups.listName = listName;
-	END IF;
+	SELECT *
+	FROM lookups
+	WHERE lookups.listName = listName;
 END;;
 
 DROP PROCEDURE IF EXISTS sp_Lookups_Insert;;
@@ -157,41 +187,40 @@ PROCEDURE sp_Lookups_Delete (
 	IN listName VARCHAR(32)
 )
 BEGIN
-	IF (listName IS NULL) THEN
-		DELETE FROM lookups;
-	ELSE
-		DELETE FROM lookups
-		WHERE lookups.listName = listName;
-	END IF;
+	DELETE FROM lookups
+	WHERE lookups.listName = listName;
 END;;
 
 /*suppliers*/
+DROP PROCEDURE IF EXISTS sp_Suppliers_SelectAll;;
+CREATE DEFINER = CURRENT_USER 
+PROCEDURE sp_Suppliers_SelectAll ()
+BEGIN
+	SELECT *
+	FROM suppliers;
+END;;
+
 DROP PROCEDURE IF EXISTS sp_Suppliers_Select;;
 CREATE DEFINER = CURRENT_USER 
 PROCEDURE sp_Suppliers_Select (
 	IN supplierId INT UNSIGNED
 )
 BEGIN
-	IF (supplierId IS NULL) THEN
-    	SELECT *
-		FROM suppliers;
-    ELSE
-    	SELECT *
-		FROM suppliers
-		WHERE suppliers.supplierId = supplierId;
-	END IF;
+	SELECT *
+	FROM suppliers
+	WHERE suppliers.supplierId = supplierId;
 END;;
 
 DROP PROCEDURE IF EXISTS sp_Suppliers_Insert;;
 CREATE DEFINER = CURRENT_USER 
 PROCEDURE sp_Suppliers_Insert (
+    OUT supplierId INT UNSIGNED,
 	IN nickname VARCHAR(32),
-    IN URL VARCHAR(256),
-    OUT supplierId INT UNSIGNED
+    IN url VARCHAR(256)
 )
 BEGIN
-	INSERT INTO suppliers(nickname,URL)
-	VALUES(nickname,URL);
+	INSERT INTO suppliers(nickname, url)
+	VALUES(nickname, url);
     
     SET supplierId = LAST_INSERT_ID();
 END;;
@@ -201,12 +230,12 @@ CREATE DEFINER = CURRENT_USER
 PROCEDURE sp_Suppliers_Update (
 	IN supplierId INT UNSIGNED,
 	IN nickname VARCHAR(32),
-    IN URL VARCHAR(256)
+    IN url VARCHAR(256)
 )
 BEGIN
 	UPDATE suppliers
     SET suppliers.nickname = nickname,
-		suppliers.URL = URL
+		suppliers.url = url
 	WHERE suppliers.supplierId = supplierId;
 END;;
 
@@ -216,44 +245,43 @@ PROCEDURE sp_Suppliers_Delete (
 	IN supplierId INT UNSIGNED
 )
 BEGIN
-	IF (supplierId IS NULL) THEN
-		DELETE FROM suppliers;
-	ELSE
-		DELETE FROM suppliers
-		WHERE suppliers.supplierId = supplierId;
-	END IF;
+	DELETE FROM suppliers
+	WHERE suppliers.supplierId = supplierId;
 END;;
 
 /*orders*/
+DROP PROCEDURE IF EXISTS sp_Orders_SelectAll;;
+CREATE DEFINER = CURRENT_USER 
+PROCEDURE sp_Orders_SelectAll ()
+BEGIN
+	SELECT *
+	FROM orders;
+END;;
+
 DROP PROCEDURE IF EXISTS sp_Orders_Select;;
 CREATE DEFINER = CURRENT_USER 
 PROCEDURE sp_Orders_Select (
 	IN orderId INT UNSIGNED
 )
 BEGIN
-	IF (orderId IS NULL) THEN
-    	SELECT *
-		FROM orders;
-    ELSE
-    	SELECT *
-		FROM orders
-		WHERE orders.orderId = orderId;
-	END IF;
+	SELECT *
+	FROM orders
+	WHERE orders.orderId = orderId;
 END;;
 
 DROP PROCEDURE IF EXISTS sp_Orders_Insert;;
 CREATE DEFINER = CURRENT_USER 
 PROCEDURE sp_Orders_Insert (
+    OUT orderId INT UNSIGNED,
 	IN description VARCHAR (64),
 	IN orderedFrom INT UNSIGNED,
-    IN dateOrdered DATE,
     IN orderStatus VARCHAR (32),
-    IN dateExpected DATE,
-    OUT orderId INT UNSIGNED
+    IN dateOrdered DATE,
+    IN dateExpected DATE
 )
 BEGIN
-	INSERT INTO orders (description, orderedFrom, dateOrdered, orderStatus, dateExpected)
-    VALUES (description, orderedFrom, dateOrdered, orderStatus, dateExpected);
+	INSERT INTO orders (description, orderedFrom, orderStatus, dateOrdered, dateExpected)
+    VALUES (description, orderedFrom, orderStatus, dateOrdered, dateExpected);
     
     SET orderId = LAST_INSERT_ID();
 END;;
@@ -264,17 +292,17 @@ PROCEDURE sp_Orders_Update (
 	IN orderId INT UNSIGNED,
 	IN description VARCHAR (64),
     IN orderedFrom INT UNSIGNED,
-    IN dateOrdered DATE,
     IN orderStatus VARCHAR (32),
+    IN dateOrdered DATE,
     IN dateExpected DATE
 )
 BEGIN
 	UPDATE orders
     SET orders.description = description,
 		orders.orderedFrom = orderedFrom,
-        orders.dateOrdered = dateOrdered,
-        orders.orderStatus = orderStatus,
-        orders.dateExpected = dateExpected
+	   orders.orderStatus = orderStatus,
+	   orders.dateOrdered = dateOrdered,
+	   orders.dateExpected = dateExpected
 	WHERE orders.orderId = orderId;
 END;;
 
@@ -284,111 +312,52 @@ PROCEDURE sp_Orders_Delete (
 	IN orderId INT UNSIGNED
 )
 BEGIN
-	IF (orderId IS NULL) THEN
-		DELETE FROM orders;
-	ELSE
-		DELETE FROM orders
-		WHERE orders.orderId = orderId;
-	END IF;
-END;;
-
-/*items*/
-DROP PROCEDURE IF EXISTS sp_Items_Select;;
-CREATE DEFINER = CURRENT_USER 
-PROCEDURE sp_Items_Select (
-	IN itemId INT UNSIGNED
-)
-BEGIN
-	IF (itemId IS NULL) THEN
-    	SELECT *
-		FROM items;
-    ELSE
-    	SELECT *
-		FROM items
-		WHERE items.itemId = itemId;
-	END IF;
-END;;
-
-DROP PROCEDURE IF EXISTS sp_Items_Insert;;
-CREATE DEFINER = CURRENT_USER 
-PROCEDURE sp_Items_Insert (
-	IN description VARCHAR(64),
-    IN sku VARCHAR(32),
-    IN sizeAmount FLOAT(6,2) UNSIGNED,
-    IN sizeUnit VARCHAR(32),
-    IN isHidden BIT,
-    OUT itemId INT UNSIGNED
-)
-BEGIN
-	INSERT INTO items (description, sku, sizeAmount, sizeUnit, isHidden)
-    VALUES (description, sku, sizeAmount, sizeUnit, isHidden);
-    
-    SET itemId = LAST_INSERT_ID();
-END;;
-
-DROP PROCEDURE IF EXISTS sp_Items_Update;;
-CREATE DEFINER = CURRENT_USER 
-PROCEDURE sp_Items_Update (
-	IN itemId INT UNSIGNED,
-	IN description VARCHAR(64),
-    IN sku VARCHAR(32),
-    IN sizeAmount FLOAT(6,2) UNSIGNED,
-    IN sizeUnit VARCHAR(32),
-    IN isHidden BIT
-)
-BEGIN
-	UPDATE items
-    SET items.description = description,
-		items.sku = sku,
-        items.sizeAmount = sizeAmount,
-        items.sizeUnit = sizeUnit,
-        items.isHidden = isHidden
-	WHERE items.itemId = itemId;
-END;;
-
-DROP PROCEDURE IF EXISTS sp_Items_Delete;;
-CREATE DEFINER = CURRENT_USER 
-PROCEDURE sp_Items_Delete (
-	IN itemId INT UNSIGNED
-)
-BEGIN
-	IF (itemId IS NULL) THEN
-		DELETE FROM items;
-	ELSE
-		DELETE FROM items
-		WHERE items.itemId = itemId;
-	END IF;
+	DELETE FROM orders
+	WHERE orders.orderId = orderId;
 END;;
 
 /*orderItems*/
+DROP PROCEDURE IF EXISTS sp_OrderItems_SelectAll;;
+CREATE DEFINER = CURRENT_USER 
+PROCEDURE sp_OrderItems_SelectAll ()
+BEGIN
+	SELECT orderItems.orderItemId, orderItems.orderId, orderItems.itemId,
+		orderItems.quantityOrdered, orderItems.price, orderItems.extendedPrice,
+		items.description, items.sku, items.sizeUnit, items.itemStatus
+	FROM orderItems
+		INNER JOIN items ON orderItems.itemId = items.itemId;
+END;;
+
 DROP PROCEDURE IF EXISTS sp_OrderItems_Select;;
 CREATE DEFINER = CURRENT_USER 
 PROCEDURE sp_OrderItems_Select (
 	IN orderItemId INT UNSIGNED
 )
 BEGIN
-	IF (orderItemId IS NULL) THEN
-    	SELECT *
-		FROM orderItems;
-    ELSE
-    	SELECT *
-		FROM orderitems
-		WHERE orderitems.orderItemId = orderItemId;
-	END IF;
+	SELECT orderItems.orderItemId, orderItems.orderId, orderItems.itemId,
+		orderItems.quantityOrdered, orderItems.price, orderItems.extendedPrice,
+		items.description, items.sku, items.sizeUnit, items.itemStatus 
+	FROM orderItems
+		INNER JOIN items ON orderItems.itemId = items.itemId
+	WHERE orderitems.orderItemId = orderItemId;
 END;;
 
 DROP PROCEDURE IF EXISTS sp_OrderItems_Insert;;
 CREATE DEFINER = CURRENT_USER 
 PROCEDURE sp_OrderItems_Insert (
+	OUT orderItemId INT UNSIGNED,
 	IN orderId INT UNSIGNED,
     IN itemId INT UNSIGNED,
     IN quantityOrdered INT UNSIGNED,
-    OUT orderItemId INT UNSIGNED
+    IN price DOUBLE UNSIGNED
 )
 BEGIN
-	INSERT INTO orderItems (orderId, itemId, quantityOrdered)
-    VALUES (orderId, itemId, quantityOrdered);
+    DECLARE extendedPrice DOUBLE UNSIGNED;
     
+    SET extendedPrice = (quantityOrdered * price);
+    
+	INSERT INTO orderItems (orderId, itemId, quantityOrdered, price, extendedPrice)
+    VALUES (orderId, itemId, quantityOrdered, price, extendedPrice);
 	SET orderItemId = LAST_INSERT_ID(); 
 END;;
 
@@ -396,16 +365,20 @@ DROP PROCEDURE IF EXISTS sp_OrderItems_Update;;
 CREATE DEFINER = CURRENT_USER 
 PROCEDURE sp_OrderItems_Update (
 	IN orderItemId INT UNSIGNED,
-	IN orderId INT UNSIGNED,
-    IN itemId INT UNSIGNED,
-    IN quantityOrdered INT UNSIGNED
+	IN quantityOrdered INT UNSIGNED,
+    IN price DOUBLE UNSIGNED
 )
 BEGIN
+    DECLARE extendedPrice DOUBLE UNSIGNED;
+    
+    SET extendedPrice = (quantityOrdered * price);
+
 	UPDATE orderitems
-    SET orderitems.orderId = orderId,
-		orderitems.itemId = itemId,
-        orderitems.quantityOrdered = quantityOrdered        
-	WHERE orderitems.orderItemId = orderItemId;
+	SET	orderitems.quantityOrdered = quantityOrdered,
+		orderitems.price = price,
+		orderitems.extendedPrice = extendedPrice
+	WHERE
+		orderitems.orderItemId = orderItemId;
 END;;
 
 DROP PROCEDURE IF EXISTS sp_OrderItems_Delete;;
@@ -414,60 +387,106 @@ PROCEDURE sp_OrderItems_Delete (
 	IN orderItemId INT UNSIGNED
 )
 BEGIN
-	IF (orderItemId IS NULL) THEN
-		DELETE FROM orderitems;
-	ELSE
-		DELETE FROM orderitems
-		WHERE orderitems.orderItemId = orderItemId;
-	END IF;
+	DELETE FROM orderitems
+	WHERE orderitems.orderItemId = orderItemId;
 END;;
 
 /*inventoryItems*/
+DROP PROCEDURE IF EXISTS sp_InventoryItems_SelectAll;;
+CREATE DEFINER = CURRENT_USER 
+PROCEDURE sp_InventoryItems_SelectAll ()
+BEGIN
+	SELECT inventoryitems.inventoryItemId, inventoryitems.itemId,
+		inventoryitems.quantity, inventoryitems.expirationDate,
+		items.description, items.sku, items.sizeUnit, items.itemStatus 
+	FROM inventoryItems
+		INNER JOIN items ON inventoryItems.itemId = items.itemId;
+END;;
+
 DROP PROCEDURE IF EXISTS sp_InventoryItems_Select;;
 CREATE DEFINER = CURRENT_USER 
 PROCEDURE sp_InventoryItems_Select (
 	IN InventoryItemId INT UNSIGNED
 )
 BEGIN
-	IF (InventoryItemId IS NULL) THEN
-    	SELECT *
-		FROM InventoryItems;
-    ELSE
-    	SELECT *
-		FROM InventoryItems
-		WHERE InventoryItems.InventoryItemId = inventoryItemId;
-	END IF;
+	SELECT inventoryitems.inventoryItemId, inventoryitems.itemId,
+		inventoryitems.quantity, inventoryitems.expirationDate,
+		items.description, items.sku, items.sizeUnit, items.itemStatus 
+	FROM inventoryItems
+		INNER JOIN items ON inventoryItems.itemId = items.itemId
+	WHERE InventoryItems.InventoryItemId = inventoryItemId;
 END;;
 
 DROP PROCEDURE IF EXISTS sp_InventoryItems_Insert;;
 CREATE DEFINER = CURRENT_USER 
 PROCEDURE sp_InventoryItems_Insert (
-	IN itemId INT UNSIGNED,
+    OUT inventoryItemId INT UNSIGNED,
     IN quantity INT UNSIGNED,
     IN expirationDate DATE,
-    OUT inventoryItemId INT UNSIGNED
+	IN description VARCHAR(64),
+    IN sku VARCHAR(32),
+    IN sizeUnit VARCHAR(32),
+    IN itemStatus VARCHAR(32)
 )
 BEGIN
-	INSERT INTO inventoryItems(itemId, quantity, expirationDate)
-	VALUES(itemId, quantity, expirationDate);
+	DECLARE itemId INT UNSIGNED;
     
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+		ROLLBACK;
+		RESIGNAL;
+    END;
+    
+	START TRANSACTION;
+	
+	INSERT INTO items (description, sku, sizeUnit, itemStatus)
+    VALUES (description, sku, sizeUnit, itemStatus);
+    SET itemId = LAST_INSERT_ID();
+    
+    INSERT INTO inventoryItems(itemId, quantity, expirationDate)
+	VALUES(itemId, quantity, expirationDate);
     SET inventoryItemId = LAST_INSERT_ID();
+
+	COMMIT WORK;
 END;;
 
 DROP PROCEDURE IF EXISTS sp_InventoryItems_Update;;
 CREATE DEFINER = CURRENT_USER 
 PROCEDURE sp_InventoryItems_Update (
 	IN InventoryItemId INT UNSIGNED,
-	IN itemId INT UNSIGNED,
     IN quantity INT UNSIGNED,
-    IN expirationDate DATE
+    IN expirationDate DATE,
+	IN description VARCHAR(64),
+    IN sku VARCHAR(32),
+    IN sizeUnit VARCHAR(32),
+    IN itemStatus VARCHAR(32)
 )
 BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+		ROLLBACK;
+	   RESIGNAL;
+    END;
+    
+	START TRANSACTION;
+	
+	UPDATE items
+    SET items.description = description,
+		items.sku = sku,
+	   items.sizeUnit = sizeUnit,
+	   items.itemStatus = itemStatus
+	WHERE items.itemId = (
+		SELECT inventoryitems.itemId
+		FROM inventoryitems
+		WHERE inventoryitems.inventoryItemId = inventoryItemId);
+
 	UPDATE InventoryItems
     SET inventoryItems.itemId = itemId,
 		inventoryItems.quantity = quantity,
-        inventoryItems.expirationDate = expirationDate
+	   inventoryItems.expirationDate = expirationDate
 	WHERE inventoryItems.inventoryItemId = inventoryItemId;
+
+	COMMIT WORK;
 END;;
 
 DROP PROCEDURE IF EXISTS sp_InventoryItems_Delete;;
@@ -476,12 +495,31 @@ PROCEDURE sp_InventoryItems_Delete (
 	IN inventoryItemId INT UNSIGNED
 )
 BEGIN
-	IF (inventoryItemId IS NULL) THEN
-		DELETE FROM inventoryItems;
-	ELSE
-		DELETE FROM inventoryItems
-		WHERE inventoryItems.inventoryItemId = inventoryItemId;
-	END IF;
+	DECLARE itemId INT UNSIGNED;
+
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+		ROLLBACK;
+	   RESIGNAL;
+    END;
+    
+	START TRANSACTION;
+	
+    SET itemId = (
+		SELECT inventoryitems.itemId
+		FROM inventoryitems
+		WHERE inventoryitems.inventoryItemId = inventoryItemId);
+		  
+	DELETE FROM inventoryItems
+	WHERE inventoryItems.inventoryItemId = inventoryItemId;
+
+	DELETE FROM items
+	WHERE items.itemId = itemId
+		AND items.ItemId NOT IN (
+			SELECT orderitems.itemId
+			FROM orderitems);
+
+	COMMIT WORK;
 END;;
 
 /***********************************************************************
@@ -491,12 +529,6 @@ END;;
 DELIMITER ;
 
 /*lookups*/
-INSERT INTO lookups (listName, listValue) VALUES ('sizeUnits', 'Large');
-INSERT INTO lookups (listName, listValue) VALUES ('sizeUnits', 'Medium');
-INSERT INTO lookups (listName, listValue) VALUES ('sizeUnits', 'Small');
-INSERT INTO lookups (listName, listValue) VALUES ('sizeUnits', 'ounce');
-INSERT INTO lookups (listName, listValue) VALUES ('sizeUnits', 'quart');
-INSERT INTO lookups (listName, listValue) VALUES ('sizeUnits', 'gallon');
 INSERT INTO lookups (listName, listValue) VALUES ('orderStatuses', 'Ordered');
 INSERT INTO lookups (listName, listValue) VALUES ('orderStatuses', 'Shipping');
 INSERT INTO lookups (listName, listValue) VALUES ('orderStatuses', 'Arrived');
@@ -505,6 +537,6 @@ INSERT INTO lookups (listName, listValue) VALUES ('itemStatuses', 'Discontinued'
 INSERT INTO lookups (listName, listValue) VALUES ('itemStatuses', 'Do Not Replace');
 
 /*suppliers*/
-INSERT INTO suppliers (nickname, URL) VALUES ('Amazon', 'https://www.amazon.com/');
-INSERT INTO suppliers (nickname, URL) VALUES ('Wal-Mart', 'https://www.walmart.com/');
-INSERT INTO suppliers (nickname, URL) VALUES ('Target', 'https://www.target.com/');
+INSERT INTO suppliers (nickname, url) VALUES ('Amazon', 'https://www.amazon.com/');
+INSERT INTO suppliers (nickname, url) VALUES ('Wal-Mart', 'https://www.walmart.com/');
+INSERT INTO suppliers (nickname, url) VALUES ('Target', 'https://www.target.com/');
