@@ -24,8 +24,7 @@ public class SupplierDetailsUI
     JPanel pnlCenter;
     JLabel lblName, lblAddress;
     JTextField tfName, tfAddress;
-    JButton btnOK = new JButton();
-    JButton btnCancel = new JButton();
+    JButton btnOK, btnCancel;
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -75,6 +74,7 @@ public class SupplierDetailsUI
         this.btnOK.addActionListener((ActionEvent e) -> {
             if (!bll.save()) {
                 //TODO:  display bal.getErrorMessage();
+                
             }
         });
         

@@ -7,6 +7,7 @@ import javax.swing.*;
 import trackit.*;
 
 /**
+ * @author Douglas
  * UI Layer: Handles all aspects of the Suppliers panel. 
  */
 public class SuppliersUI extends JPanel{
@@ -62,7 +63,6 @@ public class SuppliersUI extends JPanel{
                     details = new SupplierDetailsUI(false);
                     //TODO: enter item info of selected item
                 }
-                
             }         
         });
         
@@ -96,7 +96,7 @@ public class SuppliersUI extends JPanel{
      * Displays the frame.
      */
     public void display() {
-        System.out.println(String.format("Displaying {0}...", WINDOW_NAME));
+        System.out.println(String.format("Displaying %s...", WINDOW_NAME));
         setVisible(true);
     }
 

@@ -7,6 +7,7 @@ import javax.swing.*;
 import trackit.*;
 
 /**
+ * @author Douglas
  * UI Layer: Handles all aspects of the Order Details dialog. This is a
  * combination of the Edit Order Details and the OrderItems grid.
  */
@@ -21,12 +22,16 @@ public class OrderItemsUI
     private final Order bll = new Order();
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
-    JPanel pnlMain = new JPanel();
-    JButton btnOK = new JButton();
-    JButton btnCancel = new JButton();
-    JButton btnDelete = new JButton();
-    JButton btnAddToList = new JButton();
-    JButton btnRemoveFromList = new JButton();
+    
+    JButton btnCheckIn, btnCheckInAll, btnCreate, btnEdit, btnRemove, btnOK, btnAddItem, btnCancel;
+    JPanel pnlTop, pnlCenter, pnlBtm;
+    JLabel lblOrderNumber, lblSupplier, lblStatus, lblOrderDate, lblExpectedDate;
+    JTextField tfOrderNumber, tfSupplier, tfStatus, tfOrderDate, tfExpectedDate;
+    String[] ordersLabel = {"Item Name", "Unit", "SKU", "Quantity", "Price", "Ext Price"};
+    JTable ordersTable;
+    OrderItemDetailsUI details;
+    int selectedRow;
+
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -53,7 +58,27 @@ public class OrderItemsUI
         this.addWindowListener(new CloseQuery());
 
         //Add all components here and set properties.
-        this.add(pnlMain);
+        setLayout(new BorderLayout());
+        
+        pnlTop = new JPanel();
+        //layGroup order-details
+        
+        //add(pnlTop, BorderLayout.);
+        
+        //add data to suppliers arraylist 
+        Object[][] suppliersTestData = {{"12MAY2018", "019645232", "Walmart", "in transit", "$128.34", ""}, {"12MAY2018", "019645232", "Walmart", "in transit", "$128.34", ""}, {"12MAY2018", "019645232", "Walmart", "in transit", "$128.34", ""} };
+        ordersTable = new JTable(suppliersTestData, ordersLabel);
+        JScrollPane scrollPane = new JScrollPane(ordersTable);
+        ordersTable.setFillsViewportHeight(true);
+        ordersTable.setDefaultEditor(Object.class, null);
+        
+        add(scrollPane, BorderLayout.CENTER);
+        
+        pnlBtm = new JPanel();
+        
+        btnCreate = new JButton("Create");
+        
+        
         this.add(this.btnOK);
         this.btnOK.addActionListener((ActionEvent e) -> {
             /*
@@ -67,8 +92,8 @@ public class OrderItemsUI
         this.btnCancel.addActionListener((ActionEvent e) -> {
             //TODO:  close window and return to prior window.
         });
-        this.add(this.btnDelete);
-        this.btnDelete.addActionListener((ActionEvent e) -> {
+        this.add(this.btnRemove);
+        this.btnRemove.addActionListener((ActionEvent e) -> {
             /*
             //TODO:  surrond below in a for loop
             if (bal.remove()) {
@@ -78,12 +103,12 @@ public class OrderItemsUI
             }
              */
         });
-        this.add(this.btnAddToList);
-        this.btnAddToList.addActionListener((ActionEvent e) -> {
+        this.add(this.btnAddItem);
+        this.btnAddItem.addActionListener((ActionEvent e) -> {
             //TODO
         });
-        this.add(this.btnRemoveFromList);
-        this.btnRemoveFromList.addActionListener((ActionEvent e) -> {
+        this.add(this.btnRemove);
+        this.btnRemove.addActionListener((ActionEvent e) -> {
             //TODO
         });
 
@@ -103,7 +128,7 @@ public class OrderItemsUI
      * Displays the frame.
      */
     public void display() {
-        System.out.println(String.format("Displaying {0}...", WINDOW_NAME));
+        System.out.println(String.format("Displaying %s...", WINDOW_NAME));
         setVisible(true);
     }
 
