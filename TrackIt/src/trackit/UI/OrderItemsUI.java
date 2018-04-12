@@ -47,15 +47,16 @@ public class OrderItemsUI
      */
     private void initializeComponents() {
         //Setup main frame
-        int frameWidth = 1200;
-        int frameHeight = 600;
+        int frameWidth = 1028;
+        int frameHeight = 700;
         Dimension dimFrame = new Dimension(frameWidth, frameHeight);
-        this.setTitle(Utilities.getWindowCaption(WINDOW_NAME));
-        this.setPreferredSize(dimFrame);
-        this.setLocationRelativeTo(null);
-        this.setResizable(false);
-        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        this.addWindowListener(new CloseQuery());
+        setTitle(Utilities.getWindowCaption(WINDOW_NAME));
+        setPreferredSize(dimFrame);
+        setLocationRelativeTo(null);
+        setResizable(false);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new CloseQuery());
+        setVisible(true);
 
         //Add all components here and set properties.
         setLayout(new BorderLayout());
@@ -63,10 +64,47 @@ public class OrderItemsUI
         pnlTop = new JPanel();
         //layGroup order-details
         
-        //add(pnlTop, BorderLayout.);
+        lblOrderNumber = new JLabel("Order Number");
+        pnlTop.add(lblOrderNumber);
+        tfOrderNumber = new JTextField(20);
+        pnlTop.add(tfOrderNumber);
+        
+        lblSupplier = new JLabel("Supplier");
+        pnlTop.add(lblSupplier);
+        tfSupplier = new JTextField(20);
+        pnlTop.add(tfSupplier);
+        
+        lblOrderDate = new JLabel("Order Date");
+        pnlTop.add(lblOrderDate);
+        tfOrderDate = new JTextField(20);
+        pnlTop.add(tfOrderDate);
+        
+        lblStatus = new JLabel("Status");
+        pnlTop.add(lblStatus);
+        tfStatus = new JTextField(20);
+        pnlTop.add(tfStatus);
+        
+        lblExpectedDate = new JLabel("Expected Date");
+        pnlTop.add(lblExpectedDate);
+        tfExpectedDate = new JTextField(20);
+        pnlTop.add(tfExpectedDate);
+        
+        btnCheckIn = new JButton("Check In");
+        pnlTop.add(btnCheckIn);
+        btnCheckIn.addActionListener((ActionEvent e) -> {
+            //TODO
+        });
+        
+        btnCheckInAll = new JButton("Check In All");
+        pnlTop.add(btnCheckInAll);
+        btnCheckInAll.addActionListener((ActionEvent e) -> {
+            //TODO
+        });
+        
+        add(pnlTop, BorderLayout.NORTH);
         
         //add data to suppliers arraylist 
-        Object[][] suppliersTestData = {{"12MAY2018", "019645232", "Walmart", "in transit", "$128.34", ""}, {"12MAY2018", "019645232", "Walmart", "in transit", "$128.34", ""}, {"12MAY2018", "019645232", "Walmart", "in transit", "$128.34", ""} };
+        Object[][] suppliersTestData = {{"paper", "pk", "12-34563487-0", "7", "$12.95", "276.23"}, {"paper", "pk", "12-34563487-0", "7", "$12.95", "276.23"}, {"paper", "pk", "12-34563487-0", "7", "$12.95", "276.23"} };
         ordersTable = new JTable(suppliersTestData, ordersLabel);
         JScrollPane scrollPane = new JScrollPane(ordersTable);
         ordersTable.setFillsViewportHeight(true);
@@ -76,24 +114,27 @@ public class OrderItemsUI
         
         pnlBtm = new JPanel();
         
+        btnAddItem = new JButton("Add Item");
+        pnlBtm.add(btnAddItem);
+        btnAddItem.addActionListener((ActionEvent e) -> {
+            //TODO
+        });
+        
         btnCreate = new JButton("Create");
-        
-        
-        this.add(this.btnOK);
-        this.btnOK.addActionListener((ActionEvent e) -> {
-            /*
-            //TODO:  surrond below in a for loop
-            if (!bal.save()) {
-                //TODO:  display bal.getErrorMessage();
-            }
-             */
+        pnlBtm.add(btnCreate);
+        btnCreate.addActionListener((ActionEvent e) -> {
+            //TODO
         });
-        this.add(this.btnCancel);
-        this.btnCancel.addActionListener((ActionEvent e) -> {
-            //TODO:  close window and return to prior window.
+        
+        btnEdit = new JButton("Edit");
+        pnlBtm.add(btnEdit);
+        btnEdit.addActionListener((ActionEvent e) -> {
+            //TODO
         });
-        this.add(this.btnRemove);
-        this.btnRemove.addActionListener((ActionEvent e) -> {
+        
+        btnRemove = new JButton("Remove");
+        pnlBtm.add(btnRemove);
+        btnRemove.addActionListener((ActionEvent e) -> {
             /*
             //TODO:  surrond below in a for loop
             if (bal.remove()) {
@@ -103,15 +144,24 @@ public class OrderItemsUI
             }
              */
         });
-        this.add(this.btnAddItem);
-        this.btnAddItem.addActionListener((ActionEvent e) -> {
-            //TODO
+        
+        btnOK = new JButton("OK");
+        pnlBtm.add(btnOK);
+        btnOK.addActionListener((ActionEvent e) -> {
+            /*
+            //TODO:  surrond below in a for loop
+            if (!bal.save()) {
+                //TODO:  display bal.getErrorMessage();
+            }
+             */
         });
-        this.add(this.btnRemove);
-        this.btnRemove.addActionListener((ActionEvent e) -> {
-            //TODO
+        
+        btnCancel = new JButton("Cancel");
+        pnlBtm.add(btnCancel);
+        btnCancel.addActionListener((ActionEvent e) -> {
+            //TODO:  close window and return to prior window.
         });
-
+        
         //Finalizations
         pack();
     }

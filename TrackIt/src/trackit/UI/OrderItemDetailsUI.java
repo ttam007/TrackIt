@@ -1,8 +1,6 @@
 package trackit.UI;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
+import javax.swing.JFrame;
 import trackit.*;
 
 /**
