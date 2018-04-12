@@ -12,8 +12,7 @@ import trackit.*;
  *
  * @author Douglas
  */
-public class OrderItemsUI
-        extends JFrame {
+public class OrderItemsUI extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
     private static final String WINDOW_NAME = "Order Details";
@@ -25,7 +24,7 @@ public class OrderItemsUI
     // <editor-fold defaultstate="collapsed" desc="Components">
 
     JButton btnCheckIn, btnCheckInAll, btnCreate, btnEdit, btnRemove, btnOK, btnAddItem, btnCancel;
-    JPanel pnlTop, pnlCenter, pnlBtm;
+    JPanel pnlTop, pnlCenter, pnlBtm, pnlBtmLeft, pnlBtmRight;
     JLabel lblOrderNumber, lblSupplier, lblStatus, lblOrderDate, lblExpectedDate;
     JTextField tfOrderNumber, tfSupplier, tfStatus, tfOrderDate, tfExpectedDate;
     String[] ordersLabel = {"Item Name", "Unit", "SKU", "Quantity", "Price", "Ext Price"};
@@ -113,27 +112,33 @@ public class OrderItemsUI
         add(scrollPane, BorderLayout.CENTER);
 
         pnlBtm = new JPanel();
+<<<<<<< HEAD
 
+=======
+        pnlBtmLeft = new JPanel();
+        pnlBtmRight = new JPanel();
+        
+>>>>>>> lagail_dev
         btnAddItem = new JButton("Add Item");
-        pnlBtm.add(btnAddItem);
+        pnlBtmLeft.add(btnAddItem);
         btnAddItem.addActionListener((ActionEvent e) -> {
             //TODO
         });
 
         btnCreate = new JButton("Create");
-        pnlBtm.add(btnCreate);
+        pnlBtmLeft.add(btnCreate);
         btnCreate.addActionListener((ActionEvent e) -> {
             //TODO
         });
 
         btnEdit = new JButton("Edit");
-        pnlBtm.add(btnEdit);
+        pnlBtmLeft.add(btnEdit);
         btnEdit.addActionListener((ActionEvent e) -> {
             //TODO
         });
 
         btnRemove = new JButton("Remove");
-        pnlBtm.add(btnRemove);
+        pnlBtmLeft.add(btnRemove);
         btnRemove.addActionListener((ActionEvent e) -> {
             /*
             //TODO:  surrond below in a for loop
@@ -146,7 +151,7 @@ public class OrderItemsUI
         });
 
         btnOK = new JButton("OK");
-        pnlBtm.add(btnOK);
+        pnlBtmRight.add(btnOK);
         btnOK.addActionListener((ActionEvent e) -> {
             /*
             //TODO:  surrond below in a for loop
@@ -157,11 +162,19 @@ public class OrderItemsUI
         });
 
         btnCancel = new JButton("Cancel");
-        pnlBtm.add(btnCancel);
+        pnlBtmRight.add(btnCancel);
         btnCancel.addActionListener((ActionEvent e) -> {
             //TODO:  close window and return to prior window.
         });
+<<<<<<< HEAD
 
+=======
+        
+        pnlBtm.add(pnlBtmLeft, BorderLayout.CENTER);
+        pnlBtm.add(pnlBtmRight, BorderLayout.EAST);
+        add(pnlBtm, BorderLayout.SOUTH);
+        
+>>>>>>> lagail_dev
         //Finalizations
         pack();
     }
