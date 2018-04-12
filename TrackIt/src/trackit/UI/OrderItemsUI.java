@@ -112,33 +112,27 @@ public class OrderItemsUI extends JFrame {
         add(scrollPane, BorderLayout.CENTER);
 
         pnlBtm = new JPanel();
-<<<<<<< HEAD
 
-=======
-        pnlBtmLeft = new JPanel();
-        pnlBtmRight = new JPanel();
-        
->>>>>>> lagail_dev
         btnAddItem = new JButton("Add Item");
-        pnlBtmLeft.add(btnAddItem);
+        pnlBtm.add(btnAddItem);
         btnAddItem.addActionListener((ActionEvent e) -> {
             //TODO
         });
 
         btnCreate = new JButton("Create");
-        pnlBtmLeft.add(btnCreate);
+        pnlBtm.add(btnCreate);
         btnCreate.addActionListener((ActionEvent e) -> {
             //TODO
         });
 
         btnEdit = new JButton("Edit");
-        pnlBtmLeft.add(btnEdit);
+        pnlBtm.add(btnEdit);
         btnEdit.addActionListener((ActionEvent e) -> {
             //TODO
         });
 
         btnRemove = new JButton("Remove");
-        pnlBtmLeft.add(btnRemove);
+        pnlBtm.add(btnRemove);
         btnRemove.addActionListener((ActionEvent e) -> {
             /*
             //TODO:  surrond below in a for loop
@@ -151,7 +145,7 @@ public class OrderItemsUI extends JFrame {
         });
 
         btnOK = new JButton("OK");
-        pnlBtmRight.add(btnOK);
+        pnlBtm.add(btnOK);
         btnOK.addActionListener((ActionEvent e) -> {
             /*
             //TODO:  surrond below in a for loop
@@ -162,19 +156,16 @@ public class OrderItemsUI extends JFrame {
         });
 
         btnCancel = new JButton("Cancel");
-        pnlBtmRight.add(btnCancel);
+        pnlBtm.add(btnCancel);
         btnCancel.addActionListener((ActionEvent e) -> {
             //TODO:  close window and return to prior window.
         });
-<<<<<<< HEAD
 
-=======
-        
         pnlBtm.add(pnlBtmLeft, BorderLayout.CENTER);
         pnlBtm.add(pnlBtmRight, BorderLayout.EAST);
         add(pnlBtm, BorderLayout.SOUTH);
         
->>>>>>> lagail_dev
+
         //Finalizations
         pack();
     }
