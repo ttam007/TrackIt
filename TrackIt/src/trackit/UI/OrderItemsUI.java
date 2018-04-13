@@ -5,11 +5,14 @@ import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 import trackit.*;
+import trackit.DAL.AnOrder;
+import trackit.DAL.AnOrderItem;
 
 /**
+ * UI Layer: Handles all aspects of the AnOrder Details dialog. This is a
+ combination of the Edit AnOrder Details and the OrderItems grid.
+ *
  * @author Douglas
- * UI Layer: Handles all aspects of the Order Details dialog. This is a
- * combination of the Edit Order Details and the OrderItems grid.
  */
 public class OrderItemsUI extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Constants">
@@ -17,11 +20,11 @@ public class OrderItemsUI extends JFrame {
     private static final String WINDOW_NAME = "Order Details";
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
-    private final ArrayList<OrderItem> orderItems = new ArrayList<>();
-    private final Order bll = new Order();
+    private final ArrayList<AnOrderItem> orderItems = new ArrayList<>();
+    private final AnOrder bll = new AnOrder();
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
-    
+
     JButton btnCheckIn, btnCheckInAll, btnCreate, btnEdit, btnRemove, btnOK, btnAddItem, btnCancel;
     JPanel pnlTop, pnlCenter, pnlBtm, pnlBtmLeft, pnlBtmRight;
     JLabel lblOrderNumber, lblSupplier, lblStatus, lblOrderDate, lblExpectedDate, lblBlank;
@@ -32,7 +35,6 @@ public class OrderItemsUI extends JFrame {
     CheckInOutUI checkInOut;
     InventoryItemDetailsUI inventory;
     int selectedRow;
-
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -61,6 +63,37 @@ public class OrderItemsUI extends JFrame {
 
         //Add all components here and set properties.
         setLayout(new BorderLayout());
+
+
+        pnlTop = new JPanel();
+        //layGroup order-details
+
+        lblOrderNumber = new JLabel("Order Number");
+        pnlTop.add(lblOrderNumber);
+        tfOrderNumber = new JTextField(20);
+        pnlTop.add(tfOrderNumber);
+
+        lblSupplier = new JLabel("Supplier");
+        pnlTop.add(lblSupplier);
+        tfSupplier = new JTextField(20);
+        pnlTop.add(tfSupplier);
+
+        lblOrderDate = new JLabel("Order Date");
+        pnlTop.add(lblOrderDate);
+        tfOrderDate = new JTextField(20);
+        pnlTop.add(tfOrderDate);
+
+        lblStatus = new JLabel("Status");
+        pnlTop.add(lblStatus);
+        tfStatus = new JTextField(20);
+        pnlTop.add(tfStatus);
+
+        lblExpectedDate = new JLabel("Expected Date");
+        pnlTop.add(lblExpectedDate);
+        tfExpectedDate = new JTextField(20);
+        pnlTop.add(tfExpectedDate);
+
+
         
         Box topBox, topInnerBx, btmInnerBx, middleBox, bottomBox, combine;
         
@@ -102,26 +135,41 @@ public class OrderItemsUI extends JFrame {
         add(topBox, BorderLayout.NORTH);
         
         middleBox = Box.createHorizontalBox();
+
         btnCheckIn = new JButton("Check In");
         middleBox.add(btnCheckIn);
         btnCheckIn.addActionListener((ActionEvent e) -> {
             //TODO
             checkInOut = new CheckInOutUI();
         });
-        
+
         btnCheckInAll = new JButton("Check In All");
         middleBox.add(btnCheckInAll);
         btnCheckInAll.addActionListener((ActionEvent e) -> {
             //TODO
         });
+
+
+        add(pnlTop, BorderLayout.NORTH);
+
+
         
         bottomBox = Box.createHorizontalBox();
+
         //add data to suppliers arraylist 
+
+        Object[][] suppliersTestData = {{"paper", "pk", "12-34563487-0", "7", "$12.95", "276.23"}, {"paper", "pk", "12-34563487-0", "7", "$12.95", "276.23"}, {"paper", "pk", "12-34563487-0", "7", "$12.95", "276.23"}};
+        ordersTable = new JTable(suppliersTestData, ordersLabel);
         Object[][] testData = {{"paper", "pk", "12-34563487-0", "7", "$12.95", "$276.23"}, {"paper", "pk", "12-34563487-0", "7", "$12.95", "$276.23"}, {"paper", "pk", "12-34563487-0", "7", "$12.95", "$276.23"} };
         ordersTable = new JTable(testData, ordersLabel);
         JScrollPane scrollPane = new JScrollPane(ordersTable);
         ordersTable.setFillsViewportHeight(true);
         ordersTable.setDefaultEditor(Object.class, null);
+
+
+        add(scrollPane, BorderLayout.CENTER);
+
+
         
         bottomBox.add(scrollPane);
         
@@ -131,33 +179,32 @@ public class OrderItemsUI extends JFrame {
         combine.add(bottomBox);
         add(combine, BorderLayout.CENTER);
         
+
         pnlBtm = new JPanel();
-        pnlBtmLeft = new JPanel();
-        pnlBtmRight = new JPanel();
-        
+
         btnAddItem = new JButton("Add Item");
-        pnlBtmLeft.add(btnAddItem);
+        pnlBtm.add(btnAddItem);
         btnAddItem.addActionListener((ActionEvent e) -> {
             //TODO
             details = new OrderItemDetailsUI(true);
         });
-        
+
         btnCreate = new JButton("Create");
-        pnlBtmLeft.add(btnCreate);
+        pnlBtm.add(btnCreate);
         btnCreate.addActionListener((ActionEvent e) -> {
             //TODO
             inventory = new InventoryItemDetailsUI(true);
         });
-        
+
         btnEdit = new JButton("Edit");
-        pnlBtmLeft.add(btnEdit);
+        pnlBtm.add(btnEdit);
         btnEdit.addActionListener((ActionEvent e) -> {
             //TODO
             details = new OrderItemDetailsUI(false);
         });
-        
+
         btnRemove = new JButton("Remove");
-        pnlBtmLeft.add(btnRemove);
+        pnlBtm.add(btnRemove);
         btnRemove.addActionListener((ActionEvent e) -> {
             /*
             //TODO:  surrond below in a for loop
@@ -168,9 +215,9 @@ public class OrderItemsUI extends JFrame {
             }
              */
         });
-        
+
         btnOK = new JButton("OK");
-        pnlBtmRight.add(btnOK);
+        pnlBtm.add(btnOK);
         btnOK.addActionListener((ActionEvent e) -> {
             setVisible(false);
             
@@ -181,26 +228,27 @@ public class OrderItemsUI extends JFrame {
             }
              */
         });
-        
+
         btnCancel = new JButton("Cancel");
-        pnlBtmRight.add(btnCancel);
+        pnlBtm.add(btnCancel);
         btnCancel.addActionListener((ActionEvent e) -> {
             //TODO:  close window and return to prior window.
             setVisible(false);
         });
-        
+
         pnlBtm.add(pnlBtmLeft, BorderLayout.CENTER);
         pnlBtm.add(pnlBtmRight, BorderLayout.EAST);
         add(pnlBtm, BorderLayout.SOUTH);
         
+
         //Finalizations
         pack();
     }
 
     private void getValues() {
-        if (bll.load()) {
+        /*if (bll.load()) {
             this.orderItems.addAll(bll.getItems());
-        }
+        }*/
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">

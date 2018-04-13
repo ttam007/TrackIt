@@ -2,9 +2,9 @@ package trackit.UI;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
 import javax.swing.*;
 import trackit.*;
+import trackit.DAL.AnInventoryItem;
 
 /**
  * UI Layer: Handles all aspects of the Check In/Out dialog.
@@ -17,7 +17,11 @@ public class CheckInOutUI
     private static final String WINDOW_NAME = "Check In/Out";
 // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
-    private final InventoryItem testItem = new InventoryItem();
+
+    private final AnInventoryItem testItem = new AnInventoryItem();
+
+    //private final InventoryItem testItem = new InventoryItem();
+
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     JPanel pnlMain;
@@ -84,10 +88,18 @@ public class CheckInOutUI
         submitBx = Box.createHorizontalBox();
         btnOK = new JButton("OK");
         
+
+        this.btnOK.addActionListener((ActionEvent e) -> {
+            //TODO
+            /*if(!testItem.save()) {
+                
+            }*/
+
         btnOK.addActionListener((ActionEvent e) -> {
             if(!testItem.save()) {
                 
             }
+
         });
         
         btnCancel = new JButton("Cancel");

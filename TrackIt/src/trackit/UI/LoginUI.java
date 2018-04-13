@@ -6,8 +6,9 @@ import javax.swing.*;
 import trackit.*;
 
 /**
- * @author Douglas
  * UI Layer: Handles all aspects of the Login's UI.
+ *
+ * @author Douglas
  */
 public class LoginUI extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Constants">
@@ -24,7 +25,7 @@ public class LoginUI extends JFrame {
     JPasswordField pfPassword;
     JButton btnLogin;
     String username, password;
-   
+
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     public LoginUI() {
@@ -63,7 +64,7 @@ public class LoginUI extends JFrame {
 
         //Add all components here and set properties.
         Box usernameBx, passwordBx, submitBx, combine;
-        
+
         pnlNorth = new JPanel();
         lblTitle = new JLabel(Utilities.PROGRAM_NAME_LONG);
         pnlNorth.add(lblTitle);
@@ -85,6 +86,7 @@ public class LoginUI extends JFrame {
         submitBx = Box.createHorizontalBox();
         btnLogin = new JButton("Log In");
         submitBx.add(btnLogin);
+        this.getRootPane().setDefaultButton(btnLogin);
 
         combine = Box.createVerticalBox();
         combine.add(usernameBx);
@@ -97,9 +99,9 @@ public class LoginUI extends JFrame {
         lblAccess = new JLabel("");
         pnlSouth.add(lblAccess);
         add(lblAccess, BorderLayout.SOUTH);
- 
+
         btnLogin.addActionListener((ActionEvent e) -> {
-            if (this.bll.startLogin(this.tfUsername.getText().trim(), this.pfPassword.getText().trim())) {
+            if (this.bll.startLogin(this.tfUsername.getText().trim(), new String(this.pfPassword.getPassword()))) {
                 this.dispose();
             } else {
                 JOptionPane.showMessageDialog(this,
@@ -110,7 +112,7 @@ public class LoginUI extends JFrame {
                 }
             }
         });
-        
+
         //Finalizations
         this.pack();
     }

@@ -1,9 +1,12 @@
 /TrackItTestDriver/build/
 /TrackItTestDriver/nbproject/private/
-<<<<<<< HEAD
 /TrackItTestDriver/dist/
-=======
+/TrackIt/build/
+/TrackIt/nbproject/private/
+/TrackIt/dist/
 *.properties
+<<<<<<< HEAD
+=======
 *.properties
 <<<<<<< HEAD
 >>>>>>> bdb23d81bb2f0c9d6282fb60c934649f88d11b12
@@ -11,5 +14,9 @@
 *.properties
 >>>>>>> lagail_dev
 *.properties
+<<<<<<< HEAD
+>>>>>>> lagail_dev
+=======
 *.properties
+>>>>>>> lagail_dev
 *.properties

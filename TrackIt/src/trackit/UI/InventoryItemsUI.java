@@ -1,12 +1,13 @@
 package trackit.UI;
 
+import trackit.DAL.AnInventoryItem;
+import trackit.DAL.AnItem;
 import java.util.*;
 import javax.swing.*;
 import trackit.*;
 
 /**
- * UI Layer: Handles all aspects of the Inventory panel. TODO: convert to
- * JPanel.
+ * UI Layer: Handles all aspects of the Inventory panel.
  */
 public class InventoryItemsUI
         extends JPanel {
@@ -15,7 +16,7 @@ public class InventoryItemsUI
     private static final String WINDOW_NAME = "Inventory";
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
-    private final ArrayList<InventoryItem> inventoryItems = new ArrayList<>();
+    private final ArrayList<AnInventoryItem> inventoryItems = new ArrayList<>();
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     JButton btnAddToList = new JButton();
@@ -42,11 +43,11 @@ public class InventoryItemsUI
     }
 
     /**
-     * Launches the Item Detail window.
+     * Launches the AnItem Detail window.
      *
      * @param anItem The item to be shown.
      */
-    private void showItemDetails(Item anItem) {
+    private void showItemDetails(AnItem anItem) {
         //bll.showDialog(anItem);    
     }
     // </editor-fold>

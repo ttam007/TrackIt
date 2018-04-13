@@ -4,11 +4,13 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import trackit.*;
+import trackit.DAL.ASupplier;
 
 /**
+ * UI Layer: Handles all aspects of the Create ASupplier and Edit ASupplier
+ dialog.
+ *
  * @author Douglas
- * UI Layer: Handles all aspects of the Create Supplier and Edit Supplier
- * dialog.
  */
 public class SupplierDetailsUI
         extends JFrame {
@@ -17,7 +19,7 @@ public class SupplierDetailsUI
     private static final String WINDOW_NAME = "Supplier Details";
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Fields">
-    private final Supplier bll = new Supplier();
+    private final ASupplier bll = new ASupplier();
     private final boolean isCreateMode;
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
@@ -53,7 +55,7 @@ public class SupplierDetailsUI
 
         //Add all components here and set properties.
         Box nameBx, addressBx, submitBx, combine;
-        
+
         pnlCenter = new JPanel();
         add(pnlCenter, BorderLayout.CENTER);
 
@@ -70,17 +72,17 @@ public class SupplierDetailsUI
         submitBx = Box.createHorizontalBox();
         btnOK = new JButton("OK");
         submitBx.add(btnOK);
-        
+
         this.btnOK.addActionListener((ActionEvent e) -> {
-            if (!bll.save()) {
+           /* if (!bll.save()) {
                 //TODO:  display bal.getErrorMessage();
-                
-            }
+
+            }*/
         });
-        
+
         btnCancel = new JButton("Cancel");
         submitBx.add(btnCancel);
-        
+
         this.btnCancel.addActionListener((ActionEvent e) -> {
             //TODO:  close window and return to prior window.
         });
@@ -91,8 +93,6 @@ public class SupplierDetailsUI
 
         pnlCenter.add(combine);
 
-        
-        
         //Finalizations
         pack();
     }
@@ -106,7 +106,8 @@ public class SupplierDetailsUI
         System.out.println(String.format("Displaying %s...", WINDOW_NAME));
         setVisible(true);
     }
-    public void closeWindow(){
+
+    public void closeWindow() {
         this.setVisible(false);
     }
 

@@ -7,8 +7,9 @@ import javax.swing.*;
 import trackit.*;
 
 /**
- * @author Douglas
  * UI Layer: Handles all aspects of the Main Menu's UI.
+ *
+ * @author Douglas
  */
 public class MainMenuUI extends JFrame {
 
@@ -27,7 +28,6 @@ public class MainMenuUI extends JFrame {
     JTabbedPane tabpane;
     JLabel title;
     JButton btnLogout, btnExit;
-    
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -36,6 +36,7 @@ public class MainMenuUI extends JFrame {
 
         refreshDashBoards();
     }
+
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
     /**
@@ -57,32 +58,32 @@ public class MainMenuUI extends JFrame {
         tabpane.add("Inventory", inventoryTab);
         tabpane.add("Orders", ordersTab);
         tabpane.add("Supplies", suppliersTab);
-        
+
         add(tabpane, BorderLayout.CENTER);
-        
+
         JPanel pnlBottom = new JPanel();
         btnLogout = new JButton("Log Out");
-        btnLogout.addActionListener(new ActionListener(){
+        btnLogout.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
                 LoginUI login = new LoginUI();
                 login.display();
             }
-            
+
         });
         btnExit = new JButton("Exit");
-        btnExit.addActionListener(new ActionListener(){
+        btnExit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
             }
-            
+
         });
         pnlBottom.add(btnLogout);
         pnlBottom.add(btnExit);
         add(pnlBottom, BorderLayout.SOUTH);
-        
+
         //Finalizations
         //pack();
     }
