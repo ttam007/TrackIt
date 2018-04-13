@@ -103,8 +103,8 @@ public class OrderItemsUI extends JFrame {
         add(pnlTop, BorderLayout.NORTH);
         
         //add data to suppliers arraylist 
-        Object[][] suppliersTestData = {{"paper", "pk", "12-34563487-0", "7", "$12.95", "276.23"}, {"paper", "pk", "12-34563487-0", "7", "$12.95", "276.23"}, {"paper", "pk", "12-34563487-0", "7", "$12.95", "276.23"} };
-        ordersTable = new JTable(suppliersTestData, ordersLabel);
+        Object[][] testData = {{"paper", "pk", "12-34563487-0", "7", "$12.95", "$276.23"}, {"paper", "pk", "12-34563487-0", "7", "$12.95", "$276.23"}, {"paper", "pk", "12-34563487-0", "7", "$12.95", "$276.23"} };
+        ordersTable = new JTable(testData, ordersLabel);
         JScrollPane scrollPane = new JScrollPane(ordersTable);
         ordersTable.setFillsViewportHeight(true);
         ordersTable.setDefaultEditor(Object.class, null);
