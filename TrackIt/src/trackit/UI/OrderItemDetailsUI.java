@@ -16,6 +16,7 @@ public class OrderItemDetailsUI
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
+    
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     public OrderItemDetailsUI(boolean useCreateMode) {
@@ -30,6 +31,8 @@ public class OrderItemDetailsUI
     protected void initializeComponents() {
 
         //TODO:  add additional components here.
+        
+        
         super.finalizeComponents();
     }
 
