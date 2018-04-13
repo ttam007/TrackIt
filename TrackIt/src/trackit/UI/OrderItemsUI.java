@@ -5,10 +5,12 @@ import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 import trackit.*;
+import trackit.DAL.AnOrder;
+import trackit.DAL.AnOrderItem;
 
 /**
- * UI Layer: Handles all aspects of the Order Details dialog. This is a
- * combination of the Edit Order Details and the OrderItems grid.
+ * UI Layer: Handles all aspects of the AnOrder Details dialog. This is a
+ combination of the Edit AnOrder Details and the OrderItems grid.
  *
  * @author Douglas
  */
@@ -18,8 +20,8 @@ public class OrderItemsUI extends JFrame {
     private static final String WINDOW_NAME = "Order Details";
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
-    private final ArrayList<OrderItem> orderItems = new ArrayList<>();
-    private final Order bll = new Order();
+    private final ArrayList<AnOrderItem> orderItems = new ArrayList<>();
+    private final AnOrder bll = new AnOrder();
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
 
@@ -174,9 +176,9 @@ public class OrderItemsUI extends JFrame {
     }
 
     private void getValues() {
-        if (bll.load()) {
+        /*if (bll.load()) {
             this.orderItems.addAll(bll.getItems());
-        }
+        }*/
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">

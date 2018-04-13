@@ -1,16 +1,13 @@
 package trackit.UI;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import trackit.*;
+import trackit.DAL.AnInventoryItem;
 
 /**
  * UI Layer: Handles all aspects of the Create Inventory Item and Edit Inventory
  * Item dialog.
  */
 public class InventoryItemDetailsUI
-        extends ItemDetailsUI<InventoryItem> {
+        extends ItemDetailsUI<AnInventoryItem> {
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
     // </editor-fold>
@@ -21,7 +18,7 @@ public class InventoryItemDetailsUI
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     public InventoryItemDetailsUI(boolean useCreateMode) {
-        super("Inventory Item Details", new InventoryItem());
+        super("Inventory Item Details", new AnInventoryItem());
   
         this.isCreateMode = useCreateMode;      
         this.initializeComponents();
@@ -29,11 +26,11 @@ public class InventoryItemDetailsUI
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
 
-    /**
+    // <editor-fold defaultstate="collapsed" desc="Private Methods">
+     /**
      * Sets up all components used in this frame.
      */
-    // <editor-fold defaultstate="collapsed" desc="Private Methods">
-    protected void initializeComponents() {
+   protected void initializeComponents() {
 
         //TODO:  add additional components here.
         super.finalizeComponents();
@@ -41,9 +38,9 @@ public class InventoryItemDetailsUI
 
     @Override
     protected void actionSave() {
-        if (!bal.save()) {
+        /*if (!bal.save()) {
             //TODO:  display bal.getErrorMessage();
-        }
+        }*/
     }
 
     @Override
@@ -53,11 +50,11 @@ public class InventoryItemDetailsUI
 
     @Override
     protected void actionDelete() {
-        if (bal.remove()) {
+        /*if (bal.remove()) {
             //TODO:  close window and return to prior window.
         } else {
             //TODO:  display bal.getErrorMessage() and stay on this window.
-        }
+        }*/
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">

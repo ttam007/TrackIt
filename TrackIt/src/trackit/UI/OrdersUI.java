@@ -4,10 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
-import trackit.*;
+import trackit.DAL.AnOrder;
 
 /**
- * UI Layer: Handles all aspects of the Order panel.
+ * UI Layer: Handles all aspects of the AnOrder panel.
  *
  * @author Douglas
  */
@@ -18,8 +18,8 @@ public class OrdersUI
     private static final String WINDOW_NAME = "Orders";
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
-    private final ArrayList<Order> orders = new ArrayList<>();
-    private final Order bll = new Order();
+    private final ArrayList<AnOrder> orders = new ArrayList<>();
+    private final AnOrder bll = new AnOrder();
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     JButton btnCreate, btnRemove, btnEdit;
@@ -95,9 +95,9 @@ public class OrdersUI
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
     private void getValues() {
-        if (bll.load()) {
+       /* if (bll.load()) {
             //this.orders.addAll(bll.getItems());
-        }
+        }*/
     }
 
     // </editor-fold>

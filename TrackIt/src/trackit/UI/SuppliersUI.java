@@ -1,5 +1,6 @@
 package trackit.UI;
 
+import trackit.DAL.ASupplier;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
@@ -17,7 +18,7 @@ public class SuppliersUI extends JPanel {
     private static final String WINDOW_NAME = "Suppliers";
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
-    private final ArrayList<Supplier> suppliers = new ArrayList<>();
+    private final ArrayList<ASupplier> suppliers = new ArrayList<>();
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     JButton btnCreate, btnRemove, btnEdit;

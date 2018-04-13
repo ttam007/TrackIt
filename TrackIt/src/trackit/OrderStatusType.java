@@ -1,8 +1,10 @@
-/*
- * Decompiled with CFR 0_123.
- */
 package trackit;
 
+/**
+ * All the statuses for an order.
+ *
+ * @author Bond
+ */
 public enum OrderStatusType {
     // <editor-fold defaultstate="expanded" desc="Enumeration">
     ORDERED(0),
@@ -33,6 +35,21 @@ public enum OrderStatusType {
     static {
         //TODO:  get values from database.
         STATUS_TEXT = new String[]{"Ordered", "Being Shipped", "Delievered"};
+    }
+
+    /**
+     * Gets the enumerated value from its string equivalent.
+     *
+     * @param aValue The string equivalent of the enumerated value.
+     * @return The enumerated value.
+     */
+    public static OrderStatusType getType(String aValue) {
+        for (OrderStatusType aType : OrderStatusType.values()) {
+            if (aType.getText().equalsIgnoreCase(aValue)) {
+                return aType;
+            }
+        }
+        return null;
     }
     // </editor-fold>
 }
