@@ -95,11 +95,6 @@ public class CheckInOutUI
                 
             }*/
 
-        btnOK.addActionListener((ActionEvent e) -> {
-            if(!testItem.save()) {
-                
-            }
-
         });
         
         btnCancel = new JButton("Cancel");

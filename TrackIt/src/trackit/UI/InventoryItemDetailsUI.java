@@ -1,10 +1,10 @@
 package trackit.UI;
 
-<<<<<<< HEAD
+
 import trackit.*;
-=======
+
 import trackit.DAL.AnInventoryItem;
->>>>>>> Dev
+
 
 /**
  * UI Layer: Handles all aspects of the Create Inventory Item and Edit Inventory
