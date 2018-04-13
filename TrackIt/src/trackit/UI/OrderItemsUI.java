@@ -27,11 +27,13 @@ public class OrderItemsUI extends JFrame {
 
     JButton btnCheckIn, btnCheckInAll, btnCreate, btnEdit, btnRemove, btnOK, btnAddItem, btnCancel;
     JPanel pnlTop, pnlCenter, pnlBtm, pnlBtmLeft, pnlBtmRight;
-    JLabel lblOrderNumber, lblSupplier, lblStatus, lblOrderDate, lblExpectedDate;
-    JTextField tfOrderNumber, tfSupplier, tfStatus, tfOrderDate, tfExpectedDate;
+    JLabel lblOrderNumber, lblSupplier, lblStatus, lblOrderDate, lblExpectedDate, lblBlank;
+    JTextField tfOrderNumber, tfSupplier, tfStatus, tfOrderDate, tfExpectedDate, tfBlank;
     String[] ordersLabel = {"Item Name", "Unit", "SKU", "Quantity", "Price", "Ext Price"};
     JTable ordersTable;
     OrderItemDetailsUI details;
+    CheckInOutUI checkInOut;
+    InventoryItemDetailsUI inventory;
     int selectedRow;
 
     // </editor-fold>
@@ -61,6 +63,7 @@ public class OrderItemsUI extends JFrame {
 
         //Add all components here and set properties.
         setLayout(new BorderLayout());
+<<<<<<< HEAD
 
         pnlTop = new JPanel();
         //layGroup order-details
@@ -90,20 +93,69 @@ public class OrderItemsUI extends JFrame {
         tfExpectedDate = new JTextField(20);
         pnlTop.add(tfExpectedDate);
 
+=======
+        
+        Box topBox, topInnerBx, btmInnerBx, middleBox, bottomBox, combine;
+        
+        topBox = Box.createVerticalBox();
+        
+        topInnerBx = Box.createHorizontalBox();
+        lblOrderNumber = new JLabel("Order Number:");
+        topInnerBx.add(lblOrderNumber);
+        tfOrderNumber = new JTextField(20);
+        topInnerBx.add(tfOrderNumber);
+        
+        lblSupplier = new JLabel("Supplier:");
+        topInnerBx.add(lblSupplier);
+        tfSupplier = new JTextField(20);
+        topInnerBx.add(tfSupplier);
+        
+        lblOrderDate = new JLabel("      Order Date:");
+        topInnerBx.add(lblOrderDate);
+        tfOrderDate = new JTextField(20);
+        topInnerBx.add(tfOrderDate);
+        
+        btmInnerBx = Box.createHorizontalBox();
+        lblStatus = new JLabel("            Status:");
+        btmInnerBx.add(lblStatus);
+        tfStatus = new JTextField(20);
+        btmInnerBx.add(tfStatus);
+        
+        lblStatus = new JLabel("                          ");
+        btmInnerBx.add(lblStatus);
+        
+        lblExpectedDate = new JLabel("                                                     Expected Date:");
+        btmInnerBx.add(lblExpectedDate);
+        tfExpectedDate = new JTextField(20);
+        btmInnerBx.add(tfExpectedDate);
+        
+        topBox.add(topInnerBx);
+        topBox.add(btmInnerBx);
+        
+        add(topBox, BorderLayout.NORTH);
+        
+        middleBox = Box.createHorizontalBox();
+>>>>>>> lagail_dev
         btnCheckIn = new JButton("Check In");
-        pnlTop.add(btnCheckIn);
+        middleBox.add(btnCheckIn);
         btnCheckIn.addActionListener((ActionEvent e) -> {
             //TODO
+            checkInOut = new CheckInOutUI();
         });
 
         btnCheckInAll = new JButton("Check In All");
-        pnlTop.add(btnCheckInAll);
+        middleBox.add(btnCheckInAll);
         btnCheckInAll.addActionListener((ActionEvent e) -> {
             //TODO
         });
+<<<<<<< HEAD
 
         add(pnlTop, BorderLayout.NORTH);
 
+=======
+        
+        bottomBox = Box.createHorizontalBox();
+>>>>>>> lagail_dev
         //add data to suppliers arraylist 
 
         Object[][] suppliersTestData = {{"paper", "pk", "12-34563487-0", "7", "$12.95", "276.23"}, {"paper", "pk", "12-34563487-0", "7", "$12.95", "276.23"}, {"paper", "pk", "12-34563487-0", "7", "$12.95", "276.23"}};
@@ -113,27 +165,42 @@ public class OrderItemsUI extends JFrame {
         JScrollPane scrollPane = new JScrollPane(ordersTable);
         ordersTable.setFillsViewportHeight(true);
         ordersTable.setDefaultEditor(Object.class, null);
+<<<<<<< HEAD
 
         add(scrollPane, BorderLayout.CENTER);
 
+=======
+        
+        bottomBox.add(scrollPane);
+        
+        
+        combine = Box.createVerticalBox();
+        combine.add(middleBox);
+        combine.add(bottomBox);
+        add(combine, BorderLayout.CENTER);
+        
+>>>>>>> lagail_dev
         pnlBtm = new JPanel();
 
         btnAddItem = new JButton("Add Item");
         pnlBtm.add(btnAddItem);
         btnAddItem.addActionListener((ActionEvent e) -> {
             //TODO
+            details = new OrderItemDetailsUI(true);
         });
 
         btnCreate = new JButton("Create");
         pnlBtm.add(btnCreate);
         btnCreate.addActionListener((ActionEvent e) -> {
             //TODO
+            inventory = new InventoryItemDetailsUI(true);
         });
 
         btnEdit = new JButton("Edit");
         pnlBtm.add(btnEdit);
         btnEdit.addActionListener((ActionEvent e) -> {
             //TODO
+            details = new OrderItemDetailsUI(false);
         });
 
         btnRemove = new JButton("Remove");
@@ -152,6 +219,8 @@ public class OrderItemsUI extends JFrame {
         btnOK = new JButton("OK");
         pnlBtm.add(btnOK);
         btnOK.addActionListener((ActionEvent e) -> {
+            setVisible(false);
+            
             /*
             //TODO:  surrond below in a for loop
             if (!bal.save()) {
@@ -164,6 +233,7 @@ public class OrderItemsUI extends JFrame {
         pnlBtm.add(btnCancel);
         btnCancel.addActionListener((ActionEvent e) -> {
             //TODO:  close window and return to prior window.
+            setVisible(false);
         });
 
         pnlBtm.add(pnlBtmLeft, BorderLayout.CENTER);
