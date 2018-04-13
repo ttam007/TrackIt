@@ -9,6 +9,8 @@ import trackit.DAL.AnInventoryItem;
 import trackit.DAL.AnItem;
 import java.util.*;
 import javax.swing.*;
+import java.awt.*;
+import java.util.List;
 import trackit.*;
 
 /**
@@ -60,7 +62,7 @@ public class InventoryItemsUI extends JPanel {
         itemInputForm.setTitle("Add Inventory Item");
         itemInputForm.setModal(true);
         itemInputForm.setContentPane(itemCreate.getMainFrame().getContentPane());*/
-        create.addActionListener((event)-> /*itemInputForm.setVisible(true)*/);
+        //create.addActionListener((event)-> /*itemInputForm.setVisible(true)*/);
 
         edit = new JButton("Edit");
        /* itemEdit = new InventoryItemDetails(false);
@@ -69,7 +71,7 @@ public class InventoryItemsUI extends JPanel {
         itemEditForm.setTitle("Edit Inventory Item");
         itemEditForm.setModal(true);
         itemEditForm.setContentPane(itemEdit.getMainFrame().getContentPane());*/
-        edit.addActionListener((event)-> /*itemEditForm.setVisible(true)*/);
+       // edit.addActionListener((event)-> /*itemEditForm.setVisible(true)*/);
 
         remove = new JButton("Remove");
         remove.addActionListener((event)-> System.out.println("REMOVE TEST"));
