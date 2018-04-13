@@ -12,8 +12,7 @@ import trackit.*;
  *
  * @author Douglas
  */
-public class OrderItemsUI
-        extends JFrame {
+public class OrderItemsUI extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
     private static final String WINDOW_NAME = "Order Details";
@@ -25,7 +24,7 @@ public class OrderItemsUI
     // <editor-fold defaultstate="collapsed" desc="Components">
 
     JButton btnCheckIn, btnCheckInAll, btnCreate, btnEdit, btnRemove, btnOK, btnAddItem, btnCancel;
-    JPanel pnlTop, pnlCenter, pnlBtm;
+    JPanel pnlTop, pnlCenter, pnlBtm, pnlBtmLeft, pnlBtmRight;
     JLabel lblOrderNumber, lblSupplier, lblStatus, lblOrderDate, lblExpectedDate;
     JTextField tfOrderNumber, tfSupplier, tfStatus, tfOrderDate, tfExpectedDate;
     String[] ordersLabel = {"Item Name", "Unit", "SKU", "Quantity", "Price", "Ext Price"};
@@ -161,6 +160,11 @@ public class OrderItemsUI
         btnCancel.addActionListener((ActionEvent e) -> {
             //TODO:  close window and return to prior window.
         });
+
+        pnlBtm.add(pnlBtmLeft, BorderLayout.CENTER);
+        pnlBtm.add(pnlBtmRight, BorderLayout.EAST);
+        add(pnlBtm, BorderLayout.SOUTH);
+        
 
         //Finalizations
         pack();
