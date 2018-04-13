@@ -24,11 +24,13 @@ public class OrderItemsUI extends JFrame {
     
     JButton btnCheckIn, btnCheckInAll, btnCreate, btnEdit, btnRemove, btnOK, btnAddItem, btnCancel;
     JPanel pnlTop, pnlCenter, pnlBtm, pnlBtmLeft, pnlBtmRight;
-    JLabel lblOrderNumber, lblSupplier, lblStatus, lblOrderDate, lblExpectedDate;
-    JTextField tfOrderNumber, tfSupplier, tfStatus, tfOrderDate, tfExpectedDate;
+    JLabel lblOrderNumber, lblSupplier, lblStatus, lblOrderDate, lblExpectedDate, lblBlank;
+    JTextField tfOrderNumber, tfSupplier, tfStatus, tfOrderDate, tfExpectedDate, tfBlank;
     String[] ordersLabel = {"Item Name", "Unit", "SKU", "Quantity", "Price", "Ext Price"};
     JTable ordersTable;
     OrderItemDetailsUI details;
+    CheckInOutUI checkInOut;
+    InventoryItemDetailsUI inventory;
     int selectedRow;
 
 
@@ -60,48 +62,60 @@ public class OrderItemsUI extends JFrame {
         //Add all components here and set properties.
         setLayout(new BorderLayout());
         
-        pnlTop = new JPanel();
-        //layGroup order-details
+        Box topBox, topInnerBx, btmInnerBx, middleBox, bottomBox, combine;
         
-        lblOrderNumber = new JLabel("Order Number");
-        pnlTop.add(lblOrderNumber);
+        topBox = Box.createVerticalBox();
+        
+        topInnerBx = Box.createHorizontalBox();
+        lblOrderNumber = new JLabel("Order Number:");
+        topInnerBx.add(lblOrderNumber);
         tfOrderNumber = new JTextField(20);
-        pnlTop.add(tfOrderNumber);
+        topInnerBx.add(tfOrderNumber);
         
-        lblSupplier = new JLabel("Supplier");
-        pnlTop.add(lblSupplier);
+        lblSupplier = new JLabel("Supplier:");
+        topInnerBx.add(lblSupplier);
         tfSupplier = new JTextField(20);
-        pnlTop.add(tfSupplier);
+        topInnerBx.add(tfSupplier);
         
-        lblOrderDate = new JLabel("Order Date");
-        pnlTop.add(lblOrderDate);
+        lblOrderDate = new JLabel("      Order Date:");
+        topInnerBx.add(lblOrderDate);
         tfOrderDate = new JTextField(20);
-        pnlTop.add(tfOrderDate);
+        topInnerBx.add(tfOrderDate);
         
-        lblStatus = new JLabel("Status");
-        pnlTop.add(lblStatus);
+        btmInnerBx = Box.createHorizontalBox();
+        lblStatus = new JLabel("            Status:");
+        btmInnerBx.add(lblStatus);
         tfStatus = new JTextField(20);
-        pnlTop.add(tfStatus);
+        btmInnerBx.add(tfStatus);
         
-        lblExpectedDate = new JLabel("Expected Date");
-        pnlTop.add(lblExpectedDate);
+        lblStatus = new JLabel("                          ");
+        btmInnerBx.add(lblStatus);
+        
+        lblExpectedDate = new JLabel("                                                     Expected Date:");
+        btmInnerBx.add(lblExpectedDate);
         tfExpectedDate = new JTextField(20);
-        pnlTop.add(tfExpectedDate);
+        btmInnerBx.add(tfExpectedDate);
         
+        topBox.add(topInnerBx);
+        topBox.add(btmInnerBx);
+        
+        add(topBox, BorderLayout.NORTH);
+        
+        middleBox = Box.createHorizontalBox();
         btnCheckIn = new JButton("Check In");
-        pnlTop.add(btnCheckIn);
+        middleBox.add(btnCheckIn);
         btnCheckIn.addActionListener((ActionEvent e) -> {
             //TODO
+            checkInOut = new CheckInOutUI();
         });
         
         btnCheckInAll = new JButton("Check In All");
-        pnlTop.add(btnCheckInAll);
+        middleBox.add(btnCheckInAll);
         btnCheckInAll.addActionListener((ActionEvent e) -> {
             //TODO
         });
         
-        add(pnlTop, BorderLayout.NORTH);
-        
+        bottomBox = Box.createHorizontalBox();
         //add data to suppliers arraylist 
         Object[][] testData = {{"paper", "pk", "12-34563487-0", "7", "$12.95", "$276.23"}, {"paper", "pk", "12-34563487-0", "7", "$12.95", "$276.23"}, {"paper", "pk", "12-34563487-0", "7", "$12.95", "$276.23"} };
         ordersTable = new JTable(testData, ordersLabel);
@@ -109,7 +123,13 @@ public class OrderItemsUI extends JFrame {
         ordersTable.setFillsViewportHeight(true);
         ordersTable.setDefaultEditor(Object.class, null);
         
-        add(scrollPane, BorderLayout.CENTER);
+        bottomBox.add(scrollPane);
+        
+        
+        combine = Box.createVerticalBox();
+        combine.add(middleBox);
+        combine.add(bottomBox);
+        add(combine, BorderLayout.CENTER);
         
         pnlBtm = new JPanel();
         pnlBtmLeft = new JPanel();
@@ -119,18 +139,21 @@ public class OrderItemsUI extends JFrame {
         pnlBtmLeft.add(btnAddItem);
         btnAddItem.addActionListener((ActionEvent e) -> {
             //TODO
+            details = new OrderItemDetailsUI(true);
         });
         
         btnCreate = new JButton("Create");
         pnlBtmLeft.add(btnCreate);
         btnCreate.addActionListener((ActionEvent e) -> {
             //TODO
+            inventory = new InventoryItemDetailsUI(true);
         });
         
         btnEdit = new JButton("Edit");
         pnlBtmLeft.add(btnEdit);
         btnEdit.addActionListener((ActionEvent e) -> {
             //TODO
+            details = new OrderItemDetailsUI(false);
         });
         
         btnRemove = new JButton("Remove");
@@ -149,6 +172,8 @@ public class OrderItemsUI extends JFrame {
         btnOK = new JButton("OK");
         pnlBtmRight.add(btnOK);
         btnOK.addActionListener((ActionEvent e) -> {
+            setVisible(false);
+            
             /*
             //TODO:  surrond below in a for loop
             if (!bal.save()) {
@@ -161,6 +186,7 @@ public class OrderItemsUI extends JFrame {
         pnlBtmRight.add(btnCancel);
         btnCancel.addActionListener((ActionEvent e) -> {
             //TODO:  close window and return to prior window.
+            setVisible(false);
         });
         
         pnlBtm.add(pnlBtmLeft, BorderLayout.CENTER);
