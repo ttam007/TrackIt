@@ -1,10 +1,6 @@
 package trackit.UI;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
 import javax.swing.*;
-import trackit.*;
 
 /**
  * UI Layer: Handles all aspects of the Dashboard panel.
