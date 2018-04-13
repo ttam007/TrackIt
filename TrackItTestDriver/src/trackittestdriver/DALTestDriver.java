@@ -1,5 +1,6 @@
 package trackittestdriver;
 
+import trackit.DAL.ASupplier;
 import java.sql.*;
 import java.util.*;
 import trackit.*;
@@ -110,7 +111,7 @@ public class DALTestDriver {
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="SQLHelperSupplier Class">
-    private void printSupplier(Supplier aSupplier) {
+    private void printSupplier(ASupplier aSupplier) {
         if (aSupplier == null) {
             System.out.println("Supplier is null.");
         } else {
@@ -120,18 +121,18 @@ public class DALTestDriver {
     }
 
     /**
-     * Tests all CRUD operations for the Supplier's sprocs.
+     * Tests all CRUD operations for the ASupplier's sprocs.
      */
     public void testSQLHelperSupplier() {
         System.out.println("\n\ntestSQLHelperSupplier");
 
         SQLHelperSupplier helper = new SQLHelperSupplier();
-        Supplier aSupplier;
+        ASupplier aSupplier;
         Integer pk;
         try {
             System.out.println("\nSelectAll");
-            ArrayList<Supplier> suppliers = helper.selectAll();
-            for (Supplier anItem : suppliers) {
+            ArrayList<ASupplier> suppliers = helper.selectAll();
+            for (ASupplier anItem : suppliers) {
                 printSupplier(anItem);
             }
 
@@ -141,13 +142,13 @@ public class DALTestDriver {
 
             System.out.println("\nInsert");
             //Must delete "Etsy" from the database before testing this.
-            Supplier aSupplierInsert = new Supplier("Etsy", "https://www.etsy.com");
+            ASupplier aSupplierInsert = new ASupplier("Etsy", "https://www.etsy.com");
             pk = helper.insert(aSupplierInsert);
             aSupplier = helper.selectOne(pk);
             printSupplier(aSupplier);
 
             System.out.println("\nUpdate");
-            Supplier aSupplierUpdate = new Supplier(pk, "Etsy", "https://www.etsy-orders.com");
+            ASupplier aSupplierUpdate = new ASupplier(pk, "Etsy", "https://www.etsy-orders.com");
             helper.update(aSupplierUpdate);
             aSupplier = helper.selectOne(aSupplierUpdate.getPrimaryKey());
             printSupplier(aSupplier);

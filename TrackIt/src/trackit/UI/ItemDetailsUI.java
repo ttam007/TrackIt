@@ -1,17 +1,18 @@
 package trackit.UI;
 
+import trackit.DAL.AnItem;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import trackit.*;
 
 /**
- * UI Layer: Super class of all windows that show Item Details.
+ * UI Layer: Super class of all windows that show AnItem Details.
  *
- * @param <T> The specific type of Item (Inventory or Order) that will be
- * handled by this class.
+ * @param <T> The specific type of AnItem (Inventory or Order) that will be
+ handled by this class.
  */
-public abstract class ItemDetailsUI<T extends Item>
+public abstract class ItemDetailsUI<T extends AnItem>
         extends JFrame {
 
     // <editor-fold defaultstate="collapsed" desc="Constants">

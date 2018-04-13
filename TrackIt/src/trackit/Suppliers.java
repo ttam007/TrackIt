@@ -1,15 +1,15 @@
 package trackit;
 
 import java.sql.*;
-import trackit.DAL.AnInventoryItem;
+import trackit.DAL.ASupplier;
 
 /**
- * BAL Layer: Works with the Inventory tab.
+ * BLL Layer: Works with the Suppliers Tab.
  *
- * @author Bond
+ * @author
  */
-public class Inventory
-        extends GridClass<AnInventoryItem> {
+public class Suppliers
+        extends GridClass<ASupplier> {
 
     /**
      * Loads all rows from the database to the grid.
@@ -21,7 +21,7 @@ public class Inventory
     public boolean load() {
         boolean returnValue = false;
         try {
-            rows = AnInventoryItem.loadAll();
+            rows = ASupplier.loadAll();
             returnValue = true;
         } catch (SQLException exSQL) {
             this.errorMessage = exSQL.getLocalizedMessage();
@@ -41,8 +41,8 @@ public class Inventory
     public boolean save() {
         boolean returnValue = false;
         try {
-            for (AnInventoryItem anItem : rows) {
-                AnInventoryItem.save(anItem);
+            for (ASupplier anItem : rows) {
+                ASupplier.save(anItem);
             }
             returnValue = true;
         } catch (SQLException exSQL) {
@@ -64,7 +64,7 @@ public class Inventory
     public boolean remove(Integer primaryKey) {
         boolean returnValue = false;
         try {
-            AnInventoryItem.remove(primaryKey);
+            ASupplier.remove(primaryKey);
             returnValue = true;
         } catch (SQLException exSQL) {
             this.errorMessage = exSQL.getLocalizedMessage();
