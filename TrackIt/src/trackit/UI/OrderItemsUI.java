@@ -63,7 +63,7 @@ public class OrderItemsUI extends JFrame {
 
         //Add all components here and set properties.
         setLayout(new BorderLayout());
-<<<<<<< HEAD
+
 
         pnlTop = new JPanel();
         //layGroup order-details
@@ -93,7 +93,7 @@ public class OrderItemsUI extends JFrame {
         tfExpectedDate = new JTextField(20);
         pnlTop.add(tfExpectedDate);
 
-=======
+
         
         Box topBox, topInnerBx, btmInnerBx, middleBox, bottomBox, combine;
         
@@ -135,7 +135,7 @@ public class OrderItemsUI extends JFrame {
         add(topBox, BorderLayout.NORTH);
         
         middleBox = Box.createHorizontalBox();
->>>>>>> lagail_dev
+
         btnCheckIn = new JButton("Check In");
         middleBox.add(btnCheckIn);
         btnCheckIn.addActionListener((ActionEvent e) -> {
@@ -148,14 +148,14 @@ public class OrderItemsUI extends JFrame {
         btnCheckInAll.addActionListener((ActionEvent e) -> {
             //TODO
         });
-<<<<<<< HEAD
+
 
         add(pnlTop, BorderLayout.NORTH);
 
-=======
+
         
         bottomBox = Box.createHorizontalBox();
->>>>>>> lagail_dev
+
         //add data to suppliers arraylist 
 
         Object[][] suppliersTestData = {{"paper", "pk", "12-34563487-0", "7", "$12.95", "276.23"}, {"paper", "pk", "12-34563487-0", "7", "$12.95", "276.23"}, {"paper", "pk", "12-34563487-0", "7", "$12.95", "276.23"}};
@@ -165,11 +165,11 @@ public class OrderItemsUI extends JFrame {
         JScrollPane scrollPane = new JScrollPane(ordersTable);
         ordersTable.setFillsViewportHeight(true);
         ordersTable.setDefaultEditor(Object.class, null);
-<<<<<<< HEAD
+
 
         add(scrollPane, BorderLayout.CENTER);
 
-=======
+
         
         bottomBox.add(scrollPane);
         
@@ -179,7 +179,7 @@ public class OrderItemsUI extends JFrame {
         combine.add(bottomBox);
         add(combine, BorderLayout.CENTER);
         
->>>>>>> lagail_dev
+
         pnlBtm = new JPanel();
 
         btnAddItem = new JButton("Add Item");

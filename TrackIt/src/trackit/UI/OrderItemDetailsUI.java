@@ -1,8 +1,8 @@
 package trackit.UI;
 
-<<<<<<< HEAD
+
 import trackit.DAL.AnOrderItem;
-=======
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import trackit.*;
->>>>>>> lagail_dev
+
 
 /**
  * UI Layer: Handles all aspects of the Add Item to Order and Edit Order Item
