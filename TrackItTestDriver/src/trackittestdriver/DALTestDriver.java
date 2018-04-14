@@ -1,9 +1,7 @@
 package trackittestdriver;
 
-import trackit.DAL.ASupplier;
 import java.sql.*;
 import java.util.*;
-import trackit.*;
 import trackit.DAL.*;
 
 /**
@@ -142,13 +140,18 @@ public class DALTestDriver {
 
             System.out.println("\nInsert");
             //Must delete "Etsy" from the database before testing this.
-            ASupplier aSupplierInsert = new ASupplier("Etsy", "https://www.etsy.com");
+            ASupplier aSupplierInsert = new ASupplier();
+            aSupplierInsert.setNickname("Etsy");
+            aSupplierInsert.setUrl("https://www.etsy.com");
             pk = helper.insert(aSupplierInsert);
             aSupplier = helper.selectOne(pk);
             printSupplier(aSupplier);
 
             System.out.println("\nUpdate");
-            ASupplier aSupplierUpdate = new ASupplier(pk, "Etsy", "https://www.etsy-orders.com");
+            ASupplier aSupplierUpdate = new ASupplier();
+            aSupplierUpdate.setPrimaryKey(pk);
+            aSupplierUpdate.setNickname("Etsy");
+            aSupplierUpdate.setUrl("https://www.etsy-orders.com");
             helper.update(aSupplierUpdate);
             aSupplier = helper.selectOne(aSupplierUpdate.getPrimaryKey());
             printSupplier(aSupplier);

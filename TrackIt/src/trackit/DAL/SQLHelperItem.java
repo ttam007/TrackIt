@@ -13,10 +13,10 @@ public class SQLHelperItem
         extends SQLHelper<AnItem> {
 
     // <editor-fold defaultstate="collapsed" desc="Database Columns">
-    public final String COLUMN_DESCRIPTION = "description";
-    public final String COLUMN_SKU = "sku";
-    public final String COLUMN_SIZEUNIT = "sizeUnit";
-    public final String COLUMN_ITEMSTATUS = "itemStatus";
+    public static final String COLUMN_DESCRIPTION = "description";
+    public static final String COLUMN_SKU = "sku";
+    public static final String COLUMN_SIZEUNIT = "sizeUnit";
+    public static final String COLUMN_ITEMSTATUS = "itemStatus";
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -105,13 +105,13 @@ public class SQLHelperItem
     @Override
     public java.sql.Date doNullCheck(String columnName, java.sql.Date aValue)
             throws SQLException {
-      throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public Double doNullCheck(String columnName, Double aValue)
             throws SQLException {
-       throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException();
     }
 
     @Override

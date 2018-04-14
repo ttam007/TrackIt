@@ -44,7 +44,7 @@ public class MainMenuUI extends JFrame {
      */
     private void initializeComponents() {
         //Setup main frame
-        this.setTitle(WINDOW_NAME);
+        this.setTitle(Utilities.getWindowCaption(WINDOW_NAME));
         this.setSize(1280, 786);
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);

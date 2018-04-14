@@ -13,8 +13,8 @@ public class SQLHelperSupplier
         extends SQLHelper<ASupplier> {
 
     // <editor-fold defaultstate="collapsed" desc="Database Columns">
-    public final String COLUMN_NICKNAME = "nickname";
-    public final String COLUMN_URL = "url";
+    public static final String COLUMN_NICKNAME = "nickname";
+    public static final String COLUMN_URL = "url";
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">

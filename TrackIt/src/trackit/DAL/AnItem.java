@@ -28,7 +28,7 @@ public abstract class AnItem
     // <editor-fold defaultstate="expanded" desc="Setters & Getters">
     public void setDescription(String description)
             throws SQLException {
-        this.description = HELPER.doNullCheck(HELPER.COLUMN_DESCRIPTION, description);
+        this.description = HELPER.doNullCheck(SQLHelperItem.COLUMN_DESCRIPTION, description);
     }
 
     public String getDescription() {
@@ -37,7 +37,7 @@ public abstract class AnItem
 
     public void setSku(String sku)
             throws SQLException {
-        this.sku = HELPER.doNullCheck(HELPER.COLUMN_SKU, sku);
+        this.sku = HELPER.doNullCheck(SQLHelperItem.COLUMN_SKU, sku);
     }
 
     public String getSku() {
@@ -46,7 +46,7 @@ public abstract class AnItem
 
     public void setSizeUnit(String sizeUnit)
             throws SQLException {
-        this.sizeUnit = HELPER.doNullCheck(HELPER.COLUMN_SIZEUNIT, sizeUnit);
+        this.sizeUnit = HELPER.doNullCheck(SQLHelperItem.COLUMN_SIZEUNIT, sizeUnit);
     }
 
     public String getSizeUnit() {
@@ -55,7 +55,7 @@ public abstract class AnItem
 
     public void setItemStatus(String itemStatus)
             throws SQLException {
-        String tmpValue = HELPER.doNullCheck(HELPER.COLUMN_ITEMSTATUS, itemStatus);
+        String tmpValue = HELPER.doNullCheck(SQLHelperItem.COLUMN_ITEMSTATUS, itemStatus);
         this.itemStatus = ItemStatusType.getType(tmpValue);
     }
 

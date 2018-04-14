@@ -33,7 +33,7 @@ public class AnOrder
     // <editor-fold defaultstate="expanded" desc="Setters & Getters">
     public void setDescription(String description)
             throws SQLException {
-        this.description = HELPER.doNullCheck(HELPER.COLUMN_DESCRIPTION, description);
+        this.description = HELPER.doNullCheck(SQLHelperOrder.COLUMN_DESCRIPTION, description);
     }
 
     public String getDescription() {
@@ -42,7 +42,7 @@ public class AnOrder
 
     public void setOrderedFrom(Integer orderedFrom)
             throws SQLException {
-        this.orderedFrom = HELPER.doNullCheck(HELPER.COLUMN_ORDEREDFROM, orderedFrom);
+        this.orderedFrom = HELPER.doNullCheck(SQLHelperOrder.COLUMN_ORDEREDFROM, orderedFrom);
     }
 
     public Integer getOrderedFrom() {
@@ -51,7 +51,7 @@ public class AnOrder
 
     public void setOrderStatus(String orderStatus)
             throws SQLException {
-        String tmpValue = HELPER.doNullCheck(HELPER.COLUMN_ORDERSTATUS, orderStatus);
+        String tmpValue = HELPER.doNullCheck(SQLHelperOrder.COLUMN_ORDERSTATUS, orderStatus);
         this.orderStatus = OrderStatusType.getType(tmpValue);
     }
 
@@ -67,20 +67,20 @@ public class AnOrder
 
     public void setDateOrdered(java.sql.Date dateOrdered)
             throws SQLException {
-        this.dateOrdered = HELPER.doNullCheck(HELPER.COLUMN_DATEORDERED, dateOrdered);
+        this.dateOrdered = HELPER.doNullCheck(SQLHelperOrder.COLUMN_DATEORDERED, dateOrdered);
     }
 
     public java.sql.Date getDateOrdered() {
-        return this.dateOrdered;
+        return (java.sql.Date) this.dateOrdered.clone();
     }
 
     public void setDateExpected(java.sql.Date dateExpected)
             throws SQLException {
-        this.dateExpected = HELPER.doNullCheck(HELPER.COLUMN_DATEEXPECTED, dateExpected);
+        this.dateExpected = HELPER.doNullCheck(SQLHelperOrder.COLUMN_DATEEXPECTED, dateExpected);
     }
 
     public java.sql.Date getDateExpected() {
-        return this.dateExpected;
+        return (java.sql.Date) this.dateExpected.clone();
     }
 
     // </editor-fold>
