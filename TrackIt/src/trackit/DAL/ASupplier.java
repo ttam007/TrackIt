@@ -36,7 +36,7 @@ public class ASupplier
      */
     public void setNickname(String nickname)
             throws SQLException {
-        this.nickname = HELPER.doNullCheck(HELPER.COLUMN_NICKNAME, nickname);
+        this.nickname = HELPER.doNullCheck(SQLHelperSupplier.COLUMN_NICKNAME, nickname);
     }
 
     /**
@@ -54,7 +54,7 @@ public class ASupplier
      */
     public void setUrl(String url)
             throws SQLException {
-        this.url = HELPER.doNullCheck(HELPER.COLUMN_URL, url);
+        this.url = HELPER.doNullCheck(SQLHelperSupplier.COLUMN_URL, url);
     }
 
     /**

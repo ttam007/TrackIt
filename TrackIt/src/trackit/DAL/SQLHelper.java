@@ -101,8 +101,7 @@ public abstract class SQLHelper<T>
     protected String buildSprocSyntax(String sprocName, int parameterCount) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("{");
-        sb.append("CALL ");
+        sb.append("{ CALL ");
         sb.append(sprocName);
         if (parameterCount > 0) {
             sb.append("(");

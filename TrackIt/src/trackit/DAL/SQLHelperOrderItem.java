@@ -10,33 +10,35 @@ import java.util.*;
  * @author Bond
  */
 public class SQLHelperOrderItem
-        extends SQLHelper<AnOrderItem>
-        implements ISQLHelper<AnOrderItem> {
+        extends SQLHelper<AnOrderItem> {
 
     SQLHelperItem itemHelper = new SQLHelperItem();
 
     // <editor-fold defaultstate="collapsed" desc="Database Columns">
-
     /**
      *
      */
-    public final String COLUMN_ORDERID = "orderId";
-    //public final String COLUMN_ITEMID = "itemId";
+    public static final String COLUMN_ORDERID = "orderId";
+    //public static final String COLUMN_ITEMID = "itemId";
 
     /**
      *
      */
     public final String COLUMN_QUANTITYORDERED = "quantityOrdered";
 
+  /**
+  *
+  */
+   public static final String COLUMN_QUANTITYCHECKEDIN = "quantityCheckedIn";
     /**
      *
      */
-    public final String COLUMN_PRICE = "price";
+    public static final String COLUMN_PRICE = "price";
 
     /**
      *
      */
-    public final String COLUMN_EXTENDEDPRICE = "extendedPrice";
+    public static final String COLUMN_EXTENDEDPRICE = "extendedPrice";
 
     // </editor-fold>  // <editor-fold defaultstate="collapsed" desc="Constructors">
 
@@ -160,7 +162,7 @@ public class SQLHelperOrderItem
     @Override
     public java.sql.Date doNullCheck(String columnName, java.sql.Date aValue)
             throws SQLException {
-      throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException();
     }
 
     @Override
