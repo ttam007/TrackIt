@@ -15,7 +15,7 @@ public class NegativeAmountException extends RuntimeException {
     // <editor-fold defaultstate="expanded" desc="Constructors">
 
     /**
-     *avoid negative values
+     * avoid negative values
      */
     public NegativeAmountException() {
         this.errorMessage = MSG_TEMPLATE_GENERIC;
@@ -28,6 +28,7 @@ public class NegativeAmountException extends RuntimeException {
     public NegativeAmountException(Float amount) {
         this.errorMessage = String.format(MSG_TEMPLATE_SPECIFIC, amount);
     }
+
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
     @Override

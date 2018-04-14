@@ -12,12 +12,10 @@ public enum ItemStatusType {
      *
      */
     AVAILABLE(0),
-
     /**
      *
      */
     DISCONTINUED(1),
-
     /**
      *
      */
@@ -36,7 +34,6 @@ public enum ItemStatusType {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
-
     /**
      *
      * @return

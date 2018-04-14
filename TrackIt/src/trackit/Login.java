@@ -14,7 +14,7 @@ public class Login {
     private int loginAttempts = 0;
 
     /**
-     *login
+     * login
      */
     public Login() {
     }
@@ -54,7 +54,7 @@ public class Login {
     }
 
     /**
-     *logout
+     * logout
      */
     public void startLogout() {
         LoginUI dlgLogin = new LoginUI(SQLConnector.getInstance().getUserName());

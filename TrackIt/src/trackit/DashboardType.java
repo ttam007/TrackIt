@@ -11,17 +11,14 @@ public enum DashboardType {
      *
      */
     COUNT_ITEMS_OUT_OF_STOCK(0),
-
     /**
      *
      */
     DATE_NEXT_ITEM_EXPIRES(1),
-
     /**
      *
      */
     DATE_NEXT_ORDER_ARRIVES(2),
-
     /**
      *
      */
@@ -40,7 +37,6 @@ public enum DashboardType {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
-
     /**
      *
      * @return
