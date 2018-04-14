@@ -236,8 +236,6 @@ public class OrderItemsUI extends JFrame {
             setVisible(false);
         });
 
-        pnlBtm.add(pnlBtmLeft, BorderLayout.CENTER);
-        pnlBtm.add(pnlBtmRight, BorderLayout.EAST);
         add(pnlBtm, BorderLayout.SOUTH);
         
 
