@@ -118,6 +118,7 @@ public class CheckInOutUI
         pnlMain.add(combine);
         //Finalizations
         pack();
+
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
