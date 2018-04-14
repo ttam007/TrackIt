@@ -25,18 +25,13 @@ public class SQLHelperSupplier
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
-<<<<<<< HEAD
     static {
-=======
-
-    /**
-     *supplier help for mysql
-     */
-    public SQLHelperSupplier() {
->>>>>>> c325af60196bf4417f5a1e7e174602122f1e22a0
         COLUMN_PK = "supplierId";
     }
 
+    /**
+     * supplier help for mysql
+     */
     public SQLHelperSupplier() {
 
     }
