@@ -28,7 +28,6 @@ public class OrderItemsUI extends JFrame {
     String[] ordersLabel = {"Item Name", "Unit", "SKU", "Quantity", "Price", "Ext Price"};
     JTable ordersTable;
     OrderItemDetailsUI details;
-    CheckInOutUI checkInOut;
     InventoryItemDetailsUI inventory;
     int selectedRow;
 
@@ -152,11 +151,17 @@ public class OrderItemsUI extends JFrame {
 
         btnCreate = new JButton("Create");
         pnlBtm.add(btnCreate);
+        JDialog itemInputForm = new JDialog();
+        itemInputForm.setSize(new Dimension(640, 400));
+        itemInputForm.setTitle("Add Inventory Item");
+        itemInputForm.setModal(true);
+        itemInputForm.setContentPane(new InventoryItemDetailsUI(true).getMainFrame().getContentPane());
         btnCreate.addActionListener((ActionEvent e) -> {
             //TODO
-            inventory = new InventoryItemDetailsUI(true);
+            itemInputForm.setVisible(true);
+            
         });
-
+        
         btnEdit = new JButton("Edit");
         pnlBtm.add(btnEdit);
         btnEdit.addActionListener((ActionEvent e) -> {
@@ -218,6 +223,10 @@ public class OrderItemsUI extends JFrame {
         System.out.println(String.format("Displaying %s...", WINDOW_NAME));
         setVisible(true);
     }
+    
+    public void close(){
+        this.dispose();
+    }
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="SubClasses">
@@ -235,8 +244,10 @@ public class OrderItemsUI extends JFrame {
             if (result == JOptionPane.YES_OPTION) {
                 //TODO
                 //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                close();
             } else {
                 //TODO
+                close();
             }
         }
     }
