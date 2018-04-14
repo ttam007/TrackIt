@@ -30,6 +30,11 @@ public class SupplierDetailsUI
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
+
+    /**
+     *
+     * @param useCreateMode
+     */
     public SupplierDetailsUI(boolean useCreateMode) {
         this.isCreateMode = useCreateMode;
         initializeComponents();
@@ -107,6 +112,9 @@ public class SupplierDetailsUI
         setVisible(true);
     }
 
+    /**
+     *close window
+     */
     public void closeWindow() {
         this.setVisible(false);
     }

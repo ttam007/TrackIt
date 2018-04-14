@@ -30,6 +30,10 @@ public class OrdersUI
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
+
+    /**
+     *orders ui
+     */
     public OrdersUI() {
         setLayout(new BorderLayout());
 
@@ -45,42 +49,33 @@ public class OrdersUI
         JPanel btmSup = new JPanel();
 
         btnCreate = new JButton("Create");
-        btnCreate.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.print("create order");
-                details = new OrderItemsUI();
-            }
+        btnCreate.addActionListener((ActionEvent e) -> {
+            System.out.print("create order");
+            details = new OrderItemsUI();
         });
 
         btnEdit = new JButton("Edit");
-        btnEdit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.print("Edit order");
-                //if list item selected edit item else select item
-                selectedRow = ordersTable.getSelectedRow();
-                if (selectedRow < 0) {
-                    JOptionPane.showMessageDialog(null, "Select item to edit");
-                } else {
-                    details = new OrderItemsUI();
-                    //TODO: enter item info of selected item
-                }
+        btnEdit.addActionListener((ActionEvent e) -> {
+            System.out.print("Edit order");
+            //if list item selected edit item else select item
+            selectedRow = ordersTable.getSelectedRow();
+            if (selectedRow < 0) {
+                JOptionPane.showMessageDialog(null, "Select item to edit");
+            } else {
+                details = new OrderItemsUI();
+                //TODO: enter item info of selected item
             }
         });
 
         btnRemove = new JButton("Remove");
-        btnRemove.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.print("remove order");
-                selectedRow = ordersTable.getSelectedRow();
-                if (selectedRow < 0) {
-                    JOptionPane.showMessageDialog(null, "Select item to remove");
-                } else {
-                    //TODO: remove item from db
-                    JOptionPane.showMessageDialog(null, "Item successfully removed");
-                }
+        btnRemove.addActionListener((ActionEvent e) -> {
+            System.out.print("remove order");
+            selectedRow = ordersTable.getSelectedRow();
+            if (selectedRow < 0) {
+                JOptionPane.showMessageDialog(null, "Select item to remove");
+            } else {
+                //TODO: remove item from db
+                JOptionPane.showMessageDialog(null, "Item successfully removed");
             }
         });
 

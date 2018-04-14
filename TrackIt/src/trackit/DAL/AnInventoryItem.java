@@ -19,6 +19,9 @@ public class AnInventoryItem
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Constructors">
 
+    /**
+     *add an inventory item
+     */
     public AnInventoryItem() {
         super();
     }
@@ -94,6 +97,10 @@ public class AnInventoryItem
     }
     // </editor-fold>
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<AnItem> getExpiredItems() {
         ArrayList<AnItem> returnValue = new ArrayList<>();
         return returnValue;

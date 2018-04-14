@@ -36,6 +36,11 @@ public class OrderItemDetailsUI
     
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
+
+    /**
+     *
+     * @param useCreateMode
+     */
     public OrderItemDetailsUI(boolean useCreateMode) {
         super("Order Item Details", new AnOrderItem());
 
@@ -45,6 +50,10 @@ public class OrderItemDetailsUI
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
+
+    /**
+     *itnialize the items
+     */
     protected void initializeComponents() {
 
         //TODO:  add additional components here.
@@ -121,6 +130,9 @@ public class OrderItemDetailsUI
         super.finalizeComponents();
     }
 
+    /**
+     *
+     */
     @Override
     protected void actionSave() {
         /*if (!bal.save()) {
@@ -128,11 +140,17 @@ public class OrderItemDetailsUI
         }*/
     }
 
+    /**
+     *
+     */
     @Override
     protected void actionCancel() {
         //TODO:  close window and return to prior window.
     }
 
+    /**
+     *
+     */
     @Override
     protected void actionDelete() {
        /*if (bal.remove()) {

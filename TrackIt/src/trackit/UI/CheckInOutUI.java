@@ -34,6 +34,10 @@ public class CheckInOutUI
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
+
+    /**
+     *checkin out button
+     */
     public CheckInOutUI() {
     
         initializeComponents();
@@ -87,7 +91,6 @@ public class CheckInOutUI
         qtyBx.add(qtyTextField);
         submitBx = Box.createHorizontalBox();
         btnOK = new JButton("OK");
-        submitBx.add(btnOK);
         
 
         this.btnOK.addActionListener((ActionEvent e) -> {
@@ -127,6 +130,9 @@ public class CheckInOutUI
         setVisible(true);
     }
     
+    /**
+     *close the window
+     */
     public void closeWindow() {
         this.setVisible(false);
     }

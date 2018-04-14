@@ -77,18 +77,35 @@ public abstract class SprocParameter {
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
+
+    /**
+     *
+     * @return
+     */
     public boolean isNull() {
         return (this.value == null);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getName() {
         return this.name;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getValue() {
         return this.value;
     }
 
+    /**
+     *
+     * @param aValue
+     */
     public void setValue(String aValue) {
         this.value = aValue;
     }

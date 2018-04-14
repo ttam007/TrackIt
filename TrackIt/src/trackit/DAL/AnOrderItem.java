@@ -21,6 +21,10 @@ public class AnOrderItem
 
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Constructors">
+
+    /**
+     *order item
+     */
     public AnOrderItem() {
         super();
     }
@@ -37,31 +41,59 @@ public class AnOrderItem
     // </editor-fold>
 
     // <editor-fold defaultstate="expanded" desc="Setters & Getters">
+
+    /**
+     *
+     * @param orderId
+     * @throws SQLException
+     */
     public void setOrderId(Integer orderId)
             throws SQLException {
         this.orderId = HELPER.doNullCheck(HELPER.COLUMN_ORDERID, orderId);
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer getOrderId() {
         return this.orderId;
     }
 
+    /**
+     *
+     * @param quantityOrdered
+     * @throws SQLException
+     */
     public void setQuantityOrdered(Integer quantityOrdered)
             throws SQLException {
         this.quantityOrdered = HELPER.doNullCheck(HELPER.COLUMN_QUANTITYORDERED, quantityOrdered);
         calcExtendedPrice();
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer getQuantityOrdered() {
         return this.quantityOrdered;
     }
 
+    /**
+     *
+     * @param price
+     * @throws SQLException
+     */
     public void setPrice(Double price)
             throws SQLException {
         this.price = HELPER.doNullCheck(HELPER.COLUMN_PRICE, price);
         calcExtendedPrice();
     }
 
+    /**
+     *
+     * @return
+     */
     public Double getPrice() {
         return this.price;
     }
@@ -71,6 +103,12 @@ public class AnOrderItem
             throws SQLException {
         this.extendedPrice = HELPER.doNullCheck(HELPER.COLUMN_EXTENDEDPRICE, extendedPrice);
     }*/
+
+    /**
+     *
+     * @return
+     */
+
     public Double getExtendedPrice() {
         return this.extendedPrice;
     }

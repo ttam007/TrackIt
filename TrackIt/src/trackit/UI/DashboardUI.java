@@ -2,8 +2,6 @@ package trackit.UI;
 
 
 import java.awt.Dimension;
-import java.awt.event.*;
-import java.util.*;
 import javax.swing.*;
 
 /**
@@ -24,10 +22,10 @@ public class DashboardUI extends JPanel {
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
     private void initializeComponents() {
 
-        StringBuilder sb = new StringBuilder("- 5 items are out of stock\n- Milk will expire in 3 days\n- Order arriving today\n");
+        String sb = "- 5 items are out of stock\n- Milk will expire in 3 days\n- Order arriving today\n";
 
         dashboardInfo = new JTextArea(35,90);
-        dashboardInfo.setText(sb.toString());
+        dashboardInfo.setText(sb);
         dashboardInfo.setEditable(false);
 
         JScrollPane sp = new JScrollPane(dashboardInfo);
