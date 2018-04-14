@@ -61,7 +61,7 @@ public class MainMenuUI extends JFrame {
         tabpane.add("Dashboard", dashboardTab);
         tabpane.add("Inventory", inventoryTab);
         tabpane.add("Orders", ordersTab);
-        tabpane.add("Supplies", suppliersTab);
+        tabpane.add("Suppliers", suppliersTab);
 
         add(tabpane, BorderLayout.CENTER);
 
