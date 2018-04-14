@@ -4,24 +4,34 @@ import java.sql.*;
 import java.util.*;
 
 /**
- * DAL Layer: Converts a row in database table Suppliers into a ASupplier object
- * and vice versa.
+ * DAL Layer: Converts a row in database table Items into an AnItem object and
+ * vice versa.
  *
  * @author Bond
  */
-public class SQLHelperSupplier
-        extends SQLHelper<ASupplier> {
+public class SQLHelperItem
+        extends SQLHelper<AnItem> {
 
     // <editor-fold defaultstate="collapsed" desc="Database Columns">
     /**
      *
      */
-    public static final String COLUMN_NICKNAME = "nickname";
+    public static final String COLUMN_DESCRIPTION = "description";
 
     /**
      *
      */
-    public static final String COLUMN_URL = "url";
+    public static final String COLUMN_SKU = "sku";
+
+    /**
+     *
+     */
+    public static final String COLUMN_SIZEUNIT = "sizeUnit";
+
+    /**
+     *
+     */
+    public static final String COLUMN_ITEMSTATUS = "itemStatus";
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -30,28 +40,31 @@ public class SQLHelperSupplier
     }
 
     /**
-     * supplier help for mysql
+     * sql helper item
      */
-    public SQLHelperSupplier() {
+    public SQLHelperItem() {
 
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
 
     @Override
-    protected ASupplier convertResultSetToObject(ResultSet rs)
+    protected AnItem convertResultSetToObject(ResultSet rs)
             throws SQLException {
-        ASupplier anObj = new ASupplier();
+        /*AnItem anObj = new AnItem();
         anObj.setPrimaryKey(rs.getInt(COLUMN_PK));
-        anObj.setNickname(rs.getString(COLUMN_NICKNAME));
-        anObj.setUrl(rs.getString(COLUMN_URL));
-        return anObj;
+        anObj.setDescription(rs.getString(COLUMN_DESCRIPTION));
+        anObj.setSku(rs.getString(COLUMN_SKU));
+        anObj.setSizeUNit(rs.getString(COLUMN_SIZEUNIT));
+        anObj.setItemStatus(rs.getString(COLUMN_ITEMSTATUS));
+        return anObj;*/
+        return null;
     }
 
     @Override
-    protected ArrayList<ASupplier> execSproc(String sprocName, HashMap<Integer, SprocParameter> parameters)
+    protected ArrayList<AnItem> execSproc(String sprocName, HashMap<Integer, SprocParameter> parameters)
             throws SQLException, Exception {
-        ArrayList<ASupplier> results = new ArrayList<>();
+        ArrayList<AnItem> results = new ArrayList<>();
 
         String sql = buildSprocSyntax(sprocName, parameters.size());
         System.out.println("execSproc's sql = " + sql);
@@ -82,61 +95,33 @@ public class SQLHelperSupplier
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
 
     @Override
-    public ArrayList<ASupplier> selectAll()
+    public ArrayList<AnItem> selectAll()
             throws SQLException, Exception {
-        HashMap<Integer, SprocParameter> params = new HashMap<>();
-
-        ArrayList<ASupplier> results = execSproc("sp_Suppliers_SelectAll", params);
-        return results;
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public ASupplier selectOne(Integer primaryKey)
+    public AnItem selectOne(Integer primaryKey)
             throws SQLException, Exception {
-        HashMap<Integer, SprocParameter> params = new HashMap<>();
-        params.put(0, new SprocParameterInteger(COLUMN_PK, primaryKey.toString(), ParameterDirection.IN));
-
-        ArrayList<ASupplier> results = execSproc("sp_Suppliers_Select", params);
-        if (results.isEmpty()) {
-            return null;
-        } else {
-            return results.get(0);
-        }
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public Integer insert(ASupplier anObject)
+    public Integer insert(AnItem anObject)
             throws SQLException, Exception {
-        HashMap<Integer, SprocParameter> params = new HashMap<>();
-        SprocParameterInteger outParam = new SprocParameterInteger(COLUMN_PK, anObject.getPrimaryKey().toString(), ParameterDirection.OUT);
-        params.put(0, outParam);
-        params.put(1, new SprocParameterVarchar(COLUMN_NICKNAME, anObject.getNickname(), ParameterDirection.IN));
-        params.put(2, new SprocParameterVarchar(COLUMN_URL, anObject.getUrl(), ParameterDirection.IN));
-
-        execSproc("sp_Suppliers_Insert", params);
-        Integer primaryKey = Integer.parseInt(outParam.getValue());
-        anObject.setPrimaryKey(primaryKey);
-        return primaryKey;
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public void update(ASupplier anObject)
+    public void update(AnItem anObject)
             throws SQLException, Exception {
-        HashMap<Integer, SprocParameter> params = new HashMap<>();
-        params.put(0, new SprocParameterInteger(COLUMN_PK, anObject.getPrimaryKey().toString(), ParameterDirection.IN));
-        params.put(1, new SprocParameterVarchar(COLUMN_NICKNAME, anObject.getNickname(), ParameterDirection.IN));
-        params.put(2, new SprocParameterVarchar(COLUMN_URL, anObject.getUrl(), ParameterDirection.IN));
-
-        execSproc("sp_Suppliers_Update", params);
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public void delete(Integer primaryKey)
             throws SQLException, Exception {
-        HashMap<Integer, SprocParameter> params = new HashMap<>();
-        params.put(0, new SprocParameterInteger(COLUMN_PK, primaryKey.toString(), ParameterDirection.IN));
-
-        execSproc("sp_Suppliers_Delete", params);
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -164,7 +149,11 @@ public class SQLHelperSupplier
     @Override
     public String doNullCheck(String columnName, String aValue)
             throws SQLException {
-        if (aValue == null && columnName.equalsIgnoreCase(COLUMN_NICKNAME)) {
+        if (aValue == null
+                && (columnName.equalsIgnoreCase(COLUMN_DESCRIPTION)
+                || columnName.equalsIgnoreCase(COLUMN_SKU)
+                || columnName.equalsIgnoreCase(COLUMN_SIZEUNIT)
+                || columnName.equalsIgnoreCase(COLUMN_ITEMSTATUS))) {
             throw new NonNullableValueException();
         } else {
             return aValue;

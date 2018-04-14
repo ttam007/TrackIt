@@ -37,6 +37,10 @@ public enum ParameterDirection {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
+    /**
+     *
+     * @return
+     */
     public int getValue() {
         return this.value;
     }

@@ -2,46 +2,76 @@ package trackit.DAL;
 
 import java.sql.*;
 import java.util.*;
-import trackit.*;
 
 /**
- * DAL Layer: Converts a row in database table OrderItems into an OrderItem
+ * DAL Layer: Converts a row in database table OrderItems into an AnOrderItem
  * object and vice versa.
  *
  * @author Bond
  */
 public class SQLHelperOrderItem
-        extends SQLHelper<OrderItem>
-        implements ISQLHelper<OrderItem> {
+        extends SQLHelper<AnOrderItem> {
 
+    //SQLHelperItem itemHelper = new SQLHelperItem();
     // <editor-fold defaultstate="collapsed" desc="Database Columns">
-    public final String COLUMN_ORDERID = "orderId";
-    public final String COLUMN_ITEMID = "itemId";
-    public final String COLUMN_QUANTITYORDERED = "quantityOrdered";
-    public final String COLUMN_PRICE = "price";
-    public final String COLUMN_EXTENDEDPRICE = "extendedPrice";
+    /**
+     *
+     */
+    public static final String COLUMN_ORDERID = "orderId";
+    //public static final String COLUMN_ITEMID = "itemId";
 
-    // </editor-fold>  // <editor-fold defaultstate="collapsed" desc="Constructors">
+    /**
+     *
+     */
+    public static final String COLUMN_QUANTITYORDERED = "quantityOrdered";
+
+    /**
+     *
+     */
+    public static final String COLUMN_QUANTITYCHECKEDIN = "quantityCheckedIn";
+    /**
+     *
+     */
+    public static final String COLUMN_PRICE = "price";
+
+    /**
+     *
+     */
+    public static final String COLUMN_EXTENDEDPRICE = "extendedPrice";
+
+    // </editor-fold> 
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
+    static {
+        COLUMN_PK = "orderItemId";
+    }
+
+    /**
+     * order item for dbase
+     */
     public SQLHelperOrderItem() {
+
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
 
     @Override
-    protected OrderItem convertResultSetToObject(ResultSet rs)
+    protected AnOrderItem convertResultSetToObject(ResultSet rs)
             throws SQLException {
-        OrderItem anObj = new OrderItem();
+        AnOrderItem anObj = new AnOrderItem();
         anObj.setPrimaryKey(rs.getInt(COLUMN_PK));
-        //TODO:
-        //anObj.setNickname(rs.getString(COLUMN_NICKNAME));
-        //anObj.setUrl(rs.getString(COLUMN_URL));
+        anObj.setOrderId(rs.getInt(COLUMN_ORDERID));
+        //TODO
+        //anObj.setItemId(rs.getInt(itemHelper.COLUMN_PK));
+        anObj.setQuantityOrdered(rs.getInt(COLUMN_QUANTITYORDERED));
+        anObj.setQuantityCheckedIn(rs.getInt(COLUMN_QUANTITYCHECKEDIN));
+        anObj.setPrice(rs.getDouble(COLUMN_PRICE));
         return anObj;
     }
 
     @Override
-    protected ArrayList<OrderItem> execSproc(String sprocName, HashMap<Integer, SprocParameter> parameters)
+    protected ArrayList<AnOrderItem> execSproc(String sprocName, HashMap<Integer, SprocParameter> parameters)
             throws SQLException, Exception {
-        ArrayList<OrderItem> results = new ArrayList<>();
+        ArrayList<AnOrderItem> results = new ArrayList<>();
 
         String sql = buildSprocSyntax(sprocName, parameters.size());
         System.out.println("execSproc's sql = " + sql);
@@ -72,21 +102,21 @@ public class SQLHelperOrderItem
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
 
     @Override
-    public ArrayList<OrderItem> selectAll()
+    public ArrayList<AnOrderItem> selectAll()
             throws SQLException, Exception {
         HashMap<Integer, SprocParameter> params = new HashMap<>();
 
-        ArrayList<OrderItem> results = execSproc("sp_OrderItems_SelectAll", params);
+        ArrayList<AnOrderItem> results = execSproc("sp_OrderItems_SelectAll", params);
         return results;
     }
 
     @Override
-    public OrderItem selectOne(Integer primaryKey)
+    public AnOrderItem selectOne(Integer primaryKey)
             throws SQLException, Exception {
         HashMap<Integer, SprocParameter> params = new HashMap<>();
         params.put(0, new SprocParameterInteger(COLUMN_PK, primaryKey.toString(), ParameterDirection.IN));
 
-        ArrayList<OrderItem> results = execSproc("sp_OrderItems_Select", params);
+        ArrayList<AnOrderItem> results = execSproc("sp_OrderItems_Select", params);
         if (results.isEmpty()) {
             return null;
         } else {
@@ -95,24 +125,16 @@ public class SQLHelperOrderItem
     }
 
     @Override
-    public List<Integer> insertAll(List<OrderItem> aList)
-            throws SQLException, Exception {
-        ArrayList<Integer> primaryKeys = new ArrayList<>();
-        for (OrderItem anObj : aList) {
-            primaryKeys.add(insert(anObj));
-        }
-        return primaryKeys;
-    }
-
-    @Override
-    public Integer insert(OrderItem anObject)
+    public Integer insert(AnOrderItem anObject)
             throws SQLException, Exception {
         HashMap<Integer, SprocParameter> params = new HashMap<>();
         SprocParameterInteger outParam = new SprocParameterInteger(COLUMN_PK, anObject.getPrimaryKey().toString(), ParameterDirection.OUT);
         params.put(0, outParam);
         //TODO:
-        //params.put(1, new SprocParameterVarchar("nickname", anObject.getNickname(), ParameterDirection.IN));
-        //params.put(2, new SprocParameterVarchar("url", anObject.getUrl(), ParameterDirection.IN));
+        params.put(1, new SprocParameterInteger(COLUMN_ORDERID, anObject.getOrderId().toString(), ParameterDirection.IN));
+        //params.put(2, new SprocParameterInteger(itemHelper.COLUMN_PK, anObject.getItemId().toString(), ParameterDirection.IN));
+        params.put(3, new SprocParameterInteger(COLUMN_QUANTITYORDERED, anObject.getQuantityOrdered().toString(), ParameterDirection.IN));
+        params.put(4, new SprocParameterDouble(COLUMN_PRICE, anObject.getPrice().toString(), ParameterDirection.IN));
 
         execSproc("sp_OrderItems_Insert", params);
         Integer primaryKey = Integer.parseInt(outParam.getValue());
@@ -121,31 +143,17 @@ public class SQLHelperOrderItem
     }
 
     @Override
-    public void updateAll(List<OrderItem> aList)
-            throws SQLException, Exception {
-        for (OrderItem anObj : aList) {
-            update(anObj);
-        }
-    }
-
-    @Override
-    public void update(OrderItem anObject)
+    public void update(AnOrderItem anObject)
             throws SQLException, Exception {
         HashMap<Integer, SprocParameter> params = new HashMap<>();
         params.put(0, new SprocParameterInteger(COLUMN_PK, anObject.getPrimaryKey().toString(), ParameterDirection.IN));
         //TODO:
         //params.put(1, new SprocParameterVarchar("nickname", anObject.getNickname(), ParameterDirection.IN));
         //params.put(2, new SprocParameterVarchar("url", anObject.getUrl(), ParameterDirection.IN));
+        params.put(3, new SprocParameterInteger(COLUMN_QUANTITYORDERED, anObject.getQuantityOrdered().toString(), ParameterDirection.IN));
+        params.put(4, new SprocParameterDouble(COLUMN_PRICE, anObject.getPrice().toString(), ParameterDirection.IN));
 
         execSproc("sp_OrderItems_Update", params);
-    }
-
-    @Override
-    public void deleteAll(List<Integer> primaryKeys)
-            throws SQLException, Exception {
-        for (Integer aPK : primaryKeys) {
-            delete(aPK);
-        }
     }
 
     @Override
@@ -158,21 +166,32 @@ public class SQLHelperOrderItem
     }
 
     @Override
-    public java.util.Date doNullCheck(String columnName, java.util.Date aValue)
+    public java.sql.Date doNullCheck(String columnName, java.sql.Date aValue)
             throws SQLException {
-        throw new NonNullableValueException();
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public Double doNullCheck(String columnName, Double aValue)
             throws SQLException {
-        throw new NonNullableValueException();
+        if (aValue == null
+                && (columnName.equalsIgnoreCase(COLUMN_PRICE)
+                || columnName.equalsIgnoreCase(COLUMN_EXTENDEDPRICE))) {
+            throw new NonNullableValueException();
+        } else {
+            return aValue;
+        }
     }
 
     @Override
     public Integer doNullCheck(String columnName, Integer aValue)
             throws SQLException {
-        if (aValue == null && columnName.equalsIgnoreCase(COLUMN_PK)) {
+        if (aValue == null
+                && (columnName.equalsIgnoreCase(COLUMN_PK)
+                || columnName.equalsIgnoreCase(COLUMN_ORDERID)
+                || columnName.equalsIgnoreCase(SQLHelperItem.COLUMN_PK)
+                || columnName.equalsIgnoreCase(COLUMN_QUANTITYORDERED)
+                || columnName.equalsIgnoreCase(COLUMN_QUANTITYCHECKEDIN))) {
             throw new NonNullableValueException();
         } else {
             return aValue;
@@ -182,7 +201,11 @@ public class SQLHelperOrderItem
     @Override
     public String doNullCheck(String columnName, String aValue)
             throws SQLException {
-        if (aValue == null && false /*columnName.equalsIgnoreCase(COLUMN_NICKNAME)*/) {
+        if (aValue == null
+                && (columnName.equalsIgnoreCase(SQLHelperItem.COLUMN_DESCRIPTION)
+                || columnName.equalsIgnoreCase(SQLHelperItem.COLUMN_SKU)
+                || columnName.equalsIgnoreCase(SQLHelperItem.COLUMN_SIZEUNIT)
+                || columnName.equalsIgnoreCase(SQLHelperItem.COLUMN_ITEMSTATUS))) {
             throw new NonNullableValueException();
         } else {
             return aValue;
