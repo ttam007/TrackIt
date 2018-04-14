@@ -11,7 +11,6 @@ import java.util.*;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
-import trackit.*;
 
 /**
  * UI Layer: Handles all aspects of the Inventory panel.
@@ -27,14 +26,18 @@ public class InventoryItemsUI extends JPanel {
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     private JTable mainTable;
-    private final List<String> tableHeaders = new ArrayList<String>(Arrays.asList("Item Name", "Qty","Unit","SKU","Expiration","Status"));
+    private final List<String> tableHeaders = new ArrayList<>(Arrays.asList("Item Name", "Qty","Unit","SKU","Expiration","Status"));
     private JButton create,edit, remove,check;
-    private Object[][] data;
+    private final Object[][] data;
     private JScrollPane sp;
     private JFrame mainFrame;
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
+
+    /**
+     *Invetory items ui
+     */
     public InventoryItemsUI() {
         this.setLayout(new BorderLayout());
         //mainFrame = new JFrame();
@@ -48,6 +51,11 @@ public class InventoryItemsUI extends JPanel {
         this.display();
         refreshItems();
     }
+
+    /**
+     *
+     * @return
+     */
     public JFrame getMainFrame(){
         return this.mainFrame;
     }

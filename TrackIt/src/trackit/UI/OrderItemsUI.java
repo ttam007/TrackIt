@@ -38,6 +38,10 @@ public class OrderItemsUI extends JFrame {
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
+
+    /**
+     *order item window
+     */
     public OrderItemsUI() {
         initializeComponents();
         getValues();
