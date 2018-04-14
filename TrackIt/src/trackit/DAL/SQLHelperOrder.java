@@ -14,14 +14,38 @@ public class SQLHelperOrder
         implements ISQLHelper<AnOrder> {
 
     // <editor-fold defaultstate="collapsed" desc="Database Columns">
+
+    /**
+     *
+     */
     public final String COLUMN_DESCRIPTION = "description";
+
+    /**
+     *
+     */
     public final String COLUMN_ORDEREDFROM = "orderedFrom";
+
+    /**
+     *
+     */
     public final String COLUMN_ORDERSTATUS = "orderStatus";
+
+    /**
+     *
+     */
     public final String COLUMN_DATEORDERED = "dateOrdered";
+
+    /**
+     *
+     */
     public final String COLUMN_DATEEXPECTED = "dateExpected";
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
+
+    /**
+     *sql help order for dbase
+     */
     public SQLHelperOrder() {
         COLUMN_PK = "orderId";
     }

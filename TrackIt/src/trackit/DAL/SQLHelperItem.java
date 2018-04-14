@@ -13,13 +13,33 @@ public class SQLHelperItem
         extends SQLHelper<AnItem> {
 
     // <editor-fold defaultstate="collapsed" desc="Database Columns">
+
+    /**
+     *
+     */
     public final String COLUMN_DESCRIPTION = "description";
+
+    /**
+     *
+     */
     public final String COLUMN_SKU = "sku";
+
+    /**
+     *
+     */
     public final String COLUMN_SIZEUNIT = "sizeUnit";
+
+    /**
+     *
+     */
     public final String COLUMN_ITEMSTATUS = "itemStatus";
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
+
+    /**
+     *sql helper item
+     */
     public SQLHelperItem() {
         COLUMN_PK = "supplierId";
     }

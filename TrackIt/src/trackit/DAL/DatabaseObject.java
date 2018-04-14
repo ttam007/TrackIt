@@ -8,6 +8,10 @@ package trackit.DAL;
 public abstract class DatabaseObject {
 
     // <editor-fold defaultstate="expanded" desc="Protected Fields">
+
+    /**
+     *
+     */
     protected Integer primaryKey = null;
     private String errorMessage;
 
@@ -24,6 +28,10 @@ public abstract class DatabaseObject {
         return false;
     }
 
+    /**
+     *
+     * @param errorMessage
+     */
     protected void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
     }
@@ -40,10 +48,18 @@ public abstract class DatabaseObject {
         return this.errorMessage;
     }
 
+    /**
+     *
+     * @param primaryKey
+     */
     public void setPrimaryKey(Integer primaryKey) {
         this.primaryKey = primaryKey;
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer getPrimaryKey() {
         return this.primaryKey;
     }
