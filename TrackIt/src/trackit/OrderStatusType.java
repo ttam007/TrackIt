@@ -7,8 +7,20 @@ package trackit;
  */
 public enum OrderStatusType {
     // <editor-fold defaultstate="expanded" desc="Enumeration">
+
+    /**
+     *
+     */
     ORDERED(0),
+
+    /**
+     *
+     */
     BEINGSHIPPED(1),
+
+    /**
+     *
+     */
     DELIVERED(2);
     // </editor-fold>
 
@@ -24,10 +36,19 @@ public enum OrderStatusType {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
+
+    /**
+     *
+     * @return
+     */
     public int getValue() {
         return this.value;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getText() {
         return STATUS_TEXT[this.value];
     }

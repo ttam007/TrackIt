@@ -8,8 +8,19 @@ import java.sql.*;
  */
 public class Utilities {
 
+    /**
+     *
+     */
     public static final String TEAM_NAME = "TrackIt";
+
+    /**
+     *
+     */
     public static final String PROGRAM_NAME_SHORT = "HITS";
+
+    /**
+     *
+     */
     public static final String PROGRAM_NAME_LONG = "Home Inventory Tracking System";
 
     /**
@@ -18,6 +29,11 @@ public class Utilities {
     private Utilities() {
     }
 
+    /**
+     *
+     * @param windowName
+     * @return
+     */
     public static String getWindowCaption(String windowName) {
         return String.format("%s %s - %s", TEAM_NAME, PROGRAM_NAME_SHORT, windowName);
     }

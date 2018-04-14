@@ -11,7 +11,14 @@ import trackit.DAL.*;
  */
 public abstract class GridClass<T extends DatabaseObject> {
 
+    /**
+     *
+     */
     protected ArrayList<T> rows = new ArrayList<>();
+
+    /**
+     *
+     */
     protected String errorMessage;
 
     /**
@@ -39,6 +46,10 @@ public abstract class GridClass<T extends DatabaseObject> {
      */
     protected abstract boolean remove(Integer primaryKey);
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<T> getList() {
         return this.rows;
     }
