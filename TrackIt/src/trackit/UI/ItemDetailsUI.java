@@ -78,19 +78,7 @@ public abstract class ItemDetailsUI<T extends AnItem>
         this.addWindowListener(new CloseQuery());
 
         //Add all components here and set properties.
-        this.add(pnlMain);
-        this.add(this.btnOK);
-        this.btnOK.addActionListener((ActionEvent e) -> {
-            actionSave();
-        });
-        this.add(this.btnCancel);
-        this.btnCancel.addActionListener((ActionEvent e) -> {
-            actionCancel();
-        });
-        this.add(this.btnDelete);
-        this.btnDelete.addActionListener((ActionEvent e) -> {
-            actionDelete();
-        });
+        
     }
 
     /**
