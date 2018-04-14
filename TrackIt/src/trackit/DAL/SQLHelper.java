@@ -25,10 +25,17 @@ public abstract class SQLHelper<T>
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Protected Fields">
 
+    /**
+     *
+     */
     protected final SQLConnector sqlConn = SQLConnector.getInstance();
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
+
+    /**
+     *sql helper for dbase
+     */
     protected SQLHelper() {
     }
 
@@ -151,7 +158,6 @@ public abstract class SQLHelper<T>
      *
      * @param stmt The CallableStatement that called the stored procedure.
      * @param aParam The SprocParameter that we need the value for.
-     * @param index The index of the parameter within the stored procedure.
      * @return The value of the OUT parameter as a String.
      * @throws SQLException
      * @throws Exception

@@ -18,6 +18,10 @@ public class NonNullableValueException
 
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Constructors">
+
+    /**
+     *no null value
+     */
     public NonNullableValueException() {
         this.errorMessage = MSG_TEMPLATE_GENERIC;
     }

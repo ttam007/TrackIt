@@ -1,10 +1,30 @@
 package trackit;
 
+/**
+ *
+ * @author Bryan
+ */
 public enum DashboardType {
     // <editor-fold defaultstate="expanded" desc="Enumeration">
+
+    /**
+     *
+     */
     COUNT_ITEMS_OUT_OF_STOCK(0),
+
+    /**
+     *
+     */
     DATE_NEXT_ITEM_EXPIRES(1),
+
+    /**
+     *
+     */
     DATE_NEXT_ORDER_ARRIVES(2),
+
+    /**
+     *
+     */
     MONEY_SPENT_LAST_30_DAYS(3);
     // </editor-fold>
 
@@ -20,10 +40,19 @@ public enum DashboardType {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
+
+    /**
+     *
+     * @return
+     */
     public int getValue() {
         return this.value;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getText() {
         return STATUS_TEXT[this.value];
     }

@@ -17,7 +17,11 @@ public class CheckInOutUI
     private static final String WINDOW_NAME = "Check In/Out";
 // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
+
     private final AnInventoryItem testItem = new AnInventoryItem();
+
+    //private final InventoryItem testItem = new InventoryItem();
+
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     JPanel pnlMain;
@@ -30,6 +34,10 @@ public class CheckInOutUI
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
+
+    /**
+     *checkin out button
+     */
     public CheckInOutUI() {
     
         initializeComponents();
@@ -84,11 +92,13 @@ public class CheckInOutUI
         submitBx = Box.createHorizontalBox();
         btnOK = new JButton("OK");
         
+
         this.btnOK.addActionListener((ActionEvent e) -> {
             //TODO
             /*if(!testItem.save()) {
                 
             }*/
+
         });
         
         btnCancel = new JButton("Cancel");
@@ -120,6 +130,9 @@ public class CheckInOutUI
         setVisible(true);
     }
     
+    /**
+     *close the window
+     */
     public void closeWindow() {
         this.setVisible(false);
     }

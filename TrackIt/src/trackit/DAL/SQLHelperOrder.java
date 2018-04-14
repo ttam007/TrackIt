@@ -13,14 +13,38 @@ public class SQLHelperOrder
         extends SQLHelper<AnOrder> {
 
     // <editor-fold defaultstate="collapsed" desc="Database Columns">
+
+    /**
+     *
+     */
     public static final String COLUMN_DESCRIPTION = "description";
+
+    /**
+     *
+     */
     public static final String COLUMN_ORDEREDFROM = "orderedFrom";
+
+    /**
+     *
+     */
     public static final String COLUMN_ORDERSTATUS = "orderStatus";
+
+    /**
+     *
+     */
     public static final String COLUMN_DATEORDERED = "dateOrdered";
+
+    /**
+     *
+     */
     public static final String COLUMN_DATEEXPECTED = "dateExpected";
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
+
+    /**
+     *sql help order for dbase
+     */
     public SQLHelperOrder() {
         COLUMN_PK = "orderId";
     }

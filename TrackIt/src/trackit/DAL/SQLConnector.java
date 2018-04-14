@@ -61,15 +61,30 @@ public class SQLConnector {
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
 
+    /**
+     *
+     * @param userName
+     */
     public void setConnectionString(String userName) {
         this.userName = userName;
     }
 
+    /**
+     *
+     * @param userName
+     * @param password
+     */
     public void setConnectionString(String userName, String password) {
         this.setConnectionString(userName);
         this.password = password;
     }
 
+    /**
+     *
+     * @param databaseLocation
+     * @param port
+     * @param databaseName
+     */
     public void setConnectionString(
             String databaseLocation, Integer port, String databaseName) {
         this.databaseLocation = databaseLocation;
@@ -77,18 +92,37 @@ public class SQLConnector {
         this.databaseName = databaseName;
     }
 
+    /**
+     *
+     * @param databaseLocation
+     * @param port
+     * @param databaseName
+     * @param userName
+     */
     public void setConnectionString(String databaseLocation, Integer port,
             String databaseName, String userName) {
         this.setConnectionString(databaseLocation, port, databaseName);
         this.setConnectionString(userName);
     }
 
+    /**
+     *
+     * @param databaseLocation
+     * @param port
+     * @param databaseName
+     * @param userName
+     * @param password
+     */
     public void setConnectionString(String databaseLocation, Integer port,
             String databaseName, String userName, String password) {
         this.setConnectionString(databaseLocation, port, databaseName);
         this.setConnectionString(userName, password);
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isValidConnection() {
         boolean isValid = false;
 

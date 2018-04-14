@@ -15,14 +15,36 @@ public class SQLHelperOrderItem
     SQLHelperItem itemHelper = new SQLHelperItem();
 
     // <editor-fold defaultstate="collapsed" desc="Database Columns">
+    /**
+     *
+     */
     public static final String COLUMN_ORDERID = "orderId";
     //public static final String COLUMN_ITEMID = "itemId";
-    public static final String COLUMN_QUANTITYORDERED = "quantityOrdered";
+
+    /**
+     *
+     */
+    public final String COLUMN_QUANTITYORDERED = "quantityOrdered";
+
+  /**
+  *
+  */
+   public static final String COLUMN_QUANTITYCHECKEDIN = "quantityCheckedIn";
+    /**
+     *
+     */
     public static final String COLUMN_PRICE = "price";
+
+    /**
+     *
+     */
     public static final String COLUMN_EXTENDEDPRICE = "extendedPrice";
-    public static final String COLUMN_QUANTITYCHECKEDIN = "quantityCheckedIn";
 
     // </editor-fold>  // <editor-fold defaultstate="collapsed" desc="Constructors">
+
+    /**
+     *order item for dbase
+     */
     public SQLHelperOrderItem() {
         COLUMN_PK = "orderItemId";
     }

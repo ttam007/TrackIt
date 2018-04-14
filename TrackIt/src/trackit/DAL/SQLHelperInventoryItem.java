@@ -13,16 +13,48 @@ public class SQLHelperInventoryItem
         extends SQLHelper<AnInventoryItem> {
 
     // <editor-fold defaultstate="collapsed" desc="Database Columns">
+
+    /**
+     *
+     */
     public static final String COLUMN_ITEMID = "itemId";
+
+    /**
+     *
+     */
     public static final String COLUMN_QUANTITY = "quantity";
-    public static final String COLUMN_EXPIRATIONDATE = "expirationDate";
+
+    /**
+     *
+     */
+    public final String COLUMN_EXPIRATIONDATE = "expirationDate";
+
+    /**
+     *
+     */
     public static final String COLUMN_DESCRIPTION = "description";
+
+    /**
+     *
+     */
     public static final String COLUMN_SKU = "sku";
+
+    /**
+     *
+     */
     public static final String COLUMN_SIZEUNIT = "sizeUnit";
+
+    /**
+     *
+     */
     public static final String COLUMN_ITEMSTATUS = "itemStatus";
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
+
+    /**
+     *database for inventory item
+     */
     public SQLHelperInventoryItem() {
         COLUMN_PK = "inventoryItemId";
     }
