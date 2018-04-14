@@ -31,6 +31,7 @@ public class SuppliersUI extends JPanel {
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     public SuppliersUI() {
         setLayout(new BorderLayout());
+        this.getRootPane().setDefaultButton(btnCreate);
 
         //add data to suppliers arraylist 
         Object[][] suppliersTestData = {{"Amazon", "http://www.amazon.com"}, {"Walmart", "http://www.walmart.com"}, {"Ebay", "http://www.ebay.com"}};

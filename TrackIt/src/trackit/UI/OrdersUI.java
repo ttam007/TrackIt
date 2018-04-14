@@ -32,6 +32,7 @@ public class OrdersUI
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     public OrdersUI() {
         setLayout(new BorderLayout());
+        this.getRootPane().setDefaultButton(btnCreate);
 
         //add data to suppliers arraylist 
         Object[][] testData = {{"12MAY2018", "019645232", "Walmart", "in transit", "$128.34"}, {"12MAY2018", "019645232", "Walmart", "in transit", "$128.34"}, {"12MAY2018", "019645232", "Walmart", "in transit", "$128.34"}};
