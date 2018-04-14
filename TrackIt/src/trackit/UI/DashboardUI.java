@@ -1,6 +1,6 @@
 package trackit.UI;
 
-import java.awt.*;
+import java.awt.Dimension;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
@@ -23,17 +23,6 @@ public class DashboardUI extends JPanel {
 
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
     private void initializeComponents() {
-        /*
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 300, Short.MAX_VALUE)
-        );*/
 
         StringBuilder sb = new StringBuilder("- 5 items are out of stock\n- Milk will expire in 3 days\n- Order arriving today\n");
 
