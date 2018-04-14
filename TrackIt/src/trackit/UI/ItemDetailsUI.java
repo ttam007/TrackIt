@@ -10,13 +10,12 @@ import trackit.*;
  * UI Layer: Super class of all windows that show AnItem Details.
  *
  * @param <T> The specific type of AnItem (Inventory or Order) that will be
- handled by this class.
+ * handled by this class.
  */
 public abstract class ItemDetailsUI<T extends AnItem>
         extends JFrame {
 
     // <editor-fold defaultstate="collapsed" desc="Constants">
-
     /**
      *
      */
@@ -103,7 +102,7 @@ public abstract class ItemDetailsUI<T extends AnItem>
     }
 
     /**
-     *save button
+     * save button
      */
     protected abstract void actionSave();/*{
          if (!bal.save()) {
@@ -112,14 +111,14 @@ public abstract class ItemDetailsUI<T extends AnItem>
     }*/
 
     /**
-     *cancel button
+     * cancel button
      */
     protected abstract void actionCancel();/* {
         //TODO:  close window and return to prior window.
     }*/
 
     /**
-     *delete item
+     * delete item
      */
     protected abstract void actionDelete();/* {
         if (bal.remove()) {

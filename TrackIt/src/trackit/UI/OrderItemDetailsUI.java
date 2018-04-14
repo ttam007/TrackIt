@@ -1,6 +1,5 @@
 package trackit.UI;
 
-
 import trackit.DAL.AnOrderItem;
 
 import java.awt.BorderLayout;
@@ -13,7 +12,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import trackit.*;
-
 
 /**
  * UI Layer: Handles all aspects of the Add Item to Order and Edit Order Item
@@ -33,10 +31,9 @@ public class OrderItemDetailsUI
     JLabel lblName, lblQuantity, lblPrice, lblStatus, lblExtPrice;
     JTextField tfName, tfQuantity, tfPrice, tfStatus, tfExtPrice;
     JButton btnOK, btnCancel;
-    
+
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
-
     /**
      *
      * @param useCreateMode
@@ -50,9 +47,8 @@ public class OrderItemDetailsUI
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
-
     /**
-     *itnialize the items
+     * initialize the items
      */
     protected void initializeComponents() {
 
@@ -67,10 +63,11 @@ public class OrderItemDetailsUI
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         //this.addWindowListener(new SupplierDetailsUI.CloseQuery());
         this.setVisible(true);
+        this.getRootPane().setDefaultButton(btnOK);
 
         //Add all components here and set properties.
         Box nameBx, priceBx, statusBx, submitBx, combine;
-        
+
         pnlCenter = new JPanel();
         add(pnlCenter, BorderLayout.CENTER);
 
@@ -79,7 +76,7 @@ public class OrderItemDetailsUI
         nameBx.add(lblName);
         tfName = new JTextField(20);
         nameBx.add(tfName);
-        
+
         priceBx = Box.createHorizontalBox();
         lblQuantity = new JLabel("    Quantity:");
         priceBx.add(lblQuantity);
@@ -89,7 +86,7 @@ public class OrderItemDetailsUI
         priceBx.add(lblPrice);
         tfPrice = new JTextField(20);
         priceBx.add(tfPrice);
-        
+
         statusBx = Box.createHorizontalBox();
         lblStatus = new JLabel("        Status:");
         statusBx.add(lblStatus);
@@ -99,23 +96,23 @@ public class OrderItemDetailsUI
         statusBx.add(lblExtPrice);
         tfExtPrice = new JTextField(20);
         statusBx.add(tfExtPrice);
-        
+
         submitBx = Box.createHorizontalBox();
         btnOK = new JButton("OK");
         submitBx.add(btnOK);
-        
+
         this.btnOK.addActionListener((ActionEvent e) -> {
-            this.setVisible(false);
+            this.dispose();
         });
-        
+
         btnCancel = new JButton("Cancel");
         submitBx.add(btnCancel);
-        
+
         this.btnCancel.addActionListener((ActionEvent e) -> {
             //TODO:  close window and return to prior window.
-            this.setVisible(false);
+            this.dispose();
         });
-        
+
         combine = Box.createVerticalBox();
         combine.add(nameBx);
         combine.add(priceBx);
@@ -124,9 +121,6 @@ public class OrderItemDetailsUI
 
         pnlCenter.add(combine);
 
-        
-        
-        
         super.finalizeComponents();
     }
 
@@ -153,7 +147,7 @@ public class OrderItemDetailsUI
      */
     @Override
     protected void actionDelete() {
-       /*if (bal.remove()) {
+        /*if (bal.remove()) {
             //TODO:  close window and return to prior window.
         } else {
             //TODO:  display bal.getErrorMessage() and stay on this window.
