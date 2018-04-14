@@ -39,7 +39,9 @@ public class InventoryItemDetailsUI extends JPanel {
 
 
     }
-
+    public JFrame getMainFrame(){
+        return this.mainFrame;
+    }
      /**
      * Sets up all components used in this frame.
      */
@@ -149,9 +151,9 @@ public class InventoryItemDetailsUI extends JPanel {
         //Test
        
        mainFrame.add(this);
-       mainFrame.setTitle("Inventory Items Detail");
+       //mainFrame.setTitle("Inventory Items Detail");
        mainFrame.pack();
-       mainFrame.setVisible(true);
+       //mainFrame.setVisible(true);
 
     }
 
