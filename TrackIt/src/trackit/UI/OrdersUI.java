@@ -4,10 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
-import trackit.*;
+import trackit.DAL.AnOrder;
 
 /**
- * UI Layer: Handles all aspects of the Order panel.
+ * UI Layer: Handles all aspects of the AnOrder panel.
  *
  * @author Douglas
  */
@@ -16,10 +16,8 @@ public class OrdersUI
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
     private static final String WINDOW_NAME = "Orders";
-    // </editor-fold>
-    // <editor-fold defaultstate="expanded" desc="Private Fields">
-    private final ArrayList<Order> orders = new ArrayList<>();
-    private final Order bll = new Order();
+    private final ArrayList<AnOrder> orders;
+    private final AnOrder bll;
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     JButton btnCreate, btnRemove, btnEdit;
@@ -30,7 +28,12 @@ public class OrdersUI
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
+    /**
+     * orders ui
+     */
     public OrdersUI() {
+        this.bll = new AnOrder();
+        this.orders = new ArrayList<>();
         setLayout(new BorderLayout());
 
         //add data to suppliers arraylist 
@@ -45,42 +48,33 @@ public class OrdersUI
         JPanel btmSup = new JPanel();
 
         btnCreate = new JButton("Create");
-        btnCreate.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.print("create order");
-                details = new OrderItemsUI();
-            }
+        btnCreate.addActionListener((ActionEvent e) -> {
+            System.out.print("create order");
+            details = new OrderItemsUI();
         });
 
         btnEdit = new JButton("Edit");
-        btnEdit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.print("Edit order");
-                //if list item selected edit item else select item
-                selectedRow = ordersTable.getSelectedRow();
-                if (selectedRow < 0) {
-                    JOptionPane.showMessageDialog(null, "Select item to edit");
-                } else {
-                    details = new OrderItemsUI();
-                    //TODO: enter item info of selected item
-                }
+        btnEdit.addActionListener((ActionEvent e) -> {
+            System.out.print("Edit order");
+            //if list item selected edit item else select item
+            selectedRow = ordersTable.getSelectedRow();
+            if (selectedRow < 0) {
+                JOptionPane.showMessageDialog(null, "Select item to edit");
+            } else {
+                details = new OrderItemsUI();
+                //TODO: enter item info of selected item
             }
         });
 
         btnRemove = new JButton("Remove");
-        btnRemove.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.print("remove order");
-                selectedRow = ordersTable.getSelectedRow();
-                if (selectedRow < 0) {
-                    JOptionPane.showMessageDialog(null, "Select item to remove");
-                } else {
-                    //TODO: remove item from db
-                    JOptionPane.showMessageDialog(null, "Item successfully removed");
-                }
+        btnRemove.addActionListener((ActionEvent e) -> {
+            System.out.print("remove order");
+            selectedRow = ordersTable.getSelectedRow();
+            if (selectedRow < 0) {
+                JOptionPane.showMessageDialog(null, "Select item to remove");
+            } else {
+                //TODO: remove item from db
+                JOptionPane.showMessageDialog(null, "Item successfully removed");
             }
         });
 
@@ -95,9 +89,9 @@ public class OrdersUI
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
     private void getValues() {
-        if (bll.load()) {
+        /* if (bll.load()) {
             //this.orders.addAll(bll.getItems());
-        }
+        }*/
     }
 
     // </editor-fold>

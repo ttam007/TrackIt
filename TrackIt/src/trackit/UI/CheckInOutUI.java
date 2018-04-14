@@ -2,12 +2,13 @@ package trackit.UI;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
 import javax.swing.*;
 import trackit.*;
+import trackit.DAL.AnInventoryItem;
 
 /**
  * UI Layer: Handles all aspects of the Check In/Out dialog.
+ *
  * @author Steven
  */
 public class CheckInOutUI
@@ -17,7 +18,10 @@ public class CheckInOutUI
     private static final String WINDOW_NAME = "Check In/Out";
 // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
-    private final InventoryItem testItem = new InventoryItem();
+
+    private final AnInventoryItem testItem;
+
+    //private final InventoryItem testItem = new InventoryItem();
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     JPanel pnlMain;
@@ -26,12 +30,16 @@ public class CheckInOutUI
     JComboBox<String> itemComboBox;
     JLabel itemNameLabel, qtyLabel;
     JTextField qtyTextField;
-    String[] itemStrings = { "soap", "shampoo", "conditioner", "paper towels", "mouthwash" };
+    String[] itemStrings = {"soap", "shampoo", "conditioner", "paper towels", "mouthwash"};
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
+    /**
+     * checkin out button
+     */
     public CheckInOutUI() {
-    
+        this.testItem = new AnInventoryItem();
+
         initializeComponents();
     }
     // </editor-fold>
@@ -55,10 +63,10 @@ public class CheckInOutUI
 
         //Add all components here and set properties.
         Box buttonBx, itemBx, qtyBx, submitBx, combine;
-        
+
         pnlMain = new JPanel();
         add(pnlMain, BorderLayout.CENTER);
-        
+
         //create the Radio Buttons and add them to a group
         buttonBx = Box.createHorizontalBox();
         ButtonGroup checkGroup = new ButtonGroup();
@@ -69,12 +77,14 @@ public class CheckInOutUI
         inButton.setSelected(true);
         buttonBx.add(inButton);
         buttonBx.add(outButton);
-        
-        //item selection
+
         itemBx = Box.createHorizontalBox();
         itemNameLabel = new JLabel("Item Name");
         itemBx.add(itemNameLabel);
-        itemComboBox = new JComboBox(itemStrings);
+        /**
+         * corrected to address compile warning
+         */
+        JComboBox <String> itemComboBox = new JComboBox <String>(itemStrings);
         itemBx.add(itemComboBox);
         qtyBx = Box.createHorizontalBox();
         qtyLabel = new JLabel("Quantity");
@@ -83,30 +93,33 @@ public class CheckInOutUI
         qtyBx.add(qtyTextField);
         submitBx = Box.createHorizontalBox();
         btnOK = new JButton("OK");
-        
+
         this.btnOK.addActionListener((ActionEvent e) -> {
-            if(!testItem.save()) {
+            //TODO
+            /*if(!testItem.save()) {
                 
-            }
+            }*/
+
         });
-        
+
         btnCancel = new JButton("Cancel");
         submitBx.add(btnCancel);
-        
+
         this.btnCancel.addActionListener((ActionEvent e) -> {
             //TODO:  close window and return to prior window.
         });
-        
+
         //add all of the boxes together
         combine = Box.createVerticalBox();
         combine.add(buttonBx);
         combine.add(itemBx);
         combine.add(qtyBx);
         combine.add(submitBx);
-        
+
         pnlMain.add(combine);
         //Finalizations
         pack();
+
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
@@ -115,13 +128,17 @@ public class CheckInOutUI
      * Displays the frame.
      */
     public void display() {
-        System.out.println(String.format("Displaying {0}...", WINDOW_NAME));
+        System.out.println(String.format("Displaying %s...", WINDOW_NAME));
         setVisible(true);
     }
-    
+
+    /**
+     * close the window
+     */
     public void closeWindow() {
         this.setVisible(false);
     }
+
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="SubClasses">
     /**

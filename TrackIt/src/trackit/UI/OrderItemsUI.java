@@ -5,10 +5,12 @@ import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 import trackit.*;
+import trackit.DAL.AnOrder;
+import trackit.DAL.AnOrderItem;
 
 /**
- * UI Layer: Handles all aspects of the Order Details dialog. This is a
- * combination of the Edit Order Details and the OrderItems grid.
+ * UI Layer: Handles all aspects of the AnOrder Details dialog. This is a
+ * combination of the Edit AnOrder Details and the OrderItems grid.
  *
  * @author Douglas
  */
@@ -16,25 +18,28 @@ public class OrderItemsUI extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
     private static final String WINDOW_NAME = "Order Details";
-    // </editor-fold>
-    // <editor-fold defaultstate="expanded" desc="Private Fields">
-    private final ArrayList<OrderItem> orderItems = new ArrayList<>();
-    private final Order bll = new Order();
-    // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Components">
+    private final ArrayList<AnOrderItem> orderItems;
+    private final AnOrder bll;
 
     JButton btnCheckIn, btnCheckInAll, btnCreate, btnEdit, btnRemove, btnOK, btnAddItem, btnCancel;
     JPanel pnlTop, pnlCenter, pnlBtm, pnlBtmLeft, pnlBtmRight;
-    JLabel lblOrderNumber, lblSupplier, lblStatus, lblOrderDate, lblExpectedDate;
-    JTextField tfOrderNumber, tfSupplier, tfStatus, tfOrderDate, tfExpectedDate;
+    JLabel lblOrderNumber, lblSupplier, lblStatus, lblOrderDate, lblExpectedDate, lblBlank;
+    JTextField tfOrderNumber, tfSupplier, tfStatus, tfOrderDate, tfExpectedDate, tfBlank;
     String[] ordersLabel = {"Item Name", "Unit", "SKU", "Quantity", "Price", "Ext Price"};
     JTable ordersTable;
     OrderItemDetailsUI details;
+    CheckInOutUI checkInOut;
+    InventoryItemDetailsUI inventory;
     int selectedRow;
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
+    /**
+     * order item window
+     */
     public OrderItemsUI() {
+        this.bll = new AnOrder();
+        this.orderItems = new ArrayList<>();
         initializeComponents();
         getValues();
     }
@@ -56,57 +61,72 @@ public class OrderItemsUI extends JFrame {
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addWindowListener(new CloseQuery());
         setVisible(true);
+        this.getRootPane().setDefaultButton(btnOK);
 
         //Add all components here and set properties.
         setLayout(new BorderLayout());
 
-        pnlTop = new JPanel();
-        //layGroup order-details
+        Box topBox, topInnerBx, btmInnerBx, middleBox, bottomBox, combine;
 
-        lblOrderNumber = new JLabel("Order Number");
-        pnlTop.add(lblOrderNumber);
+        topBox = Box.createVerticalBox();
+
+        topInnerBx = Box.createHorizontalBox();
+        lblOrderNumber = new JLabel("Order Number:");
+        topInnerBx.add(lblOrderNumber);
         tfOrderNumber = new JTextField(20);
-        pnlTop.add(tfOrderNumber);
+        topInnerBx.add(tfOrderNumber);
 
-        lblSupplier = new JLabel("Supplier");
-        pnlTop.add(lblSupplier);
+        lblSupplier = new JLabel("Supplier:");
+        topInnerBx.add(lblSupplier);
         tfSupplier = new JTextField(20);
-        pnlTop.add(tfSupplier);
+        topInnerBx.add(tfSupplier);
 
-        lblOrderDate = new JLabel("Order Date");
-        pnlTop.add(lblOrderDate);
+        lblOrderDate = new JLabel("      Order Date:");
+        topInnerBx.add(lblOrderDate);
         tfOrderDate = new JTextField(20);
-        pnlTop.add(tfOrderDate);
+        topInnerBx.add(tfOrderDate);
 
-        lblStatus = new JLabel("Status");
-        pnlTop.add(lblStatus);
+        btmInnerBx = Box.createHorizontalBox();
+        lblStatus = new JLabel("            Status:");
+        btmInnerBx.add(lblStatus);
         tfStatus = new JTextField(20);
-        pnlTop.add(tfStatus);
+        btmInnerBx.add(tfStatus);
 
-        lblExpectedDate = new JLabel("Expected Date");
-        pnlTop.add(lblExpectedDate);
+        lblStatus = new JLabel("                          ");
+        btmInnerBx.add(lblStatus);
+
+        lblExpectedDate = new JLabel("                                                     Expected Date:");
+        btmInnerBx.add(lblExpectedDate);
         tfExpectedDate = new JTextField(20);
-        pnlTop.add(tfExpectedDate);
+        btmInnerBx.add(tfExpectedDate);
+
+        topBox.add(topInnerBx);
+        topBox.add(btmInnerBx);
+
+        add(topBox, BorderLayout.NORTH);
+
+        middleBox = Box.createHorizontalBox();
 
         btnCheckIn = new JButton("Check In");
-        pnlTop.add(btnCheckIn);
+        middleBox.add(btnCheckIn);
         btnCheckIn.addActionListener((ActionEvent e) -> {
             //TODO
+            JOptionPane.showMessageDialog(null, "Item Checked In");
         });
 
         btnCheckInAll = new JButton("Check In All");
-        pnlTop.add(btnCheckInAll);
+        middleBox.add(btnCheckInAll);
         btnCheckInAll.addActionListener((ActionEvent e) -> {
             //TODO
+            JOptionPane.showMessageDialog(null, "All Items Checked In");
         });
 
-        add(pnlTop, BorderLayout.NORTH);
+        bottomBox = Box.createHorizontalBox();
 
         //add data to suppliers arraylist 
-
         Object[][] suppliersTestData = {{"paper", "pk", "12-34563487-0", "7", "$12.95", "276.23"}, {"paper", "pk", "12-34563487-0", "7", "$12.95", "276.23"}, {"paper", "pk", "12-34563487-0", "7", "$12.95", "276.23"}};
         ordersTable = new JTable(suppliersTestData, ordersLabel);
-        Object[][] testData = {{"paper", "pk", "12-34563487-0", "7", "$12.95", "$276.23"}, {"paper", "pk", "12-34563487-0", "7", "$12.95", "$276.23"}, {"paper", "pk", "12-34563487-0", "7", "$12.95", "$276.23"} };
+        Object[][] testData = {{"paper", "pk", "12-34563487-0", "7", "$12.95", "$276.23"}, {"paper", "pk", "12-34563487-0", "7", "$12.95", "$276.23"}, {"paper", "pk", "12-34563487-0", "7", "$12.95", "$276.23"}};
         ordersTable = new JTable(testData, ordersLabel);
         JScrollPane scrollPane = new JScrollPane(ordersTable);
         ordersTable.setFillsViewportHeight(true);
@@ -114,24 +134,34 @@ public class OrderItemsUI extends JFrame {
 
         add(scrollPane, BorderLayout.CENTER);
 
+        bottomBox.add(scrollPane);
+
+        combine = Box.createVerticalBox();
+        combine.add(middleBox);
+        combine.add(bottomBox);
+        add(combine, BorderLayout.CENTER);
+
         pnlBtm = new JPanel();
 
         btnAddItem = new JButton("Add Item");
         pnlBtm.add(btnAddItem);
         btnAddItem.addActionListener((ActionEvent e) -> {
             //TODO
+            details = new OrderItemDetailsUI(true);
         });
 
         btnCreate = new JButton("Create");
         pnlBtm.add(btnCreate);
         btnCreate.addActionListener((ActionEvent e) -> {
             //TODO
+            inventory = new InventoryItemDetailsUI(true);
         });
 
         btnEdit = new JButton("Edit");
         pnlBtm.add(btnEdit);
         btnEdit.addActionListener((ActionEvent e) -> {
             //TODO
+            details = new OrderItemDetailsUI(false);
         });
 
         btnRemove = new JButton("Remove");
@@ -150,6 +180,8 @@ public class OrderItemsUI extends JFrame {
         btnOK = new JButton("OK");
         pnlBtm.add(btnOK);
         btnOK.addActionListener((ActionEvent e) -> {
+            this.dispose();
+
             /*
             //TODO:  surrond below in a for loop
             if (!bal.save()) {
@@ -162,21 +194,19 @@ public class OrderItemsUI extends JFrame {
         pnlBtm.add(btnCancel);
         btnCancel.addActionListener((ActionEvent e) -> {
             //TODO:  close window and return to prior window.
+            this.dispose();
         });
 
-        pnlBtm.add(pnlBtmLeft, BorderLayout.CENTER);
-        pnlBtm.add(pnlBtmRight, BorderLayout.EAST);
         add(pnlBtm, BorderLayout.SOUTH);
-        
 
         //Finalizations
         pack();
     }
 
     private void getValues() {
-        if (bll.load()) {
+        /*if (bll.load()) {
             this.orderItems.addAll(bll.getItems());
-        }
+        }*/
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">

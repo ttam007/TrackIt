@@ -15,11 +15,7 @@ public class MainMenuUI extends JFrame {
 
     // <editor-fold defaultstate="collapsed" desc="Constants">
     private static final String WINDOW_NAME = "Main Menu";
-    // </editor-fold>
-    // <editor-fold defaultstate="expanded" desc="Private Fields">
-    private final MainMenu bll = new MainMenu();
-    // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Components">
+    private final MainMenu bll;
 
     SuppliersUI suppliersTab = new SuppliersUI();
     DashboardUI dashboardTab = new DashboardUI();
@@ -31,7 +27,11 @@ public class MainMenuUI extends JFrame {
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
+    /**
+     * Main menu
+     */
     public MainMenuUI() {
+        this.bll = new MainMenu();
         initializeComponents();
 
         refreshDashBoards();
@@ -44,7 +44,7 @@ public class MainMenuUI extends JFrame {
      */
     private void initializeComponents() {
         //Setup main frame
-        this.setTitle(WINDOW_NAME);
+        this.setTitle(Utilities.getWindowCaption(WINDOW_NAME));
         this.setSize(1280, 786);
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -57,28 +57,20 @@ public class MainMenuUI extends JFrame {
         tabpane.add("Dashboard", dashboardTab);
         tabpane.add("Inventory", inventoryTab);
         tabpane.add("Orders", ordersTab);
-        tabpane.add("Supplies", suppliersTab);
+        tabpane.add("Suppliers", suppliersTab);
 
         add(tabpane, BorderLayout.CENTER);
 
         JPanel pnlBottom = new JPanel();
         btnLogout = new JButton("Log Out");
-        btnLogout.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setVisible(false);
-                LoginUI login = new LoginUI();
-                login.display();
-            }
-
+        btnLogout.addActionListener((ActionEvent e) -> {
+            setVisible(false);
+            LoginUI login = new LoginUI();
+            login.display();
         });
         btnExit = new JButton("Exit");
-        btnExit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-
+        btnExit.addActionListener((ActionEvent e) -> {
+            System.exit(0);
         });
         pnlBottom.add(btnLogout);
         pnlBottom.add(btnExit);
