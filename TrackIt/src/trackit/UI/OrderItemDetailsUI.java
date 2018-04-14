@@ -67,6 +67,7 @@ public class OrderItemDetailsUI
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         //this.addWindowListener(new SupplierDetailsUI.CloseQuery());
         this.setVisible(true);
+        this.getRootPane().setDefaultButton(btnOK);
 
         //Add all components here and set properties.
         Box nameBx, priceBx, statusBx, submitBx, combine;
@@ -105,7 +106,7 @@ public class OrderItemDetailsUI
         submitBx.add(btnOK);
         
         this.btnOK.addActionListener((ActionEvent e) -> {
-            this.setVisible(false);
+            this.dispose();
         });
         
         btnCancel = new JButton("Cancel");
@@ -113,7 +114,7 @@ public class OrderItemDetailsUI
         
         this.btnCancel.addActionListener((ActionEvent e) -> {
             //TODO:  close window and return to prior window.
-            this.setVisible(false);
+            this.dispose();
         });
         
         combine = Box.createVerticalBox();
@@ -123,9 +124,6 @@ public class OrderItemDetailsUI
         combine.add(submitBx);
 
         pnlCenter.add(combine);
-
-        
-        
         
         super.finalizeComponents();
     }

@@ -57,6 +57,7 @@ public class SupplierDetailsUI
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new CloseQuery());
         this.setVisible(true);
+        this.getRootPane().setDefaultButton(btnOK);
 
         //Add all components here and set properties.
         Box nameBx, addressBx, submitBx, combine;
@@ -79,7 +80,9 @@ public class SupplierDetailsUI
         submitBx.add(btnOK);
 
         this.btnOK.addActionListener((ActionEvent e) -> {
-           /* if (!bll.save()) {
+            this.dispose();
+           
+            /* if (!bll.save()) {
                 //TODO:  display bal.getErrorMessage();
 
             }*/
@@ -89,6 +92,7 @@ public class SupplierDetailsUI
         submitBx.add(btnCancel);
 
         this.btnCancel.addActionListener((ActionEvent e) -> {
+            this.dispose();
             //TODO:  close window and return to prior window.
         });
         combine = Box.createVerticalBox();
