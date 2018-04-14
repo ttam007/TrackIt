@@ -15,9 +15,7 @@ public class SuppliersUI extends JPanel {
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
     private static final String WINDOW_NAME = "Suppliers";
-    // </editor-fold>
-    // <editor-fold defaultstate="expanded" desc="Private Fields">
-    private final ArrayList<ASupplier> suppliers = new ArrayList<>();
+    private final ArrayList<ASupplier> suppliers;
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     JButton btnCreate, btnRemove, btnEdit;
@@ -28,11 +26,11 @@ public class SuppliersUI extends JPanel {
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
-
     /**
-     *Supplier UI
+     * Supplier UI
      */
     public SuppliersUI() {
+        this.suppliers = new ArrayList<>();
         setLayout(new BorderLayout());
 
         //add data to suppliers arraylist 

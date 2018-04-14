@@ -16,10 +16,8 @@ public class OrdersUI
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
     private static final String WINDOW_NAME = "Orders";
-    // </editor-fold>
-    // <editor-fold defaultstate="expanded" desc="Private Fields">
-    private final ArrayList<AnOrder> orders = new ArrayList<>();
-    private final AnOrder bll = new AnOrder();
+    private final ArrayList<AnOrder> orders;
+    private final AnOrder bll;
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     JButton btnCreate, btnRemove, btnEdit;
@@ -30,11 +28,12 @@ public class OrdersUI
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
-
     /**
-     *orders ui
+     * orders ui
      */
     public OrdersUI() {
+        this.bll = new AnOrder();
+        this.orders = new ArrayList<>();
         setLayout(new BorderLayout());
 
         //add data to suppliers arraylist 
@@ -90,7 +89,7 @@ public class OrdersUI
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
     private void getValues() {
-       /* if (bll.load()) {
+        /* if (bll.load()) {
             //this.orders.addAll(bll.getItems());
         }*/
     }

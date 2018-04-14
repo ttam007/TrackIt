@@ -1,8 +1,9 @@
 /**
  * @author      Brian Diaz
- * @date        04/10/2018
+ * @date 04/10/2018
  * @description handles the creation of the Inventory Item Screen
- **/
+ *
+ */
 package trackit.UI;
 
 import trackit.DAL.AnInventoryItem;
@@ -19,27 +20,25 @@ public class InventoryItemsUI extends JPanel {
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
     private static final String WINDOW_NAME = "Inventory";
-    // </editor-fold>
-    // <editor-fold defaultstate="expanded" desc="Private Fields">
-    private final ArrayList<AnInventoryItem> inventoryItems = new ArrayList<>();
+    private final ArrayList<AnInventoryItem> inventoryItems;
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     private JTable mainTable;
     private InventoryItemDetailsUI itemCreate, itemEdit;
-    private final List<String> tableHeaders = new ArrayList<>(Arrays.asList("Item Name", "Qty","Unit","SKU","Expiration","Status"));
-    private JButton create,edit, remove,check;
+    private final List<String> tableHeaders = new ArrayList<>(Arrays.asList("Item Name", "Qty", "Unit", "SKU", "Expiration", "Status"));
+    private JButton create, edit, remove, check;
     private final Object[][] data;
     private JScrollPane sp;
     private JFrame mainFrame;
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
-
     /**
-     *Invetory items ui
+     * Invetory items ui
      */
     public InventoryItemsUI() {
+        this.inventoryItems = new ArrayList<>();
         this.setLayout(new BorderLayout());
         //mainFrame = new JFrame();
         data = new Object[20][20];
@@ -47,8 +46,8 @@ public class InventoryItemsUI extends JPanel {
         this.setLayout(border);
         createUIComponents();
         //mainFrame.add(this);
-       // mainFrame.pack();
-        this.setSize(new Dimension(1100,700));
+        // mainFrame.pack();
+        this.setSize(new Dimension(1100, 700));
         this.display();
         refreshItems();
     }
@@ -57,45 +56,44 @@ public class InventoryItemsUI extends JPanel {
      *
      * @return
      */
-    public JFrame getMainFrame(){
+    public JFrame getMainFrame() {
         return this.mainFrame;
     }
 
-    private void setButtons(){
-
+    private void setButtons() {
 
         create = new JButton("Create");
-       //itemCreate = new InventoryItemDetailsUI(true);
+        //itemCreate = new InventoryItemDetailsUI(true);
         JDialog itemInputForm = new JDialog();
-        itemInputForm.setSize(new Dimension(640,400));
+        itemInputForm.setSize(new Dimension(640, 400));
         itemInputForm.setTitle("Add Inventory Item");
         itemInputForm.setModal(true);
-        itemInputForm.setContentPane( new InventoryItemDetailsUI(true).getMainFrame().getContentPane());/* */
-        create.addActionListener((event)-> itemInputForm.setVisible(true));
+        itemInputForm.setContentPane(new InventoryItemDetailsUI(true).getMainFrame().getContentPane());/* */
+        create.addActionListener((event) -> itemInputForm.setVisible(true));
 
         edit = new JButton("Edit");
         //itemEdit = new InventoryItemDetails(false);
         JDialog itemEditForm = new JDialog();
-        itemEditForm.setSize(new Dimension(640,400));
+        itemEditForm.setSize(new Dimension(640, 400));
         itemEditForm.setTitle("Edit Inventory Item");
         itemEditForm.setModal(true);
         itemEditForm.setContentPane(new InventoryItemDetailsUI(false).getMainFrame().getContentPane());/**/
-        edit.addActionListener((event)-> itemEditForm.setVisible(true));
+        edit.addActionListener((event) -> itemEditForm.setVisible(true));
 
         remove = new JButton("Remove");
-        remove.addActionListener((event)-> System.out.println("REMOVE TEST"));
+        remove.addActionListener((event) -> System.out.println("REMOVE TEST"));
 
         check = new JButton("Check In/Out");
         JDialog checkIn = new JDialog();
-        checkIn.setSize(new Dimension(640,400));
+        checkIn.setSize(new Dimension(640, 400));
         checkIn.setTitle("Check In/Out Item");
         checkIn.setModal(true);
         checkIn.setContentPane(new CheckInOutUI().getContentPane());
-        check.addActionListener((event)->checkIn.setVisible(true));
+        check.addActionListener((event) -> checkIn.setVisible(true));
 
     }
 
-    private void createUIComponents(){
+    private void createUIComponents() {
         setButtons();
         data[0][0] = "Gauze";
         data[0][1] = "3.0";
@@ -110,26 +108,24 @@ public class InventoryItemsUI extends JPanel {
         data[1][4] = "04-27-2018";
         data[1][5] = "Expired";
 
-        mainTable = new JTable(data,tableHeaders.toArray());
-        mainTable.setBounds(30,40,200,200);
+        mainTable = new JTable(data, tableHeaders.toArray());
+        mainTable.setBounds(30, 40, 200, 200);
 
         sp = new JScrollPane(mainTable);
 
+        add(sp, BorderLayout.CENTER);
 
-        add(sp,BorderLayout.CENTER);
-
-        JPanel buttonHolder = new JPanel(new GridLayout(0,8,2,0));
+        JPanel buttonHolder = new JPanel(new GridLayout(0, 8, 2, 0));
 
         buttonHolder.add(create);
         buttonHolder.add(edit);
         buttonHolder.add(remove);
         buttonHolder.add(check);
-        add(buttonHolder,BorderLayout.PAGE_END);
+        add(buttonHolder, BorderLayout.PAGE_END);
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
 
-  
     /**
      * Refreshes the list of items that are displayed in the grid.
      */
@@ -158,8 +154,12 @@ public class InventoryItemsUI extends JPanel {
         setVisible(true);
     }
 
-    public static void main(String[] args){
-        new InventoryItemsUI();
+    /**
+     *
+     * @param args
+     */
+    public static void main(String[] args) {
+        InventoryItemsUI inventoryItemsUI = new InventoryItemsUI();
 
     }
 

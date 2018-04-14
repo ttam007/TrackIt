@@ -1,6 +1,5 @@
 package trackit.UI;
 
-
 import java.awt.Dimension;
 import javax.swing.*;
 
@@ -8,6 +7,7 @@ import javax.swing.*;
  * UI Layer: Handles all aspects of the Dashboard panel.
  */
 public class DashboardUI extends JPanel {
+
     private JTextArea dashboardInfo;
     private JFrame mainFrame;
 
@@ -24,12 +24,12 @@ public class DashboardUI extends JPanel {
 
         String sb = "- 5 items are out of stock\n- Milk will expire in 3 days\n- Order arriving today\n";
 
-        dashboardInfo = new JTextArea(35,90);
+        dashboardInfo = new JTextArea(35, 90);
         dashboardInfo.setText(sb);
         dashboardInfo.setEditable(false);
 
         JScrollPane sp = new JScrollPane(dashboardInfo);
-        sp.setSize(new Dimension(1000,400));
+        sp.setSize(new Dimension(1000, 400));
         add(sp);
     }
     // </editor-fold>
