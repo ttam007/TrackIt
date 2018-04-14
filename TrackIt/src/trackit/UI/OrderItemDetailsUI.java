@@ -36,6 +36,11 @@ public class OrderItemDetailsUI
     
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
+
+    /**
+     *
+     * @param useCreateMode
+     */
     public OrderItemDetailsUI(boolean useCreateMode) {
         super("Order Item Details", new AnOrderItem());
 
@@ -45,6 +50,10 @@ public class OrderItemDetailsUI
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
+
+    /**
+     *initialize the items
+     */
     protected void initializeComponents() {
 
         //TODO:  add additional components here.
@@ -58,6 +67,7 @@ public class OrderItemDetailsUI
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         //this.addWindowListener(new SupplierDetailsUI.CloseQuery());
         this.setVisible(true);
+        this.getRootPane().setDefaultButton(btnOK);
 
         //Add all components here and set properties.
         Box nameBx, priceBx, statusBx, submitBx, combine;
@@ -96,7 +106,7 @@ public class OrderItemDetailsUI
         submitBx.add(btnOK);
         
         this.btnOK.addActionListener((ActionEvent e) -> {
-            this.setVisible(false);
+            this.dispose();
         });
         
         btnCancel = new JButton("Cancel");
@@ -104,7 +114,7 @@ public class OrderItemDetailsUI
         
         this.btnCancel.addActionListener((ActionEvent e) -> {
             //TODO:  close window and return to prior window.
-            this.setVisible(false);
+            this.dispose();
         });
         
         combine = Box.createVerticalBox();
@@ -114,13 +124,13 @@ public class OrderItemDetailsUI
         combine.add(submitBx);
 
         pnlCenter.add(combine);
-
-        
-        
         
         super.finalizeComponents();
     }
 
+    /**
+     *
+     */
     @Override
     protected void actionSave() {
         /*if (!bal.save()) {
@@ -128,11 +138,17 @@ public class OrderItemDetailsUI
         }*/
     }
 
+    /**
+     *
+     */
     @Override
     protected void actionCancel() {
         //TODO:  close window and return to prior window.
     }
 
+    /**
+     *
+     */
     @Override
     protected void actionDelete() {
        /*if (bal.remove()) {

@@ -5,11 +5,24 @@ import java.sql.*;
 /**
  * This is a static class that only has global constants and "fire and forget"
  * static methods.
+ *
+ * @author Bond
  */
 public class Utilities {
 
+    /**
+     *
+     */
     public static final String TEAM_NAME = "TrackIt";
+
+    /**
+     *
+     */
     public static final String PROGRAM_NAME_SHORT = "HITS";
+
+    /**
+     *
+     */
     public static final String PROGRAM_NAME_LONG = "Home Inventory Tracking System";
 
     /**
@@ -18,6 +31,11 @@ public class Utilities {
     private Utilities() {
     }
 
+    /**
+     *
+     * @param windowName
+     * @return
+     */
     public static String getWindowCaption(String windowName) {
         return String.format("%s %s - %s", TEAM_NAME, PROGRAM_NAME_SHORT, windowName);
     }
@@ -31,7 +49,7 @@ public class Utilities {
      */
     public static String buildErrorMessage(SQLException ex) {
         StringBuilder sb = new StringBuilder();
-        sb.append(String.format("Error = %s\r", ex.getLocalizedMessage()));
+        //sb.append(String.format("Error = %s\r", ex.getLocalizedMessage()));
         sb.append(String.format("SQL State = %s\r", ex.getSQLState()));
         sb.append(String.format("Error Code = %s\r", ex.getErrorCode()));
         return sb.toString();

@@ -18,26 +18,49 @@ public class ASupplier
 
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Constructors">
+
+    /**
+     *A supplier entry
+     */
     public ASupplier() {
         this.primaryKey = SQLHelper.INVALID_PRIMARY_KEY;
     }
 
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Setters & Getters">
+
+    /**
+     *
+     * @param nickname
+     * @throws SQLException
+     */
     public void setNickname(String nickname)
             throws SQLException {
-        this.nickname = HELPER.doNullCheck(HELPER.COLUMN_NICKNAME, nickname);
+        this.nickname = HELPER.doNullCheck(SQLHelperSupplier.COLUMN_NICKNAME, nickname);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getNickname() {
         return this.nickname;
     }
 
+    /**
+     *
+     * @param url
+     * @throws SQLException
+     */
     public void setUrl(String url)
             throws SQLException {
-        this.url = HELPER.doNullCheck(HELPER.COLUMN_URL, url);
+        this.url = HELPER.doNullCheck(SQLHelperSupplier.COLUMN_URL, url);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getUrl() {
         return this.url;
     }

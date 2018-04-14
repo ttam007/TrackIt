@@ -28,6 +28,10 @@ public class LoginUI extends JFrame {
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
+
+    /**
+     *Login
+     */
     public LoginUI() {
         initializeComponents();
     }
@@ -54,7 +58,7 @@ public class LoginUI extends JFrame {
         int frameWidth = 500;
         int frameHeight = 150;
         Dimension dimFrame = new Dimension(frameWidth, frameHeight);
-        this.setTitle(WINDOW_NAME);
+        this.setTitle(Utilities.getWindowCaption(WINDOW_NAME));
         this.setPreferredSize(dimFrame);
         this.setLocationRelativeTo(null);
         this.setResizable(false);

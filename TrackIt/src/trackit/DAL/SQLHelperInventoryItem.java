@@ -10,22 +10,55 @@ import java.util.*;
  * @author Bond
  */
 public class SQLHelperInventoryItem
-        extends SQLHelper<AnInventoryItem>
-        implements ISQLHelper<AnInventoryItem> {
+        extends SQLHelper<AnInventoryItem> {
 
     // <editor-fold defaultstate="collapsed" desc="Database Columns">
-    public final String COLUMN_ITEMID = "itemId";
-    public final String COLUMN_QUANTITY = "quantity";
+    /**
+     *
+     */
+    public static final String COLUMN_ITEMID = "itemId";
+
+    /**
+     *
+     */
+    public static final String COLUMN_QUANTITY = "quantity";
+
+    /**
+     *
+     */
     public final String COLUMN_EXPIRATIONDATE = "expirationDate";
-    public final String COLUMN_DESCRIPTION = "description";
-    public final String COLUMN_SKU = "sku";
-    public final String COLUMN_SIZEUNIT = "sizeUnit";
-    public final String COLUMN_ITEMSTATUS = "itemStatus";
+
+    /**
+     *
+     */
+    public static final String COLUMN_DESCRIPTION = "description";
+
+    /**
+     *
+     */
+    public static final String COLUMN_SKU = "sku";
+
+    /**
+     *
+     */
+    public static final String COLUMN_SIZEUNIT = "sizeUnit";
+
+    /**
+     *
+     */
+    public static final String COLUMN_ITEMSTATUS = "itemStatus";
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
+    static {
+        SQLHelperInventoryItem.COLUMN_PK = "inventoryItemId";
+    }
+
+    /**
+     * database for inventory item
+     */
     public SQLHelperInventoryItem() {
-        COLUMN_PK = "inventoryItemId";
+
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
@@ -148,7 +181,7 @@ public class SQLHelperInventoryItem
     @Override
     public Double doNullCheck(String columnName, Double aValue)
             throws SQLException {
-      throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException();
     }
 
     @Override

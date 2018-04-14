@@ -15,12 +15,16 @@ public class AnOrderItem
     // <editor-fold defaultstate="expanded" desc="Private Fields">
     private static final SQLHelperOrderItem HELPER = new SQLHelperOrderItem();
     private Integer orderId;
-    private Integer quantityOrdered;
-    private Double price;
-    private Double extendedPrice;
+    private Integer quantityOrdered = 1;
+    private Integer quantityCheckedIn = 0;
+    private Double price = 0d;
+    private Double extendedPrice = 0d;
 
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Constructors">
+    /**
+     * order item
+     */
     public AnOrderItem() {
         super();
     }
@@ -37,31 +41,67 @@ public class AnOrderItem
     // </editor-fold>
 
     // <editor-fold defaultstate="expanded" desc="Setters & Getters">
+    /**
+     *
+     * @param orderId
+     * @throws SQLException
+     */
     public void setOrderId(Integer orderId)
             throws SQLException {
-        this.orderId = HELPER.doNullCheck(HELPER.COLUMN_ORDERID, orderId);
+        this.orderId = HELPER.doNullCheck(SQLHelperOrderItem.COLUMN_ORDERID, orderId);
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer getOrderId() {
         return this.orderId;
     }
 
+    /**
+     *
+     * @param quantityOrdered
+     * @throws SQLException
+     */
     public void setQuantityOrdered(Integer quantityOrdered)
             throws SQLException {
-        this.quantityOrdered = HELPER.doNullCheck(HELPER.COLUMN_QUANTITYORDERED, quantityOrdered);
+        this.quantityOrdered = HELPER.doNullCheck(SQLHelperOrderItem.COLUMN_QUANTITYORDERED, quantityOrdered);
         calcExtendedPrice();
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer getQuantityOrdered() {
         return this.quantityOrdered;
     }
 
+    public void setQuantityCheckedIn(Integer quantityCheckedIn)
+            throws SQLException {
+        this.quantityCheckedIn = HELPER.doNullCheck(SQLHelperOrderItem.COLUMN_QUANTITYCHECKEDIN, quantityCheckedIn);
+    }
+
+    public Integer getQuantityCheckedIn() {
+        return this.quantityCheckedIn;
+    }
+
+    /**
+     *
+     * @param price
+     * @throws SQLException
+     */
     public void setPrice(Double price)
             throws SQLException {
-        this.price = HELPER.doNullCheck(HELPER.COLUMN_PRICE, price);
+        this.price = HELPER.doNullCheck(SQLHelperOrderItem.COLUMN_PRICE, price);
         calcExtendedPrice();
     }
 
+    /**
+     *
+     * @return
+     */
     public Double getPrice() {
         return this.price;
     }
@@ -71,6 +111,10 @@ public class AnOrderItem
             throws SQLException {
         this.extendedPrice = HELPER.doNullCheck(HELPER.COLUMN_EXTENDEDPRICE, extendedPrice);
     }*/
+    /**
+     *
+     * @return
+     */
     public Double getExtendedPrice() {
         return this.extendedPrice;
     }
