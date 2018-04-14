@@ -87,6 +87,7 @@ public class CheckInOutUI
         qtyBx.add(qtyTextField);
         submitBx = Box.createHorizontalBox();
         btnOK = new JButton("OK");
+        submitBx.add(btnOK);
         
 
         this.btnOK.addActionListener((ActionEvent e) -> {
