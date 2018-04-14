@@ -140,12 +140,12 @@ public class InventoryItemDetailsUI extends JPanel {
        gbc.gridy = 4;
        gbc.gridwidth =1;
        add(cancelInventoryItem,gbc);
-
+        //Test
+       
        mainFrame.add(this);
        mainFrame.setTitle("Inventory Items Detail");
        mainFrame.pack();
        mainFrame.setVisible(true);
-
 
 
     }
