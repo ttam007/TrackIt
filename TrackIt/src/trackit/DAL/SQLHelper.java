@@ -21,7 +21,7 @@ public abstract class SQLHelper<T>
      * Should be final, but java doesn't allow this with the inheritance that we
      * are using. Thus, it is only set in child constructors.
      */
-    public String COLUMN_PK;
+    static String COLUMN_PK;
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Protected Fields">
 
@@ -65,10 +65,10 @@ public abstract class SQLHelper<T>
                         stmt.setDate(aParam.getName(), java.sql.Date.valueOf(aParam.getValue()));
                         break;
                     case Types.DOUBLE:
-                        stmt.setDouble(aParam.getName(), Double.valueOf(aParam.getValue()));
+                        stmt.setDouble(aParam.getName(), Double.parseDouble(aParam.getValue()));
                         break;
                     case Types.INTEGER:
-                        stmt.setInt(aParam.getName(), Integer.valueOf(aParam.getValue()));
+                        stmt.setInt(aParam.getName(), Integer.parseInt(aParam.getValue()));
                         break;
                     case Types.VARCHAR:
                         stmt.setString(aParam.getName(), aParam.getValue());

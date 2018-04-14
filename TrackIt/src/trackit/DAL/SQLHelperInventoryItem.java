@@ -23,8 +23,12 @@ public class SQLHelperInventoryItem
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
+    static {
+        SQLHelperInventoryItem.COLUMN_PK = "inventoryItemId";
+    }
+
     public SQLHelperInventoryItem() {
-        COLUMN_PK = "inventoryItemId";
+
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">

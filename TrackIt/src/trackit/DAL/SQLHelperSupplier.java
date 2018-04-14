@@ -18,8 +18,12 @@ public class SQLHelperSupplier
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
-    public SQLHelperSupplier() {
+    static {
         COLUMN_PK = "supplierId";
+    }
+
+    public SQLHelperSupplier() {
+
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">

@@ -21,8 +21,12 @@ public class SQLHelperOrder
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
-    public SQLHelperOrder() {
+    static {
         COLUMN_PK = "orderId";
+    }
+
+    public SQLHelperOrder() {
+
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">

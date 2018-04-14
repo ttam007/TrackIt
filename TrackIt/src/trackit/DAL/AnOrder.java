@@ -19,8 +19,8 @@ public class AnOrder
      * FK to suppliers.supplierId
      */
     private Integer orderedFrom;
-    private OrderStatusType orderStatus;
-    private java.sql.Date dateOrdered;
+    private OrderStatusType orderStatus = OrderStatusType.ORDERED;
+    private java.sql.Date dateOrdered = new java.sql.Date(0);
     private java.sql.Date dateExpected;
 
     // </editor-fold>
@@ -80,7 +80,11 @@ public class AnOrder
     }
 
     public java.sql.Date getDateExpected() {
-        return (java.sql.Date) this.dateExpected.clone();
+        if (this.dateExpected == null) {
+            return null;
+        } else {
+            return (java.sql.Date) this.dateExpected.clone();
+        }
     }
 
     // </editor-fold>
