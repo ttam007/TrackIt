@@ -11,10 +11,10 @@ import trackit.*;
 public class SQLConnector {
 
     // <editor-fold defaultstate="collapsed" desc="Constants">
-    private final String DRIVER = "com.mysql.jdbc.Driver";
+    private static final String DRIVER = "com.mysql.jdbc.Driver";
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Fields">
-    private static SQLConnector singleton = null;
+    private volatile static SQLConnector singleton = null;
     private String databaseLocation = "localhost";
     private Integer port = 3306;
     private String databaseName = "TrackItDB";

@@ -6,7 +6,7 @@ import trackit.*;
 
 /**
  * DAL Layer: Handles all aspects of a single InventoryItem.
- * 
+ *
  * @author Bond
  */
 public class AnInventoryItem
@@ -14,13 +14,13 @@ public class AnInventoryItem
 
     // <editor-fold defaultstate="collapsed" desc="Private Fields">
     private static final SQLHelperInventoryItem HELPER = new SQLHelperInventoryItem();
-    private Integer quantity;
+    private Integer quantity = 0;
     private java.sql.Date expirationDate;
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Constructors">
 
     /**
-     *add an inventory item
+     * add an inventory item
      */
     public AnInventoryItem() {
         super();

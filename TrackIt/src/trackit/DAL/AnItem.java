@@ -37,7 +37,7 @@ public abstract class AnItem
     // <editor-fold defaultstate="expanded" desc="Constructors">
 
     /**
-     *establish an item
+     * establish an item
      */
     public AnItem() {
         this.primaryKey = SQLHelper.INVALID_PRIMARY_KEY;
@@ -45,7 +45,6 @@ public abstract class AnItem
 
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Setters & Getters">
-
     /**
      *
      * @param description
@@ -53,7 +52,7 @@ public abstract class AnItem
      */
     public void setDescription(String description)
             throws SQLException {
-        this.description = HELPER.doNullCheck(HELPER.COLUMN_DESCRIPTION, description);
+        this.description = HELPER.doNullCheck(SQLHelperItem.COLUMN_DESCRIPTION, description);
     }
 
     /**
@@ -71,7 +70,7 @@ public abstract class AnItem
      */
     public void setSku(String sku)
             throws SQLException {
-        this.sku = HELPER.doNullCheck(HELPER.COLUMN_SKU, sku);
+        this.sku = HELPER.doNullCheck(SQLHelperItem.COLUMN_SKU, sku);
     }
 
     /**
@@ -89,7 +88,7 @@ public abstract class AnItem
      */
     public void setSizeUnit(String sizeUnit)
             throws SQLException {
-        this.sizeUnit = HELPER.doNullCheck(HELPER.COLUMN_SIZEUNIT, sizeUnit);
+        this.sizeUnit = HELPER.doNullCheck(SQLHelperItem.COLUMN_SIZEUNIT, sizeUnit);
     }
 
     /**
@@ -107,7 +106,7 @@ public abstract class AnItem
      */
     public void setItemStatus(String itemStatus)
             throws SQLException {
-        String tmpValue = HELPER.doNullCheck(HELPER.COLUMN_ITEMSTATUS, itemStatus);
+        String tmpValue = HELPER.doNullCheck(SQLHelperItem.COLUMN_ITEMSTATUS, itemStatus);
         this.itemStatus = ItemStatusType.getType(tmpValue);
     }
 
