@@ -1,6 +1,9 @@
 package trackit;
 
-
+/**
+ *
+ * @author Bryan
+ */
 public class Dashboard
 {
   private final DashboardType type;
@@ -9,22 +12,31 @@ public class Dashboard
   private Integer count;
   private String description;
   
-  public Dashboard(DashboardType type)
+    /**
+     *
+     * @param type
+     */
+    public Dashboard(DashboardType type)
   {
     this.type = type;
   }
   
-  public DashboardType getType() {
+    /**
+     *
+     * @return
+     */
+    public DashboardType getType() {
     return type;
   }
   
-
-
-
-  public void refresh() {}
+    /**
+     *refresh
+     */
+    public void refresh() {}
   
 
 
+  @Override
   public String toString()
   {
     return "";

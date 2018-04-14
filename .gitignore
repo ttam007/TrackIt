@@ -14,5 +14,9 @@
 *.properties
 >>>>>>> lagail_dev
 *.properties
+<<<<<<< HEAD
+>>>>>>> lagail_dev
+=======
+*.properties
 >>>>>>> lagail_dev
 *.properties

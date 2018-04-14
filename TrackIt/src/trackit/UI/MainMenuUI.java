@@ -31,6 +31,10 @@ public class MainMenuUI extends JFrame {
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
+
+    /**
+     *Main menu
+     */
     public MainMenuUI() {
         initializeComponents();
 
@@ -63,22 +67,14 @@ public class MainMenuUI extends JFrame {
 
         JPanel pnlBottom = new JPanel();
         btnLogout = new JButton("Log Out");
-        btnLogout.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setVisible(false);
-                LoginUI login = new LoginUI();
-                login.display();
-            }
-
+        btnLogout.addActionListener((ActionEvent e) -> {
+            setVisible(false);
+            LoginUI login = new LoginUI();
+            login.display();
         });
         btnExit = new JButton("Exit");
-        btnExit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-
+        btnExit.addActionListener((ActionEvent e) -> {
+            System.exit(0);
         });
         pnlBottom.add(btnLogout);
         pnlBottom.add(btnExit);

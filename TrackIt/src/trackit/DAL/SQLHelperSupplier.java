@@ -13,12 +13,27 @@ public class SQLHelperSupplier
         extends SQLHelper<ASupplier> {
 
     // <editor-fold defaultstate="collapsed" desc="Database Columns">
+    /**
+     *
+     */
     public static final String COLUMN_NICKNAME = "nickname";
+
+    /**
+     *
+     */
     public static final String COLUMN_URL = "url";
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
+<<<<<<< HEAD
     static {
+=======
+
+    /**
+     *supplier help for mysql
+     */
+    public SQLHelperSupplier() {
+>>>>>>> c325af60196bf4417f5a1e7e174602122f1e22a0
         COLUMN_PK = "supplierId";
     }
 

@@ -22,6 +22,10 @@ public class AnOrderItem
 
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Constructors">
+
+    /**
+     *order item
+     */
     public AnOrderItem() {
         super();
     }
@@ -38,21 +42,40 @@ public class AnOrderItem
     // </editor-fold>
 
     // <editor-fold defaultstate="expanded" desc="Setters & Getters">
+
+    /**
+     *
+     * @param orderId
+     * @throws SQLException
+     */
     public void setOrderId(Integer orderId)
             throws SQLException {
         this.orderId = HELPER.doNullCheck(SQLHelperOrderItem.COLUMN_ORDERID, orderId);
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer getOrderId() {
         return this.orderId;
     }
 
+    /**
+     *
+     * @param quantityOrdered
+     * @throws SQLException
+     */
     public void setQuantityOrdered(Integer quantityOrdered)
             throws SQLException {
         this.quantityOrdered = HELPER.doNullCheck(SQLHelperOrderItem.COLUMN_QUANTITYORDERED, quantityOrdered);
         calcExtendedPrice();
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer getQuantityOrdered() {
         return this.quantityOrdered;
     }
@@ -66,12 +89,25 @@ public class AnOrderItem
         return this.quantityCheckedIn;
     }
 
+<<<<<<< HEAD
     public void setPrice(Double price)
+=======
+   /**
+     *
+     * @param price
+     * @throws SQLException
+     */
+   public void setPrice(Double price)
+>>>>>>> c325af60196bf4417f5a1e7e174602122f1e22a0
             throws SQLException {
         this.price = HELPER.doNullCheck(SQLHelperOrderItem.COLUMN_PRICE, price);
         calcExtendedPrice();
     }
 
+    /**
+     *
+     * @return
+     */
     public Double getPrice() {
         return this.price;
     }
@@ -81,6 +117,12 @@ public class AnOrderItem
             throws SQLException {
         this.extendedPrice = HELPER.doNullCheck(HELPER.COLUMN_EXTENDEDPRICE, extendedPrice);
     }*/
+
+    /**
+     *
+     * @return
+     */
+
     public Double getExtendedPrice() {
         return this.extendedPrice;
     }

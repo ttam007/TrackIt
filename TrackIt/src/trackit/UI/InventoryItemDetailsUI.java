@@ -1,6 +1,9 @@
 package trackit.UI;
 
+
+
 import trackit.DAL.AnInventoryItem;
+
 
 /**
  * UI Layer: Handles all aspects of the Create Inventory Item and Edit Inventory
@@ -17,6 +20,11 @@ public class InventoryItemDetailsUI
     // <editor-fold defaultstate="collapsed" desc="Components">
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
+
+    /**
+     *
+     * @param useCreateMode
+     */
     public InventoryItemDetailsUI(boolean useCreateMode) {
         super("Inventory Item Details", new AnInventoryItem());
   
@@ -36,6 +44,9 @@ public class InventoryItemDetailsUI
         super.finalizeComponents();
     }
 
+    /**
+     *
+     */
     @Override
     protected void actionSave() {
         /*if (!bal.save()) {
@@ -43,11 +54,17 @@ public class InventoryItemDetailsUI
         }*/
     }
 
+    /**
+     *
+     */
     @Override
     protected void actionCancel() {
         //TODO:  close window and return to prior window.
     }
 
+    /**
+     *
+     */
     @Override
     protected void actionDelete() {
         /*if (bal.remove()) {
