@@ -3,20 +3,37 @@ package trackit;
 import trackit.DAL.*;
 import trackit.UI.*;
 
+/**
+ *
+ * @author Bryan
+ */
 public class Login {
 
     private final int MAX_LOGIN_ATTEMPTS = 3;
     private String errorMessage = "";
     private int loginAttempts = 0;
 
+    /**
+     * login
+     */
     public Login() {
     }
 
+    /**
+     *
+     * @param userName
+     * @param password
+     * @return
+     */
     public boolean startLogin(String userName, String password) {
         SQLConnector.getInstance().setConnectionString(userName, password);
         return startLogin();
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean startLogin() {
         boolean returnValue = false;
 
@@ -36,11 +53,18 @@ public class Login {
         return returnValue;
     }
 
+    /**
+     * logout
+     */
     public void startLogout() {
         LoginUI dlgLogin = new LoginUI(SQLConnector.getInstance().getUserName());
         dlgLogin.display();
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isTooManyLoginAttempts() {
         return loginAttempts >= MAX_LOGIN_ATTEMPTS;
     }
