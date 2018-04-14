@@ -5,6 +5,8 @@ import java.sql.*;
 /**
  * This is a static class that only has global constants and "fire and forget"
  * static methods.
+ *
+ * @author Bond
  */
 public class Utilities {
 
@@ -47,7 +49,7 @@ public class Utilities {
      */
     public static String buildErrorMessage(SQLException ex) {
         StringBuilder sb = new StringBuilder();
-        sb.append(String.format("Error = %s\r", ex.getLocalizedMessage()));
+        //sb.append(String.format("Error = %s\r", ex.getLocalizedMessage()));
         sb.append(String.format("SQL State = %s\r", ex.getSQLState()));
         sb.append(String.format("Error Code = %s\r", ex.getErrorCode()));
         return sb.toString();
