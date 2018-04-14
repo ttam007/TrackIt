@@ -26,6 +26,7 @@ public class InventoryItemsUI extends JPanel {
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     private JTable mainTable;
+    private InventoryItemDetailsUI itemCreate, itemEdit;
     private final List<String> tableHeaders = new ArrayList<>(Arrays.asList("Item Name", "Qty","Unit","SKU","Expiration","Status"));
     private JButton create,edit, remove,check;
     private final Object[][] data;
@@ -64,28 +65,33 @@ public class InventoryItemsUI extends JPanel {
 
 
         create = new JButton("Create");
-       /* itemCreate = new InventoryItemDetails(true);
+       //itemCreate = new InventoryItemDetailsUI(true);
         JDialog itemInputForm = new JDialog();
         itemInputForm.setSize(new Dimension(640,400));
         itemInputForm.setTitle("Add Inventory Item");
         itemInputForm.setModal(true);
-        itemInputForm.setContentPane(itemCreate.getMainFrame().getContentPane());*/
-        //create.addActionListener((event)-> /*itemInputForm.setVisible(true)*/);
+        itemInputForm.setContentPane( new InventoryItemDetailsUI(true).getMainFrame().getContentPane());/* */
+        create.addActionListener((event)-> itemInputForm.setVisible(true));
 
         edit = new JButton("Edit");
-       /* itemEdit = new InventoryItemDetails(false);
+        //itemEdit = new InventoryItemDetails(false);
         JDialog itemEditForm = new JDialog();
         itemEditForm.setSize(new Dimension(640,400));
         itemEditForm.setTitle("Edit Inventory Item");
         itemEditForm.setModal(true);
-        itemEditForm.setContentPane(itemEdit.getMainFrame().getContentPane());*/
-       // edit.addActionListener((event)-> /*itemEditForm.setVisible(true)*/);
+        itemEditForm.setContentPane(new InventoryItemDetailsUI(false).getMainFrame().getContentPane());/**/
+        edit.addActionListener((event)-> itemEditForm.setVisible(true));
 
         remove = new JButton("Remove");
         remove.addActionListener((event)-> System.out.println("REMOVE TEST"));
 
         check = new JButton("Check In/Out");
-        check.addActionListener((event)->System.out.println("Check in/ Check out"));
+        JDialog checkIn = new JDialog();
+        checkIn.setSize(new Dimension(640,400));
+        checkIn.setTitle("Check In/Out Item");
+        checkIn.setModal(true);
+        checkIn.setContentPane(new CheckInOutUI().getContentPane());
+        check.addActionListener((event)->checkIn.setVisible(true));
 
     }
 
@@ -150,6 +156,11 @@ public class InventoryItemsUI extends JPanel {
     public void display() {
         System.out.println(String.format("Displaying {0}...", WINDOW_NAME));
         setVisible(true);
+    }
+
+    public static void main(String[] args){
+        new InventoryItemsUI();
+
     }
 
     // </editor-fold>
