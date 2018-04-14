@@ -38,6 +38,10 @@ public class OrderItemsUI extends JFrame {
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
+
+    /**
+     *order item window
+     */
     public OrderItemsUI() {
         initializeComponents();
         getValues();
@@ -60,41 +64,11 @@ public class OrderItemsUI extends JFrame {
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addWindowListener(new CloseQuery());
         setVisible(true);
+        this.getRootPane().setDefaultButton(btnOK);
 
         //Add all components here and set properties.
         setLayout(new BorderLayout());
 
-
-        pnlTop = new JPanel();
-        //layGroup order-details
-
-        lblOrderNumber = new JLabel("Order Number");
-        pnlTop.add(lblOrderNumber);
-        tfOrderNumber = new JTextField(20);
-        pnlTop.add(tfOrderNumber);
-
-        lblSupplier = new JLabel("Supplier");
-        pnlTop.add(lblSupplier);
-        tfSupplier = new JTextField(20);
-        pnlTop.add(tfSupplier);
-
-        lblOrderDate = new JLabel("Order Date");
-        pnlTop.add(lblOrderDate);
-        tfOrderDate = new JTextField(20);
-        pnlTop.add(tfOrderDate);
-
-        lblStatus = new JLabel("Status");
-        pnlTop.add(lblStatus);
-        tfStatus = new JTextField(20);
-        pnlTop.add(tfStatus);
-
-        lblExpectedDate = new JLabel("Expected Date");
-        pnlTop.add(lblExpectedDate);
-        tfExpectedDate = new JTextField(20);
-        pnlTop.add(tfExpectedDate);
-
-
-        
         Box topBox, topInnerBx, btmInnerBx, middleBox, bottomBox, combine;
         
         topBox = Box.createVerticalBox();
@@ -140,20 +114,17 @@ public class OrderItemsUI extends JFrame {
         middleBox.add(btnCheckIn);
         btnCheckIn.addActionListener((ActionEvent e) -> {
             //TODO
-            checkInOut = new CheckInOutUI();
+            JOptionPane.showMessageDialog(null, "Item Checked In");
         });
 
         btnCheckInAll = new JButton("Check In All");
         middleBox.add(btnCheckInAll);
         btnCheckInAll.addActionListener((ActionEvent e) -> {
             //TODO
+            JOptionPane.showMessageDialog(null, "All Items Checked In");
         });
 
 
-        add(pnlTop, BorderLayout.NORTH);
-
-
-        
         bottomBox = Box.createHorizontalBox();
 
         //add data to suppliers arraylist 
@@ -219,7 +190,7 @@ public class OrderItemsUI extends JFrame {
         btnOK = new JButton("OK");
         pnlBtm.add(btnOK);
         btnOK.addActionListener((ActionEvent e) -> {
-            setVisible(false);
+            this.dispose();
             
             /*
             //TODO:  surrond below in a for loop
@@ -233,11 +204,9 @@ public class OrderItemsUI extends JFrame {
         pnlBtm.add(btnCancel);
         btnCancel.addActionListener((ActionEvent e) -> {
             //TODO:  close window and return to prior window.
-            setVisible(false);
+            this.dispose();
         });
 
-        pnlBtm.add(pnlBtmLeft, BorderLayout.CENTER);
-        pnlBtm.add(pnlBtmRight, BorderLayout.EAST);
         add(pnlBtm, BorderLayout.SOUTH);
         
 

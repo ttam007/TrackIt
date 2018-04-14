@@ -8,6 +8,10 @@ package trackit.DAL;
 public abstract class DatabaseObject {
 
     // <editor-fold defaultstate="expanded" desc="Protected Fields">
+
+    /**
+     *
+     */
     protected Integer primaryKey = null;
     private String errorMessage;
 
@@ -20,10 +24,13 @@ public abstract class DatabaseObject {
      * database.
      */
     protected boolean isAlreadyInDatabase() {
-        //TODO:  code this check.  If primary key is already in the database, then return true.
-        return false;
+        return !(primaryKey.equals(SQLHelper.INVALID_PRIMARY_KEY));
     }
 
+    /**
+     *
+     * @param errorMessage
+     */
     protected void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
     }
@@ -40,10 +47,18 @@ public abstract class DatabaseObject {
         return this.errorMessage;
     }
 
+    /**
+     *
+     * @param primaryKey
+     */
     public void setPrimaryKey(Integer primaryKey) {
         this.primaryKey = primaryKey;
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer getPrimaryKey() {
         return this.primaryKey;
     }

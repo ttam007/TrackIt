@@ -1,7 +1,6 @@
 package trackit.UI;
 
 
-import trackit.*;
 
 import trackit.DAL.AnInventoryItem;
 
@@ -16,6 +15,7 @@ import java.awt.*;
  * UI Layer: Handles all aspects of the Create Inventory Item and Edit Inventory
  * Item dialog.
  */
+
 public class InventoryItemDetailsUI extends JPanel {
 
     private final boolean isCreateMode;
@@ -24,6 +24,24 @@ public class InventoryItemDetailsUI extends JPanel {
     private JLabel sku,statusLabel,unit,quantity,expDate, itemNameLabel;
     private JButton okInventoryItem,cancelInventoryItem;
     private GridBagConstraints gbc;
+
+
+public class InventoryItemDetailsUI
+        extends ItemDetailsUI<AnInventoryItem> {
+    // <editor-fold defaultstate="collapsed" desc="Constants">
+
+    // </editor-fold>
+    // <editor-fold defaultstate="expanded" desc="Private Fields">
+      private final boolean isCreateMode;
+   // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Components">
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
+
+    /**
+     *
+     * @param useCreateMode
+     */
 
     public InventoryItemDetailsUI(boolean useCreateMode) {
        // super("Inventory Item Details", new AnInventoryItem());
@@ -122,6 +140,7 @@ public class InventoryItemDetailsUI extends JPanel {
        //Text Field
        statusField = new JTextField(7);
 
+
        gbc.gridx =5;
        gbc.gridy =3;
        gbc.gridwidth=1;
@@ -150,18 +169,35 @@ public class InventoryItemDetailsUI extends JPanel {
 
     }
     /*
+
+    /**
+     *
+     */
+
     @Override
     protected void actionSave() {
         /*if (!bal.save()) {
             //TODO:  display bal.getErrorMessage();
+
         }
     }*/
     /*
+
+        }*/
+    }
+
+    /**
+     *
+     */
+
     @Override
     protected void actionCancel() {
         //TODO:  close window and return to prior window.
     }
 
+    /**
+     *
+     */
     @Override
     protected void actionDelete() {
         /*if (bal.remove()) {

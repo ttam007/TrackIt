@@ -16,17 +16,46 @@ public abstract class ItemDetailsUI<T extends AnItem>
         extends JFrame {
 
     // <editor-fold defaultstate="collapsed" desc="Constants">
+
+    /**
+     *
+     */
     protected final String WINDOW_NAME;
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Fields">
+
+    /**
+     *
+     */
     protected T bal;
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
+
+    /**
+     *
+     */
     protected JPanel pnlMain = new JPanel();
+
+    /**
+     *
+     */
     protected JButton btnOK = new JButton();
+
+    /**
+     *
+     */
     protected JButton btnCancel = new JButton();
+
+    /**
+     *
+     */
     protected JButton btnDelete = new JButton();
 
+    /**
+     *
+     * @param windowName
+     * @param balLayer
+     */
     protected ItemDetailsUI(String windowName, T balLayer) {
         this.WINDOW_NAME = windowName;
         this.bal = balLayer;
@@ -73,14 +102,25 @@ public abstract class ItemDetailsUI<T extends AnItem>
         pack();
     }
 
+    /**
+     *save button
+     */
     protected abstract void actionSave();/*{
          if (!bal.save()) {
                 //TODO:  display bal.getErrorMessage();
             }
     }*/
+
+    /**
+     *cancel button
+     */
     protected abstract void actionCancel();/* {
         //TODO:  close window and return to prior window.
     }*/
+
+    /**
+     *delete item
+     */
     protected abstract void actionDelete();/* {
         if (bal.remove()) {
             //TODO:  close window and return to prior window.

@@ -14,11 +14,14 @@ public class AnInventoryItem
 
     // <editor-fold defaultstate="collapsed" desc="Private Fields">
     private static final SQLHelperInventoryItem HELPER = new SQLHelperInventoryItem();
-    private Integer quantity;
+    private Integer quantity = 0;
     private java.sql.Date expirationDate;
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Constructors">
 
+    /**
+     *add an inventory item
+     */
     public AnInventoryItem() {
         super();
     }
@@ -94,6 +97,10 @@ public class AnInventoryItem
     }
     // </editor-fold>
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<AnItem> getExpiredItems() {
         ArrayList<AnItem> returnValue = new ArrayList<>();
         return returnValue;

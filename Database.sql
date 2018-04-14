@@ -114,6 +114,7 @@ CREATE TABLE orderItems (
     orderId INT UNSIGNED NOT NULL,
     itemId INT UNSIGNED NOT NULL,
     quantityOrdered INT UNSIGNED NOT NULL DEFAULT 1,
+    quantityCheckedIn INT UNSIGNED NOT NULL DEFAULT 0,
     price DOUBLE UNSIGNED NOT NULL DEFAULT 0,
     extendedPrice DOUBLE UNSIGNED NOT NULL DEFAULT 0,
     PRIMARY KEY (orderItemId),
@@ -322,7 +323,8 @@ CREATE DEFINER = CURRENT_USER
 PROCEDURE sp_OrderItems_SelectAll ()
 BEGIN
 	SELECT orderItems.orderItemId, orderItems.orderId, orderItems.itemId,
-		orderItems.quantityOrdered, orderItems.price, orderItems.extendedPrice,
+		orderItems.quantityOrdered, orderItems.quantityCheckedIn, 
+        orderItems.price, orderItems.extendedPrice,
 		items.description, items.sku, items.sizeUnit, items.itemStatus
 	FROM orderItems
 		INNER JOIN items ON orderItems.itemId = items.itemId;
@@ -335,7 +337,8 @@ PROCEDURE sp_OrderItems_Select (
 )
 BEGIN
 	SELECT orderItems.orderItemId, orderItems.orderId, orderItems.itemId,
-		orderItems.quantityOrdered, orderItems.price, orderItems.extendedPrice,
+		orderItems.quantityOrdered, orderItems.quantityCheckedIn,
+        orderItems.price, orderItems.extendedPrice,
 		items.description, items.sku, items.sizeUnit, items.itemStatus 
 	FROM orderItems
 		INNER JOIN items ON orderItems.itemId = items.itemId
@@ -356,8 +359,8 @@ BEGIN
     
     SET extendedPrice = (quantityOrdered * price);
     
-	INSERT INTO orderItems (orderId, itemId, quantityOrdered, price, extendedPrice)
-    VALUES (orderId, itemId, quantityOrdered, price, extendedPrice);
+	INSERT INTO orderItems (orderId, itemId, quantityOrdered, quantityCheckedIn, price, extendedPrice)
+    VALUES (orderId, itemId, quantityOrdered, 0, price, extendedPrice);
 	SET orderItemId = LAST_INSERT_ID(); 
 END;;
 
@@ -366,6 +369,7 @@ CREATE DEFINER = CURRENT_USER
 PROCEDURE sp_OrderItems_Update (
 	IN orderItemId INT UNSIGNED,
 	IN quantityOrdered INT UNSIGNED,
+    IN quantityCheckedIn INT UNSIGNED,
     IN price DOUBLE UNSIGNED
 )
 BEGIN
@@ -376,6 +380,7 @@ BEGIN
 	UPDATE orderitems
 	SET	orderitems.quantityOrdered = quantityOrdered,
 		orderitems.price = price,
+        orderItems.quantityCheckedIn = quantityCheckedIn,
 		orderitems.extendedPrice = extendedPrice
 	WHERE
 		orderitems.orderItemId = orderItemId;

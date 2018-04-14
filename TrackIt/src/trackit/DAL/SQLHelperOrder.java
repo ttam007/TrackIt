@@ -10,20 +10,45 @@ import java.util.*;
  * @author Bond
  */
 public class SQLHelperOrder
-        extends SQLHelper<AnOrder>
-        implements ISQLHelper<AnOrder> {
+        extends SQLHelper<AnOrder> {
 
     // <editor-fold defaultstate="collapsed" desc="Database Columns">
-    public final String COLUMN_DESCRIPTION = "description";
-    public final String COLUMN_ORDEREDFROM = "orderedFrom";
-    public final String COLUMN_ORDERSTATUS = "orderStatus";
-    public final String COLUMN_DATEORDERED = "dateOrdered";
-    public final String COLUMN_DATEEXPECTED = "dateExpected";
+    /**
+     *
+     */
+    public static final String COLUMN_DESCRIPTION = "description";
+
+    /**
+     *
+     */
+    public static final String COLUMN_ORDEREDFROM = "orderedFrom";
+
+    /**
+     *
+     */
+    public static final String COLUMN_ORDERSTATUS = "orderStatus";
+
+    /**
+     *
+     */
+    public static final String COLUMN_DATEORDERED = "dateOrdered";
+
+    /**
+     *
+     */
+    public static final String COLUMN_DATEEXPECTED = "dateExpected";
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
-    public SQLHelperOrder() {
+    static {
         COLUMN_PK = "orderId";
+    }
+
+    /**
+     * sql help order for dbase
+     */
+    public SQLHelperOrder() {
+
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
@@ -151,7 +176,7 @@ public class SQLHelperOrder
     @Override
     public Double doNullCheck(String columnName, Double aValue)
             throws SQLException {
-       throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException();
     }
 
     @Override

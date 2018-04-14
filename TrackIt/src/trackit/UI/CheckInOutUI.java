@@ -34,6 +34,10 @@ public class CheckInOutUI
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
+
+    /**
+     *checkin out button
+     */
     public CheckInOutUI() {
     
         initializeComponents();
@@ -126,6 +130,9 @@ public class CheckInOutUI
         setVisible(true);
     }
     
+    /**
+     *close the window
+     */
     public void closeWindow() {
         this.setVisible(false);
     }

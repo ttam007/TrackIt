@@ -11,13 +11,17 @@ public class NonNullableValueException
         extends SQLException {
 
     // <editor-fold defaultstate="expanded" desc="Constants">
-    private final String MSG_TEMPLATE_GENERIC = "Null value is not allowed.";
+    private static final String MSG_TEMPLATE_GENERIC = "Null value is not allowed.";
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Fields">
     private final String errorMessage;
 
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Constructors">
+
+    /**
+     *no null value
+     */
     public NonNullableValueException() {
         this.errorMessage = MSG_TEMPLATE_GENERIC;
     }
