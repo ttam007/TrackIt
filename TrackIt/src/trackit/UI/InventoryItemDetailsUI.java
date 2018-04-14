@@ -170,6 +170,6 @@ public class InventoryItemDetailsUI extends JPanel {
             //TODO:  display bal.getErrorMessage() and stay on this window.
         }
     }*/
-    
+
 
 }
