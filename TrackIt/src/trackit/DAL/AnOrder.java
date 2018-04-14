@@ -25,9 +25,8 @@ public class AnOrder
 
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Constructors">
-
     /**
-     *An order
+     * An order
      */
     public AnOrder() {
         this.primaryKey = SQLHelper.INVALID_PRIMARY_KEY;
@@ -35,7 +34,6 @@ public class AnOrder
 
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Setters & Getters">
-
     /**
      *
      * @param description

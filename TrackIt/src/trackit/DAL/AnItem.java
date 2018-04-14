@@ -37,7 +37,7 @@ public abstract class AnItem
     // <editor-fold defaultstate="expanded" desc="Constructors">
 
     /**
-     *establish an item
+     * establish an item
      */
     public AnItem() {
         this.primaryKey = SQLHelper.INVALID_PRIMARY_KEY;
@@ -45,7 +45,6 @@ public abstract class AnItem
 
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Setters & Getters">
-
     /**
      *
      * @param description

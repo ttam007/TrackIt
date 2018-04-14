@@ -18,9 +18,8 @@ public class ASupplier
 
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Constructors">
-
     /**
-     *A supplier entry
+     * A supplier entry
      */
     public ASupplier() {
         this.primaryKey = SQLHelper.INVALID_PRIMARY_KEY;
@@ -28,7 +27,6 @@ public class ASupplier
 
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Setters & Getters">
-
     /**
      *
      * @param nickname

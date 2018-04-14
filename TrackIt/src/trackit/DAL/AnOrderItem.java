@@ -78,11 +78,20 @@ public class AnOrderItem
         return this.quantityOrdered;
     }
 
+    /**
+     *
+     * @param quantityCheckedIn
+     * @throws SQLException
+     */
     public void setQuantityCheckedIn(Integer quantityCheckedIn)
             throws SQLException {
         this.quantityCheckedIn = HELPER.doNullCheck(SQLHelperOrderItem.COLUMN_QUANTITYCHECKEDIN, quantityCheckedIn);
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer getQuantityCheckedIn() {
         return this.quantityCheckedIn;
     }
