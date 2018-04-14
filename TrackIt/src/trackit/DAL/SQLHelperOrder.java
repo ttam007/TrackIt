@@ -13,7 +13,6 @@ public class SQLHelperOrder
         extends SQLHelper<AnOrder> {
 
     // <editor-fold defaultstate="collapsed" desc="Database Columns">
-
     /**
      *
      */
@@ -41,18 +40,13 @@ public class SQLHelperOrder
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
-<<<<<<< HEAD
     static {
-=======
-
-    /**
-     *sql help order for dbase
-     */
-    public SQLHelperOrder() {
->>>>>>> c325af60196bf4417f5a1e7e174602122f1e22a0
         COLUMN_PK = "orderId";
     }
 
+    /**
+     * sql help order for dbase
+     */
     public SQLHelperOrder() {
 
     }

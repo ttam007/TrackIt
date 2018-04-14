@@ -23,12 +23,12 @@ public class SQLHelperOrderItem
     /**
      *
      */
-    public final String COLUMN_QUANTITYORDERED = "quantityOrdered";
+    public static final String COLUMN_QUANTITYORDERED = "quantityOrdered";
 
-  /**
-  *
-  */
-   public static final String COLUMN_QUANTITYCHECKEDIN = "quantityCheckedIn";
+    /**
+     *
+     */
+    public static final String COLUMN_QUANTITYCHECKEDIN = "quantityCheckedIn";
     /**
      *
      */
@@ -39,19 +39,15 @@ public class SQLHelperOrderItem
      */
     public static final String COLUMN_EXTENDEDPRICE = "extendedPrice";
 
-    // </editor-fold>  // <editor-fold defaultstate="collapsed" desc="Constructors">
-<<<<<<< HEAD
+    // </editor-fold> 
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
     static {
-=======
-
-    /**
-     *order item for dbase
-     */
-    public SQLHelperOrderItem() {
->>>>>>> c325af60196bf4417f5a1e7e174602122f1e22a0
         COLUMN_PK = "orderItemId";
     }
 
+    /**
+     * order item for dbase
+     */
     public SQLHelperOrderItem() {
 
     }

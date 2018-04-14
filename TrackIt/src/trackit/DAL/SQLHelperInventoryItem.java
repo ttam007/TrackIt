@@ -13,7 +13,6 @@ public class SQLHelperInventoryItem
         extends SQLHelper<AnInventoryItem> {
 
     // <editor-fold defaultstate="collapsed" desc="Database Columns">
-
     /**
      *
      */
@@ -51,17 +50,13 @@ public class SQLHelperInventoryItem
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
-<<<<<<< HEAD
     static {
         SQLHelperInventoryItem.COLUMN_PK = "inventoryItemId";
     }
 
-=======
-
     /**
-     *database for inventory item
+     * database for inventory item
      */
->>>>>>> c325af60196bf4417f5a1e7e174602122f1e22a0
     public SQLHelperInventoryItem() {
 
     }
