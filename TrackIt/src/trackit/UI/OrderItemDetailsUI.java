@@ -52,7 +52,7 @@ public class OrderItemDetailsUI
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
 
     /**
-     *itnialize the items
+     *initialize the items
      */
     protected void initializeComponents() {
 
