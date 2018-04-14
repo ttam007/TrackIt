@@ -35,18 +35,13 @@ public class SQLHelperItem
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
-<<<<<<< HEAD
     static {
-=======
-
-    /**
-     *sql helper item
-     */
-    public SQLHelperItem() {
->>>>>>> c325af60196bf4417f5a1e7e174602122f1e22a0
         COLUMN_PK = "supplierId";
     }
 
+    /**
+     * sql helper item
+     */
     public SQLHelperItem() {
 
     }

@@ -22,9 +22,8 @@ public class AnOrderItem
 
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Constructors">
-
     /**
-     *order item
+     * order item
      */
     public AnOrderItem() {
         super();
@@ -42,7 +41,6 @@ public class AnOrderItem
     // </editor-fold>
 
     // <editor-fold defaultstate="expanded" desc="Setters & Getters">
-
     /**
      *
      * @param orderId
@@ -89,16 +87,12 @@ public class AnOrderItem
         return this.quantityCheckedIn;
     }
 
-<<<<<<< HEAD
-    public void setPrice(Double price)
-=======
-   /**
+    /**
      *
      * @param price
      * @throws SQLException
      */
-   public void setPrice(Double price)
->>>>>>> c325af60196bf4417f5a1e7e174602122f1e22a0
+    public void setPrice(Double price)
             throws SQLException {
         this.price = HELPER.doNullCheck(SQLHelperOrderItem.COLUMN_PRICE, price);
         calcExtendedPrice();
@@ -117,12 +111,10 @@ public class AnOrderItem
             throws SQLException {
         this.extendedPrice = HELPER.doNullCheck(HELPER.COLUMN_EXTENDEDPRICE, extendedPrice);
     }*/
-
     /**
      *
      * @return
      */
-
     public Double getExtendedPrice() {
         return this.extendedPrice;
     }
