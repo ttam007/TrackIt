@@ -69,7 +69,12 @@ public class MainMenuUI extends JFrame {
         });
         btnExit = new JButton("Exit");
         btnExit.addActionListener((ActionEvent e) -> {
-            System.exit(0);
+            int result = JOptionPane.showConfirmDialog(null,
+                    "Are you done with this program?", "Exit Program",
+                    JOptionPane.YES_NO_OPTION);
+            if (result == JOptionPane.YES_OPTION) {
+                System.exit(0);
+            }
         });
         pnlBottom.add(btnLogout);
         pnlBottom.add(btnExit);
@@ -100,7 +105,7 @@ public class MainMenuUI extends JFrame {
     /**
      * Handles all aspects of closing the program.
      */
-    private class CloseQuery extends WindowAdapter {
+    public class CloseQuery extends WindowAdapter {
 
         @Override
         public void windowClosing(WindowEvent e) {

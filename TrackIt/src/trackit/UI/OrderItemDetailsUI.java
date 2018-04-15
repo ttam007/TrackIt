@@ -5,10 +5,13 @@ import trackit.DAL.AnOrderItem;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import trackit.*;
@@ -156,5 +159,33 @@ public class OrderItemDetailsUI
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
 
+    public void close(){
+        this.dispose();
+    }
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="SubClasses">
+    /**
+     * Handles all aspects of closing the program.
+     */
+    private class CloseQuery extends WindowAdapter {
+
+        @Override
+        public void windowClosing(WindowEvent e) {
+            JFrame frame = (JFrame) e.getSource();
+            int result = JOptionPane.showConfirmDialog(frame,
+                    "Do you want to save?", "Close Query",
+                    JOptionPane.YES_NO_OPTION);
+            if (result == JOptionPane.YES_OPTION) {
+                //TODO
+                //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                close();
+            } else {
+                //TODO
+                close();
+            }
+        }
+    }
     // </editor-fold>
 }
