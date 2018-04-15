@@ -151,14 +151,9 @@ public class OrderItemsUI extends JFrame {
 
         btnCreate = new JButton("Create");
         pnlBtm.add(btnCreate);
-        JDialog itemInputForm = new JDialog();
-        itemInputForm.setSize(new Dimension(640, 400));
-        itemInputForm.setTitle("Add Inventory Item");
-        itemInputForm.setModal(true);
-        itemInputForm.setContentPane(new InventoryItemDetailsUI(true).getMainFrame().getContentPane());
         btnCreate.addActionListener((ActionEvent e) -> {
             //TODO
-            itemInputForm.setVisible(true);
+            inventory = new InventoryItemDetailsUI(true);
             
         });
         
@@ -203,7 +198,7 @@ public class OrderItemsUI extends JFrame {
         });
 
         add(pnlBtm, BorderLayout.SOUTH);
-
+        
         //Finalizations
         pack();
     }

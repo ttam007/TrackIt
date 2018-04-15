@@ -56,40 +56,23 @@ public class InventoryItemsUI extends JPanel {
      *
      * @return
      */
-    public JFrame getMainFrame() {
-        return this.mainFrame;
-    }
+    
 
     private void setButtons() {
 
         create = new JButton("Create");
         //itemCreate = new InventoryItemDetailsUI(true);
-        JDialog itemInputForm = new JDialog();
-        itemInputForm.setSize(new Dimension(640, 400));
-        itemInputForm.setTitle("Add Inventory Item");
-        itemInputForm.setModal(true);
-        itemInputForm.setContentPane(new InventoryItemDetailsUI(true).getMainFrame().getContentPane());/* */
-        create.addActionListener((event) -> itemInputForm.setVisible(true));
+        create.addActionListener((event) -> new InventoryItemDetailsUI(true));
 
         edit = new JButton("Edit");
         //itemEdit = new InventoryItemDetails(false);
-        JDialog itemEditForm = new JDialog();
-        itemEditForm.setSize(new Dimension(640, 400));
-        itemEditForm.setTitle("Edit Inventory Item");
-        itemEditForm.setModal(true);
-        itemEditForm.setContentPane(new InventoryItemDetailsUI(false).getMainFrame().getContentPane());/**/
-        edit.addActionListener((event) -> itemEditForm.setVisible(true));
+        edit.addActionListener((event) -> new InventoryItemDetailsUI(false));
 
         remove = new JButton("Remove");
         remove.addActionListener((event) -> System.out.println("REMOVE TEST"));
 
         check = new JButton("Check In/Out");
-        JDialog checkIn = new JDialog();
-        checkIn.setSize(new Dimension(640, 400));
-        checkIn.setTitle("Check In/Out Item");
-        checkIn.setModal(true);
-        checkIn.setContentPane(new CheckInOutUI().getContentPane());
-        check.addActionListener((event) -> checkIn.setVisible(true));
+        check.addActionListener((event) -> new CheckInOutUI());
 
     }
 

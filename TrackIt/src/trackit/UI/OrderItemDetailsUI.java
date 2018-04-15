@@ -80,11 +80,11 @@ public class OrderItemDetailsUI
         priceBx = Box.createHorizontalBox();
         lblQuantity = new JLabel("    Quantity:");
         priceBx.add(lblQuantity);
-        tfQuantity = new JTextField(20);
+        tfQuantity = new JTextField(7);
         priceBx.add(tfQuantity);
         lblPrice = new JLabel("         Price:");
         priceBx.add(lblPrice);
-        tfPrice = new JTextField(20);
+        tfPrice = new JTextField(7);
         priceBx.add(tfPrice);
 
         statusBx = Box.createHorizontalBox();
@@ -94,7 +94,7 @@ public class OrderItemDetailsUI
         statusBx.add(tfStatus);
         lblExtPrice = new JLabel("     Ext Price:");
         statusBx.add(lblExtPrice);
-        tfExtPrice = new JTextField(20);
+        tfExtPrice = new JTextField(7);
         statusBx.add(tfExtPrice);
 
         submitBx = Box.createHorizontalBox();

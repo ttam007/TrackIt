@@ -11,10 +11,11 @@ import java.awt.*;
  * UI Layer: Handles all aspects of the Create Inventory Item and Edit Inventory
  * Item dialog.
  */
-public class InventoryItemDetailsUI extends JPanel {
+public class InventoryItemDetailsUI extends JFrame {
 
     private final boolean isCreateMode;
-    private final JFrame mainFrame;
+    //private final JFrame mainFrame;
+    JPanel test;
     private JTextField skuField, quantityField, expDateField, unitField, statusField, itemNameField;
     private JLabel sku, statusLabel, unit, quantity, expDate, itemNameLabel;
     private JButton okInventoryItem, cancelInventoryItem;
@@ -27,8 +28,8 @@ public class InventoryItemDetailsUI extends JPanel {
     public InventoryItemDetailsUI(boolean useCreateMode) {
         // super("Inventory Item Details", new AnInventoryItem());
         this.isCreateMode = useCreateMode;
-        this.mainFrame = new JFrame();
-        this.initializeComponents();
+        //this.mainFrame = new JFrame();
+        initializeComponents();
 
     }
 
@@ -36,20 +37,27 @@ public class InventoryItemDetailsUI extends JPanel {
      *
      * @return
      */
-    public JFrame getMainFrame() {
+    /*public JFrame getMainFrame() {
         return this.mainFrame;
     }
-
+    */
     /**
      * Sets up all components used in this frame.
      */
-    protected void initializeComponents() {
+    private void initializeComponents() {
+        int frameWidth = 700;
+        int frameHeight = 500;
+        Dimension dimFrame = new Dimension(frameWidth, frameHeight);
+        this.setPreferredSize(dimFrame);
+        this.setResizable(false);
+        this.setVisible(true);
         gbc = new GridBagConstraints();
-        setLayout(new GridBagLayout());
+        this.setLayout(new GridBagLayout());
         gbc.insets = new Insets(2, 2, 10, 0);
         gbc.anchor = GridBagConstraints.LINE_START;
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
+        //test = new JPanel();
         // Item Name Label Initialized
         itemNameLabel = new JLabel("Item Name: ");
         gbc.gridx = 0;
@@ -137,6 +145,7 @@ public class InventoryItemDetailsUI extends JPanel {
         gbc.gridy = 4;
         gbc.gridwidth = 1;
         add(okInventoryItem, gbc);
+        okInventoryItem.addActionListener((event) -> this.dispose());
 
         //Cancel
         cancelInventoryItem = new JButton("Cancel");
@@ -144,13 +153,15 @@ public class InventoryItemDetailsUI extends JPanel {
         gbc.gridy = 4;
         gbc.gridwidth = 1;
         add(cancelInventoryItem, gbc);
+        cancelInventoryItem.addActionListener((event) -> this.dispose());
         //Test
 
-        mainFrame.add(this);
-        //mainFrame.setTitle("Inventory Items Detail");
-        mainFrame.pack();
+        //mainFrame.add(this);
+        //add(test);
+            //mainFrame.setTitle("Inventory Items Detail");
+            //mainFrame.pack();
         //mainFrame.setVisible(true);
-
+        pack();
     }
 
 }

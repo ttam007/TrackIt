@@ -22,7 +22,6 @@ public class MainMenuUI extends JFrame {
     OrdersUI ordersTab = new OrdersUI();
     InventoryItemsUI inventoryTab = new InventoryItemsUI();
     JTabbedPane tabpane;
-    JLabel title;
     JButton btnLogout, btnExit;
 
     // </editor-fold>
@@ -64,7 +63,7 @@ public class MainMenuUI extends JFrame {
         JPanel pnlBottom = new JPanel();
         btnLogout = new JButton("Log Out");
         btnLogout.addActionListener((ActionEvent e) -> {
-            setVisible(false);
+            this.dispose();
             LoginUI login = new LoginUI();
             login.display();
         });
