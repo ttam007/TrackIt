@@ -87,8 +87,8 @@ public class CheckInOutUI
         /**
          * corrected to address compile warning
          */
-        JComboBox<String> itemComboBox = new JComboBox<String>(itemStrings);
-        itemBx.add(itemComboBox);
+        JComboBox<String> itemComboBox1 = new JComboBox<>(itemStrings);
+        itemBx.add(itemComboBox1);
         qtyBx = Box.createHorizontalBox();
         qtyLabel = new JLabel("Quantity");
         qtyBx.add(qtyLabel);
