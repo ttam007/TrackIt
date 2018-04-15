@@ -7,7 +7,7 @@ import javax.swing.*;
 import trackit.DAL.AnOrder;
 
 /**
- * UI Layer: Handles all aspects of the AnOrder panel.
+ * UI Layer: Handles all aspects of the Order panel.
  *
  * @author Douglas
  */
@@ -15,7 +15,10 @@ public class OrdersUI
         extends JPanel {
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
-    private static final String WINDOW_NAME = "Orders";
+    public static final String TAB_NAME = "Orders";
+
+    // </editor-fold>
+    // <editor-fold defaultstate="expanded" desc="Private Fields">
     private final ArrayList<AnOrder> orders;
     private final AnOrder bll;
     // </editor-fold>
@@ -100,30 +103,10 @@ public class OrdersUI
      * Displays the frame.
      */
     public void display() {
-        System.out.println(String.format("Displaying %s...", WINDOW_NAME));
         setVisible(true);
     }
-
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="SubClasses">
-    /**
-     * Handles all aspects of closing the program.
-     */
-    private class CloseQuery extends WindowAdapter {
-
-        @Override
-        public void windowClosing(WindowEvent e) {
-            JFrame frame = (JFrame) e.getSource();
-            int result = JOptionPane.showConfirmDialog(frame,
-                    "Do you want to save?", "Close Query",
-                    JOptionPane.YES_NO_OPTION);
-            if (result == JOptionPane.YES_OPTION) {
-                //TODO
-                //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            } else {
-                //TODO
-            }
-        }
-    }
+   
     // </editor-fold>
 }
