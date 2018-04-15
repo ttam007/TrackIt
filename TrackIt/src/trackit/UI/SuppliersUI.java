@@ -1,10 +1,10 @@
 package trackit.UI;
 
-import trackit.DAL.ASupplier;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
+import trackit.DAL.ASupplier;
 
 /**
  * UI Layer: Handles all aspects of the Suppliers panel.
@@ -14,7 +14,7 @@ import javax.swing.*;
 public class SuppliersUI extends JPanel {
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
-    private static final String WINDOW_NAME = "Suppliers";
+    public static final String TAB_NAME = "Suppliers";
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
     private final ArrayList<ASupplier> suppliers = new ArrayList<>();
@@ -28,9 +28,8 @@ public class SuppliersUI extends JPanel {
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
-
     /**
-     *Supplier UI
+     * Supplier UI
      */
     public SuppliersUI() {
         setLayout(new BorderLayout());
@@ -84,16 +83,14 @@ public class SuppliersUI extends JPanel {
         add(btmSup, BorderLayout.SOUTH);
 
     }
-    // </editor-fold>
 
+    // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
     /**
      * Displays the frame.
      */
     public void display() {
-        System.out.println(String.format("Displaying %s...", WINDOW_NAME));
         setVisible(true);
     }
-
     // </editor-fold>
 }

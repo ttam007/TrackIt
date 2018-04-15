@@ -8,20 +8,20 @@ import trackit.DAL.AnInventoryItem;
 
 /**
  * UI Layer: Handles all aspects of the Check In/Out dialog.
+ *
  * @author Steven
  */
 public class CheckInOutUI
-        extends JFrame {
+        extends JDialog {
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
-    private static final String WINDOW_NAME = "Check In/Out";
-// </editor-fold>
+    public static final String WINDOW_NAME = "Check In/Out Item";
+    // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
 
     private final AnInventoryItem testItem = new AnInventoryItem();
 
     //private final InventoryItem testItem = new InventoryItem();
-
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     JPanel pnlMain;
@@ -30,16 +30,14 @@ public class CheckInOutUI
     JComboBox<String> itemComboBox;
     JLabel itemNameLabel, qtyLabel;
     JTextField qtyTextField;
-    String[] itemStrings = { "soap", "shampoo", "conditioner", "paper towels", "mouthwash" };
+    String[] itemStrings = {"soap", "shampoo", "conditioner", "paper towels", "mouthwash"};
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
-
     /**
-     *checkin out button
+     * Check In/Out UI
      */
     public CheckInOutUI() {
-    
         initializeComponents();
     }
     // </editor-fold>
@@ -50,23 +48,24 @@ public class CheckInOutUI
      */
     private void initializeComponents() {
         //Setup main frame
-        int frameWidth = 500;
-        int frameHeight = 250;
+        int frameWidth = 640;
+        int frameHeight = 400;
         Dimension dimFrame = new Dimension(frameWidth, frameHeight);
         this.setTitle(Utilities.getWindowCaption(WINDOW_NAME));
+        this.setSize(dimFrame);
         this.setPreferredSize(dimFrame);
+        this.setModal(true);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new CloseQuery());
-        this.setVisible(true);
 
         //Add all components here and set properties.
         Box buttonBx, itemBx, qtyBx, submitBx, combine;
-        
+
         pnlMain = new JPanel();
         add(pnlMain, BorderLayout.CENTER);
-        
+
         //create the Radio Buttons and add them to a group
         buttonBx = Box.createHorizontalBox();
         ButtonGroup checkGroup = new ButtonGroup();
@@ -77,7 +76,7 @@ public class CheckInOutUI
         inButton.setSelected(true);
         buttonBx.add(inButton);
         buttonBx.add(outButton);
-        
+
         //item selection
         itemBx = Box.createHorizontalBox();
         itemNameLabel = new JLabel("Item Name");
@@ -90,31 +89,31 @@ public class CheckInOutUI
         qtyTextField = new JTextField();
         qtyBx.add(qtyTextField);
         submitBx = Box.createHorizontalBox();
-        btnOK = new JButton("OK");
-        
 
+        btnOK = new JButton("OK");
+        submitBx.add(btnOK);
         this.btnOK.addActionListener((ActionEvent e) -> {
             //TODO
             /*if(!testItem.save()) {
                 
             }*/
-
+            this.dispose();
         });
-        
+
         btnCancel = new JButton("Cancel");
         submitBx.add(btnCancel);
-        
         this.btnCancel.addActionListener((ActionEvent e) -> {
             //TODO:  close window and return to prior window.
+            this.dispose();
         });
-        
+
         //add all of the boxes together
         combine = Box.createVerticalBox();
         combine.add(buttonBx);
         combine.add(itemBx);
         combine.add(qtyBx);
         combine.add(submitBx);
-        
+
         pnlMain.add(combine);
         //Finalizations
         pack();
@@ -130,13 +129,7 @@ public class CheckInOutUI
         System.out.println(String.format("Displaying %s...", WINDOW_NAME));
         setVisible(true);
     }
-    
-    /**
-     *close the window
-     */
-    public void closeWindow() {
-        this.setVisible(false);
-    }
+
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="SubClasses">
     /**
@@ -146,17 +139,18 @@ public class CheckInOutUI
 
         @Override
         public void windowClosing(WindowEvent e) {
-            JFrame frame = (JFrame) e.getSource();
+            JDialog frame = CheckInOutUI.this;
             int result = JOptionPane.showConfirmDialog(frame,
                     "Do you want to save?", "Close Query",
                     JOptionPane.YES_NO_OPTION);
             if (result == JOptionPane.YES_OPTION) {
                 //TODO
                 JOptionPane.showMessageDialog(null, "Successfully Updated");
-                closeWindow();
+                frame.dispose();
             } else {
                 //TODO
-                closeWindow();
+                JOptionPane.showMessageDialog(null, "Changed Cancelled");
+                frame.dispose();
             }
         }
     }

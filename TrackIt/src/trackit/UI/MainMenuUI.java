@@ -31,13 +31,12 @@ public class MainMenuUI extends JFrame {
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
-
     /**
-     *Main menu
+     * Main menu
      */
     public MainMenuUI() {
         initializeComponents();
-
+        
         refreshDashBoards();
     }
 
@@ -58,13 +57,13 @@ public class MainMenuUI extends JFrame {
 
         //Add all components here and set properties.
         tabpane = new JTabbedPane();
-        tabpane.add("Dashboard", dashboardTab);
-        tabpane.add("Inventory", inventoryTab);
-        tabpane.add("Orders", ordersTab);
-        tabpane.add("Suppliers", suppliersTab);
-
+        tabpane.add(DashboardUI.TAB_NAME, dashboardTab);
+        tabpane.add(InventoryItemsUI.TAB_NAME, inventoryTab);
+        tabpane.add(OrdersUI.TAB_NAME, ordersTab);
+        tabpane.add(SuppliersUI.TAB_NAME, suppliersTab);
+        
         add(tabpane, BorderLayout.CENTER);
-
+        
         JPanel pnlBottom = new JPanel();
         btnLogout = new JButton("Log Out");
         btnLogout.addActionListener((ActionEvent e) -> {
@@ -74,7 +73,8 @@ public class MainMenuUI extends JFrame {
         });
         btnExit = new JButton("Exit");
         btnExit.addActionListener((ActionEvent e) -> {
-            System.exit(0);
+            CloseQuery qry = new CloseQuery();
+            qry.windowClosing(null);
         });
         pnlBottom.add(btnLogout);
         pnlBottom.add(btnExit);
@@ -106,15 +106,16 @@ public class MainMenuUI extends JFrame {
      * Handles all aspects of closing the program.
      */
     private class CloseQuery extends WindowAdapter {
-
+        
         @Override
         public void windowClosing(WindowEvent e) {
-            JFrame frame = (JFrame) e.getSource();
+            JFrame frame = MainMenuUI.this;
             int result = JOptionPane.showConfirmDialog(frame,
                     "Are you done with this program?", "Exit Program",
                     JOptionPane.YES_NO_OPTION);
             if (result == JOptionPane.YES_OPTION) {
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                System.exit(0);
             }
         }
     }
