@@ -14,6 +14,9 @@ import trackit.DAL.ASupplier;
 public class SuppliersUI extends JPanel {
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
+    /**
+     *
+     */
     public static final String TAB_NAME = "Suppliers";
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
