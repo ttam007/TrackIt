@@ -54,10 +54,10 @@ public class MainMenuUI extends JFrame {
 
         //Add all components here and set properties.
         tabpane = new JTabbedPane();
-        tabpane.add("Dashboard", dashboardTab);
-        tabpane.add("Inventory", inventoryTab);
-        tabpane.add("Orders", ordersTab);
-        tabpane.add("Suppliers", suppliersTab);
+        tabpane.add(DashboardUI.TAB_NAME, dashboardTab);
+        tabpane.add(InventoryItemsUI.TAB_NAME, inventoryTab);
+        tabpane.add(OrdersUI.TAB_NAME, ordersTab);
+        tabpane.add(SuppliersUI.TAB_NAME, suppliersTab);
 
         add(tabpane, BorderLayout.CENTER);
 
@@ -70,7 +70,8 @@ public class MainMenuUI extends JFrame {
         });
         btnExit = new JButton("Exit");
         btnExit.addActionListener((ActionEvent e) -> {
-            System.exit(0);
+            CloseQuery qry = new CloseQuery();
+            qry.windowClosing(null);
         });
         pnlBottom.add(btnLogout);
         pnlBottom.add(btnExit);
@@ -84,7 +85,8 @@ public class MainMenuUI extends JFrame {
      * Refreshes the dashboards with current data.
      */
     private void refreshDashBoards() {
-        ArrayList<Dashboard> dashboards = bll.getDashboards();
+        ArrayList<Dashboard> dashboards;
+        dashboards = bll.getDashboards();
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
@@ -105,12 +107,13 @@ public class MainMenuUI extends JFrame {
 
         @Override
         public void windowClosing(WindowEvent e) {
-            JFrame frame = (JFrame) e.getSource();
+            JFrame frame = MainMenuUI.this;
             int result = JOptionPane.showConfirmDialog(frame,
                     "Are you done with this program?", "Exit Program",
                     JOptionPane.YES_NO_OPTION);
             if (result == JOptionPane.YES_OPTION) {
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                System.exit(0);
             }
         }
     }
