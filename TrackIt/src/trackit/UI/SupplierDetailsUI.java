@@ -4,28 +4,37 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import trackit.*;
+import trackit.DAL.ASupplier;
 
 /**
- * UI Layer: Handles all aspects of the Supplier Details's UI.
+ * UI Layer: Handles all aspects of the Create ASupplier and Edit ASupplier
+ * dialog.
+ *
+ * @author Douglas
  */
 public class SupplierDetailsUI
         extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
     private static final String WINDOW_NAME = "Supplier Details";
-    // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Private Fields">
-    private final Supplier bal = new Supplier();
+    private final ASupplier bll;
+    private final boolean isCreateMode;
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
-    JPanel pnlMain = new JPanel();
-    JButton btnOK = new JButton();
-    JButton btnCancel = new JButton();
-    JButton btnDelete = new JButton();
+    JPanel pnlCenter;
+    JLabel lblName, lblAddress;
+    JTextField tfName, tfAddress;
+    JButton btnOK, btnCancel;
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
-    public SupplierDetailsUI() {
+    /**
+     *
+     * @param useCreateMode
+     */
+    public SupplierDetailsUI(boolean useCreateMode) {
+        this.bll = new ASupplier();
+        this.isCreateMode = useCreateMode;
         initializeComponents();
     }
     // </editor-fold>
@@ -36,8 +45,8 @@ public class SupplierDetailsUI
      */
     private void initializeComponents() {
         //Setup main frame
-        int frameWidth = 1200;
-        int frameHeight = 600;
+        int frameWidth = 500;
+        int frameHeight = 110;
         Dimension dimFrame = new Dimension(frameWidth, frameHeight);
         this.setTitle(Utilities.getWindowCaption(WINDOW_NAME));
         this.setPreferredSize(dimFrame);
@@ -45,27 +54,51 @@ public class SupplierDetailsUI
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new CloseQuery());
+        this.setVisible(true);
+        this.getRootPane().setDefaultButton(btnOK);
 
         //Add all components here and set properties.
-        this.add(pnlMain);
-        this.add(this.btnOK);
+        Box nameBx, addressBx, submitBx, combine;
+
+        pnlCenter = new JPanel();
+        add(pnlCenter, BorderLayout.CENTER);
+
+        nameBx = Box.createHorizontalBox();
+        lblName = new JLabel("Supplier Name:   ");
+        nameBx.add(lblName);
+        tfName = new JTextField(20);
+        nameBx.add(tfName);
+        addressBx = Box.createHorizontalBox();
+        lblAddress = new JLabel("Website Address:");
+        addressBx.add(lblAddress);
+        tfAddress = new JTextField(20);
+        addressBx.add(tfAddress);
+        submitBx = Box.createHorizontalBox();
+        btnOK = new JButton("OK");
+        submitBx.add(btnOK);
+
         this.btnOK.addActionListener((ActionEvent e) -> {
-            if (!bal.save()) {
+            this.dispose();
+
+            /* if (!bll.save()) {
                 //TODO:  display bal.getErrorMessage();
-            }
+
+            }*/
         });
-        this.add(this.btnCancel);
+
+        btnCancel = new JButton("Cancel");
+        submitBx.add(btnCancel);
+
         this.btnCancel.addActionListener((ActionEvent e) -> {
+            this.dispose();
             //TODO:  close window and return to prior window.
         });
-        this.add(this.btnDelete);
-        this.btnDelete.addActionListener((ActionEvent e) -> {
-            if (bal.remove()) {
-                //TODO:  close window and return to prior window.
-            } else {
-                //TODO:  display bal.getErrorMessage() and stay on this window.
-            }
-        });
+        combine = Box.createVerticalBox();
+        combine.add(nameBx);
+        combine.add(addressBx);
+        combine.add(submitBx);
+
+        pnlCenter.add(combine);
 
         //Finalizations
         pack();
@@ -77,8 +110,15 @@ public class SupplierDetailsUI
      * Displays the frame.
      */
     public void display() {
-        System.out.println(String.format("Displaying {0}...", WINDOW_NAME));
+        System.out.println(String.format("Displaying %s...", WINDOW_NAME));
         setVisible(true);
+    }
+
+    /**
+     * close window
+     */
+    public void closeWindow() {
+        this.setVisible(false);
     }
 
     // </editor-fold>
@@ -96,9 +136,11 @@ public class SupplierDetailsUI
                     JOptionPane.YES_NO_OPTION);
             if (result == JOptionPane.YES_OPTION) {
                 //TODO
-                //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                JOptionPane.showMessageDialog(null, "Successfully Updated");
+                closeWindow();
             } else {
                 //TODO
+                closeWindow();
             }
         }
     }
