@@ -9,11 +9,14 @@ import javax.swing.*;
 public class DashboardUI extends JPanel {
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
+    /**
+     *
+     */
     public static final String TAB_NAME = "Dashboard";
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Fields">
 
-   private JTextArea dashboardInfo;
+    private JTextArea dashboardInfo;
     private JFrame mainFrame;
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -25,6 +28,7 @@ public class DashboardUI extends JPanel {
         initializeComponents();
         this.setVisible(true);
     }
+
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
     private void initializeComponents() {

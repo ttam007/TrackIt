@@ -15,6 +15,9 @@ public class CheckInOutUI
         extends JDialog {
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
+    /**
+     *
+     */
     public static final String WINDOW_NAME = "Check In/Out Item";
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
@@ -84,7 +87,7 @@ public class CheckInOutUI
         /**
          * corrected to address compile warning
          */
-        JComboBox <String> itemComboBox = new JComboBox <String>(itemStrings);
+        JComboBox<String> itemComboBox = new JComboBox<String>(itemStrings);
         itemBx.add(itemComboBox);
         qtyBx = Box.createHorizontalBox();
         qtyLabel = new JLabel("Quantity");
@@ -132,7 +135,7 @@ public class CheckInOutUI
         System.out.println(String.format("Displaying %s...", WINDOW_NAME));
         setVisible(true);
     }
-      
+
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="SubClasses">
     /**
