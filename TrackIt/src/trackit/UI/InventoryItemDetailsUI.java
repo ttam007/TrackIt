@@ -1,20 +1,21 @@
 package trackit.UI;
 
-import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import trackit.*;
 
-//getWindowCaption
-//MainMenuUI is using this.setTitle(WINDOW_NAME);
-//  now instead of the original code
-//This is the correct code: this.setTitle(Utilities.getWindowCaption(WINDOW_NAME));
 /**
  * UI Layer: Handles all aspects of the Create Inventory Item and Edit Inventory
  * Item dialog.
  */
-public class InventoryItemDetailsUI extends JPanel {
+public class InventoryItemDetailsUI
+        extends JDialog {
 
+    // <editor-fold defaultstate="collapsed" desc="Constants">
+    public static final String WINDOW_NAME = "Inventory Item Details";
+    // </editor-fold>
     private final boolean isCreateMode;
-    private final JFrame mainFrame;
     private JTextField skuField, quantityField, expDateField, unitField, statusField, itemNameField;
     private JLabel sku, statusLabel, unit, quantity, expDate, itemNameLabel;
     private JButton okInventoryItem, cancelInventoryItem;
@@ -27,23 +28,26 @@ public class InventoryItemDetailsUI extends JPanel {
     public InventoryItemDetailsUI(boolean useCreateMode) {
         // super("Inventory Item Details", new AnInventoryItem());
         this.isCreateMode = useCreateMode;
-        this.mainFrame = new JFrame();
         this.initializeComponents();
-
-    }
-
-    /**
-     *
-     * @return
-     */
-    public JFrame getMainFrame() {
-        return this.mainFrame;
-    }
+   }
 
     /**
      * Sets up all components used in this frame.
      */
-    protected void initializeComponents() {
+    private void initializeComponents() {
+        //Setup main frame
+        int frameWidth = 640;
+        int frameHeight = 400;
+        Dimension dimFrame = new Dimension(frameWidth, frameHeight);
+        this.setTitle(Utilities.getWindowCaption(WINDOW_NAME));
+        this.setSize(dimFrame);
+        this.setPreferredSize(dimFrame);
+        this.setModal(true);
+        this.setLocationRelativeTo(null);
+        this.setResizable(false);
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        this.addWindowListener(new CloseQuery());
+
         gbc = new GridBagConstraints();
         setLayout(new GridBagLayout());
         gbc.insets = new Insets(2, 2, 10, 0);
@@ -146,11 +150,39 @@ public class InventoryItemDetailsUI extends JPanel {
         add(cancelInventoryItem, gbc);
         //Test
 
-        mainFrame.add(this);
-        //mainFrame.setTitle("Inventory Items Detail");
-        mainFrame.pack();
-        //mainFrame.setVisible(true);
-
+        this.pack();
     }
 
+    /**
+     * Displays the frame.
+     */
+    public void display() {
+        System.out.println(String.format("Displaying %s...", WINDOW_NAME));
+        setVisible(true);
+    }
+
+    // <editor-fold defaultstate="collapsed" desc="SubClasses">
+    /**
+     * Handles all aspects of closing the program.
+     */
+    private class CloseQuery extends WindowAdapter {
+
+        @Override
+        public void windowClosing(WindowEvent e) {
+            JDialog frame = InventoryItemDetailsUI.this;
+            int result = JOptionPane.showConfirmDialog(frame,
+                    "Do you want to save?", "Close Query",
+                    JOptionPane.YES_NO_OPTION);
+            if (result == JOptionPane.YES_OPTION) {
+                //TODO
+                JOptionPane.showMessageDialog(null, "Successfully Updated");
+                frame.dispose();
+            } else {
+                //TODO
+                JOptionPane.showMessageDialog(null, "Changed Cancelled");
+                frame.dispose();
+            }
+        }
+    }
+    // </editor-fold>
 }
