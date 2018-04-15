@@ -7,6 +7,7 @@
 package trackit.UI;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.util.*;
 import javax.swing.*;
 import trackit.DAL.AnInventoryItem;
@@ -29,7 +30,7 @@ public class InventoryItemsUI
     private JTable mainTable;
     private InventoryItemDetailsUI itemCreate, itemEdit;
     private final ArrayList<String> tableHeaders = new ArrayList<>(Arrays.asList("Item Name", "Qty", "Unit", "SKU", "Expiration", "Status"));
-    private JButton create, edit, remove, check;
+    private JButton btnCreate, btnEdit, btnRemove, btnCheckInOut;
     private final Object[][] data;
     private JScrollPane sp;
 
@@ -55,23 +56,23 @@ public class InventoryItemsUI
 
     private void setButtons() {
 
-        create = new JButton("Create");
-        create.addActionListener((event) -> {
+        btnCreate = new JButton("Create");
+        btnCreate.addActionListener((ActionEvent e) -> {
             InventoryItemDetailsUI iidCreate = new InventoryItemDetailsUI(true);
             iidCreate.display();
         });
 
-        edit = new JButton("Edit");
-        edit.addActionListener((event) -> {
+        btnEdit = new JButton("Edit");
+        btnEdit.addActionListener((ActionEvent e) -> {
             InventoryItemDetailsUI iidEdit = new InventoryItemDetailsUI(false);
             iidEdit.display();
         });
 
-        remove = new JButton("Remove");
-        remove.addActionListener((event) -> System.out.println("REMOVE TEST"));
+        btnRemove = new JButton("Remove");
+        btnRemove.addActionListener((ActionEvent e) -> System.out.println("REMOVE TEST"));
 
-        check = new JButton("Check In/Out");
-        check.addActionListener((event) -> {
+        btnCheckInOut = new JButton("Check In/Out");
+        btnCheckInOut.addActionListener((ActionEvent e) -> {
             CheckInOutUI checkIn = new CheckInOutUI();
             checkIn.display();
         });
@@ -101,10 +102,10 @@ public class InventoryItemsUI
 
         JPanel buttonHolder = new JPanel(new GridLayout(0, 8, 2, 0));
 
-        buttonHolder.add(create);
-        buttonHolder.add(edit);
-        buttonHolder.add(remove);
-        buttonHolder.add(check);
+        buttonHolder.add(btnCreate);
+        buttonHolder.add(btnEdit);
+        buttonHolder.add(btnRemove);
+        buttonHolder.add(btnCheckInOut);
         add(buttonHolder, BorderLayout.PAGE_END);
     }
     // </editor-fold>
