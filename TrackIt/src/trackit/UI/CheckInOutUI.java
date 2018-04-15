@@ -60,6 +60,7 @@ public class CheckInOutUI
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new CloseQuery());
         this.setVisible(true);
+        this.getRootPane().setDefaultButton(btnOK);
 
         //Add all components here and set properties.
         Box buttonBx, itemBx, qtyBx, submitBx, combine;
@@ -93,7 +94,7 @@ public class CheckInOutUI
         qtyBx.add(qtyTextField);
         submitBx = Box.createHorizontalBox();
         btnOK = new JButton("OK");
-
+        submitBx.add(btnOK);
         this.btnOK.addActionListener((ActionEvent e) -> {
             //TODO
             /*if(!testItem.save()) {
@@ -104,12 +105,13 @@ public class CheckInOutUI
 
         btnCancel = new JButton("Cancel");
         submitBx.add(btnCancel);
-        this.getRootPane().setDefaultButton(btnOK);
+        
 
         this.btnCancel.addActionListener((ActionEvent e) -> {
             //TODO:  close window and return to prior window.
         });
-
+        
+        
         //add all of the boxes together
         combine = Box.createVerticalBox();
         combine.add(buttonBx);
