@@ -7,7 +7,7 @@ import trackit.DAL.*;
 /**
  * Tests the DAL Layer.
  *
- * @author Bond
+ * @author Bond, Steven
  */
 public class DALTestDriver {
 
@@ -143,6 +143,30 @@ public class DALTestDriver {
                     anOrder.getDateOrdered(), anOrder.getDateExpected()));
         }
     }
+    
+    private void printItem(AnItem anItem) {
+        if (anItem == null) {
+            System.out.println("Order is null.");
+        } else {
+            System.out.println(String.format("Order:  PK = %d; Description = %s; "
+                    + "SKU = %s; Size Unit = %s; Item Status = %s;", 
+                    anItem.getPrimaryKey(), anItem.getDescription(), 
+                    anItem.getSku(), anItem.getSizeUnit(), 
+                    anItem.getItemStatus()));
+        }
+    }
+    
+    private void printInventoryItem(AnInventoryItem anInventoryItem) {
+        if (anInventoryItem == null) {
+            System.out.println("Order is null.");
+        } else {
+            System.out.println(String.format("Order:  PK = %d; Description = %s; "
+                    + "SKU = %s; Size Unit = %s; Item Status = %s;", 
+                    anInventoryItem.getPrimaryKey(), anInventoryItem.getDescription(), 
+                    anInventoryItem.getSku(), anInventoryItem.getSizeUnit(), 
+                    anInventoryItem.getItemStatus()));
+        }
+    }
     /**
      * Tests all CRUD operations for the ASupplier's sprocs.
      */
@@ -193,6 +217,9 @@ public class DALTestDriver {
         }
     }
     
+    /**
+     * Tests all CRUD operations for the AnOrderItem's sprocs.
+     */
     public void testSQLHelperOrderItem() {
         System.out.println("\n\ntestSQLHelperOrderItem");
 
@@ -211,7 +238,6 @@ public class DALTestDriver {
             printOrderItem(anOrderItem);
 
             System.out.println("\nInsert");
-            //Must delete "Etsy" from the database before testing this.
             AnOrderItem anOrderItemInsert = new AnOrderItem();
             anOrderItemInsert.setOrderId(46532);
             anOrderItemInsert.setQuantityOrdered(3);
@@ -243,6 +269,9 @@ public class DALTestDriver {
         }
     }
     
+    /**
+     * Tests all CRUD operations for the AnOrder's sprocs.
+     */
     public void testSQLHelperOrder() {
         System.out.println("\n\ntestSQLHelperOrder");
 
@@ -261,13 +290,10 @@ public class DALTestDriver {
             printOrder(anOrder);
 
             System.out.println("\nInsert");
-            //Must delete "Etsy" from the database before testing this.
             AnOrder anOrderInsert = new AnOrder();
             anOrderInsert.setDescription("Cleaning Supplies");
             anOrderInsert.setOrderedFrom(2);
             anOrderInsert.setOrderStatus("In Progress");
-            anOrderInsert.setDateOrdered();
-            anOrderInsert.setDateExpected()
             pk = helper.insert(anOrderInsert);
             anOrder = helper.selectOne(pk);
             printOrder(anOrder);
@@ -276,10 +302,8 @@ public class DALTestDriver {
             AnOrder anOrderUpdate = new AnOrder();
             anOrderUpdate.setPrimaryKey(pk);
             anOrderUpdate.setDescription("Cleaning Supplies");
-            anOrderUpdate.setOrderedFrom("1");
+            anOrderUpdate.setOrderedFrom(1);
             anOrderUpdate.setOrderStatus("Shipped");
-            anOrderUpdate.setDateOrdered(dateOrdered);
-            anOrderUpdate.setDateExpected(dateExpected);
             helper.update(anOrderUpdate);
             anOrder = helper.selectOne(anOrderUpdate.getPrimaryKey());
             printOrder(anOrder);
@@ -289,6 +313,112 @@ public class DALTestDriver {
             helper.delete(pk);
             anOrder = helper.selectOne(pk);
             printOrder(anOrder);
+        } catch (SQLException exSQL) {
+            System.out.println("SQL error = " + exSQL.getLocalizedMessage());
+        } catch (Exception ex) {
+            System.out.println("Generic error = " + ex.getLocalizedMessage());
+        }
+    }
+    
+    /**
+     * Tests all CRUD operations for the AnItem's sprocs.
+     */
+    public void testSQLHelperItem() {
+        System.out.println("\n\ntestSQLHelper");
+
+        SQLHelperItem helper = new SQLHelperItem();
+        AnItem anItem;
+        Integer pk;
+        try {
+            System.out.println("\nSelectAll");
+            ArrayList<AnItem> items = helper.selectAll();
+            for (AnItem anItem : items) {
+                printItem(anItem);
+            }
+
+            System.out.println("\nSelectOne");
+            anItem = helper.selectOne(2);
+            printItem(anItem);
+
+            System.out.println("\nInsert");
+            anItem anItemInsert = new anItem();
+            anItemInsert.setOrderId(46532);
+            anItemInsert.setQuantityOrdered(3);
+            anItemInsert.setQuantityCheckedIn(2);
+            anItemInsert.setPrice(2.39);
+            pk = helper.insert(anItemInsert);
+            anItem = helper.selectOne(pk);
+            printItem(anItem);
+
+            System.out.println("\nUpdate");
+            anItem anItemUpdate = new anItem();
+            anItemUpdate.setPrimaryKey(pk);
+            anItemUpdate.setOrderId(46532);
+            anItemUpdate.setQuantityCheckedIn(3);
+            anItemUpdate.setPrice(2.49);
+            helper.update(anItemUpdate);
+            anItem = helper.selectOne(anItemUpdate.getPrimaryKey());
+            printItem(anItem);
+
+            System.out.println("\nDelete");
+            pk = 2;
+            helper.delete(pk);
+            anItem = helper.selectOne(pk);
+            printItem(AnItem);
+        } catch (SQLException exSQL) {
+            System.out.println("SQL error = " + exSQL.getLocalizedMessage());
+        } catch (Exception ex) {
+            System.out.println("Generic error = " + ex.getLocalizedMessage());
+        }
+    }
+    
+    /**
+     * Tests all CRUD operations for the AnInventoryItem's sprocs.
+     */
+    public void testSQLHelperInventoryItem() {
+        System.out.println("\n\ntestSQLHelperInventoryItem");
+
+        SQLHelperInventoryItem helper = new SQLHelperInventoryItem();
+        AnInventoryItem anInventoryItem;
+        Integer pk;
+        try {
+            System.out.println("\nSelectAll");
+            ArrayList<AnInventoryItem> inventoryItem = helper.selectAll();
+            for (AnInventoryItem anItem : inventoryItem) {
+                printInventoryItem(anItem);
+            }
+
+            System.out.println("\nSelectOne");
+            anInventoryItem = helper.selectOne(2);
+            printInventoryItem(anInventoryItem);
+
+            System.out.println("\nInsert");
+            //Must delete "Etsy" from the database before testing this.
+            AnInventoryItem anInventoryItemInsert = new AnInventoryItem();
+            anInventoryItemInsert.setDescription("toothpaste");
+            anInventoryItemInsert.setSku("4352");
+            anInventoryItemInsert.setSizeUnit("tube");
+            anInventoryItemInsert.setItemStatus("in stock");
+            pk = helper.insert(anInventoryItemInsert);
+            anInventoryItem = helper.selectOne(pk);
+            printInventoryItem(anInventoryItem);
+
+            System.out.println("\nUpdate");
+            AnInventoryItem anInventoryItemUpdate = new AnInventoryItem();
+            anInventoryItemUpdate.setPrimaryKey(pk);
+            anInventoryItemUpdate.setDescription("toothpaste");
+            anInventoryItemUpdate.setSku("4352");
+            anInventoryItemUpdate.setSizeUnit("box");
+            anInventoryItemUpdate.setItemStatus("not in use");
+            helper.update(anInventoryItemUpdate);
+            anInventoryItem = helper.selectOne(anInventoryItemUpdate.getPrimaryKey());
+            printInventoryItem(anInventoryItem);
+
+            System.out.println("\nDelete");
+            pk = 2;
+            helper.delete(pk);
+            anInventoryItem = helper.selectOne(pk);
+            printInventoryItem(anInventoryItem);
         } catch (SQLException exSQL) {
             System.out.println("SQL error = " + exSQL.getLocalizedMessage());
         } catch (Exception ex) {
