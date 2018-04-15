@@ -15,6 +15,9 @@ public class OrdersUI
         extends JPanel {
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
+    /**
+     *
+     */
     public static final String TAB_NAME = "Orders";
 
     // </editor-fold>
@@ -107,6 +110,6 @@ public class OrdersUI
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="SubClasses">
-   
+
     // </editor-fold>
 }

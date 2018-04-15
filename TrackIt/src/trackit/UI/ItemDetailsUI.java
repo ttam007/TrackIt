@@ -78,7 +78,6 @@ public abstract class ItemDetailsUI<T extends AnItem>
         this.addWindowListener(new CloseQuery());
 
         //Add all components here and set properties.
-        
     }
 
     /**

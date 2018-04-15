@@ -15,6 +15,9 @@ public class InventoryItemDetailsUI
         extends JDialog {
 
     // <editor-fold defaultstate="collapsed" desc="Constants">
+    /**
+     *
+     */
     public static final String WINDOW_NAME = "Inventory Item Details";
     // </editor-fold>
     private final boolean isCreateMode;

@@ -33,7 +33,7 @@ public class MainMenuUI extends JFrame {
     public MainMenuUI() {
         this.bll = new MainMenu();
         initializeComponents();
-        
+
         refreshDashBoards();
     }
 
@@ -58,9 +58,9 @@ public class MainMenuUI extends JFrame {
         tabpane.add(InventoryItemsUI.TAB_NAME, inventoryTab);
         tabpane.add(OrdersUI.TAB_NAME, ordersTab);
         tabpane.add(SuppliersUI.TAB_NAME, suppliersTab);
-        
+
         add(tabpane, BorderLayout.CENTER);
-        
+
         JPanel pnlBottom = new JPanel();
         btnLogout = new JButton("Log Out");
         btnLogout.addActionListener((ActionEvent e) -> {
@@ -85,7 +85,8 @@ public class MainMenuUI extends JFrame {
      * Refreshes the dashboards with current data.
      */
     private void refreshDashBoards() {
-        ArrayList<Dashboard> dashboards = bll.getDashboards();
+        ArrayList<Dashboard> dashboards;
+        dashboards = bll.getDashboards();
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
@@ -103,7 +104,7 @@ public class MainMenuUI extends JFrame {
      * Handles all aspects of closing the program.
      */
     private class CloseQuery extends WindowAdapter {
-        
+
         @Override
         public void windowClosing(WindowEvent e) {
             JFrame frame = MainMenuUI.this;
