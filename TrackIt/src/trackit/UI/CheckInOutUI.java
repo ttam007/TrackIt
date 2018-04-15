@@ -9,7 +9,7 @@ import trackit.DAL.AnInventoryItem;
 /**
  * UI Layer: Handles all aspects of the Check In/Out dialog.
  *
- * @author Steven
+ * @author Steven, Bond
  */
 public class CheckInOutUI
         extends JDialog {
@@ -19,7 +19,7 @@ public class CheckInOutUI
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
 
-    private final AnInventoryItem testItem;
+    private final AnInventoryItem testItem = null;
 
     //private final InventoryItem testItem = new InventoryItem();
     // </editor-fold>

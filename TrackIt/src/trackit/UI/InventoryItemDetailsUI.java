@@ -8,6 +8,8 @@ import trackit.*;
 /**
  * UI Layer: Handles all aspects of the Create Inventory Item and Edit Inventory
  * Item dialog.
+ *
+ * @author Bond
  */
 public class InventoryItemDetailsUI
         extends JDialog {
@@ -18,7 +20,7 @@ public class InventoryItemDetailsUI
     private final boolean isCreateMode;
     private JTextField skuField, quantityField, expDateField, unitField, statusField, itemNameField;
     private JLabel sku, statusLabel, unit, quantity, expDate, itemNameLabel;
-    private JButton okInventoryItem, cancelInventoryItem;
+    private JButton btnOK, btnCancel;
     private GridBagConstraints gbc;
 
     /**
@@ -29,7 +31,7 @@ public class InventoryItemDetailsUI
         // super("Inventory Item Details", new AnInventoryItem());
         this.isCreateMode = useCreateMode;
         this.initializeComponents();
-   }
+    }
 
     /**
      * Sets up all components used in this frame.
@@ -136,18 +138,26 @@ public class InventoryItemDetailsUI
         add(statusField, gbc);
 
         // Init Ok Button
-        okInventoryItem = new JButton("Ok");
+        btnOK = new JButton("Ok");
         gbc.gridx = 3;
         gbc.gridy = 4;
         gbc.gridwidth = 1;
-        add(okInventoryItem, gbc);
+        add(btnOK, gbc);
+        btnOK.addActionListener((ActionEvent e) -> {
+            //TODO
+            this.dispose();
+        });
 
         //Cancel
-        cancelInventoryItem = new JButton("Cancel");
+        btnCancel = new JButton("Cancel");
         gbc.gridx = 4;
         gbc.gridy = 4;
         gbc.gridwidth = 1;
-        add(cancelInventoryItem, gbc);
+        add(btnCancel, gbc);
+        btnCancel.addActionListener((ActionEvent e) -> {
+            //TODO
+            this.dispose();
+        });
         //Test
 
         this.pack();
