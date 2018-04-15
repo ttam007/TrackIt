@@ -32,9 +32,8 @@ public abstract class SQLHelper<T>
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
-
     /**
-     *sql helper for dbase
+     * sql helper for dbase
      */
     protected SQLHelper() {
     }

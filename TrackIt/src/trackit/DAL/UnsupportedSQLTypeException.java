@@ -17,9 +17,8 @@ public class UnsupportedSQLTypeException
 
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Constructors">
-
     /**
-     *exception
+     * exception
      */
     public UnsupportedSQLTypeException() {
         this.errorMessage = MSG_TEMPLATE_GENERIC;

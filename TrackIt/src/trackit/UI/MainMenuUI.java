@@ -15,11 +15,7 @@ public class MainMenuUI extends JFrame {
 
     // <editor-fold defaultstate="collapsed" desc="Constants">
     private static final String WINDOW_NAME = "Main Menu";
-    // </editor-fold>
-    // <editor-fold defaultstate="expanded" desc="Private Fields">
-    private final MainMenu bll = new MainMenu();
-    // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Components">
+    private final MainMenu bll;
 
     SuppliersUI suppliersTab = new SuppliersUI();
     DashboardUI dashboardTab = new DashboardUI();
@@ -35,6 +31,7 @@ public class MainMenuUI extends JFrame {
      * Main menu
      */
     public MainMenuUI() {
+        this.bll = new MainMenu();
         initializeComponents();
         
         refreshDashBoards();

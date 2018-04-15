@@ -10,7 +10,8 @@ import trackit.DAL.AnOrder;
  */
 public class Orders
         extends GridClass<AnOrder> {
-  /**
+
+    /**
      * Loads all rows from the database to the grid.
      *
      * @return True = The rows were successfully loaded; False = There was an

@@ -8,7 +8,7 @@ import trackit.DAL.ASupplier;
 
 /**
  * UI Layer: Handles all aspects of the Create ASupplier and Edit ASupplier
- dialog.
+ * dialog.
  *
  * @author Douglas
  */
@@ -17,9 +17,7 @@ public class SupplierDetailsUI
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
     private static final String WINDOW_NAME = "Supplier Details";
-    // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Private Fields">
-    private final ASupplier bll = new ASupplier();
+    private final ASupplier bll;
     private final boolean isCreateMode;
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
@@ -30,12 +28,12 @@ public class SupplierDetailsUI
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
-
     /**
      *
      * @param useCreateMode
      */
     public SupplierDetailsUI(boolean useCreateMode) {
+        this.bll = new ASupplier();
         this.isCreateMode = useCreateMode;
         initializeComponents();
     }
@@ -81,7 +79,7 @@ public class SupplierDetailsUI
 
         this.btnOK.addActionListener((ActionEvent e) -> {
             this.dispose();
-           
+
             /* if (!bll.save()) {
                 //TODO:  display bal.getErrorMessage();
 
@@ -117,7 +115,7 @@ public class SupplierDetailsUI
     }
 
     /**
-     *close window
+     * close window
      */
     public void closeWindow() {
         this.setVisible(false);

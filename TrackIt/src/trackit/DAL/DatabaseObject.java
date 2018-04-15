@@ -8,7 +8,6 @@ package trackit.DAL;
 public abstract class DatabaseObject {
 
     // <editor-fold defaultstate="expanded" desc="Protected Fields">
-
     /**
      *
      */

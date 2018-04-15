@@ -6,7 +6,7 @@ import trackit.*;
 
 /**
  * DAL Layer: Handles all aspects of a single InventoryItem.
- * 
+ *
  * @author Bond
  */
 public class AnInventoryItem
@@ -20,7 +20,7 @@ public class AnInventoryItem
     // <editor-fold defaultstate="expanded" desc="Constructors">
 
     /**
-     *add an inventory item
+     * add an inventory item
      */
     public AnInventoryItem() {
         super();

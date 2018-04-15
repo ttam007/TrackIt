@@ -19,7 +19,7 @@ public class CheckInOutUI
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
 
-    private final AnInventoryItem testItem = new AnInventoryItem();
+    private final AnInventoryItem testItem;
 
     //private final InventoryItem testItem = new InventoryItem();
     // </editor-fold>
@@ -59,6 +59,7 @@ public class CheckInOutUI
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new CloseQuery());
+        this.getRootPane().setDefaultButton(btnOK);
 
         //Add all components here and set properties.
         Box buttonBx, itemBx, qtyBx, submitBx, combine;
@@ -77,11 +78,13 @@ public class CheckInOutUI
         buttonBx.add(inButton);
         buttonBx.add(outButton);
 
-        //item selection
         itemBx = Box.createHorizontalBox();
         itemNameLabel = new JLabel("Item Name");
         itemBx.add(itemNameLabel);
-        itemComboBox = new JComboBox(itemStrings);
+        /**
+         * corrected to address compile warning
+         */
+        JComboBox <String> itemComboBox = new JComboBox <String>(itemStrings);
         itemBx.add(itemComboBox);
         qtyBx = Box.createHorizontalBox();
         qtyLabel = new JLabel("Quantity");
@@ -129,7 +132,7 @@ public class CheckInOutUI
         System.out.println(String.format("Displaying %s...", WINDOW_NAME));
         setVisible(true);
     }
-
+      
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="SubClasses">
     /**

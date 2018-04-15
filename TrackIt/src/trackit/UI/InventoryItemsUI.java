@@ -1,4 +1,4 @@
-/**
+    /**
  * @author      Brian Diaz
  * @date 04/10/2018
  * @description handles the creation of the Inventory Item Screen
@@ -21,7 +21,7 @@ public class InventoryItemsUI extends JPanel {
     public static final String TAB_NAME = "Inventory";
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
-    private final ArrayList<AnInventoryItem> inventoryItems = new ArrayList<>();
+    private final ArrayList<AnInventoryItem> inventoryItems;
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
@@ -31,7 +31,6 @@ public class InventoryItemsUI extends JPanel {
     private JButton create, edit, remove, check;
     private final Object[][] data;
     private JScrollPane sp;
-    private JFrame mainFrame;
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -42,17 +41,9 @@ public class InventoryItemsUI extends JPanel {
         data = new Object[20][20];
 
         initializeComponents();
-
         refreshItems();
     }
 
-    /**
-     *
-     * @return
-     */
-    public JFrame getMainFrame() {
-        return this.mainFrame;
-    }
 
     private void initializeComponents() {
         BorderLayout border = new BorderLayout();
@@ -77,7 +68,7 @@ public class InventoryItemsUI extends JPanel {
             InventoryItemDetailsUI iidEdit = new InventoryItemDetailsUI(false);
             iidEdit.display();
         });
-
+      
         remove = new JButton("Remove");
         remove.addActionListener((event) -> System.out.println("REMOVE TEST"));
 
@@ -147,5 +138,6 @@ public class InventoryItemsUI extends JPanel {
     public void display() {
         setVisible(true);
     }
+
     // </editor-fold>
 }

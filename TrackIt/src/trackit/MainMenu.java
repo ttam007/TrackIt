@@ -8,10 +8,11 @@ import trackit.UI.*;
  * @author Bryan
  */
 public class MainMenu {
+
     private final ArrayList<Dashboard> dashboards = new ArrayList<>();
 
     /**
-     *Create dashboard
+     * Create dashboard
      */
     public MainMenu() {
         this.createDashboards();
@@ -41,7 +42,7 @@ public class MainMenu {
     }
 
     /**
-     *logout
+     * logout
      */
     public void logout() {
         Login login = new Login();
@@ -50,16 +51,16 @@ public class MainMenu {
     }
 
     /**
-     *exit app
+     * exit app
      */
     public void exit() {
         //TODO:  close all other windows?
     }
-    
+
     /**
-     *start the application
+     * start the application
      */
-    public void start(){
+    public void start() {
         MainMenuUI dlgMain = new MainMenuUI();
         dlgMain.display();
     }

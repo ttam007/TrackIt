@@ -12,7 +12,8 @@ public class DashboardUI extends JPanel {
     public static final String TAB_NAME = "Dashboard";
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Fields">
-    private JTextArea dashboardInfo;
+
+   private JTextArea dashboardInfo;
     private JFrame mainFrame;
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">

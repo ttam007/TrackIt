@@ -12,12 +12,10 @@ public enum OrderStatusType {
      *
      */
     ORDERED(0),
-
     /**
      *
      */
     BEINGSHIPPED(1),
-
     /**
      *
      */
@@ -36,7 +34,6 @@ public enum OrderStatusType {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
-
     /**
      *
      * @return

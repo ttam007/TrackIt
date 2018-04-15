@@ -37,7 +37,6 @@ public enum ParameterDirection {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
-
     /**
      *
      * @return

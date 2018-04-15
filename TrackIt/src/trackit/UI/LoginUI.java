@@ -28,9 +28,8 @@ public class LoginUI extends JFrame {
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
-
     /**
-     *Login
+     * Login
      */
     public LoginUI() {
         initializeComponents();
