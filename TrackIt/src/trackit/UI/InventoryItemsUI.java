@@ -1,4 +1,4 @@
-    /**
+/**
  * @author      Brian Diaz
  * @date 04/10/2018
  * @description handles the creation of the Inventory Item Screen
@@ -15,13 +15,14 @@ import trackit.DAL.AnItem;
 /**
  * UI Layer: Handles all aspects of the Inventory panel.
  */
-public class InventoryItemsUI extends JPanel {
+public class InventoryItemsUI
+        extends JPanel {
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
     public static final String TAB_NAME = "Inventory";
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
-    private final ArrayList<AnInventoryItem> inventoryItems;
+    private final ArrayList<AnInventoryItem> inventoryItems = new ArrayList<>();
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
@@ -44,13 +45,10 @@ public class InventoryItemsUI extends JPanel {
         refreshItems();
     }
 
-
     private void initializeComponents() {
         BorderLayout border = new BorderLayout();
         this.setLayout(border);
         createUIComponents();
-        //mainFrame.add(this);
-        // mainFrame.pack();
         this.setSize(new Dimension(1100, 700));
         this.display();
     }
@@ -68,7 +66,7 @@ public class InventoryItemsUI extends JPanel {
             InventoryItemDetailsUI iidEdit = new InventoryItemDetailsUI(false);
             iidEdit.display();
         });
-      
+
         remove = new JButton("Remove");
         remove.addActionListener((event) -> System.out.println("REMOVE TEST"));
 

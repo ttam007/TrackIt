@@ -8,6 +8,8 @@ import trackit.*;
 /**
  * UI Layer: Handles all aspects of the Create Inventory Item and Edit Inventory
  * Item dialog.
+ *
+ * @author Bond
  */
 public class InventoryItemDetailsUI
         extends JDialog {
@@ -29,7 +31,7 @@ public class InventoryItemDetailsUI
         // super("Inventory Item Details", new AnInventoryItem());
         this.isCreateMode = useCreateMode;
         this.initializeComponents();
-   }
+    }
 
     /**
      * Sets up all components used in this frame.

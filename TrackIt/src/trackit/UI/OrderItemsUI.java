@@ -5,16 +5,16 @@ import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 import trackit.*;
-import trackit.DAL.AnOrder;
-import trackit.DAL.AnOrderItem;
+import trackit.DAL.*;
 
 /**
  * UI Layer: Handles all aspects of the AnOrder Details dialog. This is a
  * combination of the Edit AnOrder Details and the OrderItems grid.
  *
- * @author Douglas
+ * @author Douglas, Bond
  */
-public class OrderItemsUI extends JFrame {
+public class OrderItemsUI
+        extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
     private static final String WINDOW_NAME = "Order Details";
@@ -151,17 +151,11 @@ public class OrderItemsUI extends JFrame {
 
         btnCreate = new JButton("Create");
         pnlBtm.add(btnCreate);
-        JDialog itemInputForm = new JDialog();
-        itemInputForm.setSize(new Dimension(640, 400));
-        itemInputForm.setTitle("Add Inventory Item");
-        itemInputForm.setModal(true);
-        itemInputForm.setContentPane(new InventoryItemDetailsUI(true).getMainFrame().getContentPane());
-        btnCreate.addActionListener((ActionEvent e) -> {
-            //TODO
-            itemInputForm.setVisible(true);
-            
+        btnCreate.addActionListener((event) -> {
+            InventoryItemDetailsUI iidCreate = new InventoryItemDetailsUI(true);
+            iidCreate.display();
         });
-        
+
         btnEdit = new JButton("Edit");
         pnlBtm.add(btnEdit);
         btnEdit.addActionListener((ActionEvent e) -> {
@@ -223,10 +217,6 @@ public class OrderItemsUI extends JFrame {
         System.out.println(String.format("Displaying %s...", WINDOW_NAME));
         setVisible(true);
     }
-    
-    public void close(){
-        this.dispose();
-    }
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="SubClasses">
@@ -244,10 +234,10 @@ public class OrderItemsUI extends JFrame {
             if (result == JOptionPane.YES_OPTION) {
                 //TODO
                 //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                close();
+                frame.dispose();
             } else {
                 //TODO
-                close();
+                frame.dispose();
             }
         }
     }
