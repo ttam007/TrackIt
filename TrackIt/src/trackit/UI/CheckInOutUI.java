@@ -104,6 +104,7 @@ public class CheckInOutUI
 
         btnCancel = new JButton("Cancel");
         submitBx.add(btnCancel);
+        this.getRootPane().setDefaultButton(btnOK);
 
         this.btnCancel.addActionListener((ActionEvent e) -> {
             //TODO:  close window and return to prior window.
