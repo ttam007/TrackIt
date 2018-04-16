@@ -1,7 +1,8 @@
 /**
- * @author      Brian Diaz
+ * UI Layer: Handles all aspects of the Inventory Item panel.
+ *
+ * @author Brian Diaz
  * @date 04/10/2018
- * @description handles the creation of the Inventory Item Screen
  *
  */
 package trackit.UI;
@@ -16,7 +17,7 @@ import trackit.DAL.AnItem;
 /**
  * UI Layer: Handles all aspects of the Inventory panel.
  */
-public class InventoryItemsUI
+public class InventoryItemsPanel
         extends JPanel {
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
@@ -31,7 +32,7 @@ public class InventoryItemsUI
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     private JTable mainTable;
-    private InventoryItemDetailsUI itemCreate, itemEdit;
+    private InventoryItemDetailsDialog itemCreate, itemEdit;
     private final ArrayList<String> tableHeaders = new ArrayList<>(Arrays.asList("Item Name", "Qty", "Unit", "SKU", "Expiration", "Status"));
     private JButton btnCreate, btnEdit, btnRemove, btnCheckInOut;
     private final Object[][] data;
@@ -42,13 +43,15 @@ public class InventoryItemsUI
     /**
      * Inventory items ui
      */
-    public InventoryItemsUI() {
+    public InventoryItemsPanel() {
         data = new Object[20][20];
 
         initializeComponents();
         refreshItems();
     }
 
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Private Methods">
     private void initializeComponents() {
         BorderLayout border = new BorderLayout();
         this.setLayout(border);
@@ -61,13 +64,13 @@ public class InventoryItemsUI
 
         btnCreate = new JButton("Create");
         btnCreate.addActionListener((ActionEvent e) -> {
-            InventoryItemDetailsUI iidCreate = new InventoryItemDetailsUI(true);
+            InventoryItemDetailsDialog iidCreate = new InventoryItemDetailsDialog(true);
             iidCreate.display();
         });
 
         btnEdit = new JButton("Edit");
         btnEdit.addActionListener((ActionEvent e) -> {
-            InventoryItemDetailsUI iidEdit = new InventoryItemDetailsUI(false);
+            InventoryItemDetailsDialog iidEdit = new InventoryItemDetailsDialog(false);
             iidEdit.display();
         });
 
@@ -76,7 +79,7 @@ public class InventoryItemsUI
 
         btnCheckInOut = new JButton("Check In/Out");
         btnCheckInOut.addActionListener((ActionEvent e) -> {
-            CheckInOutUI checkIn = new CheckInOutUI();
+            CheckInOutDialog checkIn = new CheckInOutDialog();
             checkIn.display();
         });
     }
@@ -111,8 +114,6 @@ public class InventoryItemsUI
         buttonHolder.add(btnCheckInOut);
         add(buttonHolder, BorderLayout.PAGE_END);
     }
-    // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Private Methods">
 
     /**
      * Refreshes the list of items that are displayed in the grid.

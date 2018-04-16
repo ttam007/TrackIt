@@ -13,7 +13,7 @@ import trackit.DAL.*;
  *
  * @author Douglas, Bond
  */
-public class OrderItemsUI
+public class OrderItemsFrame
         extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
@@ -38,7 +38,7 @@ public class OrderItemsUI
     /**
      * order item window
      */
-    public OrderItemsUI() {
+    public OrderItemsFrame() {
         initializeComponents();
         getValues();
     }
@@ -144,14 +144,14 @@ public class OrderItemsUI
         pnlBtm.add(btnAddItem);
         btnAddItem.addActionListener((ActionEvent e) -> {
             //TODO
-            OrderItemDetailsUI oid = new OrderItemDetailsUI(true);
+            OrderItemDetailsDialog oid = new OrderItemDetailsDialog(true);
             oid.display();
         });
 
         btnCreate = new JButton("Create");
         pnlBtm.add(btnCreate);
         btnCreate.addActionListener((ActionEvent e) -> {
-            InventoryItemDetailsUI iidAddItem = new InventoryItemDetailsUI(true);
+            InventoryItemDetailsDialog iidAddItem = new InventoryItemDetailsDialog(true);
             iidAddItem.display();
         });
 
@@ -159,7 +159,7 @@ public class OrderItemsUI
         pnlBtm.add(btnEdit);
         btnEdit.addActionListener((ActionEvent e) -> {
             //TODO
-            OrderItemDetailsUI oid = new OrderItemDetailsUI(false);
+            OrderItemDetailsDialog oid = new OrderItemDetailsDialog(false);
             oid.display();
         });
 
@@ -244,4 +244,3 @@ public class OrderItemsUI
     }
     // </editor-fold>
 }
-
