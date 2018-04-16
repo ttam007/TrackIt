@@ -1,5 +1,7 @@
 package trackit.DAL;
 
+import java.sql.SQLException;
+
 /**
  * Super class of all objects that exist in the database.
  *
@@ -47,14 +49,17 @@ public abstract class DatabaseObject {
     }
 
     /**
+     * This can not be null. Must be overridden in child object to handle null
+     * checks.
      *
      * @param primaryKey
+     * @throws SQLException
      */
-    public void setPrimaryKey(Integer primaryKey) {
-        this.primaryKey = primaryKey;
-    }
+    protected abstract void setPrimaryKey(Integer primaryKey)
+            throws SQLException;
 
     /**
+     * This can not be null.
      *
      * @return
      */
