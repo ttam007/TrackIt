@@ -11,6 +11,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.*;
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
 import trackit.DAL.AnInventoryItem;
 import trackit.DAL.AnItem;
 
@@ -37,6 +40,7 @@ public class InventoryItemsPanel
     private JButton btnCreate, btnEdit, btnRemove, btnCheckInOut;
     private final Object[][] data;
     private JScrollPane sp;
+    private boolean disableButtons =false;
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -59,6 +63,12 @@ public class InventoryItemsPanel
         this.setSize(new Dimension(1100, 700));
         this.display();
     }
+    private void toggleDisableButton(){
+
+        btnEdit.setEnabled(disableButtons);
+        btnRemove.setEnabled(disableButtons);
+    }
+
 
     private void setButtons() {
 
@@ -69,12 +79,15 @@ public class InventoryItemsPanel
         });
 
         btnEdit = new JButton("Edit");
+        btnEdit.setEnabled(disableButtons);
+
         btnEdit.addActionListener((ActionEvent e) -> {
             InventoryItemDetailsDialog iidEdit = new InventoryItemDetailsDialog(false);
             iidEdit.display();
         });
 
         btnRemove = new JButton("Remove");
+        btnRemove.setEnabled(disableButtons);
         btnRemove.addActionListener((ActionEvent e) -> System.out.println("REMOVE TEST"));
 
         btnCheckInOut = new JButton("Check In/Out");
@@ -85,7 +98,8 @@ public class InventoryItemsPanel
     }
 
     private void createUIComponents() {
-        setButtons();
+
+
         data[0][0] = "Gauze";
         data[0][1] = "3.0";
         data[0][2] = "oz";
@@ -100,8 +114,22 @@ public class InventoryItemsPanel
         data[1][5] = "Expired";
 
         mainTable = new JTable(data, tableHeaders.toArray());
-        mainTable.setBounds(30, 40, 200, 200);
+        // Add action listener to JTable
+        mainTable.getSelectionModel().addListSelectionListener((e)->{
+            System.out.println("TEST");
+            System.out.println(mainTable.getSelectedRow());
+            if(mainTable.getSelectedRow()>-1){
+                disableButtons=true;
+                toggleDisableButton();
+            }
+        }/*new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
 
+            }
+        }*/);
+        mainTable.setBounds(30, 40, 200, 200);
+        setButtons();
         sp = new JScrollPane(mainTable);
 
         add(sp, BorderLayout.CENTER);
