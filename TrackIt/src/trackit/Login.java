@@ -9,7 +9,7 @@ import trackit.UI.*;
  */
 public class Login {
 
-    private final int MAX_LOGIN_ATTEMPTS = 3;
+    private static final int MAX_LOGIN_ATTEMPTS = 3;
     private String errorMessage = "";
     private int loginAttempts = 0;
 
@@ -57,7 +57,7 @@ public class Login {
      * logout
      */
     public void startLogout() {
-        LoginUI dlgLogin = new LoginUI(SQLConnector.getInstance().getUserName());
+        LoginFrame dlgLogin = new LoginFrame(SQLConnector.getInstance().getUserName());
         dlgLogin.display();
     }
 

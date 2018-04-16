@@ -27,17 +27,25 @@ public class ASupplier
 
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Setters & Getters">
-    /**
-     *
-     * @param nickname
-     * @throws SQLException
-     */
-    public void setNickname(String nickname)
+    @Override
+    public void setPrimaryKey(Integer aPrimaryKey)
             throws SQLException {
-        this.nickname = HELPER.doNullCheck(SQLHelperSupplier.COLUMN_NICKNAME, nickname);
+        this.primaryKey = HELPER.doNullCheck(SQLHelperSupplier.COLUMN_PK, aPrimaryKey);
     }
 
     /**
+     * This can not be null.
+     *
+     * @param aNickname
+     * @throws SQLException
+     */
+    public void setNickname(String aNickname)
+            throws SQLException {
+        this.nickname = HELPER.doNullCheck(SQLHelperSupplier.COLUMN_NICKNAME, aNickname);
+    }
+
+    /**
+     * This can not be null.
      *
      * @return
      */
@@ -46,16 +54,18 @@ public class ASupplier
     }
 
     /**
+     * This can be null.
      *
-     * @param url
+     * @param aURL
      * @throws SQLException
      */
-    public void setUrl(String url)
+    public void setUrl(String aURL)
             throws SQLException {
-        this.url = HELPER.doNullCheck(SQLHelperSupplier.COLUMN_URL, url);
+        this.url = HELPER.doNullCheck(SQLHelperSupplier.COLUMN_URL, aURL);
     }
 
     /**
+     * This can be null.
      *
      * @return
      */

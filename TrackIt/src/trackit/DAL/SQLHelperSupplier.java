@@ -142,13 +142,13 @@ public class SQLHelperSupplier
     @Override
     public java.sql.Date doNullCheck(String columnName, java.sql.Date aValue)
             throws SQLException {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedSQLTypeException(Types.DATE, this.getClass());
     }
 
     @Override
     public Double doNullCheck(String columnName, Double aValue)
             throws SQLException {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedSQLTypeException(Types.DOUBLE, this.getClass());
     }
 
     @Override
