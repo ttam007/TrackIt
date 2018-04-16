@@ -1,6 +1,7 @@
 package trackit;
 
 import java.sql.*;
+import java.text.*;
 
 /**
  * This is a static class that only has global constants and "fire and forget"
@@ -10,27 +11,43 @@ import java.sql.*;
  */
 public class Utilities {
 
+    // <editor-fold defaultstate="expanded" desc="Constants">
     /**
-     *
+     * The name of the team that created this program.
      */
     public static final String TEAM_NAME = "TrackIt";
 
     /**
-     *
+     * The abbreviated name of this program.
      */
     public static final String PROGRAM_NAME_SHORT = "HITS";
 
     /**
-     *
+     * The long name of this program.
      */
     public static final String PROGRAM_NAME_LONG = "Home Inventory Tracking System";
 
+    /**
+     * The DATE_FORMATTER used so all dates are in standard SQL date format.
+     */
+    public static final DateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd");
+
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Private Fields">
+    //There shouldn't be any private fields in this class.
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
     /**
      * Can never create an instance of this class.
      */
     private Utilities() {
     }
 
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Public Methods">
+    //There shouldn't be any public instance methods in this class.
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Public Static Methods">
     /**
      *
      * @param windowName
@@ -54,4 +71,50 @@ public class Utilities {
         sb.append(String.format("Error Code = %s\r", ex.getErrorCode()));
         return sb.toString();
     }
+
+    /**
+     * Converts from a standard java Date to a SQL Date class.
+     *
+     * @param aDate The date to be converted.
+     * @return A standard java Date object with the same date as parameter
+     * aDate.
+     */
+    public static java.sql.Date convertToSQLDate(java.util.Date aDate) {
+        return new java.sql.Date(aDate.getTime());
+    }
+
+    /**
+     * Converts a string representation of a date into a Date object.
+     *
+     * @param aValue The value to convert to a Date object.
+     * @return A Date object with the specified date.
+     * @throws ParseException
+     */
+    public static java.sql.Date convertToSQLDate(String aValue)
+            throws ParseException {
+        return convertToSQLDate(convertToUtilDate(aValue));
+    }
+
+    /**
+     * Converts from a SQL Date to a standard java Date class.
+     *
+     * @param aDate The date to be converted.
+     * @return A SQL Date object with the same date as parameter aDate.
+     */
+    public static java.util.Date convertToUtilDate(java.sql.Date aDate) {
+        return new java.util.Date(aDate.getTime());
+    }
+
+    /**
+     * Converts a string representation of a date into a Date object.
+     *
+     * @param aValue The value to convert to a Date object.
+     * @return A Date object with the specified date.
+     * @throws ParseException
+     */
+    public static java.util.Date convertToUtilDate(String aValue)
+            throws ParseException {
+        return DATE_FORMATTER.parse(aValue);
+    }
+
 }

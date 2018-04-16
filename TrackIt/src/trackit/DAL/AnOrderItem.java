@@ -14,34 +14,31 @@ public class AnOrderItem
 
     // <editor-fold defaultstate="expanded" desc="Private Fields">
     private static final SQLHelperOrderItem HELPER = new SQLHelperOrderItem();
-    private Integer orderId;
+    private Integer orderId = SQLHelper.INVALID_PRIMARY_KEY;
+    private Integer itemId = SQLHelper.INVALID_PRIMARY_KEY;
     private Integer quantityOrdered = 1;
     private Integer quantityCheckedIn = 0;
     private Double price = 0d;
-    private Double extendedPrice = 0d;
 
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Constructors">
     /**
-     * order item
+     * Default constructor.
      */
     public AnOrderItem() {
         super();
     }
-    // </editor-fold>
 
+    // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Setters & Getters">
-    /**
-     * Calculates the extended price. Should be used any time the
-     * quantityOrdered or the price changes.
-     */
-    private void calcExtendedPrice() {
-        this.extendedPrice = this.quantityOrdered * this.price;
+    @Override
+    public void setPrimaryKey(Integer aPrimaryKey)
+            throws SQLException {
+        this.primaryKey = HELPER.doNullCheck(SQLHelperOrderItem.COLUMN_PK, aPrimaryKey);
     }
-    // </editor-fold>
 
-    // <editor-fold defaultstate="expanded" desc="Setters & Getters">
     /**
+     * This can not be null.
      *
      * @param orderId
      * @throws SQLException
@@ -52,6 +49,7 @@ public class AnOrderItem
     }
 
     /**
+     * This can not be null.
      *
      * @return
      */
@@ -60,6 +58,27 @@ public class AnOrderItem
     }
 
     /**
+     * This can not be null.
+     *
+     * @param anItemId
+     * @throws SQLException
+     */
+    public void setItemId(Integer anItemId)
+            throws SQLException {
+        this.itemId = HELPER.doNullCheck(SQLHelperInventoryItem.COLUMN_ITEMID, anItemId);
+    }
+
+    /**
+     * This can not be null.
+     *
+     * @return
+     */
+    public Integer getItemId() {
+        return this.itemId;
+    }
+
+    /**
+     * This can not be null.
      *
      * @param quantityOrdered
      * @throws SQLException
@@ -67,10 +86,10 @@ public class AnOrderItem
     public void setQuantityOrdered(Integer quantityOrdered)
             throws SQLException {
         this.quantityOrdered = HELPER.doNullCheck(SQLHelperOrderItem.COLUMN_QUANTITYORDERED, quantityOrdered);
-        calcExtendedPrice();
     }
 
     /**
+     * This can not be null.
      *
      * @return
      */
@@ -79,6 +98,7 @@ public class AnOrderItem
     }
 
     /**
+     * This can not be null.
      *
      * @param quantityCheckedIn
      * @throws SQLException
@@ -89,6 +109,7 @@ public class AnOrderItem
     }
 
     /**
+     * This can not be null.
      *
      * @return
      */
@@ -97,6 +118,7 @@ public class AnOrderItem
     }
 
     /**
+     * This can not be null.
      *
      * @param price
      * @throws SQLException
@@ -104,10 +126,10 @@ public class AnOrderItem
     public void setPrice(Double price)
             throws SQLException {
         this.price = HELPER.doNullCheck(SQLHelperOrderItem.COLUMN_PRICE, price);
-        calcExtendedPrice();
     }
 
     /**
+     * This can not be null.
      *
      * @return
      */
@@ -115,17 +137,23 @@ public class AnOrderItem
         return this.price;
     }
 
-    /*
-    public void setExtendedPrice(Double extendedPrice)
-            throws SQLException {
-        this.extendedPrice = HELPER.doNullCheck(HELPER.COLUMN_EXTENDEDPRICE, extendedPrice);
-    }*/
     /**
+     * This can not be null.
      *
      * @return
      */
     public Double getExtendedPrice() {
-        return this.extendedPrice;
+        return this.calcExtendedPrice();
+    }
+
+    // </editor-fold>
+    // <editor-fold defaultstate="expanded" desc="Private methods">
+    /**
+     * Calculates the extended price. Should be used any time the
+     * quantityOrdered or the price changes.
+     */
+    private Double calcExtendedPrice() {
+        return this.quantityOrdered * this.price;
     }
 
     // </editor-fold>
@@ -196,6 +224,7 @@ public class AnOrderItem
         HELPER.delete(primaryKey);
     }
     // </editor-fold>
+    // <editor-fold defaultstate="expanded" desc="Public Methods">
 
     @Override
     public void changeQuantity(int amountToChangeBy)
@@ -206,4 +235,5 @@ public class AnOrderItem
         this.quantityOrdered += amountToChangeBy;
         calcExtendedPrice();
     }
+    // </editor-fold>
 }

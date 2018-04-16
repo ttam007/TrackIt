@@ -17,7 +17,7 @@ public abstract class AnItem
     /**
      *
      */
-    protected String description;
+    protected String description = "New Item";
 
     /**
      *
@@ -32,7 +32,7 @@ public abstract class AnItem
     /**
      *
      */
-    protected ItemStatusType itemStatus;
+    protected ItemStatusType itemStatus = ItemStatusType.AVAILABLE;
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Constructors">
 
@@ -45,7 +45,15 @@ public abstract class AnItem
 
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Setters & Getters">
+    @Override
+    public void setPrimaryKey(Integer primaryKey)
+            throws SQLException {
+        throw new UnsupportedOperationException();
+        //this.primaryKey = HELPER.doNullCheck(SQLHelperItem.COLUMN_PK, primaryKey);
+    }
+
     /**
+     * This can not be null.
      *
      * @param description
      * @throws SQLException
@@ -56,6 +64,7 @@ public abstract class AnItem
     }
 
     /**
+     * This can not be null.
      *
      * @return
      */
@@ -64,6 +73,7 @@ public abstract class AnItem
     }
 
     /**
+     * This can be null.
      *
      * @param sku
      * @throws SQLException
@@ -74,6 +84,7 @@ public abstract class AnItem
     }
 
     /**
+     * This can be null.
      *
      * @return
      */
@@ -82,6 +93,7 @@ public abstract class AnItem
     }
 
     /**
+     * This can be null.
      *
      * @param sizeUnit
      * @throws SQLException
@@ -92,6 +104,7 @@ public abstract class AnItem
     }
 
     /**
+     * This can be null.
      *
      * @return
      */
@@ -100,6 +113,7 @@ public abstract class AnItem
     }
 
     /**
+     * This can not be null.
      *
      * @param itemStatus
      * @throws SQLException
@@ -111,6 +125,7 @@ public abstract class AnItem
     }
 
     /**
+     * This can not be null.
      *
      * @param itemStatus
      * @throws SQLException
@@ -122,6 +137,7 @@ public abstract class AnItem
     }
 
     /**
+     * This can not be null.
      *
      * @return
      */
