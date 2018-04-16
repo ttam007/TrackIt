@@ -11,8 +11,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.*;
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+//Unused imports, commented out for now
+//import javax.swing.event.ListSelectionEvent;
+//import javax.swing.event.ListSelectionListener;
 
 import trackit.DAL.AnInventoryItem;
 import trackit.DAL.AnItem;
@@ -40,7 +41,7 @@ public class InventoryItemsPanel
     private JButton btnCreate, btnEdit, btnRemove, btnCheckInOut;
     private final Object[][] data;
     private JScrollPane sp;
-    private boolean disableButtons =false;//use this variable to toggle edit and remove buttons on and off
+    private boolean disableButtons = false;//use this variable to toggle edit and remove buttons on and off
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -63,13 +64,13 @@ public class InventoryItemsPanel
         this.setSize(new Dimension(1100, 700));
         this.display();
     }
+
     //private method to toggle whether buttons will be enabled or not
-    private void toggleDisableButton(){
+    private void toggleDisableButton() {
 
         btnEdit.setEnabled(disableButtons);
         btnRemove.setEnabled(disableButtons);
     }
-
 
     private void setButtons() {
 
@@ -100,7 +101,6 @@ public class InventoryItemsPanel
 
     private void createUIComponents() {
 
-
         data[0][0] = "Gauze";
         data[0][1] = "3.0";
         data[0][2] = "oz";
@@ -116,10 +116,10 @@ public class InventoryItemsPanel
 
         mainTable = new JTable(data, tableHeaders.toArray());
         // Add action listener to JTable
-        mainTable.getSelectionModel().addListSelectionListener((e)->{
+        mainTable.getSelectionModel().addListSelectionListener((e) -> {
             //if the row is bigger than -1 than we need to enable the buttons
-            if(mainTable.getSelectedRow()>-1){
-                disableButtons=true;
+            if (mainTable.getSelectedRow() > -1) {
+                disableButtons = true;
                 toggleDisableButton();
             }
         });

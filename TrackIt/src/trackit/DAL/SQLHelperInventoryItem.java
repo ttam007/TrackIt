@@ -30,6 +30,7 @@ public class SQLHelperInventoryItem
      *
      */
     public static final String COLUMN_EXPIRATIONDATE = "expirationDate";
+
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     static {
@@ -42,6 +43,7 @@ public class SQLHelperInventoryItem
     public SQLHelperInventoryItem() {
 
     }
+
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
     @Override
