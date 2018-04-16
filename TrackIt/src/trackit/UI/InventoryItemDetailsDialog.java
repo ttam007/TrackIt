@@ -41,8 +41,8 @@ public class InventoryItemDetailsDialog
      */
     private void initializeComponents() {
         //Setup main frame
-        int frameWidth = 640;
-        int frameHeight = 400;
+        int frameWidth = 500;// Originally 640
+        int frameHeight = 250;//Originally 400.
         Dimension dimFrame = new Dimension(frameWidth, frameHeight);
         this.setTitle(Utilities.getWindowCaption(WINDOW_NAME));
         this.setSize(dimFrame);
@@ -55,7 +55,7 @@ public class InventoryItemDetailsDialog
 
         gbc = new GridBagConstraints();
         setLayout(new GridBagLayout());
-        gbc.insets = new Insets(2, 2, 10, 0);
+        gbc.insets = new Insets(2, 2, 5, 0);
         gbc.anchor = GridBagConstraints.LINE_START;
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
@@ -67,7 +67,7 @@ public class InventoryItemDetailsDialog
 
         // Item Name Text Field
         itemNameField = new JTextField(25);
-        itemNameField.setEditable(this.isCreateMode);
+
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.gridwidth = 5;
@@ -80,7 +80,7 @@ public class InventoryItemDetailsDialog
         gbc.gridwidth = 1;
         add(sku, gbc);
         skuField = new JTextField(25);
-        skuField.setEditable(this.isCreateMode);
+
         gbc.gridx = 1;
         gbc.gridy = 1;
         gbc.gridwidth = 5;
@@ -120,7 +120,7 @@ public class InventoryItemDetailsDialog
         add(unit, gbc);
         // Field
         unitField = new JTextField(7);
-        unitField.setEditable(this.isCreateMode);
+        
         gbc.gridx = 1;
         gbc.gridy = 3;
         gbc.gridwidth = 3;
@@ -161,7 +161,6 @@ public class InventoryItemDetailsDialog
             //TODO
             this.dispose();
         });
-        //Test
 
         this.pack();
     }
