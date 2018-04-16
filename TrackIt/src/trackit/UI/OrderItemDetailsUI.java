@@ -1,7 +1,5 @@
 package trackit.UI;
 
-import trackit.DAL.AnOrderItem;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -12,6 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import trackit.*;
+import trackit.DAL.AnOrderItem;
 
 /**
  * UI Layer: Handles all aspects of the Add Item to Order and Edit Order Item
@@ -50,7 +49,7 @@ public class OrderItemDetailsUI
     /**
      * initialize the items
      */
-    protected void initializeComponents() {
+    private void initializeComponents() {
 
         //TODO:  add additional components here.
         int frameWidth = 660;

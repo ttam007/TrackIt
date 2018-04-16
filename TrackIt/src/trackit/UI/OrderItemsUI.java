@@ -144,15 +144,15 @@ public class OrderItemsUI
         pnlBtm.add(btnAddItem);
         btnAddItem.addActionListener((ActionEvent e) -> {
             //TODO
-            InventoryItemDetailsUI iidAddItem = new InventoryItemDetailsUI(true);
-            iidAddItem.display();
+            OrderItemDetailsUI oid = new OrderItemDetailsUI(true);
+            oid.display();
         });
 
         btnCreate = new JButton("Create");
         pnlBtm.add(btnCreate);
         btnCreate.addActionListener((ActionEvent e) -> {
-            OrderItemDetailsUI oid = new OrderItemDetailsUI(true);
-            oid.display();
+            InventoryItemDetailsUI iidAddItem = new InventoryItemDetailsUI(true);
+            iidAddItem.display();
         });
 
         btnEdit = new JButton("Edit");
@@ -223,7 +223,8 @@ public class OrderItemsUI
     /**
      * Handles all aspects of closing the program.
      */
-    private class CloseQuery extends WindowAdapter {
+    private static class CloseQuery
+            extends WindowAdapter {
 
         @Override
         public void windowClosing(WindowEvent e) {

@@ -134,7 +134,7 @@ public class LoginUI extends JFrame {
     /**
      * Handles all aspects of closing the program.
      */
-    private class CloseQuery extends WindowAdapter {
+    private static class CloseQuery extends WindowAdapter {
 
         @Override
         public void windowClosing(WindowEvent e) {

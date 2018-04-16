@@ -20,6 +20,9 @@ public class InventoryItemsUI
         extends JPanel {
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
+    /**
+     * The name of the panel.
+     */
     public static final String TAB_NAME = "Inventory";
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
