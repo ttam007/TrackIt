@@ -4,80 +4,85 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
-import trackit.DAL.ASupplier;
+import trackit.DAL.AnOrder;
 
 /**
- * UI Layer: Handles all aspects of the Suppliers panel.
+ * UI Layer: Handles all aspects of the Order panel.
  *
  * @author Douglas
  */
-public class SuppliersUI
+public class OrdersPanel
         extends JPanel {
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
     /**
      * The name of the panel.
      */
-    public static final String TAB_NAME = "Suppliers";
+    public static final String TAB_NAME = "Orders";
+
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
-    private final ArrayList<ASupplier> suppliers;
-    // </editor-fold>
+    private final ArrayList<AnOrder> orders = new ArrayList<>();
+    private final AnOrder bll = new AnOrder();
+// </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     JButton btnCreate, btnRemove, btnEdit;
-    String[] suppliersLabel = {"Supplier", "Web Address"};
-    JTable suppliersTable;
-    SupplierDetailsUI details;
+    String[] ordersLabel = {"Order Date", "Order Number", "Supplier", "Status", "Total"};
+    JTable ordersTable;
+    OrderItemsFrame details;
     int selectedRow;
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     /**
-     * Supplier UI
+     * orders ui
      */
-    public SuppliersUI() {
-        this.suppliers = new ArrayList<>();
+    public OrdersPanel() {
+        initializeComponents();
+    }
+
+    private void initializeComponents() {
         setLayout(new BorderLayout());
 
         //add data to suppliers arraylist 
-        Object[][] suppliersTestData = {{"Amazon", "http://www.amazon.com"}, {"Walmart", "http://www.walmart.com"}, {"Ebay", "http://www.ebay.com"}};
-        suppliersTable = new JTable(suppliersTestData, suppliersLabel);
-        JScrollPane suppliersScrollPane = new JScrollPane(suppliersTable);
-        suppliersTable.setFillsViewportHeight(true);
-        suppliersTable.setDefaultEditor(Object.class, null);
+        Object[][] testData = {{"12MAY2018", "019645232", "Walmart", "in transit", "$128.34"}, {"12MAY2018", "019645232", "Walmart", "in transit", "$128.34"}, {"12MAY2018", "019645232", "Walmart", "in transit", "$128.34"}};
+        ordersTable = new JTable(testData, ordersLabel);
+        JScrollPane scrollPane = new JScrollPane(ordersTable);
+        ordersTable.setFillsViewportHeight(true);
+        ordersTable.setDefaultEditor(Object.class, null);
 
-        add(suppliersScrollPane, BorderLayout.CENTER);
+        add(scrollPane, BorderLayout.CENTER);
 
         JPanel btmSup = new JPanel();
 
         btnCreate = new JButton("Create");
         btnCreate.addActionListener((ActionEvent e) -> {
-            System.out.print("create supply");
-            details = new SupplierDetailsUI(true);
+            System.out.print("create order");
+            details = new OrderItemsFrame();
         });
 
         btnEdit = new JButton("Edit");
         btnEdit.addActionListener((ActionEvent e) -> {
-            System.out.print("Edit supply");
+            System.out.print("Edit order");
             //if list item selected edit item else select item
-            selectedRow = suppliersTable.getSelectedRow();
+            selectedRow = ordersTable.getSelectedRow();
             if (selectedRow < 0) {
                 JOptionPane.showMessageDialog(null, "Select item to edit");
             } else {
-                details = new SupplierDetailsUI(false);
+                details = new OrderItemsFrame();
                 //TODO: enter item info of selected item
             }
         });
 
         btnRemove = new JButton("Remove");
         btnRemove.addActionListener((ActionEvent e) -> {
-            System.out.print("remove supply");
-            selectedRow = suppliersTable.getSelectedRow();
+            System.out.print("remove order");
+            selectedRow = ordersTable.getSelectedRow();
             if (selectedRow < 0) {
                 JOptionPane.showMessageDialog(null, "Select item to remove");
             } else {
                 //TODO: remove item from db
-                JOptionPane.showMessageDialog(null, "Item removed");
+                JOptionPane.showMessageDialog(null, "Item successfully removed");
             }
         });
 
@@ -90,6 +95,14 @@ public class SuppliersUI
     }
 
     // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Private Methods">
+    private void getValues() {
+        /* if (bll.load()) {
+            //this.orders.addAll(bll.getItems());
+        }*/
+    }
+
+    // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
     /**
      * Displays the frame.
@@ -97,5 +110,8 @@ public class SuppliersUI
     public void display() {
         setVisible(true);
     }
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="SubClasses">
+
     // </editor-fold>
 }

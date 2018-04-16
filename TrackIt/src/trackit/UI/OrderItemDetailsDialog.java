@@ -10,8 +10,8 @@ import trackit.DAL.AnOrderItem;
  * UI Layer: Handles all aspects of the Add Item to Order and Edit Order Item
  * dialog.
  */
-public class OrderItemDetailsUI
-        extends ItemDetailsUI<AnOrderItem> {
+public class OrderItemDetailsDialog
+        extends ItemDetailsDialog<AnOrderItem> {
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
     // </editor-fold>
@@ -31,7 +31,7 @@ public class OrderItemDetailsUI
      *
      * @param useCreateMode
      */
-    public OrderItemDetailsUI(boolean useCreateMode) {
+    public OrderItemDetailsDialog(boolean useCreateMode) {
         super("Order Item Details", new AnOrderItem());
 
         this.isCreateMode = useCreateMode;

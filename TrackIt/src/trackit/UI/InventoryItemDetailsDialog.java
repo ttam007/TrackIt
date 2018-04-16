@@ -11,7 +11,7 @@ import trackit.*;
  *
  * @author Bond
  */
-public class InventoryItemDetailsUI
+public class InventoryItemDetailsDialog
         extends JDialog {
 
     // <editor-fold defaultstate="collapsed" desc="Constants">
@@ -30,7 +30,7 @@ public class InventoryItemDetailsUI
      *
      * @param useCreateMode
      */
-    public InventoryItemDetailsUI(boolean useCreateMode) {
+    public InventoryItemDetailsDialog(boolean useCreateMode) {
         // super("Inventory Item Details", new AnInventoryItem());
         this.isCreateMode = useCreateMode;
         this.initializeComponents();
@@ -182,7 +182,7 @@ public class InventoryItemDetailsUI
 
         @Override
         public void windowClosing(WindowEvent e) {
-            JDialog frame = InventoryItemDetailsUI.this;
+            JDialog frame = InventoryItemDetailsDialog.this;
             int result = JOptionPane.showConfirmDialog(frame,
                     "Do you want to save?", "Close Query",
                     JOptionPane.YES_NO_OPTION);

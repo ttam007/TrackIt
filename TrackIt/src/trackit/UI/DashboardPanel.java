@@ -5,8 +5,11 @@ import javax.swing.*;
 
 /**
  * UI Layer: Handles all aspects of the Dashboard panel.
+ *
+ * @author Bond
  */
-public class DashboardUI extends JPanel {
+public class DashboardPanel
+        extends JPanel {
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
     /**
@@ -24,7 +27,7 @@ public class DashboardUI extends JPanel {
     /**
      * Creates new form DashboardUI
      */
-    public DashboardUI() {
+    public DashboardPanel() {
         initializeComponents();
         this.setVisible(true);
     }

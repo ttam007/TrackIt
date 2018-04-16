@@ -11,7 +11,7 @@ import trackit.DAL.AnInventoryItem;
  *
  * @author Steven, Bond
  */
-public class CheckInOutUI
+public class CheckInOutDialog
         extends JDialog {
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
@@ -40,7 +40,7 @@ public class CheckInOutUI
     /**
      * Check In/Out UI
      */
-    public CheckInOutUI() {
+    public CheckInOutDialog() {
         initializeComponents();
     }
     // </editor-fold>
@@ -145,7 +145,7 @@ public class CheckInOutUI
 
         @Override
         public void windowClosing(WindowEvent e) {
-            JDialog frame = CheckInOutUI.this;
+            JDialog frame = CheckInOutDialog.this;
             int result = JOptionPane.showConfirmDialog(frame,
                     "Do you want to save?", "Close Query",
                     JOptionPane.YES_NO_OPTION);
