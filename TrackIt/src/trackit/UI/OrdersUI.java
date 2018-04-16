@@ -16,15 +16,15 @@ public class OrdersUI
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
     /**
-     *
+     * The name of the panel.
      */
     public static final String TAB_NAME = "Orders";
 
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
-    private final ArrayList<AnOrder> orders;
-    private final AnOrder bll;
-    // </editor-fold>
+    private final ArrayList<AnOrder> orders = new ArrayList<>();
+    private final AnOrder bll = new AnOrder();
+// </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     JButton btnCreate, btnRemove, btnEdit;
     String[] ordersLabel = {"Order Date", "Order Number", "Supplier", "Status", "Total"};
@@ -38,8 +38,10 @@ public class OrdersUI
      * orders ui
      */
     public OrdersUI() {
-        this.bll = new AnOrder();
-        this.orders = new ArrayList<>();
+        initializeComponents();
+    }
+
+    private void initializeComponents() {
         setLayout(new BorderLayout());
 
         //add data to suppliers arraylist 

@@ -10,7 +10,7 @@ public class DashboardUI extends JPanel {
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
     /**
-     *
+     * The name of the panel.
      */
     public static final String TAB_NAME = "Dashboard";
     // </editor-fold>

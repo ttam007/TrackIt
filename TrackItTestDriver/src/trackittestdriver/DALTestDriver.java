@@ -325,6 +325,7 @@ public class DALTestDriver {
      */
     public void testSQLHelperItem() {
         System.out.println("\n\ntestSQLHelper");
+        /*
 
         SQLHelperItem helper = new SQLHelperItem();
         AnItem anItem;
@@ -370,6 +371,7 @@ public class DALTestDriver {
         } catch (Exception ex) {
             System.out.println("Generic error = " + ex.getLocalizedMessage());
         }
+        */
     }
     
     /**

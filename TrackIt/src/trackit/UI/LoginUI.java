@@ -13,6 +13,9 @@ import trackit.*;
 public class LoginUI extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
+    /**
+    * The name of the window.
+    */
     private static final String WINDOW_NAME = "Login";
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
@@ -134,7 +137,7 @@ public class LoginUI extends JFrame {
     /**
      * Handles all aspects of closing the program.
      */
-    private class CloseQuery extends WindowAdapter {
+    private static class CloseQuery extends WindowAdapter {
 
         @Override
         public void windowClosing(WindowEvent e) {

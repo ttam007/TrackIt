@@ -16,7 +16,7 @@ public class InventoryItemDetailsUI
 
     // <editor-fold defaultstate="collapsed" desc="Constants">
     /**
-     *
+     * The name of the dialog.
      */
     public static final String WINDOW_NAME = "Inventory Item Details";
     // </editor-fold>
