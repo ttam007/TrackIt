@@ -11,16 +11,17 @@ import trackit.*;
  *
  * @author Douglas
  */
-public class MainMenuUI extends JFrame {
+public class MainMenuFrame
+        extends JFrame {
 
     // <editor-fold defaultstate="collapsed" desc="Constants">
     private static final String WINDOW_NAME = "Main Menu";
     private final MainMenu bll;
 
-    SuppliersUI suppliersTab = new SuppliersUI();
-    DashboardUI dashboardTab = new DashboardUI();
-    OrdersUI ordersTab = new OrdersUI();
-    InventoryItemsUI inventoryTab = new InventoryItemsUI();
+    SuppliersPanel suppliersTab = new SuppliersPanel();
+    DashboardPanel dashboardTab = new DashboardPanel();
+    OrdersPanel ordersTab = new OrdersPanel();
+    InventoryItemsPanel inventoryTab = new InventoryItemsPanel();
     JTabbedPane tabpane;
     JLabel title;
     JButton btnLogout, btnExit;
@@ -30,7 +31,7 @@ public class MainMenuUI extends JFrame {
     /**
      * Main menu
      */
-    public MainMenuUI() {
+    public MainMenuFrame() {
         this.bll = new MainMenu();
         initializeComponents();
 
@@ -54,10 +55,10 @@ public class MainMenuUI extends JFrame {
 
         //Add all components here and set properties.
         tabpane = new JTabbedPane();
-        tabpane.add(DashboardUI.TAB_NAME, dashboardTab);
-        tabpane.add(InventoryItemsUI.TAB_NAME, inventoryTab);
-        tabpane.add(OrdersUI.TAB_NAME, ordersTab);
-        tabpane.add(SuppliersUI.TAB_NAME, suppliersTab);
+        tabpane.add(DashboardPanel.TAB_NAME, dashboardTab);
+        tabpane.add(InventoryItemsPanel.TAB_NAME, inventoryTab);
+        tabpane.add(OrdersPanel.TAB_NAME, ordersTab);
+        tabpane.add(SuppliersPanel.TAB_NAME, suppliersTab);
 
         add(tabpane, BorderLayout.CENTER);
 
@@ -65,7 +66,7 @@ public class MainMenuUI extends JFrame {
         btnLogout = new JButton("Log Out");
         btnLogout.addActionListener((ActionEvent e) -> {
             setVisible(false);
-            LoginUI login = new LoginUI();
+            LoginFrame login = new LoginFrame();
             login.display();
         });
         btnExit = new JButton("Exit");
@@ -106,7 +107,7 @@ public class MainMenuUI extends JFrame {
 
         @Override
         public void windowClosing(WindowEvent e) {
-            JFrame frame = MainMenuUI.this;
+            JFrame frame = MainMenuFrame.this;
             int result = JOptionPane.showConfirmDialog(frame,
                     "Are you done with this program?", "Exit Program",
                     JOptionPane.YES_NO_OPTION);

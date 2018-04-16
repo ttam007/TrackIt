@@ -12,7 +12,7 @@ import trackit.DAL.AnItem;
  * @param <T> The specific type of AnItem (Inventory or Order) that will be
  * handled by this class.
  */
-public abstract class ItemDetailsUI<T extends AnItem>
+public abstract class ItemDetailsDialog<T extends AnItem>
         extends JFrame {
 
     // <editor-fold defaultstate="collapsed" desc="Constants">
@@ -55,7 +55,7 @@ public abstract class ItemDetailsUI<T extends AnItem>
      * @param windowName
      * @param balLayer
      */
-    protected ItemDetailsUI(String windowName, T balLayer) {
+    protected ItemDetailsDialog(String windowName, T balLayer) {
         this.WINDOW_NAME = windowName;
         this.bal = balLayer;
 
@@ -147,4 +147,3 @@ public abstract class ItemDetailsUI<T extends AnItem>
     }
     // </editor-fold>
 }
-

@@ -47,7 +47,7 @@ public class MainMenu {
     public void logout() {
         Login login = new Login();
         login.startLogout();
-        //TODO:  close the Main Menu UI; done in MainMenuUI
+        //TODO:  close the Main Menu UI; done in MainMenuFrame
     }
 
     /**
@@ -61,7 +61,7 @@ public class MainMenu {
      * start the application
      */
     public void start() {
-        MainMenuUI dlgMain = new MainMenuUI();
+        MainMenuFrame dlgMain = new MainMenuFrame();
         dlgMain.display();
     }
 }

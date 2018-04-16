@@ -10,12 +10,13 @@ import trackit.*;
  *
  * @author Douglas
  */
-public class LoginUI extends JFrame {
+public class LoginFrame
+        extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
     /**
-    * The name of the window.
-    */
+     * The name of the window.
+     */
     private static final String WINDOW_NAME = "Login";
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
@@ -34,7 +35,7 @@ public class LoginUI extends JFrame {
     /**
      * Login
      */
-    public LoginUI() {
+    public LoginFrame() {
         initializeComponents();
     }
 
@@ -44,7 +45,7 @@ public class LoginUI extends JFrame {
      *
      * @param userName The value to appear in the User Name textbox.
      */
-    public LoginUI(String userName) {
+    public LoginFrame(String userName) {
         this();
 
         this.tfUsername.setText(userName);

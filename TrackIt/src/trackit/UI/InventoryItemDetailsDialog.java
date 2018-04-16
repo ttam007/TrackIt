@@ -11,7 +11,7 @@ import trackit.*;
  *
  * @author Bond
  */
-public class InventoryItemDetailsUI
+public class InventoryItemDetailsDialog
         extends JDialog {
 
     // <editor-fold defaultstate="collapsed" desc="Constants">
@@ -30,7 +30,7 @@ public class InventoryItemDetailsUI
      *
      * @param useCreateMode
      */
-    public InventoryItemDetailsUI(boolean useCreateMode) {
+    public InventoryItemDetailsDialog(boolean useCreateMode) {
         // super("Inventory Item Details", new AnInventoryItem());
         this.isCreateMode = useCreateMode;
         this.initializeComponents();
@@ -41,8 +41,8 @@ public class InventoryItemDetailsUI
      */
     private void initializeComponents() {
         //Setup main frame
-        int frameWidth = 640;
-        int frameHeight = 400;
+        int frameWidth = 500;// Originally 640
+        int frameHeight = 250;//Originally 400.
         Dimension dimFrame = new Dimension(frameWidth, frameHeight);
         this.setTitle(Utilities.getWindowCaption(WINDOW_NAME));
         this.setSize(dimFrame);
@@ -55,7 +55,7 @@ public class InventoryItemDetailsUI
 
         gbc = new GridBagConstraints();
         setLayout(new GridBagLayout());
-        gbc.insets = new Insets(2, 2, 10, 0);
+        gbc.insets = new Insets(2, 2, 5, 0);
         gbc.anchor = GridBagConstraints.LINE_START;
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
@@ -67,7 +67,7 @@ public class InventoryItemDetailsUI
 
         // Item Name Text Field
         itemNameField = new JTextField(25);
-        itemNameField.setEditable(this.isCreateMode);
+
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.gridwidth = 5;
@@ -80,7 +80,7 @@ public class InventoryItemDetailsUI
         gbc.gridwidth = 1;
         add(sku, gbc);
         skuField = new JTextField(25);
-        skuField.setEditable(this.isCreateMode);
+
         gbc.gridx = 1;
         gbc.gridy = 1;
         gbc.gridwidth = 5;
@@ -120,7 +120,7 @@ public class InventoryItemDetailsUI
         add(unit, gbc);
         // Field
         unitField = new JTextField(7);
-        unitField.setEditable(this.isCreateMode);
+        
         gbc.gridx = 1;
         gbc.gridy = 3;
         gbc.gridwidth = 3;
@@ -161,7 +161,6 @@ public class InventoryItemDetailsUI
             //TODO
             this.dispose();
         });
-        //Test
 
         this.pack();
     }
@@ -182,7 +181,7 @@ public class InventoryItemDetailsUI
 
         @Override
         public void windowClosing(WindowEvent e) {
-            JDialog frame = InventoryItemDetailsUI.this;
+            JDialog frame = InventoryItemDetailsDialog.this;
             int result = JOptionPane.showConfirmDialog(frame,
                     "Do you want to save?", "Close Query",
                     JOptionPane.YES_NO_OPTION);
