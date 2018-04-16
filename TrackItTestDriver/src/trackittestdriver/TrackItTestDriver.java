@@ -16,6 +16,7 @@ public class TrackItTestDriver {
 
         //dal.testMySQLJarConnection();
         //dal.testSQLConnector();
-        dal.testSQLHelperSupplier();
+        //dal.testSQLHelperSupplier();
+        dal.testSQLHelperInventoryItem();
     }
 }

@@ -1,10 +1,10 @@
 package trackit.UI;
 
-import trackit.DAL.AnItem;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import trackit.*;
+import trackit.DAL.AnItem;
 
 /**
  * UI Layer: Super class of all windows that show AnItem Details.
@@ -120,7 +120,7 @@ public abstract class ItemDetailsUI<T extends AnItem>
      * Displays the frame.
      */
     public void display() {
-        System.out.println(String.format("Displaying {0}...", WINDOW_NAME));
+        System.out.println(String.format("Displaying %s...", WINDOW_NAME));
         setVisible(true);
     }
     // </editor-fold>
@@ -147,3 +147,4 @@ public abstract class ItemDetailsUI<T extends AnItem>
     }
     // </editor-fold>
 }
+

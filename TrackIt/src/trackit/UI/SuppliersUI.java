@@ -11,11 +11,12 @@ import trackit.DAL.ASupplier;
  *
  * @author Douglas
  */
-public class SuppliersUI extends JPanel {
+public class SuppliersUI
+        extends JPanel {
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
     /**
-     *
+     * The name of the panel.
      */
     public static final String TAB_NAME = "Suppliers";
     // </editor-fold>
