@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="TrackIt">
+  <ClassDiagramComponents>
+    <Class name="Inventory" package="trackit" visibility="public" xPosition="1900.0" yPosition="1000.0">
+      <Fields>
+        <Field name="items" type="ArrayList&lt;Item&gt;" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="addItem" returnType="void" visibility="public">
+          <Argument type="Item" name="anItem"/>
+        </Method>
+        <Method name="removeItem" returnType="void" visibility="public">
+          <Argument type="Item" name="anItem"/>
+          <Argument type="int" name="quantity"/>
+        </Method>
+        <Method name="getExpiredItems" returnType="ArrayList&lt;Item&gt;" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="Item" package="trackit" visibility="public" xPosition="1757.0" yPosition="1486.0">
+      <Fields>
+        <Field name="description" type="String" visibility="private"/>
+        <Field name="sku" type="String" visibility="private"/>
+        <Field name="size" type="Float" visibility="private"/>
+        <Field name="sizeUnit" type="String" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+        <Constructor visibility="public">
+          <Argument type="String" name="description"/>
+          <Argument type="String" name="sku"/>
+          <Argument type="Float" name="size"/>
+          <Argument type="String" name="sizeUnit"/>
+        </Constructor>
+      </Constructors>
+      <Methods/>
+    </Class>
+    <Class name="MainMenu" package="trackit" visibility="public" xPosition="136.0" yPosition="746.0">
+      <Fields>
+        <Field name="pnlMain" type="JPanel" visibility="package"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="initializeComponents" returnType="void" visibility="private"/>
+        <Method name="display" returnType="void" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="NegativeAmountException" package="trackit" visibility="public" xPosition="871.0" yPosition="109.0">
+      <Fields>
+        <Field name="MSG_TEMPLATE_BASE" type="String" visibility="private" isFinal="true"/>
+        <Field name="errorMessage" type="String" visibility="private" isFinal="true"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="getLocalizedMessage" returnType="String" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="Order" package="trackit" visibility="public" xPosition="891.0" yPosition="1486.0">
+      <Fields>
+        <Field name="orderId" type="Integer" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="addItem" returnType="void" visibility="public">
+          <Argument type="Item" name="anItem"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="SQLConnector" package="trackit" visibility="public" xPosition="1373.0" yPosition="181.0">
+      <Fields>
+        <Field name="DRIVER" type="String" visibility="private"/>
+        <Field name="singleton" type="SQLConnector" visibility="private" isStatic="true"/>
+        <Field name="databaseLocation" type="String" visibility="private"/>
+        <Field name="port" type="String" visibility="private"/>
+        <Field name="databaseName" type="String" visibility="private"/>
+        <Field name="userName" type="String" visibility="private"/>
+        <Field name="password" type="String" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="private"/>
+      </Constructors>
+      <Methods>
+        <Method name="getDatabaseURL" returnType="String" visibility="private"/>
+        <Method name="getInstance" returnType="SQLConnector" visibility="public" isStatic="true"/>
+        <Method name="setConnectionString" returnType="void" visibility="public">
+          <Argument type="String" name="databaseLocation"/>
+          <Argument type="String" name="port"/>
+          <Argument type="String" name="databaseName"/>
+          <Argument type="String" name="userName"/>
+          <Argument type="String" name="password"/>
+        </Method>
+        <Method name="validateConnection" returnType="boolean" visibility="public"/>
+        <Method name="getConnection" returnType="Connection" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="SQLHelper" package="trackit" visibility="public" isAbstract="true" xPosition="410.0" yPosition="319.0">
+      <Fields>
+        <Field name="sqlConn" type="SQLConnector" visibility="private"/>
+      </Fields>
+      <Constructors/>
+      <Methods>
+        <Method name="buildSprocSyntax" returnType="String" visibility="private">
+          <Argument type="String" name="sprocName"/>
+          <Argument type="HashMap&lt;String, String&gt;" name="parameters"/>
+        </Method>
+        <Method name="execSproc" returnType="ResultSet" visibility="protected">
+          <Argument type="String" name="sprocName"/>
+          <Argument type="HashMap&lt;String, String&gt;" name="parameters"/>
+        </Method>
+        <Method name="getAllFromDatabase" returnType="ArrayList&lt;T&gt;" visibility="public" isAbstract="true"/>
+      </Methods>
+    </Class>
+    <Class name="SQLHelperItems" package="trackit" visibility="public" xPosition="410.0" yPosition="1680.0">
+      <Fields/>
+      <Constructors/>
+      <Methods>
+        <Method name="getAllFromDatabase" returnType="ArrayList&lt;T&gt;" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="TrackIt" package="trackit" visibility="public" xPosition="136.0" yPosition="1253.0">
+      <Fields/>
+      <Constructors/>
+      <Methods>
+        <Method name="main" returnType="void" visibility="public" isStatic="true">
+          <Argument type="String[]" name="args"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Interface name="ISQLHelper" package="trackit" visibility="public" xPosition="1373.0" yPosition="1818.0">
+      <Methods/>
+    </Interface>
+    <Enum name="OrderStatus" package="trackit" visibility="public" xPosition="1714.0" yPosition="598.0">
+      <Literals>
+        <Literal name="ORDERED"/>
+        <Literal name="BEINGSHIPPED"/>
+        <Literal name="DELIVERED"/>
+      </Literals>
+    </Enum>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations>
+    <HasRelation name="items" source="trackit.Inventory" target="trackit.Item" type="Aggregation" sourceCardinality="1..1" targetCardinality="0..*" collectionType="ArrayList&lt;Item&gt;"/>
+    <HasRelation name="sqlConn" source="trackit.SQLHelper" target="trackit.SQLConnector" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="trackit.SQLConnector" target="trackit.SQLConnector" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="trackit.Order" target="trackit.Item" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="trackit.SQLHelperItems" target="trackit.SQLHelper"/>
+    <HasRelation name="singleton" source="trackit.SQLConnector" target="trackit.SQLConnector" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="trackit.Inventory" target="trackit.Item" sourceCardinality="1..1" targetCardinality="1..1"/>
+  </ClassDiagramRelations>
+</ClassDiagram>

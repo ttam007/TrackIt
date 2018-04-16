@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="TrackIt">
+  <ClassDiagramComponents>
+    <Class name="MainMenu" package="trackit" visibility="public" xPosition="20.0" yPosition="20.0">
+      <Fields>
+        <Field name="pnlMain" type="JPanel" visibility="package"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="initializeComponents" returnType="void" visibility="private"/>
+        <Method name="display" returnType="void" visibility="public"/>
+      </Methods>
+    </Class>
+    <Enum name="OrderStatus" package="trackit" visibility="public" xPosition="320.0" yPosition="20.0">
+      <Literals>
+        <Literal name="ORDERED"/>
+        <Literal name="BEINGSHIPPED"/>
+        <Literal name="DELIVERED"/>
+      </Literals>
+    </Enum>
+    <Class name="TrackIt" package="trackit" visibility="public" xPosition="620.0" yPosition="20.0">
+      <Fields/>
+      <Constructors/>
+      <Methods>
+        <Method name="main" returnType="void" visibility="public" isStatic="true">
+          <Argument type="String[]" name="args"/>
+        </Method>
+      </Methods>
+    </Class>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations/>
+</ClassDiagram>
