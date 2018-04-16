@@ -40,7 +40,7 @@ public class InventoryItemsPanel
     private JButton btnCreate, btnEdit, btnRemove, btnCheckInOut;
     private final Object[][] data;
     private JScrollPane sp;
-    private boolean disableButtons =false;
+    private boolean disableButtons =false;//use this variable to toggle edit and remove buttons on and off
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -63,6 +63,7 @@ public class InventoryItemsPanel
         this.setSize(new Dimension(1100, 700));
         this.display();
     }
+    //private method to toggle whether buttons will be enabled or not
     private void toggleDisableButton(){
 
         btnEdit.setEnabled(disableButtons);
@@ -116,18 +117,12 @@ public class InventoryItemsPanel
         mainTable = new JTable(data, tableHeaders.toArray());
         // Add action listener to JTable
         mainTable.getSelectionModel().addListSelectionListener((e)->{
-            System.out.println("TEST");
-            System.out.println(mainTable.getSelectedRow());
+            //if the row is bigger than -1 than we need to enable the buttons
             if(mainTable.getSelectedRow()>-1){
                 disableButtons=true;
                 toggleDisableButton();
             }
-        }/*new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-
-            }
-        }*/);
+        });
         mainTable.setBounds(30, 40, 200, 200);
         setButtons();
         sp = new JScrollPane(mainTable);
