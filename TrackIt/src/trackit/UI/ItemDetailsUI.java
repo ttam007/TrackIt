@@ -147,3 +147,4 @@ public abstract class ItemDetailsUI<T extends AnItem>
     }
     // </editor-fold>
 }
+
