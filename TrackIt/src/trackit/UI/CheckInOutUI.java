@@ -16,7 +16,7 @@ public class CheckInOutUI
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
     /**
-     *
+     * The name of the dialog.
      */
     public static final String WINDOW_NAME = "Check In/Out Item";
     // </editor-fold>
@@ -87,8 +87,8 @@ public class CheckInOutUI
         /**
          * corrected to address compile warning
          */
-        JComboBox<String> itemComboBox1 = new JComboBox<>(itemStrings);
-        itemBx.add(itemComboBox1);
+        JComboBox<String> itemComboBox = new JComboBox<>(itemStrings);
+        itemBx.add(itemComboBox);
         qtyBx = Box.createHorizontalBox();
         qtyLabel = new JLabel("Quantity");
         qtyBx.add(qtyLabel);

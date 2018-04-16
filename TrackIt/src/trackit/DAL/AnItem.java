@@ -115,7 +115,7 @@ public abstract class AnItem
      * @param itemStatus
      * @throws SQLException
      */
-    public void setOrderStatus(ItemStatusType itemStatus)
+    public void setItemStatus(ItemStatusType itemStatus)
             throws SQLException {
         //Calls the overloaded method instead of directly setting so the null check can occur.
         setItemStatus(itemStatus.getText());

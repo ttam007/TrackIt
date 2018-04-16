@@ -21,7 +21,7 @@ public class InventoryItemsUI
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
     /**
-     *
+     * The name of the panel.
      */
     public static final String TAB_NAME = "Inventory";
     // </editor-fold>

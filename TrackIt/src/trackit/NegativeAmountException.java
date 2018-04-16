@@ -6,8 +6,8 @@ package trackit;
 public class NegativeAmountException extends RuntimeException {
 
     // <editor-fold defaultstate="expanded" desc="Constants">
-    private final String MSG_TEMPLATE_GENERIC = "Amount is less than zero.";
-    private final String MSG_TEMPLATE_SPECIFIC = "$%f2 is less than zero.";
+    private static final String MSG_TEMPLATE_GENERIC = "Amount is less than zero.";
+    private static final String MSG_TEMPLATE_SPECIFIC = "$%f2 is less than zero.";
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Fields">
     private final String errorMessage;

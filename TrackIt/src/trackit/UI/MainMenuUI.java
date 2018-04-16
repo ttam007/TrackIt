@@ -85,8 +85,7 @@ public class MainMenuUI extends JFrame {
      * Refreshes the dashboards with current data.
      */
     private void refreshDashBoards() {
-        ArrayList<Dashboard> dashboards;
-        dashboards = bll.getDashboards();
+        ArrayList<Dashboard> dashboards = bll.getDashboards();
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
