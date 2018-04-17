@@ -36,6 +36,7 @@ public class OrderItemsFrame
     private JLabel lblOrderNumber, lblSupplier, lblStatus, lblOrderDate, lblExpectedDate, lblBlank;
     private JTextField tfOrderNumber, tfSupplier, tfStatus, tfOrderDate, tfExpectedDate, tfBlank;
     private JTable mainTable;
+    private Date orderDate, expectedDate, sqlOrderDate, sqlExpectedDate;
     
     UtilDateModel orderModel = new UtilDateModel();
     UtilDateModel expectedModel = new UtilDateModel();
@@ -136,6 +137,7 @@ public class OrderItemsFrame
         btmInnerBx.add(lblExpectedDate);
         expectedDatePicker = new JDatePickerImpl(expectedDatePanel, new DateLabelFormatter());
         btmInnerBx.add(expectedDatePicker);
+        
 
         topBox.add(topInnerBx);
         topBox.add(btmInnerBx);
@@ -230,6 +232,10 @@ public class OrderItemsFrame
         pnlBtm.add(btnOK);
         btnOK.addActionListener((ActionEvent e) -> {
             saveAction();
+            orderDate = (Date) orderDatePicker.getModel().getValue();
+            sqlOrderDate = Utilities.convertToSQLDate(orderDate);
+            expectedDate = (Date) expectedDatePicker.getModel().getValue();
+            sqlExpectedDate = Utilities.convertToSQLDate(expectedDate);
         });
 
         btnCancel = new JButton("Cancel");
