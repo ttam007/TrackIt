@@ -53,10 +53,17 @@ public class MainMenuUI extends JFrame {
 
         //Add all components here and set properties.
         tabpane = new JTabbedPane();
+<<<<<<< HEAD
         tabpane.add("Dashboard", dashboardTab);
         tabpane.add("Inventory", inventoryTab);
         tabpane.add("Orders", ordersTab);
         tabpane.add("Suppliers", suppliersTab);
+=======
+        tabpane.add(DashboardUI.TAB_NAME, dashboardTab);
+        tabpane.add(InventoryItemsUI.TAB_NAME, inventoryTab);
+        tabpane.add(OrdersUI.TAB_NAME, ordersTab);
+        tabpane.add(SuppliersUI.TAB_NAME, suppliersTab);
+>>>>>>> origin/master
 
         add(tabpane, BorderLayout.CENTER);
 
@@ -105,7 +112,11 @@ public class MainMenuUI extends JFrame {
     /**
      * Handles all aspects of closing the program.
      */
+<<<<<<< HEAD
     public class CloseQuery extends WindowAdapter {
+=======
+    private class CloseQuery extends WindowAdapter {
+>>>>>>> origin/master
 
         @Override
         public void windowClosing(WindowEvent e) {

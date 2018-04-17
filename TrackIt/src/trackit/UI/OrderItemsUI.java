@@ -146,15 +146,25 @@ public class OrderItemsUI extends JFrame {
         pnlBtm.add(btnAddItem);
         btnAddItem.addActionListener((ActionEvent e) -> {
             //TODO
+<<<<<<< HEAD
             details = new OrderItemDetailsUI(true);
+=======
+            OrderItemDetailsUI oid = new OrderItemDetailsUI(true);
+            oid.display();
+>>>>>>> origin/master
         });
 
         btnCreate = new JButton("Create");
         pnlBtm.add(btnCreate);
         btnCreate.addActionListener((ActionEvent e) -> {
+<<<<<<< HEAD
             //TODO
             inventory = new InventoryItemDetailsUI(true);
             
+=======
+            InventoryItemDetailsUI iidAddItem = new InventoryItemDetailsUI(true);
+            iidAddItem.display();
+>>>>>>> origin/master
         });
         
         btnEdit = new JButton("Edit");
@@ -228,7 +238,8 @@ public class OrderItemsUI extends JFrame {
     /**
      * Handles all aspects of closing the program.
      */
-    private class CloseQuery extends WindowAdapter {
+    private static class CloseQuery
+            extends WindowAdapter {
 
         @Override
         public void windowClosing(WindowEvent e) {
@@ -248,3 +259,4 @@ public class OrderItemsUI extends JFrame {
     }
     // </editor-fold>
 }
+

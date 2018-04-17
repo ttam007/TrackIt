@@ -19,8 +19,18 @@ import java.util.List;
 public class InventoryItemsUI extends JPanel {
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
+<<<<<<< HEAD
     private static final String WINDOW_NAME = "Inventory";
     private final ArrayList<AnInventoryItem> inventoryItems;
+=======
+    /**
+     * The name of the panel.
+     */
+    public static final String TAB_NAME = "Inventory";
+    // </editor-fold>
+    // <editor-fold defaultstate="expanded" desc="Private Fields">
+    private final ArrayList<AnInventoryItem> inventoryItems = new ArrayList<>();
+>>>>>>> origin/master
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">

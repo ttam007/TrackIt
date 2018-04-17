@@ -26,7 +26,7 @@ public class SQLHelperInventoryItem
     /**
      *
      */
-    public final String COLUMN_EXPIRATIONDATE = "expirationDate";
+    public static final String COLUMN_EXPIRATIONDATE = "expirationDate";
 
     /**
      *
@@ -197,12 +197,7 @@ public class SQLHelperInventoryItem
     @Override
     public String doNullCheck(String columnName, String aValue)
             throws SQLException {
-        //TODO
-        if (aValue == null && false /*columnName.equalsIgnoreCase(COLUMN_NICKNAME)*/) {
-            throw new NonNullableValueException();
-        } else {
-            return aValue;
-        }
+        throw new UnsupportedOperationException();
     }
     // </editor-fold>
 }

@@ -53,4 +53,8 @@ public abstract class GridClass<T extends DatabaseObject> {
     public ArrayList<T> getList() {
         return this.rows;
     }
+
+    public String getErrorMessage() {
+        return this.errorMessage;
+    }
 }

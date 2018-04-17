@@ -13,6 +13,15 @@ import java.awt.*;
  */
 public class InventoryItemDetailsUI extends JFrame {
 
+<<<<<<< HEAD
+=======
+    // <editor-fold defaultstate="collapsed" desc="Constants">
+    /**
+     * The name of the dialog.
+     */
+    public static final String WINDOW_NAME = "Inventory Item Details";
+    // </editor-fold>
+>>>>>>> origin/master
     private final boolean isCreateMode;
     //private final JFrame mainFrame;
     JPanel test;

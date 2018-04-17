@@ -32,6 +32,8 @@ public class TrackIt {
                 case 1:
                     conn.setConnectionString(args[0]);
                     break;
+                default:
+                    break;
             }
         } catch (NumberFormatException exNF) {
             System.out.println("Invalid command line parameter " + args[1]);
