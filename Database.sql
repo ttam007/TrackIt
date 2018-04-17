@@ -355,12 +355,14 @@ PROCEDURE sp_OrderItems_Insert (
     IN price DOUBLE UNSIGNED
 )
 BEGIN
+	DECLARE quantityCheckedIn INT UNSIGNED;
     DECLARE extendedPrice DOUBLE UNSIGNED;
     
+    SET quantityCheckedIn = 0;
     SET extendedPrice = (quantityOrdered * price);
     
 	INSERT INTO orderItems (orderId, itemId, quantityOrdered, quantityCheckedIn, price, extendedPrice)
-    VALUES (orderId, itemId, quantityOrdered, 0, price, extendedPrice);
+    VALUES (orderId, itemId, quantityOrdered, quantityCheckedIn, price, extendedPrice);
 	SET orderItemId = LAST_INSERT_ID(); 
 END;;
 
@@ -411,7 +413,7 @@ END;;
 DROP PROCEDURE IF EXISTS sp_InventoryItems_Select;;
 CREATE DEFINER = CURRENT_USER 
 PROCEDURE sp_InventoryItems_Select (
-	IN InventoryItemId INT UNSIGNED
+	IN inventoryItemId INT UNSIGNED
 )
 BEGIN
 	SELECT inventoryitems.inventoryItemId, inventoryitems.itemId,
@@ -458,7 +460,7 @@ END;;
 DROP PROCEDURE IF EXISTS sp_InventoryItems_Update;;
 CREATE DEFINER = CURRENT_USER 
 PROCEDURE sp_InventoryItems_Update (
-	IN InventoryItemId INT UNSIGNED,
+	IN inventoryItemId INT UNSIGNED,
     IN quantity INT UNSIGNED,
     IN expirationDate DATE,
 	IN description VARCHAR(64),
@@ -534,12 +536,13 @@ END;;
 DELIMITER ;
 
 /*lookups*/
+INSERT INTO lookups (listName, listValue) VALUES ('orderStatuses', 'Created');
 INSERT INTO lookups (listName, listValue) VALUES ('orderStatuses', 'Ordered');
-INSERT INTO lookups (listName, listValue) VALUES ('orderStatuses', 'Shipping');
-INSERT INTO lookups (listName, listValue) VALUES ('orderStatuses', 'Arrived');
+INSERT INTO lookups (listName, listValue) VALUES ('orderStatuses', 'Shipped');
+INSERT INTO lookups (listName, listValue) VALUES ('orderStatuses', 'Delivered');
 INSERT INTO lookups (listName, listValue) VALUES ('itemStatuses', 'Available');
 INSERT INTO lookups (listName, listValue) VALUES ('itemStatuses', 'Discontinued');
-INSERT INTO lookups (listName, listValue) VALUES ('itemStatuses', 'Do Not Replace');
+INSERT INTO lookups (listName, listValue) VALUES ('itemStatuses', 'Do Not Order');
 
 /*suppliers*/
 INSERT INTO suppliers (nickname, url) VALUES ('Amazon', 'https://www.amazon.com/');

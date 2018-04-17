@@ -11,16 +11,20 @@ import trackit.*;
  *
  * @author Douglas
  */
-public class MainMenuUI extends JFrame {
+public class MainMenuFrame
+        extends JFrame {
 
     // <editor-fold defaultstate="collapsed" desc="Constants">
+    /**
+     * The name of the window.
+     */
     private static final String WINDOW_NAME = "Main Menu";
     private final MainMenu bll;
 
-    SuppliersUI suppliersTab = new SuppliersUI();
-    DashboardUI dashboardTab = new DashboardUI();
-    OrdersUI ordersTab = new OrdersUI();
-    InventoryItemsUI inventoryTab = new InventoryItemsUI();
+    SuppliersPanel suppliersTab = new SuppliersPanel();
+    DashboardPanel dashboardTab = new DashboardPanel();
+    OrdersPanel ordersTab = new OrdersPanel();
+    InventoryItemsPanel inventoryTab = new InventoryItemsPanel();
     JTabbedPane tabpane;
     JButton btnLogout, btnExit;
 
@@ -29,7 +33,7 @@ public class MainMenuUI extends JFrame {
     /**
      * Main menu
      */
-    public MainMenuUI() {
+    public MainMenuFrame() {
         this.bll = new MainMenu();
         initializeComponents();
 
@@ -38,6 +42,29 @@ public class MainMenuUI extends JFrame {
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
+    /**
+     * Added solely to prevent serialization and Inspector items related to
+     * such.
+     *
+     * @param stream
+     * @throws java.io.IOException
+     */
+    private void writeObject(java.io.ObjectOutputStream stream) throws java.io.IOException {
+        throw new java.io.NotSerializableException(getClass().getName());
+    }
+
+    /**
+     * Added solely to prevent serialization and Inspector items related to
+     * such.
+     *
+     * @param stream
+     * @throws java.io.IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject(java.io.ObjectInputStream stream) throws java.io.IOException, ClassNotFoundException {
+        throw new java.io.NotSerializableException(getClass().getName());
+    }
+
     /**
      * Sets up all components used in this frame.
      */
@@ -53,6 +80,7 @@ public class MainMenuUI extends JFrame {
 
         //Add all components here and set properties.
         tabpane = new JTabbedPane();
+<<<<<<< HEAD:TrackIt/src/trackit/UI/MainMenuUI.java
 <<<<<<< HEAD
         tabpane.add("Dashboard", dashboardTab);
         tabpane.add("Inventory", inventoryTab);
@@ -64,14 +92,25 @@ public class MainMenuUI extends JFrame {
         tabpane.add(OrdersUI.TAB_NAME, ordersTab);
         tabpane.add(SuppliersUI.TAB_NAME, suppliersTab);
 >>>>>>> origin/master
+=======
+        tabpane.add(DashboardPanel.TAB_NAME, dashboardTab);
+        tabpane.add(InventoryItemsPanel.TAB_NAME, inventoryTab);
+        tabpane.add(OrdersPanel.TAB_NAME, ordersTab);
+        tabpane.add(SuppliersPanel.TAB_NAME, suppliersTab);
+>>>>>>> Dev:TrackIt/src/trackit/UI/MainMenuFrame.java
 
         add(tabpane, BorderLayout.CENTER);
 
         JPanel pnlBottom = new JPanel();
         btnLogout = new JButton("Log Out");
         btnLogout.addActionListener((ActionEvent e) -> {
+<<<<<<< HEAD:TrackIt/src/trackit/UI/MainMenuUI.java
             this.dispose();
             LoginUI login = new LoginUI();
+=======
+            setVisible(false);
+            LoginFrame login = new LoginFrame();
+>>>>>>> Dev:TrackIt/src/trackit/UI/MainMenuFrame.java
             login.display();
         });
         btnExit = new JButton("Exit");
@@ -120,7 +159,11 @@ public class MainMenuUI extends JFrame {
 
         @Override
         public void windowClosing(WindowEvent e) {
+<<<<<<< HEAD:TrackIt/src/trackit/UI/MainMenuUI.java
             JFrame frame = (JFrame) e.getSource();
+=======
+            JFrame frame = MainMenuFrame.this;
+>>>>>>> Dev:TrackIt/src/trackit/UI/MainMenuFrame.java
             int result = JOptionPane.showConfirmDialog(frame,
                     "Are you done with this program?", "Exit Program",
                     JOptionPane.YES_NO_OPTION);

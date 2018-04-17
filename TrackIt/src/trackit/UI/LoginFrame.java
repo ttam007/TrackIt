@@ -10,12 +10,13 @@ import trackit.*;
  *
  * @author Douglas
  */
-public class LoginUI extends JFrame {
+public class LoginFrame
+        extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
     /**
-    * The name of the window.
-    */
+     * The name of the window.
+     */
     private static final String WINDOW_NAME = "Login";
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
@@ -34,7 +35,7 @@ public class LoginUI extends JFrame {
     /**
      * Login
      */
-    public LoginUI() {
+    public LoginFrame() {
         initializeComponents();
     }
 
@@ -44,7 +45,7 @@ public class LoginUI extends JFrame {
      *
      * @param userName The value to appear in the User Name textbox.
      */
-    public LoginUI(String userName) {
+    public LoginFrame(String userName) {
         this();
 
         this.tfUsername.setText(userName);
@@ -52,6 +53,29 @@ public class LoginUI extends JFrame {
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
+    /**
+     * Added solely to prevent serialization and Inspector items related to
+     * such.
+     *
+     * @param stream
+     * @throws java.io.IOException
+     */
+    private void writeObject(java.io.ObjectOutputStream stream) throws java.io.IOException {
+        throw new java.io.NotSerializableException(getClass().getName());
+    }
+
+    /**
+     * Added solely to prevent serialization and Inspector items related to
+     * such.
+     *
+     * @param stream
+     * @throws java.io.IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject(java.io.ObjectInputStream stream) throws java.io.IOException, ClassNotFoundException {
+        throw new java.io.NotSerializableException(getClass().getName());
+    }
+
     /**
      * Sets up all components used in this frame.
      */

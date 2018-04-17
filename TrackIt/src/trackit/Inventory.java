@@ -1,7 +1,6 @@
 package trackit;
 
 import java.sql.*;
-import trackit.DAL.AnInventoryItem;
 
 /**
  * BAL Layer: Works with the Inventory tab.

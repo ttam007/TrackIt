@@ -11,15 +11,19 @@ public enum OrderStatusType {
     /**
      *
      */
-    ORDERED(0),
+    CREATED(0),
     /**
      *
      */
-    BEINGSHIPPED(1),
+    ORDERED(1),
     /**
      *
      */
-    DELIVERED(2);
+    SHIPPED(2),
+    /**
+     *
+     */
+    DELIVERED(3);
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Private Fields">
@@ -52,7 +56,7 @@ public enum OrderStatusType {
 
     static {
         //TODO:  get values from database.
-        STATUS_TEXT = new String[]{"Ordered", "Being Shipped", "Delievered"};
+        STATUS_TEXT = new String[]{"Created", "Ordered", "Shipped", "Delivered"};
     }
 
     /**

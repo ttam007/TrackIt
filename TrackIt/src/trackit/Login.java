@@ -5,7 +5,7 @@ import trackit.UI.*;
 
 /**
  *
- * @author Bryan
+ * @author Bryan, Bond
  */
 public class Login {
 
@@ -57,7 +57,7 @@ public class Login {
      * logout
      */
     public void startLogout() {
-        LoginUI dlgLogin = new LoginUI(SQLConnector.getInstance().getUserName());
+        LoginFrame dlgLogin = new LoginFrame(SQLConnector.getInstance().getUserName());
         dlgLogin.display();
     }
 
