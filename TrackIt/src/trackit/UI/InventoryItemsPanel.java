@@ -1,21 +1,17 @@
-/**
- * UI Layer: Handles all aspects of the Inventory Item panel.
- *
- * @author Brian Diaz
- * @date 04/10/2018
- *
- */
 package trackit.UI;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.*;
 import javax.swing.*;
-import trackit.AnInventoryItem;
-import trackit.AnItem;
+import javax.swing.event.*;
+import trackit.*;
+import trackit.DAL.*;
 
 /**
  * UI Layer: Handles all aspects of the Inventory panel.
+ *
+ * @author Brian Diaz
  */
 public class InventoryItemsPanel
         extends JPanel {
@@ -36,6 +32,7 @@ public class InventoryItemsPanel
     private JButton btnCreate, btnEdit, btnRemove, btnCheckInOut;
     private final Object[][] data;
     private JScrollPane sp;
+    private boolean disableButtons =false;//use this variable to toggle edit and remove buttons on and off
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -58,6 +55,13 @@ public class InventoryItemsPanel
         this.setSize(new Dimension(1100, 700));
         this.display();
     }
+    //private method to toggle whether buttons will be enabled or not
+    private void toggleDisableButton(){
+
+        btnEdit.setEnabled(disableButtons);
+        btnRemove.setEnabled(disableButtons);
+    }
+
 
     private void setButtons() {
 
@@ -68,6 +72,8 @@ public class InventoryItemsPanel
         });
 
         btnEdit = new JButton("Edit");
+        btnEdit.setEnabled(disableButtons);
+
         btnEdit.addActionListener((ActionEvent e) -> {
             //If list item selected then edit item else select item.
             int selectedRow = this.mainTable.getSelectedRow();
@@ -82,6 +88,7 @@ public class InventoryItemsPanel
         });
 
         btnRemove = new JButton("Remove");
+        btnRemove.setEnabled(disableButtons);
         btnRemove.addActionListener((ActionEvent e) -> {
             int selectedRow = this.mainTable.getSelectedRow();
             if (selectedRow < 0) {
@@ -98,7 +105,8 @@ public class InventoryItemsPanel
             } else {
                 //TODO:  display bll.getErrorMessage() and stay on this window.
             }
-             */        });
+             */ 
+        });
 
         btnCheckInOut = new JButton("Check In/Out");
         btnCheckInOut.addActionListener((ActionEvent e) -> {
@@ -108,7 +116,8 @@ public class InventoryItemsPanel
     }
 
     private void createUIComponents() {
-        setButtons();
+
+
         data[0][0] = "Gauze";
         data[0][1] = "3.0";
         data[0][2] = "oz";
@@ -123,8 +132,16 @@ public class InventoryItemsPanel
         data[1][5] = "Expired";
 
         mainTable = new JTable(data, TABLE_LABELS);
+        // Add action listener to JTable
+        mainTable.getSelectionModel().addListSelectionListener((e)->{
+            //if the row is bigger than -1 than we need to enable the buttons
+            if(mainTable.getSelectedRow()>-1){
+                disableButtons=true;
+                toggleDisableButton();
+            }
+        });
         mainTable.setBounds(30, 40, 200, 200);
-
+        setButtons();
         sp = new JScrollPane(mainTable);
 
         add(sp, BorderLayout.CENTER);
