@@ -1,4 +1,7 @@
-package trackit.DAL;
+package trackit;
+
+import java.sql.SQLException;
+import trackit.DAL.SQLHelper;
 
 /**
  * Super class of all objects that exist in the database.
@@ -8,6 +11,9 @@ package trackit.DAL;
 public abstract class DatabaseObject {
 
     // <editor-fold defaultstate="expanded" desc="Protected Fields">
+    /**
+     *
+     */
     protected Integer primaryKey = null;
     private String errorMessage;
 
@@ -20,10 +26,13 @@ public abstract class DatabaseObject {
      * database.
      */
     protected boolean isAlreadyInDatabase() {
-        //TODO:  code this check.  If primary key is already in the database, then return true.
-        return false;
+        return !(primaryKey.equals(SQLHelper.INVALID_PRIMARY_KEY));
     }
 
+    /**
+     *
+     * @param errorMessage
+     */
     protected void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
     }
@@ -40,10 +49,21 @@ public abstract class DatabaseObject {
         return this.errorMessage;
     }
 
-    public void setPrimaryKey(Integer primaryKey) {
-        this.primaryKey = primaryKey;
-    }
+    /**
+     * This can not be null. Must be overridden in child object to handle null
+     * checks.
+     *
+     * @param primaryKey
+     * @throws SQLException
+     */
+    protected abstract void setPrimaryKey(Integer primaryKey)
+            throws SQLException;
 
+    /**
+     * This can not be null.
+     *
+     * @return
+     */
     public Integer getPrimaryKey() {
         return this.primaryKey;
     }

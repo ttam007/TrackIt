@@ -1,8 +1,9 @@
-package trackit.DAL;
+package trackit;
 
 import java.sql.*;
 import java.util.*;
-import trackit.*;
+import trackit.DAL.SQLHelper;
+import trackit.DAL.SQLHelperOrder;
 
 /**
  * DAL Layer: Handles all aspects of a single Order.
@@ -14,73 +15,166 @@ public class AnOrder
 
     // <editor-fold defaultstate="expanded" desc="Private Fields">
     private static final SQLHelperOrder HELPER = new SQLHelperOrder();
-    private String description;
+    private String description = "New Order";
     /**
      * FK to suppliers.supplierId
      */
-    private Integer orderedFrom;
-    private OrderStatusType orderStatus;
-    private java.sql.Date dateOrdered;
-    private java.sql.Date dateExpected;
+    private Integer orderedFrom = null;
+    private OrderStatusType orderStatus = OrderStatusType.CREATED;
+    private java.sql.Date dateOrdered = null;
+    private java.sql.Date dateExpected = null;
 
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Constructors">
+    /**
+     * An order
+     */
     public AnOrder() {
         this.primaryKey = SQLHelper.INVALID_PRIMARY_KEY;
     }
 
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Setters & Getters">
-    public void setDescription(String description)
+    @Override
+    public void setPrimaryKey(Integer aPrimaryKey)
             throws SQLException {
-        this.description = HELPER.doNullCheck(HELPER.COLUMN_DESCRIPTION, description);
+        this.primaryKey = HELPER.doNullCheck(SQLHelperOrder.COLUMN_PK, aPrimaryKey);
     }
 
+    /**
+     * This can not be null.
+     *
+     * @param aDescription
+     * @throws SQLException
+     */
+    public void setDescription(String aDescription)
+            throws SQLException {
+        this.description = HELPER.doNullCheck(SQLHelperOrder.COLUMN_DESCRIPTION, aDescription);
+    }
+
+    /**
+     * This can not be null.
+     *
+     * @return
+     */
     public String getDescription() {
         return this.description;
     }
 
-    public void setOrderedFrom(Integer orderedFrom)
+    /**
+     * This can not be null.
+     *
+     * @param anOrderedFrom
+     * @throws SQLException
+     */
+    public void setOrderedFrom(Integer anOrderedFrom)
             throws SQLException {
-        this.orderedFrom = HELPER.doNullCheck(HELPER.COLUMN_ORDEREDFROM, orderedFrom);
+        this.orderedFrom = HELPER.doNullCheck(SQLHelperOrder.COLUMN_ORDEREDFROM, anOrderedFrom);
     }
 
+    /**
+     * This can not be null.
+     *
+     * @return
+     */
     public Integer getOrderedFrom() {
         return this.orderedFrom;
     }
 
-    public void setOrderStatus(String orderStatus)
+    /**
+     * This can not be null.
+     *
+     * @param anOrderStatus
+     * @throws SQLException
+     */
+    public void setOrderStatus(String anOrderStatus)
             throws SQLException {
-        String tmpValue = HELPER.doNullCheck(HELPER.COLUMN_ORDERSTATUS, orderStatus);
+        String tmpValue = HELPER.doNullCheck(SQLHelperOrder.COLUMN_ORDERSTATUS, anOrderStatus);
         this.orderStatus = OrderStatusType.getType(tmpValue);
     }
 
-    public void setOrderStatus(OrderStatusType orderStatus)
+    /**
+     * This can not be null.
+     *
+     * @param anOrderStatus
+     * @throws SQLException
+     */
+    public void setOrderStatus(OrderStatusType anOrderStatus)
             throws SQLException {
         //Calls the overloaded method instead of directly setting so the null check can occur.
-        setOrderStatus(orderStatus.getText());
+        setOrderStatus(anOrderStatus.getText());
     }
 
+    /**
+     * This can not be null.
+     *
+     * @return
+     */
     public OrderStatusType getOrderStatus() {
         return this.orderStatus;
     }
 
-    public void setDateOrdered(java.sql.Date dateOrdered)
+    /**
+     * This can not be null.
+     *
+     * @param aDateOrdered
+     * @throws SQLException
+     */
+    public void setDateOrdered(java.sql.Date aDateOrdered)
             throws SQLException {
-        this.dateOrdered = HELPER.doNullCheck(HELPER.COLUMN_DATEORDERED, dateOrdered);
+        this.dateOrdered = HELPER.doNullCheck(SQLHelperOrder.COLUMN_DATEORDERED, aDateOrdered);
     }
 
+    /**
+     * This can not be null.
+     *
+     * @return
+     */
     public java.sql.Date getDateOrdered() {
-        return this.dateOrdered;
+        return (java.sql.Date) this.dateOrdered.clone();
     }
 
-    public void setDateExpected(java.sql.Date dateExpected)
+    /**
+     * This can be null.
+     *
+     * @param aDateExpected
+     * @throws SQLException
+     */
+    public void setDateExpected(java.sql.Date aDateExpected)
             throws SQLException {
-        this.dateExpected = HELPER.doNullCheck(HELPER.COLUMN_DATEEXPECTED, dateExpected);
+        this.dateExpected = HELPER.doNullCheck(SQLHelperOrder.COLUMN_DATEEXPECTED, aDateExpected);
     }
 
+    /**
+     * This can be null.
+     *
+     * @return
+     */
     public java.sql.Date getDateExpected() {
-        return this.dateExpected;
+        if (this.dateExpected == null) {
+            return null;
+        } else {
+            return (java.sql.Date) this.dateExpected.clone();
+        }
+    }
+
+    // </editor-fold>
+    // <editor-fold defaultstate="expanded" desc="Protected Methods">
+    @Override
+    protected boolean isAlreadyInDatabase() {
+        boolean returnValue = false;
+
+        try {
+            if (this.primaryKey == null) {
+                returnValue = false;
+            } else {
+                returnValue = (AnOrder.load(this.getPrimaryKey()) != null);
+            }
+        } catch (SQLException exSQL) {
+        } catch (Exception ex) {
+        }
+        return returnValue;
+        //return !(primaryKey.equals(SQLHelper.INVALID_PRIMARY_KEY));
     }
 
     // </editor-fold>

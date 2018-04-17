@@ -10,9 +10,13 @@ import trackit.*;
  *
  * @author Douglas
  */
-public class LoginUI extends JFrame {
+public class LoginFrame
+        extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
+    /**
+     * The name of the window.
+     */
     private static final String WINDOW_NAME = "Login";
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
@@ -28,7 +32,10 @@ public class LoginUI extends JFrame {
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
-    public LoginUI() {
+    /**
+     * Login
+     */
+    public LoginFrame() {
         initializeComponents();
     }
 
@@ -38,7 +45,7 @@ public class LoginUI extends JFrame {
      *
      * @param userName The value to appear in the User Name textbox.
      */
-    public LoginUI(String userName) {
+    public LoginFrame(String userName) {
         this();
 
         this.tfUsername.setText(userName);
@@ -47,6 +54,29 @@ public class LoginUI extends JFrame {
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
     /**
+     * Added solely to prevent serialization and Inspector items related to
+     * such.
+     *
+     * @param stream
+     * @throws java.io.IOException
+     */
+    private void writeObject(java.io.ObjectOutputStream stream) throws java.io.IOException {
+        throw new java.io.NotSerializableException(getClass().getName());
+    }
+
+    /**
+     * Added solely to prevent serialization and Inspector items related to
+     * such.
+     *
+     * @param stream
+     * @throws java.io.IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject(java.io.ObjectInputStream stream) throws java.io.IOException, ClassNotFoundException {
+        throw new java.io.NotSerializableException(getClass().getName());
+    }
+
+    /**
      * Sets up all components used in this frame.
      */
     private void initializeComponents() {
@@ -54,7 +84,7 @@ public class LoginUI extends JFrame {
         int frameWidth = 500;
         int frameHeight = 150;
         Dimension dimFrame = new Dimension(frameWidth, frameHeight);
-        this.setTitle(WINDOW_NAME);
+        this.setTitle(Utilities.getWindowCaption(WINDOW_NAME));
         this.setPreferredSize(dimFrame);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
@@ -131,7 +161,7 @@ public class LoginUI extends JFrame {
     /**
      * Handles all aspects of closing the program.
      */
-    private class CloseQuery extends WindowAdapter {
+    private static class CloseQuery extends WindowAdapter {
 
         @Override
         public void windowClosing(WindowEvent e) {

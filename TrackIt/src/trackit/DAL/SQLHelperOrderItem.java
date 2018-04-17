@@ -1,5 +1,6 @@
 package trackit.DAL;
 
+import trackit.AnOrderItem;
 import java.sql.*;
 import java.util.*;
 
@@ -10,35 +11,68 @@ import java.util.*;
  * @author Bond
  */
 public class SQLHelperOrderItem
-        extends SQLHelper<AnOrderItem>
-        implements ISQLHelper<AnOrderItem> {
+        extends SQLHelper<AnOrderItem> {
 
-    SQLHelperItem itemHelper = new SQLHelperItem();
-
+    // <editor-fold defaultstate="collapsed" desc="Constants">
+    private static final SQLHelperItem HELPER_ITEM = new SQLHelperItem();
+    // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Database Columns">
-    public final String COLUMN_ORDERID = "orderId";
-    //public final String COLUMN_ITEMID = "itemId";
-    public final String COLUMN_QUANTITYORDERED = "quantityOrdered";
-    public final String COLUMN_PRICE = "price";
-    public final String COLUMN_EXTENDEDPRICE = "extendedPrice";
+    /**
+     *
+     */
+    public static final String COLUMN_ORDERID = "orderId";
+    /**
+     *
+     */
+    public static final String COLUMN_ITEMID = "itemId";
+    /**
+     *
+     */
+    public static final String COLUMN_QUANTITYORDERED = "quantityOrdered";
 
-    // </editor-fold>  // <editor-fold defaultstate="collapsed" desc="Constructors">
-    public SQLHelperOrderItem() {
+    /**
+     *
+     */
+    public static final String COLUMN_QUANTITYCHECKEDIN = "quantityCheckedIn";
+    /**
+     *
+     */
+    public static final String COLUMN_PRICE = "price";
+
+    /**
+     *
+     */
+    public static final String COLUMN_EXTENDEDPRICE = "extendedPrice";
+
+    // </editor-fold> 
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
+    static {
         COLUMN_PK = "orderItemId";
     }
+
+    /**
+     * Default constructor.
+     */
+    public SQLHelperOrderItem() {
+
+    }
+
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
-
     @Override
     protected AnOrderItem convertResultSetToObject(ResultSet rs)
             throws SQLException {
         AnOrderItem anObj = new AnOrderItem();
         anObj.setPrimaryKey(rs.getInt(COLUMN_PK));
         anObj.setOrderId(rs.getInt(COLUMN_ORDERID));
-        //TODO
-        //anObj.setItemId(rs.getInt(itemHelper.COLUMN_PK));
+        anObj.setItemId(rs.getInt(COLUMN_ITEMID));
         anObj.setQuantityOrdered(rs.getInt(COLUMN_QUANTITYORDERED));
+        anObj.setQuantityCheckedIn(rs.getInt(COLUMN_QUANTITYCHECKEDIN));
         anObj.setPrice(rs.getDouble(COLUMN_PRICE));
+        anObj.setDescription(rs.getString(SQLHelperItem.COLUMN_DESCRIPTION));
+        anObj.setSku(rs.getString(SQLHelperItem.COLUMN_SKU));
+        anObj.setSizeUnit(rs.getString(SQLHelperItem.COLUMN_SIZEUNIT));
+        anObj.setItemStatus(rs.getString(SQLHelperItem.COLUMN_ITEMSTATUS));
         return anObj;
     }
 
@@ -104,9 +138,8 @@ public class SQLHelperOrderItem
         HashMap<Integer, SprocParameter> params = new HashMap<>();
         SprocParameterInteger outParam = new SprocParameterInteger(COLUMN_PK, anObject.getPrimaryKey().toString(), ParameterDirection.OUT);
         params.put(0, outParam);
-        //TODO:
         params.put(1, new SprocParameterInteger(COLUMN_ORDERID, anObject.getOrderId().toString(), ParameterDirection.IN));
-        //params.put(2, new SprocParameterInteger(itemHelper.COLUMN_PK, anObject.getItemId().toString(), ParameterDirection.IN));
+        params.put(2, new SprocParameterInteger(COLUMN_ITEMID, anObject.getItemId().toString(), ParameterDirection.IN));
         params.put(3, new SprocParameterInteger(COLUMN_QUANTITYORDERED, anObject.getQuantityOrdered().toString(), ParameterDirection.IN));
         params.put(4, new SprocParameterDouble(COLUMN_PRICE, anObject.getPrice().toString(), ParameterDirection.IN));
 
@@ -121,9 +154,9 @@ public class SQLHelperOrderItem
             throws SQLException, Exception {
         HashMap<Integer, SprocParameter> params = new HashMap<>();
         params.put(0, new SprocParameterInteger(COLUMN_PK, anObject.getPrimaryKey().toString(), ParameterDirection.IN));
-        //TODO:
-        //params.put(1, new SprocParameterVarchar("nickname", anObject.getNickname(), ParameterDirection.IN));
-        //params.put(2, new SprocParameterVarchar("url", anObject.getUrl(), ParameterDirection.IN));
+        params.put(1, new SprocParameterInteger(COLUMN_QUANTITYORDERED, anObject.getQuantityOrdered().toString(), ParameterDirection.IN));
+        params.put(2, new SprocParameterInteger(COLUMN_QUANTITYCHECKEDIN, anObject.getQuantityCheckedIn().toString(), ParameterDirection.IN));
+        params.put(3, new SprocParameterDouble(COLUMN_PRICE, anObject.getPrice().toString(), ParameterDirection.IN));
 
         execSproc("sp_OrderItems_Update", params);
     }
@@ -140,7 +173,7 @@ public class SQLHelperOrderItem
     @Override
     public java.sql.Date doNullCheck(String columnName, java.sql.Date aValue)
             throws SQLException {
-      throw new UnsupportedOperationException();
+        throw new UnsupportedSQLTypeException(Types.DATE, this.getClass());
     }
 
     @Override
@@ -161,8 +194,9 @@ public class SQLHelperOrderItem
         if (aValue == null
                 && (columnName.equalsIgnoreCase(COLUMN_PK)
                 || columnName.equalsIgnoreCase(COLUMN_ORDERID)
-                || columnName.equalsIgnoreCase(itemHelper.COLUMN_PK)
-                || columnName.equalsIgnoreCase(COLUMN_QUANTITYORDERED))) {
+                || columnName.equalsIgnoreCase(COLUMN_ITEMID)
+                || columnName.equalsIgnoreCase(COLUMN_QUANTITYORDERED)
+                || columnName.equalsIgnoreCase(COLUMN_QUANTITYCHECKEDIN))) {
             throw new NonNullableValueException();
         } else {
             return aValue;
@@ -172,15 +206,7 @@ public class SQLHelperOrderItem
     @Override
     public String doNullCheck(String columnName, String aValue)
             throws SQLException {
-        if (aValue == null
-                && (columnName.equalsIgnoreCase(itemHelper.COLUMN_DESCRIPTION)
-                || columnName.equalsIgnoreCase(itemHelper.COLUMN_SKU)
-                || columnName.equalsIgnoreCase(itemHelper.COLUMN_SIZEUNIT)
-                || columnName.equalsIgnoreCase(itemHelper.COLUMN_ITEMSTATUS))) {
-            throw new NonNullableValueException();
-        } else {
-            return aValue;
-        }
+        return HELPER_ITEM.doNullCheck(columnName, aValue);
     }
     // </editor-fold>
 }

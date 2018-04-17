@@ -7,8 +7,18 @@ package trackit;
  */
 public enum ItemStatusType {
     // <editor-fold defaultstate="expanded" desc="Enumeration">
+
+    /**
+     *
+     */
     AVAILABLE(0),
+    /**
+     *
+     */
     DISCONTINUED(1),
+    /**
+     *
+     */
     DO_NOT_ORDER(2);
     // </editor-fold>
 
@@ -24,10 +34,18 @@ public enum ItemStatusType {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
+    /**
+     *
+     * @return
+     */
     public int getValue() {
         return this.value;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getText() {
         return STATUS_TEXT[this.value];
     }

@@ -114,6 +114,7 @@ CREATE TABLE orderItems (
     orderId INT UNSIGNED NOT NULL,
     itemId INT UNSIGNED NOT NULL,
     quantityOrdered INT UNSIGNED NOT NULL DEFAULT 1,
+    quantityCheckedIn INT UNSIGNED NOT NULL DEFAULT 0,
     price DOUBLE UNSIGNED NOT NULL DEFAULT 0,
     extendedPrice DOUBLE UNSIGNED NOT NULL DEFAULT 0,
     PRIMARY KEY (orderItemId),
@@ -322,7 +323,8 @@ CREATE DEFINER = CURRENT_USER
 PROCEDURE sp_OrderItems_SelectAll ()
 BEGIN
 	SELECT orderItems.orderItemId, orderItems.orderId, orderItems.itemId,
-		orderItems.quantityOrdered, orderItems.price, orderItems.extendedPrice,
+		orderItems.quantityOrdered, orderItems.quantityCheckedIn, 
+        orderItems.price, orderItems.extendedPrice,
 		items.description, items.sku, items.sizeUnit, items.itemStatus
 	FROM orderItems
 		INNER JOIN items ON orderItems.itemId = items.itemId;
@@ -335,7 +337,8 @@ PROCEDURE sp_OrderItems_Select (
 )
 BEGIN
 	SELECT orderItems.orderItemId, orderItems.orderId, orderItems.itemId,
-		orderItems.quantityOrdered, orderItems.price, orderItems.extendedPrice,
+		orderItems.quantityOrdered, orderItems.quantityCheckedIn,
+        orderItems.price, orderItems.extendedPrice,
 		items.description, items.sku, items.sizeUnit, items.itemStatus 
 	FROM orderItems
 		INNER JOIN items ON orderItems.itemId = items.itemId
@@ -352,12 +355,14 @@ PROCEDURE sp_OrderItems_Insert (
     IN price DOUBLE UNSIGNED
 )
 BEGIN
+	DECLARE quantityCheckedIn INT UNSIGNED;
     DECLARE extendedPrice DOUBLE UNSIGNED;
     
+    SET quantityCheckedIn = 0;
     SET extendedPrice = (quantityOrdered * price);
     
-	INSERT INTO orderItems (orderId, itemId, quantityOrdered, price, extendedPrice)
-    VALUES (orderId, itemId, quantityOrdered, price, extendedPrice);
+	INSERT INTO orderItems (orderId, itemId, quantityOrdered, quantityCheckedIn, price, extendedPrice)
+    VALUES (orderId, itemId, quantityOrdered, quantityCheckedIn, price, extendedPrice);
 	SET orderItemId = LAST_INSERT_ID(); 
 END;;
 
@@ -366,6 +371,7 @@ CREATE DEFINER = CURRENT_USER
 PROCEDURE sp_OrderItems_Update (
 	IN orderItemId INT UNSIGNED,
 	IN quantityOrdered INT UNSIGNED,
+    IN quantityCheckedIn INT UNSIGNED,
     IN price DOUBLE UNSIGNED
 )
 BEGIN
@@ -376,6 +382,7 @@ BEGIN
 	UPDATE orderitems
 	SET	orderitems.quantityOrdered = quantityOrdered,
 		orderitems.price = price,
+        orderItems.quantityCheckedIn = quantityCheckedIn,
 		orderitems.extendedPrice = extendedPrice
 	WHERE
 		orderitems.orderItemId = orderItemId;
@@ -406,7 +413,7 @@ END;;
 DROP PROCEDURE IF EXISTS sp_InventoryItems_Select;;
 CREATE DEFINER = CURRENT_USER 
 PROCEDURE sp_InventoryItems_Select (
-	IN InventoryItemId INT UNSIGNED
+	IN inventoryItemId INT UNSIGNED
 )
 BEGIN
 	SELECT inventoryitems.inventoryItemId, inventoryitems.itemId,
@@ -453,7 +460,7 @@ END;;
 DROP PROCEDURE IF EXISTS sp_InventoryItems_Update;;
 CREATE DEFINER = CURRENT_USER 
 PROCEDURE sp_InventoryItems_Update (
-	IN InventoryItemId INT UNSIGNED,
+	IN inventoryItemId INT UNSIGNED,
     IN quantity INT UNSIGNED,
     IN expirationDate DATE,
 	IN description VARCHAR(64),
@@ -529,12 +536,13 @@ END;;
 DELIMITER ;
 
 /*lookups*/
+INSERT INTO lookups (listName, listValue) VALUES ('orderStatuses', 'Created');
 INSERT INTO lookups (listName, listValue) VALUES ('orderStatuses', 'Ordered');
-INSERT INTO lookups (listName, listValue) VALUES ('orderStatuses', 'Shipping');
-INSERT INTO lookups (listName, listValue) VALUES ('orderStatuses', 'Arrived');
+INSERT INTO lookups (listName, listValue) VALUES ('orderStatuses', 'Shipped');
+INSERT INTO lookups (listName, listValue) VALUES ('orderStatuses', 'Delivered');
 INSERT INTO lookups (listName, listValue) VALUES ('itemStatuses', 'Available');
 INSERT INTO lookups (listName, listValue) VALUES ('itemStatuses', 'Discontinued');
-INSERT INTO lookups (listName, listValue) VALUES ('itemStatuses', 'Do Not Replace');
+INSERT INTO lookups (listName, listValue) VALUES ('itemStatuses', 'Do Not Order');
 
 /*suppliers*/
 INSERT INTO suppliers (nickname, url) VALUES ('Amazon', 'https://www.amazon.com/');

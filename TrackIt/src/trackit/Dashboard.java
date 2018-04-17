@@ -1,32 +1,41 @@
 package trackit;
 
+/**
+ *
+ * @author Bryan
+ */
+public class Dashboard {
 
-public class Dashboard
-{
-  private final DashboardType type;
-  
-  private String title;
-  private Integer count;
-  private String description;
-  
-  public Dashboard(DashboardType type)
-  {
-    this.type = type;
-  }
-  
-  public DashboardType getType() {
-    return type;
-  }
-  
+    private final DashboardType type;
 
+    private String title;
+    private Integer count;
+    private String description;
 
+    /**
+     *
+     * @param type
+     */
+    public Dashboard(DashboardType type) {
+        this.type = type;
+    }
 
-  public void refresh() {}
-  
+    /**
+     *
+     * @return
+     */
+    public DashboardType getType() {
+        return type;
+    }
 
+    /**
+     * refresh
+     */
+    public void refresh() {
+    }
 
-  public String toString()
-  {
-    return "";
-  }
+    @Override
+    public String toString() {
+        return "";
+    }
 }

@@ -1,30 +1,80 @@
-package trackit.DAL;
+package trackit;
 
 import java.sql.*;
 import java.util.*;
-import trackit.*;
+import trackit.DAL.SQLHelper;
+import trackit.DAL.SQLHelperSupplier;
 
 /**
- * DAL Layer: Handles all aspects of a single InventoryItem.
- * 
+ * DAL Layer: Handles all aspects of a single Supplier.
+ *
  * @author Bond
  */
-public class AnInventoryItem
-        extends AnItem {
+public class ASupplier
+        extends DatabaseObject {
 
-    // <editor-fold defaultstate="collapsed" desc="Private Fields">
-    private static final SQLHelperInventoryItem HELPER = new SQLHelperInventoryItem();
-    private Integer quantity;
-    private java.sql.Date expirationDate;
+    // <editor-fold defaultstate="expanded" desc="Private Fields">
+    private static final SQLHelperSupplier HELPER = new SQLHelperSupplier();
+    private String nickname = null;
+    private String url = null;
+
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Constructors">
-
-    public AnInventoryItem() {
-        super();
+    /**
+     * A supplier entry
+     */
+    public ASupplier() {
+        this.primaryKey = SQLHelper.INVALID_PRIMARY_KEY;
     }
 
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Setters & Getters">
+    @Override
+    public void setPrimaryKey(Integer aPrimaryKey)
+            throws SQLException {
+        this.primaryKey = HELPER.doNullCheck(SQLHelperSupplier.COLUMN_PK, aPrimaryKey);
+    }
+
+    /**
+     * This can not be null.
+     *
+     * @param aNickname
+     * @throws SQLException
+     */
+    public void setNickname(String aNickname)
+            throws SQLException {
+        this.nickname = HELPER.doNullCheck(SQLHelperSupplier.COLUMN_NICKNAME, aNickname);
+    }
+
+    /**
+     * This can not be null.
+     *
+     * @return
+     */
+    public String getNickname() {
+        return this.nickname;
+    }
+
+    /**
+     * This can be null.
+     *
+     * @param aURL
+     * @throws SQLException
+     */
+    public void setUrl(String aURL)
+            throws SQLException {
+        this.url = HELPER.doNullCheck(SQLHelperSupplier.COLUMN_URL, aURL);
+    }
+
+    /**
+     * This can be null.
+     *
+     * @return
+     */
+    public String getUrl() {
+        return this.url;
+    }
+
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Public Static Methods">
     /**
@@ -34,7 +84,7 @@ public class AnInventoryItem
      * @throws SQLException
      * @throws Exception
      */
-    public static ArrayList<AnInventoryItem> loadAll()
+    public static ArrayList<ASupplier> loadAll()
             throws SQLException, Exception {
         return HELPER.selectAll();
     }
@@ -48,7 +98,7 @@ public class AnInventoryItem
      * @throws SQLException
      * @throws Exception
      */
-    public static AnInventoryItem load(int primaryKey)
+    public static ASupplier load(int primaryKey)
             throws SQLException, Exception {
         return HELPER.selectOne(primaryKey);
     }
@@ -60,7 +110,7 @@ public class AnInventoryItem
      * @throws SQLException
      * @throws Exception
      */
-    public static void save(AnInventoryItem anObj)
+    public static void save(ASupplier anObj)
             throws SQLException, Exception {
         if (anObj.isAlreadyInDatabase()) {
             HELPER.update(anObj);
@@ -76,7 +126,7 @@ public class AnInventoryItem
      * @throws SQLException
      * @throws Exception
      */
-    public static void remove(AnInventoryItem anObj)
+    public static void remove(ASupplier anObj)
             throws SQLException, Exception {
         remove(anObj.getPrimaryKey());
     }
@@ -91,21 +141,6 @@ public class AnInventoryItem
     public static void remove(Integer primaryKey)
             throws SQLException, Exception {
         HELPER.delete(primaryKey);
-    }
-    // </editor-fold>
-
-    public ArrayList<AnItem> getExpiredItems() {
-        ArrayList<AnItem> returnValue = new ArrayList<>();
-        return returnValue;
-    }
-
-    @Override
-    public void changeQuantity(int amountToChangeBy)
-            throws NegativeAmountException {
-        if (this.quantity + amountToChangeBy < 0) {
-            throw new NegativeAmountException();
-        }
-        this.quantity += amountToChangeBy;
     }
     // </editor-fold>
 }

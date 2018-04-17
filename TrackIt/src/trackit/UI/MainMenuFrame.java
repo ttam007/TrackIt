@@ -11,27 +11,31 @@ import trackit.*;
  *
  * @author Douglas
  */
-public class MainMenuUI extends JFrame {
+public class MainMenuFrame
+        extends JFrame {
 
     // <editor-fold defaultstate="collapsed" desc="Constants">
+    /**
+     * The name of the window.
+     */
     private static final String WINDOW_NAME = "Main Menu";
-    // </editor-fold>
-    // <editor-fold defaultstate="expanded" desc="Private Fields">
-    private final MainMenu bll = new MainMenu();
-    // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Components">
+    private final MainMenu bll;
 
-    SuppliersUI suppliersTab = new SuppliersUI();
-    DashboardUI dashboardTab = new DashboardUI();
-    OrdersUI ordersTab = new OrdersUI();
-    InventoryItemsUI inventoryTab = new InventoryItemsUI();
+    SuppliersPanel suppliersTab = new SuppliersPanel();
+    DashboardPanel dashboardTab = new DashboardPanel();
+    OrdersPanel ordersTab = new OrdersPanel();
+    InventoryItemsPanel inventoryTab = new InventoryItemsPanel();
     JTabbedPane tabpane;
     JLabel title;
     JButton btnLogout, btnExit;
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
-    public MainMenuUI() {
+    /**
+     * Main menu
+     */
+    public MainMenuFrame() {
+        this.bll = new MainMenu();
         initializeComponents();
 
         refreshDashBoards();
@@ -40,11 +44,34 @@ public class MainMenuUI extends JFrame {
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
     /**
+     * Added solely to prevent serialization and Inspector items related to
+     * such.
+     *
+     * @param stream
+     * @throws java.io.IOException
+     */
+    private void writeObject(java.io.ObjectOutputStream stream) throws java.io.IOException {
+        throw new java.io.NotSerializableException(getClass().getName());
+    }
+
+    /**
+     * Added solely to prevent serialization and Inspector items related to
+     * such.
+     *
+     * @param stream
+     * @throws java.io.IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject(java.io.ObjectInputStream stream) throws java.io.IOException, ClassNotFoundException {
+        throw new java.io.NotSerializableException(getClass().getName());
+    }
+
+    /**
      * Sets up all components used in this frame.
      */
     private void initializeComponents() {
         //Setup main frame
-        this.setTitle(WINDOW_NAME);
+        this.setTitle(Utilities.getWindowCaption(WINDOW_NAME));
         this.setSize(1280, 786);
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -54,31 +81,24 @@ public class MainMenuUI extends JFrame {
 
         //Add all components here and set properties.
         tabpane = new JTabbedPane();
-        tabpane.add("Dashboard", dashboardTab);
-        tabpane.add("Inventory", inventoryTab);
-        tabpane.add("Orders", ordersTab);
-        tabpane.add("Supplies", suppliersTab);
+        tabpane.add(DashboardPanel.TAB_NAME, dashboardTab);
+        tabpane.add(InventoryItemsPanel.TAB_NAME, inventoryTab);
+        tabpane.add(OrdersPanel.TAB_NAME, ordersTab);
+        tabpane.add(SuppliersPanel.TAB_NAME, suppliersTab);
 
         add(tabpane, BorderLayout.CENTER);
 
         JPanel pnlBottom = new JPanel();
         btnLogout = new JButton("Log Out");
-        btnLogout.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setVisible(false);
-                LoginUI login = new LoginUI();
-                login.display();
-            }
-
+        btnLogout.addActionListener((ActionEvent e) -> {
+            setVisible(false);
+            LoginFrame login = new LoginFrame();
+            login.display();
         });
         btnExit = new JButton("Exit");
-        btnExit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-
+        btnExit.addActionListener((ActionEvent e) -> {
+            CloseQuery qry = new CloseQuery();
+            qry.windowClosing(null);
         });
         pnlBottom.add(btnLogout);
         pnlBottom.add(btnExit);
@@ -113,12 +133,13 @@ public class MainMenuUI extends JFrame {
 
         @Override
         public void windowClosing(WindowEvent e) {
-            JFrame frame = (JFrame) e.getSource();
+            JFrame frame = MainMenuFrame.this;
             int result = JOptionPane.showConfirmDialog(frame,
                     "Are you done with this program?", "Exit Program",
                     JOptionPane.YES_NO_OPTION);
             if (result == JOptionPane.YES_OPTION) {
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                System.exit(0);
             }
         }
     }

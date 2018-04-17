@@ -1,7 +1,6 @@
 package trackit;
 
 import java.sql.*;
-import trackit.DAL.AnOrder;
 
 /**
  * BLL Layer: Works with the Orders Tab.
@@ -10,7 +9,8 @@ import trackit.DAL.AnOrder;
  */
 public class Orders
         extends GridClass<AnOrder> {
-  /**
+
+    /**
      * Loads all rows from the database to the grid.
      *
      * @return True = The rows were successfully loaded; False = There was an

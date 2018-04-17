@@ -1,7 +1,8 @@
-package trackit.DAL;
+package trackit;
 
 import java.sql.*;
-import trackit.*;
+import trackit.DAL.SQLHelper;
+import trackit.DAL.SQLHelperItem;
 
 /**
  * DAL Layer: Handles all aspects of a single Item.
@@ -13,58 +14,134 @@ public abstract class AnItem
 
     // <editor-fold defaultstate="expanded" desc="Private Fields">
     private static final SQLHelperItem HELPER = new SQLHelperItem();
-    protected String description;
+
+    /**
+     *
+     */
+    protected String description = "New Item";
+
+    /**
+     *
+     */
     protected String sku;
+
+    /**
+     *
+     */
     protected String sizeUnit;
-    protected ItemStatusType itemStatus;
+
+    /**
+     *
+     */
+    protected ItemStatusType itemStatus = ItemStatusType.AVAILABLE;
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Constructors">
 
+    /**
+     * establish an item
+     */
     public AnItem() {
         this.primaryKey = SQLHelper.INVALID_PRIMARY_KEY;
     }
 
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Setters & Getters">
-    public void setDescription(String description)
+    @Override
+    public void setPrimaryKey(Integer primaryKey)
             throws SQLException {
-        this.description = HELPER.doNullCheck(HELPER.COLUMN_DESCRIPTION, description);
+        throw new UnsupportedOperationException();
+        //this.primaryKey = HELPER.doNullCheck(SQLHelperItem.COLUMN_PK, primaryKey);
     }
 
+    /**
+     * This can not be null.
+     *
+     * @param description
+     * @throws SQLException
+     */
+    public void setDescription(String description)
+            throws SQLException {
+        this.description = HELPER.doNullCheck(SQLHelperItem.COLUMN_DESCRIPTION, description);
+    }
+
+    /**
+     * This can not be null.
+     *
+     * @return
+     */
     public String getDescription() {
         return this.description;
     }
 
+    /**
+     * This can be null.
+     *
+     * @param sku
+     * @throws SQLException
+     */
     public void setSku(String sku)
             throws SQLException {
-        this.sku = HELPER.doNullCheck(HELPER.COLUMN_SKU, sku);
+        this.sku = HELPER.doNullCheck(SQLHelperItem.COLUMN_SKU, sku);
     }
 
+    /**
+     * This can be null.
+     *
+     * @return
+     */
     public String getSku() {
         return this.sku;
     }
 
+    /**
+     * This can be null.
+     *
+     * @param sizeUnit
+     * @throws SQLException
+     */
     public void setSizeUnit(String sizeUnit)
             throws SQLException {
-        this.sizeUnit = HELPER.doNullCheck(HELPER.COLUMN_SIZEUNIT, sizeUnit);
+        this.sizeUnit = HELPER.doNullCheck(SQLHelperItem.COLUMN_SIZEUNIT, sizeUnit);
     }
 
+    /**
+     * This can be null.
+     *
+     * @return
+     */
     public String getSizeUnit() {
         return this.sizeUnit;
     }
 
+    /**
+     * This can not be null.
+     *
+     * @param itemStatus
+     * @throws SQLException
+     */
     public void setItemStatus(String itemStatus)
             throws SQLException {
-        String tmpValue = HELPER.doNullCheck(HELPER.COLUMN_ITEMSTATUS, itemStatus);
+        String tmpValue = HELPER.doNullCheck(SQLHelperItem.COLUMN_ITEMSTATUS, itemStatus);
         this.itemStatus = ItemStatusType.getType(tmpValue);
     }
 
-    public void setOrderStatus(ItemStatusType itemStatus)
+    /**
+     * This can not be null.
+     *
+     * @param itemStatus
+     * @throws SQLException
+     */
+    public void setItemStatus(ItemStatusType itemStatus)
             throws SQLException {
         //Calls the overloaded method instead of directly setting so the null check can occur.
         setItemStatus(itemStatus.getText());
     }
 
+    /**
+     * This can not be null.
+     *
+     * @return
+     */
     public ItemStatusType getItemStatus() {
         return this.itemStatus;
     }
