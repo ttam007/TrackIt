@@ -1,7 +1,6 @@
 package trackit;
 
 import java.util.*;
-import trackit.DAL.*;
 
 /**
  * BLL Layer: For all classes that deal with grids in the UI.

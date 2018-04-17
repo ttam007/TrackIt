@@ -29,7 +29,6 @@ public class DashboardPanel
      */
     public DashboardPanel() {
         initializeComponents();
-        this.setVisible(true);
     }
 
     // </editor-fold>

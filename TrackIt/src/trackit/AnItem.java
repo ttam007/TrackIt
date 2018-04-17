@@ -1,7 +1,6 @@
 package trackit;
 
 import java.sql.*;
-import trackit.*;
 import trackit.DAL.SQLHelper;
 import trackit.DAL.SQLHelperItem;
 

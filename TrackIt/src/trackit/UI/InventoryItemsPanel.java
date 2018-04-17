@@ -4,9 +4,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.*;
 import javax.swing.*;
-import javax.swing.event.*;
 import trackit.*;
-import trackit.DAL.*;
 
 /**
  * UI Layer: Handles all aspects of the Inventory panel.
@@ -32,7 +30,7 @@ public class InventoryItemsPanel
     private JButton btnCreate, btnEdit, btnRemove, btnCheckInOut;
     private final Object[][] data;
     private JScrollPane sp;
-    private boolean disableButtons =false;//use this variable to toggle edit and remove buttons on and off
+    private boolean disableButtons = false;//use this variable to toggle edit and remove buttons on and off
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -48,6 +46,29 @@ public class InventoryItemsPanel
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
+    /**
+     * Added solely to prevent serialization and Inspector items related to
+     * such.
+     *
+     * @param stream
+     * @throws java.io.IOException
+     */
+    private void writeObject(java.io.ObjectOutputStream stream) throws java.io.IOException {
+        throw new java.io.NotSerializableException(getClass().getName());
+    }
+
+    /**
+     * Added solely to prevent serialization and Inspector items related to
+     * such.
+     *
+     * @param stream
+     * @throws java.io.IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject(java.io.ObjectInputStream stream) throws java.io.IOException, ClassNotFoundException {
+        throw new java.io.NotSerializableException(getClass().getName());
+    }
+
     private void initializeComponents() {
         BorderLayout border = new BorderLayout();
         this.setLayout(border);
@@ -55,13 +76,15 @@ public class InventoryItemsPanel
         this.setSize(new Dimension(1100, 700));
         this.display();
     }
-    //private method to toggle whether buttons will be enabled or not
-    private void toggleDisableButton(){
+
+    /**
+     * Toggles whether buttons will be enabled or not.
+     */
+    private void toggleDisableButton() {
 
         btnEdit.setEnabled(disableButtons);
         btnRemove.setEnabled(disableButtons);
     }
-
 
     private void setButtons() {
 
@@ -105,7 +128,7 @@ public class InventoryItemsPanel
             } else {
                 //TODO:  display bll.getErrorMessage() and stay on this window.
             }
-             */ 
+             */
         });
 
         btnCheckInOut = new JButton("Check In/Out");
@@ -116,7 +139,6 @@ public class InventoryItemsPanel
     }
 
     private void createUIComponents() {
-
 
         data[0][0] = "Gauze";
         data[0][1] = "3.0";
@@ -133,10 +155,10 @@ public class InventoryItemsPanel
 
         mainTable = new JTable(data, TABLE_LABELS);
         // Add action listener to JTable
-        mainTable.getSelectionModel().addListSelectionListener((e)->{
+        mainTable.getSelectionModel().addListSelectionListener((e) -> {
             //if the row is bigger than -1 than we need to enable the buttons
-            if(mainTable.getSelectedRow()>-1){
-                disableButtons=true;
+            if (mainTable.getSelectedRow() > -1) {
+                disableButtons = true;
                 toggleDisableButton();
             }
         });
@@ -164,17 +186,8 @@ public class InventoryItemsPanel
         //TODO:  load items from database.
     }
 
-    /**
-     * Launches the AnItem Detail window.
-     *
-     * @param anItem The item to be shown.
-     */
-    private void showItemDetails(AnItem anItem) {
-        //bll.showDialog(anItem);    
-    }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
-
     /**
      * Displays the frame.
      */

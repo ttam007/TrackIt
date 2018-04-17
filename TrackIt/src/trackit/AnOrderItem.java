@@ -1,9 +1,7 @@
 package trackit;
 
-import trackit.AnItem;
 import java.sql.*;
 import java.util.*;
-import trackit.*;
 import trackit.DAL.SQLHelper;
 import trackit.DAL.SQLHelperInventoryItem;
 import trackit.DAL.SQLHelperOrderItem;
