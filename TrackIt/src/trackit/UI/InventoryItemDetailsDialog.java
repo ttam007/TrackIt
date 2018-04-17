@@ -56,6 +56,29 @@ public class InventoryItemDetailsDialog
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
 
     /**
+     * Added solely to prevent serialization and Inspector items related to
+     * such.
+     *
+     * @param stream
+     * @throws java.io.IOException
+     */
+    private void writeObject(java.io.ObjectOutputStream stream) throws java.io.IOException {
+        throw new java.io.NotSerializableException(getClass().getName());
+    }
+
+    /**
+     * Added solely to prevent serialization and Inspector items related to
+     * such.
+     *
+     * @param stream
+     * @throws java.io.IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject(java.io.ObjectInputStream stream) throws java.io.IOException, ClassNotFoundException {
+        throw new java.io.NotSerializableException(getClass().getName());
+    }
+
+    /**
      * Sets up all components used in this frame.
      */
     private void initializeComponents() {
@@ -140,7 +163,7 @@ public class InventoryItemDetailsDialog
         add(unit, gbc);
         // Field
         unitField = new JTextField(7);
-        
+
         gbc.gridx = 1;
         gbc.gridy = 3;
         gbc.gridwidth = 3;
