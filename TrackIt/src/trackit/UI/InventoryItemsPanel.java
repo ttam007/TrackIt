@@ -11,8 +11,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.*;
 import javax.swing.*;
-import trackit.DAL.AnInventoryItem;
-import trackit.DAL.AnItem;
+import trackit.AnInventoryItem;
+import trackit.AnItem;
 
 /**
  * UI Layer: Handles all aspects of the Inventory panel.
@@ -25,6 +25,7 @@ public class InventoryItemsPanel
      * The name of the panel.
      */
     public static final String TAB_NAME = "Inventory";
+    private static final String[] TABLE_LABELS = new String[]{"Item Name", "Qty", "Unit", "SKU", "Expiration", "Status"};
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
     private final ArrayList<AnInventoryItem> inventoryItems = new ArrayList<>();
@@ -32,8 +33,6 @@ public class InventoryItemsPanel
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     private JTable mainTable;
-    private InventoryItemDetailsDialog itemCreate, itemEdit;
-    private final ArrayList<String> tableHeaders = new ArrayList<>(Arrays.asList("Item Name", "Qty", "Unit", "SKU", "Expiration", "Status"));
     private JButton btnCreate, btnEdit, btnRemove, btnCheckInOut;
     private final Object[][] data;
     private JScrollPane sp;
@@ -64,18 +63,42 @@ public class InventoryItemsPanel
 
         btnCreate = new JButton("Create");
         btnCreate.addActionListener((ActionEvent e) -> {
-            InventoryItemDetailsDialog iidCreate = new InventoryItemDetailsDialog(true);
-            iidCreate.display();
+            InventoryItemDetailsDialog dlgCreate = new InventoryItemDetailsDialog(true, null);
+            dlgCreate.display();
         });
 
         btnEdit = new JButton("Edit");
         btnEdit.addActionListener((ActionEvent e) -> {
-            InventoryItemDetailsDialog iidEdit = new InventoryItemDetailsDialog(false);
-            iidEdit.display();
+            //If list item selected then edit item else select item.
+            int selectedRow = this.mainTable.getSelectedRow();
+            if (selectedRow < 0) {
+                JOptionPane.showMessageDialog(this, "Select item to edit");
+            } else {
+                AnInventoryItem anInventoryItem = new AnInventoryItem();
+                //TODO: Set anInventoryItem to the value of selectedRow.
+                InventoryItemDetailsDialog dlgEdit = new InventoryItemDetailsDialog(false, anInventoryItem);
+                dlgEdit.display();
+            }
         });
 
         btnRemove = new JButton("Remove");
-        btnRemove.addActionListener((ActionEvent e) -> System.out.println("REMOVE TEST"));
+        btnRemove.addActionListener((ActionEvent e) -> {
+            int selectedRow = this.mainTable.getSelectedRow();
+            if (selectedRow < 0) {
+                JOptionPane.showMessageDialog(null, "Select item to remove");
+            } else {
+                //TODO: remove item from db
+                JOptionPane.showMessageDialog(null, "Item removed");
+            }
+
+            //TODO: surround below in a for loop
+            /*
+            if (bll.remove()) {
+                //TODO:  close window and return to prior window.
+            } else {
+                //TODO:  display bll.getErrorMessage() and stay on this window.
+            }
+             */        });
 
         btnCheckInOut = new JButton("Check In/Out");
         btnCheckInOut.addActionListener((ActionEvent e) -> {
@@ -99,7 +122,7 @@ public class InventoryItemsPanel
         data[1][4] = "04-27-2018";
         data[1][5] = "Expired";
 
-        mainTable = new JTable(data, tableHeaders.toArray());
+        mainTable = new JTable(data, TABLE_LABELS);
         mainTable.setBounds(30, 40, 200, 200);
 
         sp = new JScrollPane(mainTable);

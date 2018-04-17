@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
-import trackit.DAL.AnOrder;
+import trackit.AnOrder;
 
 /**
  * UI Layer: Handles all aspects of the Order panel.
@@ -19,6 +19,7 @@ public class OrdersPanel
      * The name of the panel.
      */
     public static final String TAB_NAME = "Orders";
+    private static final String[] TABLE_LABELS = {"Order Date", "Order Number", "Supplier", "Status", "Total"};
 
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
@@ -27,29 +28,29 @@ public class OrdersPanel
 // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     JButton btnCreate, btnRemove, btnEdit;
-    String[] ordersLabel = {"Order Date", "Order Number", "Supplier", "Status", "Total"};
-    JTable ordersTable;
+    JTable mainTable;
     OrderItemsFrame details;
-    int selectedRow;
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     /**
-     * orders ui
+     * Default Constructor.
      */
     public OrdersPanel() {
         initializeComponents();
     }
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Private Methods">
 
     private void initializeComponents() {
         setLayout(new BorderLayout());
 
         //add data to suppliers arraylist 
         Object[][] testData = {{"12MAY2018", "019645232", "Walmart", "in transit", "$128.34"}, {"12MAY2018", "019645232", "Walmart", "in transit", "$128.34"}, {"12MAY2018", "019645232", "Walmart", "in transit", "$128.34"}};
-        ordersTable = new JTable(testData, ordersLabel);
-        JScrollPane scrollPane = new JScrollPane(ordersTable);
-        ordersTable.setFillsViewportHeight(true);
-        ordersTable.setDefaultEditor(Object.class, null);
+        mainTable = new JTable(testData, TABLE_LABELS);
+        JScrollPane scrollPane = new JScrollPane(mainTable);
+        mainTable.setFillsViewportHeight(true);
+        mainTable.setDefaultEditor(Object.class, null);
 
         add(scrollPane, BorderLayout.CENTER);
 
@@ -65,7 +66,7 @@ public class OrdersPanel
         btnEdit.addActionListener((ActionEvent e) -> {
             System.out.print("Edit order");
             //if list item selected edit item else select item
-            selectedRow = ordersTable.getSelectedRow();
+            int selectedRow = mainTable.getSelectedRow();
             if (selectedRow < 0) {
                 JOptionPane.showMessageDialog(null, "Select item to edit");
             } else {
@@ -76,14 +77,21 @@ public class OrdersPanel
 
         btnRemove = new JButton("Remove");
         btnRemove.addActionListener((ActionEvent e) -> {
-            System.out.print("remove order");
-            selectedRow = ordersTable.getSelectedRow();
+            int selectedRow = this.mainTable.getSelectedRow();
             if (selectedRow < 0) {
                 JOptionPane.showMessageDialog(null, "Select item to remove");
             } else {
                 //TODO: remove item from db
-                JOptionPane.showMessageDialog(null, "Item successfully removed");
+                JOptionPane.showMessageDialog(null, "Item removed");
             }
+            //TODO: surround below in a for loop
+            /*
+            if (bll.remove()) {
+                //TODO:  close window and return to prior window.
+            } else {
+                //TODO:  display bll.getErrorMessage() and stay on this window.
+            }
+             */
         });
 
         btmSup.add(btnCreate);
@@ -94,8 +102,6 @@ public class OrdersPanel
 
     }
 
-    // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Private Methods">
     private void getValues() {
         /* if (bll.load()) {
             //this.orders.addAll(bll.getItems());

@@ -43,7 +43,7 @@ public class SQLHelperItem {
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
-    String doNullCheck(String columnName, String aValue)
+    public String doNullCheck(String columnName, String aValue)
             throws SQLException {
         if (aValue == null
                 && (columnName.equalsIgnoreCase(COLUMN_DESCRIPTION)

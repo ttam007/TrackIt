@@ -5,7 +5,7 @@ import trackit.UI.*;
 
 /**
  *
- * @author Bryan
+ * @author Bryan, Bond
  */
 public class Login {
 

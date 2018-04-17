@@ -12,13 +12,13 @@ public class TrackItTestDriver {
      */
     public static void main(String[] args) {
         //Must set this parameter to get a valid connection.
-        DALTestDriver dal = new DALTestDriver("Jade2627");
+        DALTestDriver dal = new DALTestDriver("Password");
 
         //dal.testMySQLJarConnection();
         //dal.testSQLConnector();
         //dal.testSQLHelperSupplier();
         //dal.testSQLHelperOrder();
         //dal.testSQLHelperInventoryItem();
-        dal.testSQLHelperOrderItem();
+        //dal.testSQLHelperOrderItem();
     }
 }

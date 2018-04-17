@@ -5,7 +5,6 @@ import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 import trackit.*;
-import trackit.DAL.*;
 
 /**
  * UI Layer: Handles all aspects of the AnOrder Details dialog. This is a
@@ -17,7 +16,8 @@ public class OrderItemsFrame
         extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
-    private static final String WINDOW_NAME = "Order Details";
+    public static final String WINDOW_NAME = "Order Details";
+    private static final String[] TABLE_LABELS = {"Item Name", "Unit", "SKU", "Quantity", "Price", "Ext Price"};
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Fields">
     private final ArrayList<AnOrderItem> orderItems = new ArrayList<>();
@@ -29,9 +29,7 @@ public class OrderItemsFrame
     private JPanel pnlTop, pnlCenter, pnlBtm, pnlBtmLeft, pnlBtmRight;
     private JLabel lblOrderNumber, lblSupplier, lblStatus, lblOrderDate, lblExpectedDate, lblBlank;
     private JTextField tfOrderNumber, tfSupplier, tfStatus, tfOrderDate, tfExpectedDate, tfBlank;
-    private final String[] ordersLabel = {"Item Name", "Unit", "SKU", "Quantity", "Price", "Ext Price"};
-    private JTable ordersTable;
-    private int selectedRow;
+    private JTable mainTable;
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -109,25 +107,25 @@ public class OrderItemsFrame
         btnCheckIn = new JButton("Check In");
         middleBox.add(btnCheckIn);
         btnCheckIn.addActionListener((ActionEvent e) -> {
-            //TODO
-            JOptionPane.showMessageDialog(null, "Item Checked In");
+            //TODO:  Call into BLL for check-in.
+            JOptionPane.showMessageDialog(this, "Item Checked In");
         });
 
         btnCheckInAll = new JButton("Check In All");
         middleBox.add(btnCheckInAll);
         btnCheckInAll.addActionListener((ActionEvent e) -> {
-            //TODO
-            JOptionPane.showMessageDialog(null, "All Items Checked In");
+            //TODO:  Call into BLL for check-in.
+            JOptionPane.showMessageDialog(this, "All Items Checked In");
         });
 
         bottomBox = Box.createHorizontalBox();
 
         //add data to suppliers arraylist 
         Object[][] testData = {{"paper", "pk", "12-34563487-0", "7", "$12.95", "$276.23"}, {"paper", "pk", "12-34563487-0", "7", "$12.95", "$276.23"}, {"paper", "pk", "12-34563487-0", "7", "$12.95", "$276.23"}};
-        ordersTable = new JTable(testData, ordersLabel);
-        JScrollPane scrollPane = new JScrollPane(ordersTable);
-        ordersTable.setFillsViewportHeight(true);
-        ordersTable.setDefaultEditor(Object.class, null);
+        mainTable = new JTable(testData, TABLE_LABELS);
+        JScrollPane scrollPane = new JScrollPane(mainTable);
+        mainTable.setFillsViewportHeight(true);
+        mainTable.setDefaultEditor(Object.class, null);
 
         add(scrollPane, BorderLayout.CENTER);
 
@@ -143,35 +141,47 @@ public class OrderItemsFrame
         btnAddItem = new JButton("Add Item");
         pnlBtm.add(btnAddItem);
         btnAddItem.addActionListener((ActionEvent e) -> {
-            //TODO
-            OrderItemDetailsDialog oid = new OrderItemDetailsDialog(true);
-            oid.display();
+            OrderItemDetailsDialog dlgAdd = new OrderItemDetailsDialog(true, null);
+            dlgAdd.display();
         });
 
         btnCreate = new JButton("Create");
         pnlBtm.add(btnCreate);
         btnCreate.addActionListener((ActionEvent e) -> {
-            InventoryItemDetailsDialog iidAddItem = new InventoryItemDetailsDialog(true);
-            iidAddItem.display();
+            InventoryItemDetailsDialog dlgCreate = new InventoryItemDetailsDialog(true, null);
+            dlgCreate.display();
         });
 
         btnEdit = new JButton("Edit");
         pnlBtm.add(btnEdit);
         btnEdit.addActionListener((ActionEvent e) -> {
-            //TODO
-            OrderItemDetailsDialog oid = new OrderItemDetailsDialog(false);
-            oid.display();
+            int selectedRow = this.mainTable.getSelectedRow();
+            if (selectedRow < 0) {
+                JOptionPane.showMessageDialog(null, "Select item to remove");
+            } else {
+                AnOrderItem anOrderItem = new AnOrderItem();
+                //TODO: Set anOrderItem to the value of selectedRow.
+                OrderItemDetailsDialog dlgEdit = new OrderItemDetailsDialog(false, anOrderItem);
+                dlgEdit.display();
+            }
         });
 
         btnRemove = new JButton("Remove");
         pnlBtm.add(btnRemove);
         btnRemove.addActionListener((ActionEvent e) -> {
+            int selectedRow = this.mainTable.getSelectedRow();
+            if (selectedRow < 0) {
+                JOptionPane.showMessageDialog(null, "Select item to remove");
+            } else {
+                //TODO: remove item from db
+                JOptionPane.showMessageDialog(null, "Item removed");
+            }
+            //TODO: surround below in a for loop
             /*
-            //TODO:  surrond below in a for loop
-            if (bal.remove()) {
+            if (bll.remove()) {
                 //TODO:  close window and return to prior window.
             } else {
-                //TODO:  display bal.getErrorMessage() and stay on this window.
+                //TODO:  display bll.getErrorMessage() and stay on this window.
             }
              */
         });
@@ -179,21 +189,13 @@ public class OrderItemsFrame
         btnOK = new JButton("OK");
         pnlBtm.add(btnOK);
         btnOK.addActionListener((ActionEvent e) -> {
-
-            /*
-            //TODO:  surrond below in a for loop
-            if (!bal.save()) {
-                //TODO:  display bal.getErrorMessage();
-            }
-             */
-            this.dispose();
+            saveAction();
         });
 
         btnCancel = new JButton("Cancel");
         pnlBtm.add(btnCancel);
         btnCancel.addActionListener((ActionEvent e) -> {
-            //TODO:  close window and return to prior window.
-            this.dispose();
+            cancelAction();
         });
 
         add(pnlBtm, BorderLayout.SOUTH);
@@ -202,7 +204,35 @@ public class OrderItemsFrame
         pack();
     }
 
+    /**
+     * Handles the save action. If any errors, then display error message
+     * instead.
+     *
+     */
+    private void saveAction() {
+        JOptionPane.showMessageDialog(null, "Successfully Updated");
+        //TODO:  implement save.
+        /*if (successfullySaved) {
+                this.dispose();
+            } else {
+               //TODO:  catch errors and display them.  Do not exit dialog if an error occurs.
+            }*/
+        this.dispose();
+    }
+
+    /**
+     * Handles the cancel action. If any errors, then display error message
+     * instead.
+     *
+     */
+    private void cancelAction() {
+        JOptionPane.showMessageDialog(null, "Changed Cancelled");
+        //TODO:  close window and return to prior window.
+        this.dispose();
+    }
+
     private void getValues() {
+        //TODO:  if we need this?
         /*if (bll.load()) {
             this.orderItems.addAll(bll.getItems());
         }*/
@@ -223,22 +253,19 @@ public class OrderItemsFrame
     /**
      * Handles all aspects of closing the program.
      */
-    private static class CloseQuery
+    private class CloseQuery
             extends WindowAdapter {
 
         @Override
         public void windowClosing(WindowEvent e) {
-            JFrame frame = (JFrame) e.getSource();
+            JFrame frame = OrderItemsFrame.this;
             int result = JOptionPane.showConfirmDialog(frame,
                     "Do you want to save?", "Close Query",
                     JOptionPane.YES_NO_OPTION);
             if (result == JOptionPane.YES_OPTION) {
-                //TODO
-                //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.dispose();
+                saveAction();
             } else {
-                //TODO
-                frame.dispose();
+                cancelAction();
             }
         }
     }
