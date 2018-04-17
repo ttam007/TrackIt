@@ -20,21 +20,40 @@ public class InventoryItemDetailsDialog
      */
     public static final String WINDOW_NAME = "Inventory Item Details";
     // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Private Fields">
     private final boolean isCreateMode;
+    private final AnInventoryItem anInventoryItem;
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Components">
     private JTextField skuField, quantityField, expDateField, unitField, statusField, itemNameField;
     private JLabel sku, statusLabel, unit, quantity, expDate, itemNameLabel;
     private JButton btnOK, btnCancel;
     private GridBagConstraints gbc;
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
 
     /**
+     * Creates a new dialog for working with a single Inventory Item.
      *
-     * @param useCreateMode
+     * @param useCreateMode True = use for a new Inventory Item; False = use to
+     * edit the specified Inventory Item.
+     * @param anInventoryItem The Inventory Item to be edited. This value is
+     * ignored if useCreateMode is true.
      */
-    public InventoryItemDetailsDialog(boolean useCreateMode) {
-        // super("Inventory Item Details", new AnInventoryItem());
+    public InventoryItemDetailsDialog(boolean useCreateMode, AnInventoryItem anInventoryItem) {
         this.isCreateMode = useCreateMode;
+        if (this.isCreateMode) {
+            this.anInventoryItem = null;
+        } else if (anInventoryItem == null) {
+            throw new IllegalArgumentException("When 'useCreateMode' = true, then a non-null anInventoryItem must be provided.");
+        } else {
+            this.anInventoryItem = anInventoryItem;
+        }
+
         this.initializeComponents();
     }
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Private Methods">
 
     /**
      * Sets up all components used in this frame.
@@ -52,6 +71,7 @@ public class InventoryItemDetailsDialog
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new CloseQuery());
+        this.getRootPane().setDefaultButton(btnOK);
 
         gbc = new GridBagConstraints();
         setLayout(new GridBagLayout());
@@ -147,8 +167,7 @@ public class InventoryItemDetailsDialog
         gbc.gridwidth = 1;
         add(btnOK, gbc);
         btnOK.addActionListener((ActionEvent e) -> {
-            //TODO
-            this.dispose();
+            saveAction();
         });
 
         //Cancel
@@ -158,13 +177,41 @@ public class InventoryItemDetailsDialog
         gbc.gridwidth = 1;
         add(btnCancel, gbc);
         btnCancel.addActionListener((ActionEvent e) -> {
-            //TODO
-            this.dispose();
+            cancelAction();
         });
 
         this.pack();
     }
 
+    /**
+     * Handles the save action. If any errors, then display error message
+     * instead.
+     *
+     */
+    private void saveAction() {
+        JOptionPane.showMessageDialog(null, "Successfully Updated");
+        //TODO:  implement save.
+        /*if (successfullySaved) {
+                this.dispose();
+            } else {
+               //TODO:  catch errors and display them.  Do not exit dialog if an error occurs.
+            }*/
+        this.dispose();
+    }
+
+    /**
+     * Handles the cancel action. If any errors, then display error message
+     * instead.
+     *
+     */
+    private void cancelAction() {
+        JOptionPane.showMessageDialog(null, "Changed Cancelled");
+        //TODO:  close window and return to prior window.
+        this.dispose();
+    }
+
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Public Methods">
     /**
      * Displays the frame.
      */
@@ -173,6 +220,7 @@ public class InventoryItemDetailsDialog
         setVisible(true);
     }
 
+    // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="SubClasses">
     /**
      * Handles all aspects of closing the program.
@@ -186,13 +234,9 @@ public class InventoryItemDetailsDialog
                     "Do you want to save?", "Close Query",
                     JOptionPane.YES_NO_OPTION);
             if (result == JOptionPane.YES_OPTION) {
-                //TODO
-                JOptionPane.showMessageDialog(null, "Successfully Updated");
-                frame.dispose();
+                saveAction();
             } else {
-                //TODO
-                JOptionPane.showMessageDialog(null, "Changed Cancelled");
-                frame.dispose();
+                cancelAction();
             }
         }
     }

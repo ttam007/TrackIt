@@ -1,7 +1,6 @@
 package trackit;
 
 import java.sql.*;
-import trackit.DAL.AnOrder;
 
 /**
  * BLL Layer: Works with the Orders Tab.

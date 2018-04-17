@@ -1,7 +1,6 @@
 package trackit;
 
 import java.sql.*;
-import trackit.DAL.ASupplier;
 
 /**
  * BLL Layer: Works with the Suppliers Tab.
