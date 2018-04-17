@@ -4,13 +4,16 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
 import trackit.*;
 
 /**
  * UI Layer: Handles all aspects of the AnOrder Details dialog. This is a
  * combination of the Edit AnOrder Details and the OrderItems grid.
  *
- * @author Douglas, Bond
+ * @author Douglas, Bond, Steven
  */
 public class OrderItemsFrame
         extends JFrame {
@@ -33,7 +36,12 @@ public class OrderItemsFrame
     private JLabel lblOrderNumber, lblSupplier, lblStatus, lblOrderDate, lblExpectedDate, lblBlank;
     private JTextField tfOrderNumber, tfSupplier, tfStatus, tfOrderDate, tfExpectedDate, tfBlank;
     private JTable mainTable;
-
+    
+    UtilDateModel orderModel = new UtilDateModel();
+    UtilDateModel expectedModel = new UtilDateModel();
+    JDatePanelImpl orderDatePanel, expectedDatePanel;
+    JDatePickerImpl orderDatePicker, expectedDatePicker;
+    
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     /**
@@ -85,7 +93,13 @@ public class OrderItemsFrame
         addWindowListener(new CloseQuery());
         setVisible(true);
         this.getRootPane().setDefaultButton(btnOK);
-
+        Properties p = new Properties();
+        p.put("text.today", "Today");
+        p.put("text.month", "Month");
+        p.put("text.year", "Year");
+        orderDatePanel = new JDatePanelImpl(orderModel,p);
+        expectedDatePanel = new JDatePanelImpl(expectedModel,p);
+         
         //Add all components here and set properties.
         setLayout(new BorderLayout());
 
@@ -106,8 +120,8 @@ public class OrderItemsFrame
 
         lblOrderDate = new JLabel("      Order Date:");
         topInnerBx.add(lblOrderDate);
-        tfOrderDate = new JTextField(20);
-        topInnerBx.add(tfOrderDate);
+        orderDatePicker = new JDatePickerImpl(orderDatePanel, new DateLabelFormatter());
+        topInnerBx.add(orderDatePicker);
 
         btmInnerBx = Box.createHorizontalBox();
         lblStatus = new JLabel("            Status:");
@@ -120,8 +134,8 @@ public class OrderItemsFrame
 
         lblExpectedDate = new JLabel("                                                     Expected Date:");
         btmInnerBx.add(lblExpectedDate);
-        tfExpectedDate = new JTextField(20);
-        btmInnerBx.add(tfExpectedDate);
+        expectedDatePicker = new JDatePickerImpl(expectedDatePanel, new DateLabelFormatter());
+        btmInnerBx.add(expectedDatePicker);
 
         topBox.add(topInnerBx);
         topBox.add(btmInnerBx);
@@ -252,7 +266,7 @@ public class OrderItemsFrame
      *
      */
     private void cancelAction() {
-        JOptionPane.showMessageDialog(null, "Changed Cancelled");
+        JOptionPane.showMessageDialog(null, "Change Cancelled");
         //TODO:  close window and return to prior window.
         this.dispose();
     }

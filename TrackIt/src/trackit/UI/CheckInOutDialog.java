@@ -142,7 +142,7 @@ public class CheckInOutDialog
      *
      */
     private void cancelAction() {
-        JOptionPane.showMessageDialog(null, "Changed Cancelled");
+        JOptionPane.showMessageDialog(null, "Change Cancelled");
         //TODO:  close window and return to prior window.
         this.dispose();
     }
