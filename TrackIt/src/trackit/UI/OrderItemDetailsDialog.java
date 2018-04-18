@@ -1,8 +1,25 @@
 package trackit.UI;
 
+<<<<<<< HEAD
+import trackit.DAL.AnOrderItem;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+=======
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+>>>>>>> origin/master
 import trackit.*;
 
 /**
@@ -111,11 +128,11 @@ public class OrderItemDetailsDialog
         priceBx = Box.createHorizontalBox();
         lblQuantity = new JLabel("    Quantity:");
         priceBx.add(lblQuantity);
-        tfQuantity = new JTextField(20);
+        tfQuantity = new JTextField(7);
         priceBx.add(tfQuantity);
         lblPrice = new JLabel("         Price:");
         priceBx.add(lblPrice);
-        tfPrice = new JTextField(20);
+        tfPrice = new JTextField(7);
         priceBx.add(tfPrice);
 
         statusBx = Box.createHorizontalBox();
@@ -125,7 +142,7 @@ public class OrderItemDetailsDialog
         statusBx.add(tfStatus);
         lblExtPrice = new JLabel("     Ext Price:");
         statusBx.add(lblExtPrice);
-        tfExtPrice = new JTextField(20);
+        tfExtPrice = new JTextField(7);
         statusBx.add(tfExtPrice);
 
         submitBx = Box.createHorizontalBox();
@@ -192,6 +209,34 @@ public class OrderItemDetailsDialog
         setVisible(true);
     }
 
+    public void close(){
+        this.dispose();
+    }
+    
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="SubClasses">
+    /**
+     * Handles all aspects of closing the program.
+     */
+    private class CloseQuery extends WindowAdapter {
+
+        @Override
+        public void windowClosing(WindowEvent e) {
+            JFrame frame = (JFrame) e.getSource();
+            int result = JOptionPane.showConfirmDialog(frame,
+                    "Do you want to save?", "Close Query",
+                    JOptionPane.YES_NO_OPTION);
+            if (result == JOptionPane.YES_OPTION) {
+                //TODO
+                //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                close();
+            } else {
+                //TODO
+                close();
+            }
+        }
+    }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="SubClasses">
     /**
