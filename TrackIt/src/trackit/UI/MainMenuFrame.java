@@ -26,7 +26,6 @@ public class MainMenuFrame
     OrdersPanel ordersTab = new OrdersPanel();
     InventoryItemsPanel inventoryTab = new InventoryItemsPanel();
     JTabbedPane tabpane;
-    JLabel title;
     JButton btnLogout, btnExit;
 
     // </editor-fold>
@@ -81,24 +80,47 @@ public class MainMenuFrame
 
         //Add all components here and set properties.
         tabpane = new JTabbedPane();
+<<<<<<< HEAD:TrackIt/src/trackit/UI/MainMenuUI.java
+<<<<<<< HEAD
+        tabpane.add("Dashboard", dashboardTab);
+        tabpane.add("Inventory", inventoryTab);
+        tabpane.add("Orders", ordersTab);
+        tabpane.add("Suppliers", suppliersTab);
+=======
+        tabpane.add(DashboardUI.TAB_NAME, dashboardTab);
+        tabpane.add(InventoryItemsUI.TAB_NAME, inventoryTab);
+        tabpane.add(OrdersUI.TAB_NAME, ordersTab);
+        tabpane.add(SuppliersUI.TAB_NAME, suppliersTab);
+>>>>>>> origin/master
+=======
         tabpane.add(DashboardPanel.TAB_NAME, dashboardTab);
         tabpane.add(InventoryItemsPanel.TAB_NAME, inventoryTab);
         tabpane.add(OrdersPanel.TAB_NAME, ordersTab);
         tabpane.add(SuppliersPanel.TAB_NAME, suppliersTab);
+>>>>>>> Dev:TrackIt/src/trackit/UI/MainMenuFrame.java
 
         add(tabpane, BorderLayout.CENTER);
 
         JPanel pnlBottom = new JPanel();
         btnLogout = new JButton("Log Out");
         btnLogout.addActionListener((ActionEvent e) -> {
+<<<<<<< HEAD:TrackIt/src/trackit/UI/MainMenuUI.java
+            this.dispose();
+            LoginUI login = new LoginUI();
+=======
             setVisible(false);
             LoginFrame login = new LoginFrame();
+>>>>>>> Dev:TrackIt/src/trackit/UI/MainMenuFrame.java
             login.display();
         });
         btnExit = new JButton("Exit");
         btnExit.addActionListener((ActionEvent e) -> {
-            CloseQuery qry = new CloseQuery();
-            qry.windowClosing(null);
+            int result = JOptionPane.showConfirmDialog(null,
+                    "Are you done with this program?", "Exit Program",
+                    JOptionPane.YES_NO_OPTION);
+            if (result == JOptionPane.YES_OPTION) {
+                System.exit(0);
+            }
         });
         pnlBottom.add(btnLogout);
         pnlBottom.add(btnExit);
@@ -129,17 +151,24 @@ public class MainMenuFrame
     /**
      * Handles all aspects of closing the program.
      */
+<<<<<<< HEAD
+    public class CloseQuery extends WindowAdapter {
+=======
     private class CloseQuery extends WindowAdapter {
+>>>>>>> origin/master
 
         @Override
         public void windowClosing(WindowEvent e) {
+<<<<<<< HEAD:TrackIt/src/trackit/UI/MainMenuUI.java
+            JFrame frame = (JFrame) e.getSource();
+=======
             JFrame frame = MainMenuFrame.this;
+>>>>>>> Dev:TrackIt/src/trackit/UI/MainMenuFrame.java
             int result = JOptionPane.showConfirmDialog(frame,
                     "Are you done with this program?", "Exit Program",
                     JOptionPane.YES_NO_OPTION);
             if (result == JOptionPane.YES_OPTION) {
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                System.exit(0);
             }
         }
     }
