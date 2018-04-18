@@ -2,14 +2,19 @@ package trackit.UI;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Date;
+import java.util.Properties;
 import javax.swing.*;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
 import trackit.*;
 
 /**
  * UI Layer: Handles all aspects of the Create Inventory Item and Edit Inventory
  * Item dialog.
  *
- * @author Bond
+ * @author Bond, Steven
  */
 public class InventoryItemDetailsDialog
         extends JDialog {
@@ -25,10 +30,15 @@ public class InventoryItemDetailsDialog
     private final AnInventoryItem anInventoryItem;
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
-    private JTextField skuField, quantityField, expDateField, unitField, statusField, itemNameField;
-    private JLabel sku, statusLabel, unit, quantity, expDate, itemNameLabel;
+    private JTextField skuField, quantityField, unitField, statusField, itemNameField;
+    private JLabel sku, statusLabel, unit, expDateLbl, quantity, itemNameLabel;
     private JButton btnOK, btnCancel;
     private GridBagConstraints gbc;
+    private Date expDate, sqlExpDate;
+    
+    UtilDateModel expModel = new UtilDateModel();
+    JDatePanelImpl expDatePanel;
+    JDatePickerImpl expDatePicker;
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
@@ -95,6 +105,11 @@ public class InventoryItemDetailsDialog
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new CloseQuery());
         this.getRootPane().setDefaultButton(btnOK);
+        Properties p = new Properties();
+        p.put("text.today", "Today");
+        p.put("text.month", "Month");
+        p.put("text.year", "Year");
+        expDatePanel = new JDatePanelImpl(expModel,p);
 
         gbc = new GridBagConstraints();
         setLayout(new GridBagLayout());
@@ -143,17 +158,17 @@ public class InventoryItemDetailsDialog
         gbc.gridwidth = 3;
         add(quantityField, gbc);
         // Init Exp Date Label and Field
-        expDate = new JLabel("Exp Date: ");
+        expDateLbl = new JLabel("Exp Date: ");
         gbc.gridx = 4;
         gbc.gridy = 2;
         gbc.gridwidth = 1;
-        add(expDate, gbc);
-        expDateField = new JTextField(7);
+        add(expDateLbl, gbc);
+        expDatePicker = new JDatePickerImpl(expDatePanel, new DateLabelFormatter());
 
         gbc.gridx = 5;
         gbc.gridy = 2;
         gbc.gridwidth = 1;
-        add(expDateField, gbc);
+        add(expDatePicker, gbc);
         // Unit
         //Label
         unit = new JLabel("Unit: ");
@@ -213,7 +228,12 @@ public class InventoryItemDetailsDialog
      */
     private void saveAction() {
         JOptionPane.showMessageDialog(null, "Successfully Updated");
-        //TODO:  implement save.
+        
+        expDate = (Date) expDatePicker.getModel().getValue();
+            sqlExpDate = Utilities.convertToSQLDate(expDate);
+            System.out.println(sqlExpDate);
+
+//TODO:  implement save.
         /*if (successfullySaved) {
                 this.dispose();
             } else {
@@ -228,7 +248,7 @@ public class InventoryItemDetailsDialog
      *
      */
     private void cancelAction() {
-        JOptionPane.showMessageDialog(null, "Changed Cancelled");
+        JOptionPane.showMessageDialog(null, "Change Cancelled");
         //TODO:  close window and return to prior window.
         this.dispose();
     }
