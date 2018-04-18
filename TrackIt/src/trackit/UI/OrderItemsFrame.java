@@ -8,37 +8,11 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 import trackit.*;
-<<<<<<< HEAD:TrackIt/src/trackit/UI/OrderItemsUI.java
-import trackit.DAL.AnOrder;
-import trackit.DAL.AnOrderItem;
-=======
->>>>>>> Dev:TrackIt/src/trackit/UI/OrderItemsFrame.java
 
 /**
  * UI Layer: Handles all aspects of the AnOrder Details dialog. This is a
  * combination of the Edit AnOrder Details and the OrderItems grid.
  *
-<<<<<<< HEAD:TrackIt/src/trackit/UI/OrderItemsUI.java
- * @author Douglas
- */
-public class OrderItemsUI extends JFrame {
-    // <editor-fold defaultstate="collapsed" desc="Constants">
-
-    private static final String WINDOW_NAME = "Order Details";
-    private final ArrayList<AnOrderItem> orderItems;
-    private final AnOrder bll;
-
-    JButton btnCheckIn, btnCheckInAll, btnCreate, btnEdit, btnRemove, btnOK, btnAddItem, btnCancel;
-    JPanel pnlTop, pnlCenter, pnlBtm, pnlBtmLeft, pnlBtmRight;
-    JLabel lblOrderNumber, lblSupplier, lblStatus, lblOrderDate, lblExpectedDate, lblBlank;
-    JTextField tfOrderNumber, tfSupplier, tfStatus, tfOrderDate, tfExpectedDate, tfBlank;
-    String[] ordersLabel = {"Item Name", "Unit", "SKU", "Quantity", "Price", "Ext Price"};
-    JTable ordersTable;
-    OrderItemDetailsUI details;
-    InventoryItemDetailsUI inventory;
-    int selectedRow;
-
-=======
  * @author Douglas, Bond, Steven
  */
 public class OrderItemsFrame
@@ -69,19 +43,12 @@ public class OrderItemsFrame
     JDatePanelImpl orderDatePanel, expectedDatePanel;
     JDatePickerImpl orderDatePicker, expectedDatePicker;
     
->>>>>>> Dev:TrackIt/src/trackit/UI/OrderItemsFrame.java
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     /**
      * order item window
      */
-<<<<<<< HEAD:TrackIt/src/trackit/UI/OrderItemsUI.java
-    public OrderItemsUI() {
-        this.bll = new AnOrder();
-        this.orderItems = new ArrayList<>();
-=======
     public OrderItemsFrame() {
->>>>>>> Dev:TrackIt/src/trackit/UI/OrderItemsFrame.java
         initializeComponents();
         getValues();
     }
@@ -196,8 +163,6 @@ public class OrderItemsFrame
         bottomBox = Box.createHorizontalBox();
 
         //add data to suppliers arraylist 
-        Object[][] suppliersTestData = {{"paper", "pk", "12-34563487-0", "7", "$12.95", "276.23"}, {"paper", "pk", "12-34563487-0", "7", "$12.95", "276.23"}, {"paper", "pk", "12-34563487-0", "7", "$12.95", "276.23"}};
-        ordersTable = new JTable(suppliersTestData, ordersLabel);
         Object[][] testData = {{"paper", "pk", "12-34563487-0", "7", "$12.95", "$276.23"}, {"paper", "pk", "12-34563487-0", "7", "$12.95", "$276.23"}, {"paper", "pk", "12-34563487-0", "7", "$12.95", "$276.23"}};
         mainTable = new JTable(testData, TABLE_LABELS);
         JScrollPane scrollPane = new JScrollPane(mainTable);
@@ -218,45 +183,20 @@ public class OrderItemsFrame
         btnAddItem = new JButton("Add Item");
         pnlBtm.add(btnAddItem);
         btnAddItem.addActionListener((ActionEvent e) -> {
-<<<<<<< HEAD:TrackIt/src/trackit/UI/OrderItemsUI.java
-            //TODO
-<<<<<<< HEAD
-            details = new OrderItemDetailsUI(true);
-=======
-            OrderItemDetailsUI oid = new OrderItemDetailsUI(true);
-            oid.display();
->>>>>>> origin/master
-=======
             OrderItemDetailsDialog dlgAdd = new OrderItemDetailsDialog(true, null);
             dlgAdd.display();
->>>>>>> Dev:TrackIt/src/trackit/UI/OrderItemsFrame.java
         });
 
         btnCreate = new JButton("Create");
         pnlBtm.add(btnCreate);
         btnCreate.addActionListener((ActionEvent e) -> {
-<<<<<<< HEAD:TrackIt/src/trackit/UI/OrderItemsUI.java
-<<<<<<< HEAD
-            //TODO
-            inventory = new InventoryItemDetailsUI(true);
-            
-=======
-            InventoryItemDetailsUI iidAddItem = new InventoryItemDetailsUI(true);
-            iidAddItem.display();
->>>>>>> origin/master
-=======
             InventoryItemDetailsDialog dlgCreate = new InventoryItemDetailsDialog(true, null);
             dlgCreate.display();
->>>>>>> Dev:TrackIt/src/trackit/UI/OrderItemsFrame.java
         });
-        
+
         btnEdit = new JButton("Edit");
         pnlBtm.add(btnEdit);
         btnEdit.addActionListener((ActionEvent e) -> {
-<<<<<<< HEAD:TrackIt/src/trackit/UI/OrderItemsUI.java
-            //TODO
-            details = new OrderItemDetailsUI(false);
-=======
             int selectedRow = this.mainTable.getSelectedRow();
             if (selectedRow < 0) {
                 JOptionPane.showMessageDialog(null, "Select item to remove");
@@ -266,7 +206,6 @@ public class OrderItemsFrame
                 OrderItemDetailsDialog dlgEdit = new OrderItemDetailsDialog(false, anOrderItem);
                 dlgEdit.display();
             }
->>>>>>> Dev:TrackIt/src/trackit/UI/OrderItemsFrame.java
         });
 
         btnRemove = new JButton("Remove");
@@ -292,22 +231,11 @@ public class OrderItemsFrame
         btnOK = new JButton("OK");
         pnlBtm.add(btnOK);
         btnOK.addActionListener((ActionEvent e) -> {
-<<<<<<< HEAD:TrackIt/src/trackit/UI/OrderItemsUI.java
-            this.dispose();
-
-            /*
-            //TODO:  surrond below in a for loop
-            if (!bal.save()) {
-                //TODO:  display bal.getErrorMessage();
-            }
-             */
-=======
             saveAction();
             orderDate = (Date) orderDatePicker.getModel().getValue();
             sqlOrderDate = Utilities.convertToSQLDate(orderDate);
             expectedDate = (Date) expectedDatePicker.getModel().getValue();
             sqlExpectedDate = Utilities.convertToSQLDate(expectedDate);
->>>>>>> Dev:TrackIt/src/trackit/UI/OrderItemsFrame.java
         });
 
         btnCancel = new JButton("Cancel");
@@ -317,7 +245,7 @@ public class OrderItemsFrame
         });
 
         add(pnlBtm, BorderLayout.SOUTH);
-        
+
         //Finalizations
         pack();
     }
@@ -365,10 +293,6 @@ public class OrderItemsFrame
         System.out.println(String.format("Displaying %s...", WINDOW_NAME));
         setVisible(true);
     }
-    
-    public void close(){
-        this.dispose();
-    }
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="SubClasses">
@@ -385,18 +309,9 @@ public class OrderItemsFrame
                     "Do you want to save?", "Close Query",
                     JOptionPane.YES_NO_OPTION);
             if (result == JOptionPane.YES_OPTION) {
-<<<<<<< HEAD:TrackIt/src/trackit/UI/OrderItemsUI.java
-                //TODO
-                //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                close();
-            } else {
-                //TODO
-                close();
-=======
                 saveAction();
             } else {
                 cancelAction();
->>>>>>> Dev:TrackIt/src/trackit/UI/OrderItemsFrame.java
             }
         }
     }

@@ -1,9 +1,5 @@
 package trackit.UI;
 
-<<<<<<< HEAD:TrackIt/src/trackit/UI/InventoryItemDetailsUI.java
-import javax.swing.*;
-import java.awt.*;
-=======
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Date;
@@ -13,43 +9,22 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 import trackit.*;
->>>>>>> Dev:TrackIt/src/trackit/UI/InventoryItemDetailsDialog.java
 
-//getWindowCaption
-//MainMenuUI is using this.setTitle(WINDOW_NAME);
-//  now instead of the original code
-//This is the correct code: this.setTitle(Utilities.getWindowCaption(WINDOW_NAME));
 /**
  * UI Layer: Handles all aspects of the Create Inventory Item and Edit Inventory
  * Item dialog.
-<<<<<<< HEAD:TrackIt/src/trackit/UI/InventoryItemDetailsUI.java
- */
-public class InventoryItemDetailsUI extends JFrame {
-=======
  *
  * @author Bond, Steven
  */
 public class InventoryItemDetailsDialog
         extends JDialog {
->>>>>>> Dev:TrackIt/src/trackit/UI/InventoryItemDetailsDialog.java
 
-<<<<<<< HEAD
-=======
     // <editor-fold defaultstate="collapsed" desc="Constants">
     /**
      * The name of the dialog.
      */
     public static final String WINDOW_NAME = "Inventory Item Details";
     // </editor-fold>
-<<<<<<< HEAD:TrackIt/src/trackit/UI/InventoryItemDetailsUI.java
->>>>>>> origin/master
-    private final boolean isCreateMode;
-    //private final JFrame mainFrame;
-    JPanel test;
-    private JTextField skuField, quantityField, expDateField, unitField, statusField, itemNameField;
-    private JLabel sku, statusLabel, unit, quantity, expDate, itemNameLabel;
-    private JButton okInventoryItem, cancelInventoryItem;
-=======
     // <editor-fold defaultstate="collapsed" desc="Private Fields">
     private final boolean isCreateMode;
     private final AnInventoryItem anInventoryItem;
@@ -58,7 +33,6 @@ public class InventoryItemDetailsDialog
     private JTextField skuField, quantityField, unitField, statusField, itemNameField;
     private JLabel sku, statusLabel, unit, expDateLbl, quantity, itemNameLabel;
     private JButton btnOK, btnCancel;
->>>>>>> Dev:TrackIt/src/trackit/UI/InventoryItemDetailsDialog.java
     private GridBagConstraints gbc;
     private Date expDate, sqlExpDate;
     
@@ -78,11 +52,6 @@ public class InventoryItemDetailsDialog
      */
     public InventoryItemDetailsDialog(boolean useCreateMode, AnInventoryItem anInventoryItem) {
         this.isCreateMode = useCreateMode;
-<<<<<<< HEAD:TrackIt/src/trackit/UI/InventoryItemDetailsUI.java
-        //this.mainFrame = new JFrame();
-        initializeComponents();
-
-=======
         if (this.isCreateMode) {
             this.anInventoryItem = null;
         } else if (anInventoryItem == null) {
@@ -92,7 +61,6 @@ public class InventoryItemDetailsDialog
         }
 
         this.initializeComponents();
->>>>>>> Dev:TrackIt/src/trackit/UI/InventoryItemDetailsDialog.java
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
@@ -121,34 +89,19 @@ public class InventoryItemDetailsDialog
     }
 
     /**
-     *
-     * @return
-     */
-    /*public JFrame getMainFrame() {
-        return this.mainFrame;
-    }
-    */
-    /**
      * Sets up all components used in this frame.
      */
     private void initializeComponents() {
-<<<<<<< HEAD:TrackIt/src/trackit/UI/InventoryItemDetailsUI.java
-        int frameWidth = 700;
-        int frameHeight = 500;
-=======
         //Setup main frame
         int frameWidth = 500;// Originally 640
         int frameHeight = 250;//Originally 400.
->>>>>>> Dev:TrackIt/src/trackit/UI/InventoryItemDetailsDialog.java
         Dimension dimFrame = new Dimension(frameWidth, frameHeight);
+        this.setTitle(Utilities.getWindowCaption(WINDOW_NAME));
+        this.setSize(dimFrame);
         this.setPreferredSize(dimFrame);
+        this.setModal(true);
+        this.setLocationRelativeTo(null);
         this.setResizable(false);
-<<<<<<< HEAD:TrackIt/src/trackit/UI/InventoryItemDetailsUI.java
-        this.setVisible(true);
-        gbc = new GridBagConstraints();
-        this.setLayout(new GridBagLayout());
-        gbc.insets = new Insets(2, 2, 10, 0);
-=======
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new CloseQuery());
         this.getRootPane().setDefaultButton(btnOK);
@@ -161,11 +114,9 @@ public class InventoryItemDetailsDialog
         gbc = new GridBagConstraints();
         setLayout(new GridBagLayout());
         gbc.insets = new Insets(2, 2, 5, 0);
->>>>>>> Dev:TrackIt/src/trackit/UI/InventoryItemDetailsDialog.java
         gbc.anchor = GridBagConstraints.LINE_START;
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        //test = new JPanel();
         // Item Name Label Initialized
         itemNameLabel = new JLabel("Item Name: ");
         gbc.gridx = 0;
@@ -248,46 +199,28 @@ public class InventoryItemDetailsDialog
         add(statusField, gbc);
 
         // Init Ok Button
-        okInventoryItem = new JButton("Ok");
+        btnOK = new JButton("Ok");
         gbc.gridx = 3;
         gbc.gridy = 4;
         gbc.gridwidth = 1;
-<<<<<<< HEAD:TrackIt/src/trackit/UI/InventoryItemDetailsUI.java
-        add(okInventoryItem, gbc);
-        okInventoryItem.addActionListener((event) -> this.dispose());
-=======
         add(btnOK, gbc);
         btnOK.addActionListener((ActionEvent e) -> {
             saveAction();
         });
->>>>>>> Dev:TrackIt/src/trackit/UI/InventoryItemDetailsDialog.java
 
         //Cancel
-        cancelInventoryItem = new JButton("Cancel");
+        btnCancel = new JButton("Cancel");
         gbc.gridx = 4;
         gbc.gridy = 4;
         gbc.gridwidth = 1;
-<<<<<<< HEAD:TrackIt/src/trackit/UI/InventoryItemDetailsUI.java
-        add(cancelInventoryItem, gbc);
-        cancelInventoryItem.addActionListener((event) -> this.dispose());
-        //Test
-=======
         add(btnCancel, gbc);
         btnCancel.addActionListener((ActionEvent e) -> {
             cancelAction();
         });
->>>>>>> Dev:TrackIt/src/trackit/UI/InventoryItemDetailsDialog.java
 
-        //mainFrame.add(this);
-        //add(test);
-            //mainFrame.setTitle("Inventory Items Detail");
-            //mainFrame.pack();
-        //mainFrame.setVisible(true);
-        pack();
+        this.pack();
     }
 
-<<<<<<< HEAD:TrackIt/src/trackit/UI/InventoryItemDetailsUI.java
-=======
     /**
      * Handles the save action. If any errors, then display error message
      * instead.
@@ -351,5 +284,4 @@ public class InventoryItemDetailsDialog
         }
     }
     // </editor-fold>
->>>>>>> Dev:TrackIt/src/trackit/UI/InventoryItemDetailsDialog.java
 }
