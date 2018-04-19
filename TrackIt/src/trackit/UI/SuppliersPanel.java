@@ -5,6 +5,7 @@ import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 import trackit.ASupplier;
+import trackit.SuppliersTableModel;
 
 /**
  * UI Layer: Handles all aspects of the Suppliers panel.
@@ -68,7 +69,7 @@ public class SuppliersPanel
 
         //add data to suppliers arraylist 
         Object[][] suppliersTestData = {{"Amazon", "http://www.amazon.com"}, {"Walmart", "http://www.walmart.com"}, {"Ebay", "http://www.ebay.com"}};
-        mainTable = new JTable(suppliersTestData, TABLE_LABELS);
+        mainTable = new JTable(new SuppliersTableModel());
         JScrollPane suppliersScrollPane = new JScrollPane(mainTable);
         mainTable.setFillsViewportHeight(true);
         mainTable.setDefaultEditor(Object.class, null);
@@ -128,9 +129,17 @@ public class SuppliersPanel
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
+    
+    public static String[] getColumnNames(){
+        return TABLE_LABELS;   
+    }
+    
     /**
      * Displays the frame.
+     *  
      */
+    
+    
     public void display() {
         setVisible(true);
     }

@@ -5,6 +5,7 @@ import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 import trackit.AnOrder;
+import trackit.OrdersTableModel;
 
 /**
  * UI Layer: Handles all aspects of the Order panel.
@@ -70,7 +71,7 @@ public class OrdersPanel
 
         //add data to suppliers arraylist 
         Object[][] testData = {{"12MAY2018", "019645232", "Walmart", "in transit", "$128.34"}, {"12MAY2018", "019645232", "Walmart", "in transit", "$128.34"}, {"12MAY2018", "019645232", "Walmart", "in transit", "$128.34"}};
-        mainTable = new JTable(testData, TABLE_LABELS);
+        mainTable = new JTable(new OrdersTableModel());
         JScrollPane scrollPane = new JScrollPane(mainTable);
         mainTable.setFillsViewportHeight(true);
         mainTable.setDefaultEditor(Object.class, null);
@@ -127,6 +128,11 @@ public class OrdersPanel
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
+   public static String[] getColumnNames(){
+        return TABLE_LABELS;   
+    }
+    
+    
     /**
      * Displays the frame.
      */
