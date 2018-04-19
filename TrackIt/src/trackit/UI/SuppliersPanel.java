@@ -34,7 +34,11 @@ public class SuppliersPanel
     private static final String[] TABLE_LABELS = {"Supplier", "Web Address"};
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 8f2995de384ae556c913ae90acd03f0034ca6e94
     SupplierDetailsDialog details;
 
     // </editor-fold>
@@ -79,6 +83,7 @@ public class SuppliersPanel
         //add data to suppliers arraylist
 
 
+<<<<<<< HEAD
 
         mainTableModel= new DefaultTableModel(TABLE_LABELS,0);
 
@@ -86,6 +91,15 @@ public class SuppliersPanel
         Suppliers test = new Suppliers();
         mainTable = new JTable(mainTableModel);
         mainTable.setDefaultEditor(Object.class, null);
+=======
+        
+        mainTableModel= new DefaultTableModel(TABLE_LABELS,0);
+
+       // mainTable = new JTable(data, TABLE_LABELS);
+        Suppliers test = new Suppliers();
+        mainTable = new JTable(mainTableModel);
+        mainTable.setEnabled(false);
+>>>>>>> 8f2995de384ae556c913ae90acd03f0034ca6e94
         // Add action listener to JTable
         mainTable.getSelectionModel().addListSelectionListener((e) -> {
             //if the row is bigger than -1 than we need to enable the buttons
@@ -96,7 +110,11 @@ public class SuppliersPanel
         });
         mainTable.setBounds(30, 40, 200, 200);
         initTableData(test.getSQL());
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> 8f2995de384ae556c913ae90acd03f0034ca6e94
         sp = new JScrollPane(mainTable);
 
         add(sp, BorderLayout.CENTER);
@@ -160,11 +178,16 @@ public class SuppliersPanel
     public static String[] getColumnNames(){
         return TABLE_LABELS;
     }
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 8f2995de384ae556c913ae90acd03f0034ca6e94
     private void toggleDisableButton() {
         btnEdit.setEnabled(disableButtons);
         btnRemove.setEnabled(disableButtons);
     }
+<<<<<<< HEAD
 
     private void initTableData(ArrayList<ASupplier> test){
         if(test !=null){
@@ -176,11 +199,27 @@ public class SuppliersPanel
 
     }
 
+=======
+    
+    private void initTableData(ArrayList<ASupplier> test){
+        System.out.println(test);
+
+        for(ASupplier e : test){
+            Object[] data = {e.getNickname(),e.getUrl()};
+            mainTableModel.addRow(data);
+        }
+    }
+    
+>>>>>>> 8f2995de384ae556c913ae90acd03f0034ca6e94
     /**
      * Displays the frame.
      *
      */
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 8f2995de384ae556c913ae90acd03f0034ca6e94
     private void refreshItems() {
 
 
@@ -189,7 +228,11 @@ public class SuppliersPanel
 
         //TODO:  load items from database.
     }
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 8f2995de384ae556c913ae90acd03f0034ca6e94
     public void display() {
         setVisible(true);
     }

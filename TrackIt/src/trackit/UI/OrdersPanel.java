@@ -4,13 +4,15 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import trackit.AnOrder;
-import trackit.OrdersTableModel;
+import trackit.Orders;
+
 
 /**
  * UI Layer: Handles all aspects of the Order panel.
  *
- * @author Douglas
+ * @author Douglas, Steven
  */
 public class OrdersPanel
         extends JPanel {
@@ -21,16 +23,20 @@ public class OrdersPanel
      */
     public static final String TAB_NAME = "Orders";
     private static final String[] TABLE_LABELS = {"Order Date", "Order Number", "Supplier", "Status", "Total"};
-
+    private final ArrayList<AnOrder> orders = new ArrayList<>();
+    
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
-    private final ArrayList<AnOrder> orders = new ArrayList<>();
     private final AnOrder bll = new AnOrder();
+    private JButton btnCreate, btnRemove, btnEdit;
+    private JTable mainTable;
+    private DefaultTableModel mainTableModel;
+    private JScrollPane sp;
+    private boolean disableButtons = false;//use this variable to toggle edit and remove buttons on and off
+    private OrderItemsFrame details;
 // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
-    JButton btnCreate, btnRemove, btnEdit;
-    JTable mainTable;
-    OrderItemsFrame details;
+    
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -69,14 +75,27 @@ public class OrdersPanel
     private void initializeComponents() {
         setLayout(new BorderLayout());
 
-        //add data to suppliers arraylist 
-        Object[][] testData = {{"12MAY2018", "019645232", "Walmart", "in transit", "$128.34"}, {"12MAY2018", "019645232", "Walmart", "in transit", "$128.34"}, {"12MAY2018", "019645232", "Walmart", "in transit", "$128.34"}};
-        mainTable = new JTable(new OrdersTableModel());
-        JScrollPane scrollPane = new JScrollPane(mainTable);
-        mainTable.setFillsViewportHeight(true);
-        mainTable.setDefaultEditor(Object.class, null);
+        //add data to suppliers arraylist
+        mainTableModel= new DefaultTableModel(TABLE_LABELS,0);
+        Orders test = new Orders();
+        mainTable = new JTable(mainTableModel);
+        mainTable.setEnabled(false);
+        // Add action listener to JTable
+        mainTable.getSelectionModel().addListSelectionListener((e) -> {
+            //if the row is bigger than -1 than we need to enable the buttons
+            if (mainTable.getSelectedRow() > -1) {
+                disableButtons = true;
+                toggleDisableButton();
+            }
+        });
+        mainTable.setBounds(30, 40, 200, 200);
+        initTableData(test.getSQL());
+        
+        sp = new JScrollPane(mainTable);
 
-        add(scrollPane, BorderLayout.CENTER);
+        add(sp, BorderLayout.CENTER);
+
+        add(sp, BorderLayout.CENTER);
 
         JPanel btmSup = new JPanel();
 
@@ -131,8 +150,21 @@ public class OrdersPanel
    public static String[] getColumnNames(){
         return TABLE_LABELS;   
     }
-    
-    
+   
+   private void initTableData(ArrayList<AnOrder> test){
+        System.out.println(test);
+
+        for(AnOrder e : test){
+            Object[] data = {e.getDescription(),e.getOrderedFrom(),e.getOrderStatus(), e.getDateOrdered(), e.getDateExpected()};
+            mainTableModel.addRow(data);
+        }
+    }
+   
+   private void toggleDisableButton() {
+        btnEdit.setEnabled(disableButtons);
+        btnRemove.setEnabled(disableButtons);
+    } 
+   
     /**
      * Displays the frame.
      */
