@@ -123,7 +123,7 @@ public class Utilities {
      *
      * @return
      */
-    public static DateFormat getDateFormatter() {
+    public static SimpleDateFormat getDateFormatter() {
         return new SimpleDateFormat(SQL_DATE_FORMAT);
     }
 }

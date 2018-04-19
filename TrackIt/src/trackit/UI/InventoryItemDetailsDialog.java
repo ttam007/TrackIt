@@ -2,6 +2,7 @@ package trackit.UI;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Date;
 import java.util.Properties;
 import javax.swing.*;
 import org.jdatepicker.impl.JDatePanelImpl;
@@ -30,9 +31,10 @@ public class InventoryItemDetailsDialog
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     private JTextField skuField, quantityField, unitField, statusField, itemNameField;
-    private JLabel sku, statusLabel, unit, quantity, expDate, itemNameLabel;
+    private JLabel sku, statusLabel, unit, expDateLbl, quantity, itemNameLabel;
     private JButton btnOK, btnCancel;
     private GridBagConstraints gbc;
+    private Date expDate, sqlExpDate;
     
     UtilDateModel expModel = new UtilDateModel();
     JDatePanelImpl expDatePanel;
@@ -156,11 +158,11 @@ public class InventoryItemDetailsDialog
         gbc.gridwidth = 3;
         add(quantityField, gbc);
         // Init Exp Date Label and Field
-        expDate = new JLabel("Exp Date: ");
+        expDateLbl = new JLabel("Exp Date: ");
         gbc.gridx = 4;
         gbc.gridy = 2;
         gbc.gridwidth = 1;
-        add(expDate, gbc);
+        add(expDateLbl, gbc);
         expDatePicker = new JDatePickerImpl(expDatePanel, new DateLabelFormatter());
 
         gbc.gridx = 5;
@@ -226,7 +228,12 @@ public class InventoryItemDetailsDialog
      */
     private void saveAction() {
         JOptionPane.showMessageDialog(null, "Successfully Updated");
-        //TODO:  implement save.
+        
+        expDate = (Date) expDatePicker.getModel().getValue();
+            sqlExpDate = Utilities.convertToSQLDate(expDate);
+            System.out.println(sqlExpDate);
+
+//TODO:  implement save.
         /*if (successfullySaved) {
                 this.dispose();
             } else {
