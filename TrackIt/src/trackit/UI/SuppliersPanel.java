@@ -34,7 +34,7 @@ public class SuppliersPanel
     private static final String[] TABLE_LABELS = {"Supplier", "Web Address"};
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
-    
+
     SupplierDetailsDialog details;
 
     // </editor-fold>
@@ -79,14 +79,15 @@ public class SuppliersPanel
         //add data to suppliers arraylist
 
 
-        
         mainTableModel= new DefaultTableModel(TABLE_LABELS,0);
 
-       // mainTable = new JTable(data, TABLE_LABELS);
+        // mainTable = new JTable(data, TABLE_LABELS);
         Suppliers test = new Suppliers();
         mainTable = new JTable(mainTableModel);
-        mainTable.setEnabled(false);
-        // Add action listener to JTable
+        mainTable.setDefaultEditor(Object.class, null);
+
+
+             // Add action listener to JTable
         mainTable.getSelectionModel().addListSelectionListener((e) -> {
             //if the row is bigger than -1 than we need to enable the buttons
             if (mainTable.getSelectedRow() > -1) {
@@ -96,7 +97,7 @@ public class SuppliersPanel
         });
         mainTable.setBounds(30, 40, 200, 200);
         initTableData(test.getSQL());
-        
+
         sp = new JScrollPane(mainTable);
 
         add(sp, BorderLayout.CENTER);
@@ -111,6 +112,7 @@ public class SuppliersPanel
         });
 
         btnEdit = new JButton("Edit");
+        btnEdit.setEnabled(disableButtons);
         btnEdit.addActionListener((ActionEvent e) -> {
             //System.out.print("Edit supply");
             //If list item selected then edit item else select item.
@@ -126,6 +128,7 @@ public class SuppliersPanel
         });
 
         btnRemove = new JButton("Remove");
+        btnRemove.setEnabled(disableButtons);
         btnRemove.addActionListener((ActionEvent e) -> {
             int selectedRow = this.mainTable.getSelectedRow();
             if (selectedRow < 0) {
@@ -154,30 +157,33 @@ public class SuppliersPanel
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
-    
+
     public static String[] getColumnNames(){
-        return TABLE_LABELS;   
+        return TABLE_LABELS;
     }
-    
+
     private void toggleDisableButton() {
         btnEdit.setEnabled(disableButtons);
         btnRemove.setEnabled(disableButtons);
     }
-    
-    private void initTableData(ArrayList<ASupplier> test){
-        System.out.println(test);
 
-        for(ASupplier e : test){
-            Object[] data = {e.getNickname(),e.getUrl()};
-            mainTableModel.addRow(data);
+
+    private void initTableData(ArrayList<ASupplier> test){
+        if(test !=null){
+            for(ASupplier e : test){
+                Object[] data = {e.getNickname(),e.getUrl()};
+                mainTableModel.addRow(data);
+            }
         }
+
     }
-    
+
+
     /**
      * Displays the frame.
-     *  
+     *
      */
-    
+
     private void refreshItems() {
 
 
@@ -186,7 +192,7 @@ public class SuppliersPanel
 
         //TODO:  load items from database.
     }
-    
+
     public void display() {
         setVisible(true);
     }

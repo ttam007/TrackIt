@@ -143,22 +143,21 @@ public class InventoryItemsPanel
      * populates table data in a way that is dynamic
      */
     private void initTableData(ArrayList<AnInventoryItem> test){
-        for(AnInventoryItem e : test){
-            Object[] data = {e.getItemId(),e.getQuantity(),e.getSizeUnit(),e.getSku(),e.getExpirationDate(),e.getItemStatus()};
-            mainTableModel.addRow(data);
+        if(test!=null){
+            for(AnInventoryItem e : test){
+                Object[] data = {e.getItemId(),e.getQuantity(),e.getSizeUnit(),e.getSku(),e.getExpirationDate(),e.getItemStatus()};
+                mainTableModel.addRow(data);
+            }
         }
-
-
     }
 
     private void createUIComponents() {
-
 
         mainTableModel= new DefaultTableModel(TABLE_LABELS,0);
 
         Inventory test = new Inventory();
         mainTable = new JTable(mainTableModel);
-        mainTable.setEnabled(false);
+        mainTable.setDefaultEditor(Object.class, null);
         // Add action listener to JTable
         mainTable.getSelectionModel().addListSelectionListener((e) -> {
             //if the row is bigger than -1 than we need to enable the buttons
