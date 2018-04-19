@@ -145,33 +145,11 @@ public class InventoryItemsPanel
      * populates table data in a way that is dynamic
      */
     private void initTableData(ArrayList<AnInventoryItem> test){
-        System.out.println(test);
-
         for(AnInventoryItem e : test){
             Object[] data = {e.getItemId(),e.getQuantity(),e.getSizeUnit(),e.getSku(),e.getExpirationDate(),e.getItemStatus()};
             mainTableModel.addRow(data);
         }
 
-        /*ArrayList<String> testConcept = new ArrayList<String>();
-
-        testConcept.add("Gauze , 3.0, oz, 231441414, 04-27-2018, Expired");
-        testConcept.add("Gauze , 3.0, oz, 231441414, 04-27-2018, Expired");
-        testConcept.add("Gauze , 3.0, oz, 231441414, 04-27-2018, Expired");
-        testConcept.add("Gauze , 3.0, oz, 231441414, 04-27-2018, Expired");
-        testConcept.add("Gauze , 3.0, oz, 231441414, 04-27-2018, Expired");
-        testConcept.add("Gauze , 3.0, oz, 231441414, 04-27-2018, Expired");
-        testConcept.add("Gauze , 3.0, oz, 231441414, 04-27-2018, Expired");
-        testConcept.add("Gauze , 3.0, oz, 231441414, 04-27-2018, Expired");
-        testConcept.add("Gauze , 3.0, oz, 231441414, 04-27-2018, Expired");
-        testConcept.add("Gauze , 3.0, oz, 231441414, 04-27-2018, Expired");
-
-
-        for(String e : testConcept){
-            String[] test = e.split(",");
-            Object[] data = {test[0],test[1],test[2],test[3],test[4],test[5]};
-            mainTableModel.addRow(data);
-
-        }*/
 
     }
 
@@ -180,7 +158,6 @@ public class InventoryItemsPanel
 
         mainTableModel= new DefaultTableModel(TABLE_LABELS,0);
 
-       // mainTable = new JTable(data, TABLE_LABELS);
         InventoryItemsTableModel test = new InventoryItemsTableModel();
         mainTable = new JTable(mainTableModel);
         mainTable.setEnabled(false);
@@ -229,9 +206,7 @@ public class InventoryItemsPanel
     public void display() {
         setVisible(true);
     }
-    public static String[] getColumnNames(){
-        return TABLE_LABELS;
-    }
+
 
     // </editor-fold>
 }
