@@ -6,12 +6,14 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import trackit.ASupplier;
-import trackit.SuppliersTableModel;
+import trackit.Suppliers;
+
+
 
 /**
  * UI Layer: Handles all aspects of the Suppliers panel.
  *
- * @author Douglas
+ * @author Douglas, Diaz, Steven
  */
 public class SuppliersPanel
         extends JPanel {
@@ -21,16 +23,18 @@ public class SuppliersPanel
      * The name of the panel.
      */
     public static final String TAB_NAME = "Suppliers";
-    private static final String[] TABLE_LABELS = {"Supplier", "Web Address"};
-    // </editor-fold>
-    // <editor-fold defaultstate="expanded" desc="Private Fields">
     private final ArrayList<ASupplier> suppliers = new ArrayList<>();
     // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Components">
-    JButton btnCreate, btnRemove, btnEdit;
-    JTable mainTable;
+    // <editor-fold defaultstate="expanded" desc="Private Fields">
+    private JTable mainTable;
+    private JButton btnCreate, btnRemove, btnEdit;
     private DefaultTableModel mainTableModel;
-    private boolean disableButtons = false; //use this variable to toggle edit and remove buttons on and off
+    private JScrollPane sp;
+    private boolean disableButtons = false;//use this variable to toggle edit and remove buttons on and off
+    private static final String[] TABLE_LABELS = {"Supplier", "Web Address"};
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Components">
+
     SupplierDetailsDialog details;
 
     // </editor-fold>
@@ -40,6 +44,8 @@ public class SuppliersPanel
      */
     public SuppliersPanel() {
         initializeComponents();
+        refreshItems();
+        this.display();
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
@@ -66,43 +72,20 @@ public class SuppliersPanel
     private void readObject(java.io.ObjectInputStream stream) throws java.io.IOException, ClassNotFoundException {
         throw new java.io.NotSerializableException(getClass().getName());
     }
-    /**
-     * Toggles whether buttons will be enabled or not.
-     */
-    private void toggleDisableButton() {
 
-        btnEdit.setEnabled(disableButtons);
-        btnRemove.setEnabled(disableButtons);
-    }
-    /**
-     * populates table data in a way that is dynamic
-     */
-    private void initTableData(ArrayList<ASupplier> suppliers){
-        if(suppliers!=null){
-            for(ASupplier sup : suppliers){
-                Object[] data = {sup.getNickname(),sup.getUrl()};
-                mainTableModel.addRow(data);
-            }
-        }
-    }
-
-    /**
-     * Initializes all the GUI components
-     */
     private void initializeComponents() {
-
         setLayout(new BorderLayout());
-        //Declare the connection to DB
-        SuppliersTableModel supplierConnection = new SuppliersTableModel();
-        //init the table model. This will allow us to add data dynamically
-        mainTableModel = new DefaultTableModel(TABLE_LABELS,0);
-        // init the table itself
-        mainTable = new JTable(mainTableModel);
-        // declare scroll pane and add table to it
-        JScrollPane suppliersScrollPane = new JScrollPane(mainTable);
-        mainTable.setFillsViewportHeight(true);
-        mainTable.setDefaultEditor(Object.class, null);
 
+        //add data to suppliers arraylist
+
+
+
+        mainTableModel= new DefaultTableModel(TABLE_LABELS,0);
+
+        // mainTable = new JTable(data, TABLE_LABELS);
+        Suppliers test = new Suppliers();
+        mainTable = new JTable(mainTableModel);
+        mainTable.setDefaultEditor(Object.class, null);
         // Add action listener to JTable
         mainTable.getSelectionModel().addListSelectionListener((e) -> {
             //if the row is bigger than -1 than we need to enable the buttons
@@ -111,12 +94,12 @@ public class SuppliersPanel
                 toggleDisableButton();
             }
         });
+        mainTable.setBounds(30, 40, 200, 200);
+        initTableData(test.getSQL());
 
-        //add data to table
-        initTableData(supplierConnection.getSuppliers());
+        sp = new JScrollPane(mainTable);
 
-
-        add(suppliersScrollPane, BorderLayout.CENTER);
+        add(sp, BorderLayout.CENTER);
 
         JPanel btmSup = new JPanel();
 
@@ -173,17 +156,40 @@ public class SuppliersPanel
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
-    
+
     public static String[] getColumnNames(){
-        return TABLE_LABELS;   
+        return TABLE_LABELS;
     }
-    
+
+    private void toggleDisableButton() {
+        btnEdit.setEnabled(disableButtons);
+        btnRemove.setEnabled(disableButtons);
+    }
+
+    private void initTableData(ArrayList<ASupplier> test){
+        if(test !=null){
+            for(ASupplier e : test){
+                Object[] data = {e.getNickname(),e.getUrl()};
+                mainTableModel.addRow(data);
+            }
+        }
+
+    }
+
     /**
      * Displays the frame.
-     *  
+     *
      */
-    
-    
+
+    private void refreshItems() {
+
+
+
+        this.suppliers.clear();
+
+        //TODO:  load items from database.
+    }
+
     public void display() {
         setVisible(true);
     }
