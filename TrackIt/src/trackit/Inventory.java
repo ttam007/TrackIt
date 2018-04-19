@@ -37,7 +37,7 @@ public class Inventory
      * error.
      */
     @Override
-    public boolean save() {
+        public boolean save() {
         boolean returnValue = false;
         try {
             for (AnInventoryItem anItem : rows) {
