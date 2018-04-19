@@ -12,7 +12,7 @@ import trackit.Orders;
 /**
  * UI Layer: Handles all aspects of the Order panel.
  *
- * @author Douglas, Steven
+ * @author Douglas, Steven, Diaz
  */
 public class OrdersPanel
         extends JPanel {
@@ -100,12 +100,14 @@ public class OrdersPanel
         JPanel btmSup = new JPanel();
 
         btnCreate = new JButton("Create");
+
         btnCreate.addActionListener((ActionEvent e) -> {
             System.out.print("create order");
             details = new OrderItemsFrame();
         });
 
         btnEdit = new JButton("Edit");
+        btnEdit.setEnabled(disableButtons);
         btnEdit.addActionListener((ActionEvent e) -> {
             System.out.print("Edit order");
             //if list item selected edit item else select item
@@ -119,6 +121,7 @@ public class OrdersPanel
         });
 
         btnRemove = new JButton("Remove");
+        btnRemove.setEnabled(disableButtons);
         btnRemove.addActionListener((ActionEvent e) -> {
             int selectedRow = this.mainTable.getSelectedRow();
             if (selectedRow < 0) {
