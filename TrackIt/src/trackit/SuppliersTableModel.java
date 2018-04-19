@@ -15,13 +15,13 @@ import trackit.UI.SuppliersPanel;
  *
  * @author SLunsford
  */
-public class SuppliersTableModel extends AbstractTableModel {
+public class SuppliersTableModel /*extends AbstractTableModel*/ {
     SQLHelperSupplier helper = new SQLHelperSupplier();
     private final String[] columnNames = SuppliersPanel.getColumnNames();
-    ArrayList<ASupplier> suppliers;
-    Object[] allSuppliers = getSQL().toArray();
+    ArrayList<ASupplier> suppliers = getSQL();
+   // Object[] allSuppliers = getSQL().toArray();
     
-    
+   /*
     @Override
     public int getRowCount() {
         return allSuppliers.length;
@@ -41,7 +41,7 @@ public class SuppliersTableModel extends AbstractTableModel {
     public Object getValueAt(int i, int i1) {
         return allSuppliers[i];
     }
-    
+    */
     ArrayList<ASupplier> getSQL() {
         try {
             System.out.println("\nSelectAll");
@@ -52,6 +52,9 @@ public class SuppliersTableModel extends AbstractTableModel {
             System.out.println("Generic error = " + ex.getLocalizedMessage());
         }
         return suppliers;
+    }
+    public ArrayList<ASupplier> getSuppliers(){
+        return this.suppliers;
     }
     
 }

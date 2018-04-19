@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import trackit.ASupplier;
 import trackit.SuppliersTableModel;
 
@@ -28,6 +29,8 @@ public class SuppliersPanel
     // <editor-fold defaultstate="collapsed" desc="Components">
     JButton btnCreate, btnRemove, btnEdit;
     JTable mainTable;
+    private DefaultTableModel mainTableModel;
+    private boolean disableButtons = false; //use this variable to toggle edit and remove buttons on and off
     SupplierDetailsDialog details;
 
     // </editor-fold>
@@ -63,16 +66,55 @@ public class SuppliersPanel
     private void readObject(java.io.ObjectInputStream stream) throws java.io.IOException, ClassNotFoundException {
         throw new java.io.NotSerializableException(getClass().getName());
     }
+    /**
+     * Toggles whether buttons will be enabled or not.
+     */
+    private void toggleDisableButton() {
 
+        btnEdit.setEnabled(disableButtons);
+        btnRemove.setEnabled(disableButtons);
+    }
+    /**
+     * populates table data in a way that is dynamic
+     */
+    private void initTableData(ArrayList<ASupplier> suppliers){
+        if(suppliers!=null){
+            for(ASupplier sup : suppliers){
+                Object[] data = {sup.getNickname(),sup.getUrl()};
+                mainTableModel.addRow(data);
+            }
+        }
+    }
+
+    /**
+     * Initializes all the GUI components
+     */
     private void initializeComponents() {
-        setLayout(new BorderLayout());
 
-        //add data to suppliers arraylist 
-        Object[][] suppliersTestData = {{"Amazon", "http://www.amazon.com"}, {"Walmart", "http://www.walmart.com"}, {"Ebay", "http://www.ebay.com"}};
-        mainTable = new JTable(new SuppliersTableModel());
+        setLayout(new BorderLayout());
+        //Declare the connection to DB
+        SuppliersTableModel supplierConnection = new SuppliersTableModel();
+        //init the table model. This will allow us to add data dynamically
+        mainTableModel = new DefaultTableModel(TABLE_LABELS,0);
+        // init the table itself
+        mainTable = new JTable(mainTableModel);
+        // declare scroll pane and add table to it
         JScrollPane suppliersScrollPane = new JScrollPane(mainTable);
         mainTable.setFillsViewportHeight(true);
         mainTable.setDefaultEditor(Object.class, null);
+
+        // Add action listener to JTable
+        mainTable.getSelectionModel().addListSelectionListener((e) -> {
+            //if the row is bigger than -1 than we need to enable the buttons
+            if (mainTable.getSelectedRow() > -1) {
+                disableButtons = true;
+                toggleDisableButton();
+            }
+        });
+
+        //add data to table
+        initTableData(supplierConnection.getSuppliers());
+
 
         add(suppliersScrollPane, BorderLayout.CENTER);
 
@@ -86,6 +128,7 @@ public class SuppliersPanel
         });
 
         btnEdit = new JButton("Edit");
+        btnEdit.setEnabled(disableButtons);
         btnEdit.addActionListener((ActionEvent e) -> {
             //System.out.print("Edit supply");
             //If list item selected then edit item else select item.
@@ -101,6 +144,7 @@ public class SuppliersPanel
         });
 
         btnRemove = new JButton("Remove");
+        btnRemove.setEnabled(disableButtons);
         btnRemove.addActionListener((ActionEvent e) -> {
             int selectedRow = this.mainTable.getSelectedRow();
             if (selectedRow < 0) {
