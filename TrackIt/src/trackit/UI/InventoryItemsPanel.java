@@ -5,13 +5,11 @@ import java.awt.event.ActionEvent;
 import java.util.*;
 import javax.swing.*;
 import trackit.*;
-
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 /**
  * UI Layer: Handles all aspects of the Inventory panel.
  *
- * @author Brian Diaz
+ * @author Brian Diaz, Steven
  */
 public class InventoryItemsPanel
         extends JPanel {
@@ -158,7 +156,7 @@ public class InventoryItemsPanel
 
         mainTableModel= new DefaultTableModel(TABLE_LABELS,0);
 
-        InventoryItemsTableModel test = new InventoryItemsTableModel();
+        Inventory test = new Inventory();
         mainTable = new JTable(mainTableModel);
         mainTable.setEnabled(false);
         // Add action listener to JTable
@@ -170,7 +168,7 @@ public class InventoryItemsPanel
             }
         });
         mainTable.setBounds(30, 40, 200, 200);
-        initTableData(test.getItems());
+        initTableData(test.getSQL());
 
         setButtons();
         sp = new JScrollPane(mainTable);
