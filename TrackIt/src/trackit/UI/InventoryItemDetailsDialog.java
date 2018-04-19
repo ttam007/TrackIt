@@ -14,7 +14,7 @@ import trackit.*;
  * UI Layer: Handles all aspects of the Create Inventory Item and Edit Inventory
  * Item dialog.
  *
- * @author Bond, Steven
+ * @author Bond, Steven, Diaz
  */
 public class InventoryItemDetailsDialog
         extends JDialog {
@@ -30,11 +30,13 @@ public class InventoryItemDetailsDialog
     private final AnInventoryItem anInventoryItem;
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
-    private JTextField skuField, quantityField, unitField, statusField, itemNameField;
+    private JComboBox<String> statusField;
+    private JTextField skuField, quantityField, unitField, itemNameField;
     private JLabel sku, statusLabel, unit, expDateLbl, quantity, itemNameLabel;
     private JButton btnOK, btnCancel;
     private GridBagConstraints gbc;
     private Date expDate, sqlExpDate;
+    private ItemStatusType statuses;
     
     UtilDateModel expModel = new UtilDateModel();
     JDatePanelImpl expDatePanel;
@@ -191,7 +193,7 @@ public class InventoryItemDetailsDialog
         gbc.gridwidth = 1;
         add(statusLabel, gbc);
         //Text Field
-        statusField = new JTextField(7);
+        statusField = new JComboBox<String>(ItemStatusType.getStatuses());
 
         gbc.gridx = 5;
         gbc.gridy = 3;
