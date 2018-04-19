@@ -52,8 +52,6 @@ public class Dashboard {
      */
     @Override
     public String toString() {
-
-
         return this.getDescription();
     }
 }
