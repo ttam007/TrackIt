@@ -156,6 +156,7 @@ public class InventoryItemsPanel
 
         Inventory test = new Inventory();
         mainTable = new JTable(mainTableModel);
+        mainTable.getTableHeader().setReorderingAllowed(false);
         mainTable.setDefaultEditor(Object.class, null);
         // Add action listener to JTable
         mainTable.getSelectionModel().addListSelectionListener((e) -> {

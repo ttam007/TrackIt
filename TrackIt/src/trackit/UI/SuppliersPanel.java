@@ -82,7 +82,7 @@ public class SuppliersPanel
         // mainTable = new JTable(data, TABLE_LABELS);
         mainTable = new JTable(mainTableModel);
         mainTable.setDefaultEditor(Object.class, null);
-
+        mainTable.getTableHeader().setReorderingAllowed(false);
         // Add action listener to JTable
         mainTable.getSelectionModel().addListSelectionListener((e) -> {
             //if the row is bigger than -1 than we need to enable the buttons
