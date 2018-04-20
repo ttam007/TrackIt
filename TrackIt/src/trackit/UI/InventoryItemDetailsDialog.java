@@ -37,7 +37,7 @@ public class InventoryItemDetailsDialog
     private GridBagConstraints gbc;
     private Date expDate, sqlExpDate;
     private ItemStatusType statuses;
-    
+
     UtilDateModel expModel = new UtilDateModel();
     JDatePanelImpl expDatePanel;
     JDatePickerImpl expDatePicker;
@@ -111,7 +111,7 @@ public class InventoryItemDetailsDialog
         p.put("text.today", "Today");
         p.put("text.month", "Month");
         p.put("text.year", "Year");
-        expDatePanel = new JDatePanelImpl(expModel,p);
+        expDatePanel = new JDatePanelImpl(expModel, p);
 
         gbc = new GridBagConstraints();
         setLayout(new GridBagLayout());
@@ -230,10 +230,10 @@ public class InventoryItemDetailsDialog
      */
     private void saveAction() {
         JOptionPane.showMessageDialog(null, "Successfully Updated");
-        
+
         expDate = (Date) expDatePicker.getModel().getValue();
-            sqlExpDate = Utilities.convertToSQLDate(expDate);
-            System.out.println(sqlExpDate);
+        sqlExpDate = Utilities.convertToSQLDate(expDate);
+        System.out.println(sqlExpDate);
 
 //TODO:  implement save.
         /*if (successfullySaved) {

@@ -8,8 +8,6 @@ import javax.swing.table.DefaultTableModel;
 import trackit.ASupplier;
 import trackit.Suppliers;
 
-
-
 /**
  * UI Layer: Handles all aspects of the Suppliers panel.
  *
@@ -77,17 +75,14 @@ public class SuppliersPanel
         setLayout(new BorderLayout());
 
         //add data to suppliers arraylist
-
-
-        mainTableModel= new DefaultTableModel(TABLE_LABELS,0);
+        mainTableModel = new DefaultTableModel(TABLE_LABELS, 0);
 
         // mainTable = new JTable(data, TABLE_LABELS);
         Suppliers test = new Suppliers();
         mainTable = new JTable(mainTableModel);
         mainTable.setDefaultEditor(Object.class, null);
 
-
-             // Add action listener to JTable
+        // Add action listener to JTable
         mainTable.getSelectionModel().addListSelectionListener((e) -> {
             //if the row is bigger than -1 than we need to enable the buttons
             if (mainTable.getSelectedRow() > -1) {
@@ -157,8 +152,7 @@ public class SuppliersPanel
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
-
-    public static String[] getColumnNames(){
+    public static String[] getColumnNames() {
         return TABLE_LABELS;
     }
 
@@ -167,26 +161,21 @@ public class SuppliersPanel
         btnRemove.setEnabled(disableButtons);
     }
 
-
-    private void initTableData(ArrayList<ASupplier> test){
-        if(test !=null){
-            for(ASupplier e : test){
-                Object[] data = {e.getNickname(),e.getUrl()};
+    private void initTableData(ArrayList<ASupplier> test) {
+        if (test != null) {
+            for (ASupplier e : test) {
+                Object[] data = {e.getNickname(), e.getUrl()};
                 mainTableModel.addRow(data);
             }
         }
 
     }
 
-
     /**
      * Displays the frame.
      *
      */
-
     private void refreshItems() {
-
-
 
         this.suppliers.clear();
 
