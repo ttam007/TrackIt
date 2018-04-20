@@ -11,10 +11,10 @@ import trackit.DAL.SQLHelperOrder;
  */
 public class Orders
         extends GridClass<AnOrder> {
-    
+
     SQLHelperOrder helper = new SQLHelperOrder();
     ArrayList<AnOrder> orders;
-    
+
     /**
      * Pulls SQL info from database to load into JTable
      */
@@ -29,7 +29,7 @@ public class Orders
         }
         return orders;
     }
-    
+
     /**
      * Loads all rows from the database to the grid.
      *

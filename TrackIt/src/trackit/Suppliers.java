@@ -11,10 +11,10 @@ import trackit.DAL.SQLHelperSupplier;
  */
 public class Suppliers
         extends GridClass<ASupplier> {
-    
+
     SQLHelperSupplier helper = new SQLHelperSupplier();
     ArrayList<ASupplier> suppliers;
-    
+
     /**
      * Pulls SQL info from database to load into JTable
      */
@@ -29,7 +29,7 @@ public class Suppliers
         }
         return suppliers;
     }
-    
+
     /**
      * Loads all rows from the database to the grid.
      *

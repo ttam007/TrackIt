@@ -11,11 +11,10 @@ import trackit.DAL.SQLHelperInventoryItem;
  */
 public class Inventory
         extends GridClass<AnInventoryItem> {
-    
-    
+
     SQLHelperInventoryItem helper = new SQLHelperInventoryItem();
     ArrayList<AnInventoryItem> inventoryItems;
-    
+
     /**
      * Pulls SQL info from database to load into JTable
      */
@@ -30,6 +29,7 @@ public class Inventory
         }
         return inventoryItems;
     }
+
     /**
      * Loads all rows from the database to the grid.
      *
@@ -57,7 +57,7 @@ public class Inventory
      * error.
      */
     @Override
-        public boolean save() {
+    public boolean save() {
         boolean returnValue = false;
         try {
             for (AnInventoryItem anItem : rows) {
