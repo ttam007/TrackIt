@@ -33,16 +33,18 @@ public class Dashboard {
      */
     public void refresh() {
     }
+
     /**
      * @return description
      */
-    public String getDescription(){
+    public String getDescription() {
         return this.description;
     }
+
     /**
      * @return title
      */
-    public String getTitle(){
+    public String getTitle() {
         return this.title;
     }
 
@@ -52,7 +54,6 @@ public class Dashboard {
      */
     @Override
     public String toString() {
-
 
         return this.getDescription();
     }
