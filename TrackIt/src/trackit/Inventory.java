@@ -11,23 +11,20 @@ import trackit.DAL.SQLHelperInventoryItem;
  */
 public class Inventory
         extends GridClass<AnInventoryItem> {
-
-    SQLHelperInventoryItem helper = new SQLHelperInventoryItem();
-    ArrayList<AnInventoryItem> inventoryItems;
-
     /**
      * Pulls SQL info from database to load into JTable
      */
     public ArrayList<AnInventoryItem> getSQL() {
         try {
             System.out.println("\nSelectAll");
-            inventoryItems = helper.selectAll();
+         SQLHelperInventoryItem helper = new SQLHelperInventoryItem();
+       rows = helper.selectAll();
         } catch (SQLException exSQL) {
             System.out.println("SQL error = " + exSQL.getLocalizedMessage());
         } catch (Exception ex) {
             System.out.println("Generic error = " + ex.getLocalizedMessage());
         }
-        return inventoryItems;
+        return rows;
     }
 
     /**
