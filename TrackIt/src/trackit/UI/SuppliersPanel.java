@@ -82,7 +82,7 @@ public class SuppliersPanel
         // mainTable = new JTable(data, TABLE_LABELS);
         mainTable = new JTable(mainTableModel);
         mainTable.setDefaultEditor(Object.class, null);
-
+        mainTable.getTableHeader().setReorderingAllowed(false);
         // Add action listener to JTable
         mainTable.getSelectionModel().addListSelectionListener((e) -> {
             //if the row is bigger than -1 than we need to enable the buttons
@@ -102,6 +102,7 @@ public class SuppliersPanel
         btnCreate = new JButton("Create");
         btnCreate.addActionListener((ActionEvent e) -> {
             SupplierDetailsDialog dlgCreate = new SupplierDetailsDialog(true, null);
+            dlgCreate.setLocationRelativeTo(sp);
             if (dlgCreate.display() == DialogResultType.OK) {
                 this.refreshItems();
             }
@@ -117,6 +118,7 @@ public class SuppliersPanel
             } else {
                 ASupplier aSupplier = this.suppliers.get(selectedRow);
                 SupplierDetailsDialog dlgEdit = new SupplierDetailsDialog(false, aSupplier);
+                dlgEdit.setLocationRelativeTo(sp);
                 if (dlgEdit.display() == DialogResultType.OK) {
                     this.refreshItems();
                 }

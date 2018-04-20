@@ -209,7 +209,7 @@ public class InventoryItemDetailsDialog
         gbc.gridy = 4;
         gbc.gridwidth = 1;
         add(btnOK, gbc);
-        btnOK.addActionListener((ActionEvent e) -> {
+        this.btnOK.addActionListener((ActionEvent e) -> {
             saveAction();
         });
 
@@ -219,11 +219,11 @@ public class InventoryItemDetailsDialog
         gbc.gridy = 4;
         gbc.gridwidth = 1;
         add(btnCancel, gbc);
-        btnCancel.addActionListener((ActionEvent e) -> {
+        this.btnCancel.addActionListener((ActionEvent e) -> {
             cancelAction();
         });
 
-        this.pack();
+        pack();
     }
 
     /**
@@ -235,9 +235,6 @@ public class InventoryItemDetailsDialog
         this.tfSizeUnit.setText(this.anInventoryItem.getSizeUnit());
         this.tfQuantity.setText(this.anInventoryItem.getQuantity().toString());
         this.statusField.getEditor().setItem(this.anInventoryItem.getItemStatus().getText());
-        this.tfSku.setText(this.anInventoryItem.getSku());
-        this.tfSku.setText(this.anInventoryItem.getSku());
-
     }
 
     /**
@@ -248,7 +245,10 @@ public class InventoryItemDetailsDialog
         //TODO:  sort this out so boolean return is used instead of try/catch block.
         try {
             this.anInventoryItem.setDescription(this.tfDescription.getText());
-            this.anInventoryItem.setItemStatus(ItemStatusType.getType(this.statusField.getSelectedItem().toString()));
+            this.anInventoryItem.setSku(this.tfSku.getText());
+            this.anInventoryItem.setQuantity(Integer.parseInt(this.tfQuantity.getText()));
+            this.anInventoryItem.setSizeUnit(this.tfSizeUnit.getText());
+            this.anInventoryItem.setItemStatus(this.statusField.getSelectedItem().toString());
             java.util.Date expDate = (Date) expDatePicker.getModel().getValue();
             this.anInventoryItem.setExpirationDate(Utilities.convertToSQLDate(expDate));
             returnValue = true;
