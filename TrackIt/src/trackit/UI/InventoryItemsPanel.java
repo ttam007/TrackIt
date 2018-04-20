@@ -4,10 +4,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.*;
 import javax.swing.*;
-<<<<<<< HEAD
-=======
 import javax.swing.table.DefaultTableModel;
->>>>>>> Dev
 import trackit.*;
 
 /**
@@ -42,11 +39,8 @@ public class InventoryItemsPanel
      * Inventory items ui
      */
     public InventoryItemsPanel() {
-<<<<<<< HEAD
         data = new Object[20][20];
 
-=======
->>>>>>> Dev
         initializeComponents();
         refreshItems();
     }
@@ -146,7 +140,7 @@ public class InventoryItemsPanel
         });
     }
 
-<<<<<<< HEAD
+
     private void createUIComponents() {
 
         data[0][0] = "Gauze";
@@ -163,7 +157,7 @@ public class InventoryItemsPanel
         data[1][5] = "Expired";
 
         mainTable = new JTable(data, TABLE_LABELS);
-=======
+
     /**
      * populates table data in a way that is dynamic
      */
@@ -186,7 +180,7 @@ public class InventoryItemsPanel
         mainTable = new JTable(mainTableModel);
         mainTable.getTableHeader().setReorderingAllowed(false);
         mainTable.setDefaultEditor(Object.class, null);
->>>>>>> Dev
+
         // Add action listener to JTable
         mainTable.getSelectionModel().addListSelectionListener((e) -> {
             //if the row is bigger than -1 than we need to enable the buttons
@@ -196,11 +190,9 @@ public class InventoryItemsPanel
             }
         });
         mainTable.setBounds(30, 40, 200, 200);
-<<<<<<< HEAD
-=======
+
         
 
->>>>>>> Dev
         setButtons();
         sp = new JScrollPane(mainTable);
 

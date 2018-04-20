@@ -207,13 +207,10 @@ public class InventoryItemDetailsDialog
         gbc.gridy = 3;
         gbc.gridwidth = 1;
         add(statusLabel, gbc);
+        
         //Text Field
-<<<<<<< HEAD
         statusField = new JTextField(7);
-=======
         statusField = new JComboBox<>(ItemStatusType.getStatuses());
->>>>>>> Dev
-
         gbc.gridx = 5;
         gbc.gridy = 3;
         gbc.gridwidth = 1;
@@ -280,7 +277,6 @@ public class InventoryItemDetailsDialog
      * instead.
      */
     private void saveAction() {
-<<<<<<< HEAD
         JOptionPane.showMessageDialog(null, "Successfully Updated");
         
         expDate = (Date) expDatePicker.getModel().getValue();
@@ -289,20 +285,20 @@ public class InventoryItemDetailsDialog
 
 //TODO:  implement save.
         /*if (successfullySaved) {
-=======
+
         if (populateObject()) {
             if (this.bll.save(this.anInventoryItem)) {
                 this.dialogResult = DialogResultType.OK;
                 JOptionPane.showMessageDialog(null, "Successfully Saved.");
                 this.setVisible(false);
->>>>>>> Dev
+
                 this.dispose();
             } else {
                 this.dialogResult = DialogResultType.CANCEL;
                 JOptionPane.showMessageDialog(this, this.bll.getErrorMessage(),
                         Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
             }
-        }
+        }*/
     }
 
     /**

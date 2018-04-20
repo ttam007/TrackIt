@@ -1,6 +1,8 @@
 package trackit;
 
 import java.sql.*;
+import java.util.ArrayList;
+import trackit.DAL.SQLHelperOrder;
 
 /**
  * BLL Layer: Works with the Orders Tab.
@@ -10,8 +12,7 @@ import java.sql.*;
 public class Orders
         extends GridClass<AnOrder> {
 
-<<<<<<< HEAD
-=======
+
     /**
      * Pulls SQL info from database to load into JTable
      */
@@ -28,7 +29,6 @@ public class Orders
         return rows;
     }
 
->>>>>>> Dev
     /**
      * Loads all rows from the database to the grid.
      *

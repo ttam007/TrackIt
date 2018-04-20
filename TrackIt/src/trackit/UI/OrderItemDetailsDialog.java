@@ -87,16 +87,11 @@ public class OrderItemDetailsDialog
      * initialize the items
      */
     private void initializeComponents() {
-<<<<<<< HEAD
+
 
         //TODO:  add additional components here.
         int frameWidth = 500; //originally 660
         int frameHeight = 250; //originally 150
-=======
-        //Setup main frame
-        int frameWidth = 660;
-        int frameHeight = 150;
->>>>>>> Dev
         Dimension dimFrame = new Dimension(frameWidth, frameHeight);
         this.setTitle(Utilities.getWindowCaption(WINDOW_NAME));
         this.setPreferredSize(dimFrame);

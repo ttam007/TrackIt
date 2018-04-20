@@ -146,16 +146,11 @@ public class SupplierDetailsDialog
 
         //Cancel
         btnCancel = new JButton("Cancel");
-<<<<<<< HEAD
         gbc.gridx = 4;
         gbc.gridy = 4;
         gbc.gridwidth = 1;
         add(btnCancel, gbc);
         btnCancel.addActionListener((ActionEvent e) -> {
-=======
-        submitBx.add(btnCancel);
-        this.btnCancel.addActionListener((ActionEvent e) -> {
->>>>>>> Dev
             cancelAction();
         });
 

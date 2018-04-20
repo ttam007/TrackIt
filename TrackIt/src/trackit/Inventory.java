@@ -1,6 +1,8 @@
 package trackit;
 
 import java.sql.*;
+import java.util.ArrayList;
+import trackit.DAL.SQLHelperInventoryItem;
 
 /**
  * BAL Layer: Works with the Inventory tab.
@@ -9,8 +11,7 @@ import java.sql.*;
  */
 public class Inventory
         extends GridClass<AnInventoryItem> {
-<<<<<<< HEAD
-=======
+
     /**
      * Pulls SQL info from database to load into JTable
      */
@@ -26,7 +27,6 @@ public class Inventory
         }
         return rows;
     }
->>>>>>> Dev
 
     /**
      * Loads all rows from the database to the grid.

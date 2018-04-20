@@ -4,14 +4,10 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
-<<<<<<< HEAD
 import trackit.AnOrder;
 import trackit.OrdersTableModel;
-=======
 import javax.swing.table.DefaultTableModel;
 import trackit.*;
-
->>>>>>> Dev
 
 /**
  * UI Layer: Handles all aspects of the Order panel.
@@ -33,7 +29,6 @@ public class OrdersPanel
     // <editor-fold defaultstate="expanded" desc="Private Fields">
     private final ArrayList<AnOrder> orders = new ArrayList<>();
     private final AnOrder bll = new AnOrder();
-=======
     private static final String[] TABLE_LABELS = {"Description", "Supplier", "Status", "Order Date", "Expected Date"};
 
     // </editor-fold>
@@ -46,7 +41,7 @@ public class OrdersPanel
     private DefaultTableModel mainTableModel;
     private JScrollPane sp;
     private boolean disableButtons = false;//use this variable to toggle edit and remove buttons on and off
->>>>>>> Dev
+
 // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     JButton btnCreate, btnRemove, btnEdit;

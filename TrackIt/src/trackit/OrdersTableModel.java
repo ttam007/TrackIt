@@ -16,12 +16,12 @@ import trackit.UI.OrdersPanel;
  * @author SLunsford
  */
 public class OrdersTableModel extends AbstractTableModel {
+
     SQLHelperOrder helper = new SQLHelperOrder();
     private final String[] columnNames = OrdersPanel.getColumnNames();
     ArrayList<AnOrder> orders;
     Object[] allOrders = getSQL().toArray();
-    
-    
+
     @Override
     public int getRowCount() {
         return allOrders.length;
@@ -29,9 +29,9 @@ public class OrdersTableModel extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return columnNames.length;    
+        return columnNames.length;
     }
-    
+
     @Override
     public String getColumnName(int col) {
         return columnNames[col];
@@ -41,7 +41,7 @@ public class OrdersTableModel extends AbstractTableModel {
     public Object getValueAt(int i, int i1) {
         return allOrders[i];
     }
-    
+
     ArrayList<AnOrder> getSQL() {
         try {
             System.out.println("\nSelectAll");
@@ -53,5 +53,5 @@ public class OrdersTableModel extends AbstractTableModel {
         }
         return orders;
     }
-    
+
 }

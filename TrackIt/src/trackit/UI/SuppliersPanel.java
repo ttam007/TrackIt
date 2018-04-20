@@ -26,7 +26,7 @@ public class SuppliersPanel
      */
     public static final String TAB_NAME = "Suppliers";
 <<<<<<< HEAD
-    private static final String[] TABLE_LABELS = {"Supplier", "Web Address"};
+    public static final String[] TABLE_LABELS = {"Supplier", "Web Address"};
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
     private final ArrayList<ASupplier> suppliers = new ArrayList<>();
