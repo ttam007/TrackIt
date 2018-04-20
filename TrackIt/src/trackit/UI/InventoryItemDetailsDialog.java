@@ -14,7 +14,7 @@ import trackit.*;
  * UI Layer: Handles all aspects of the Create Inventory Item and Edit Inventory
  * Item dialog.
  *
- * @author Bond, Steven, Diaz
+ * @author Bond, Steven
  */
 public class InventoryItemDetailsDialog
         extends JDialog {
@@ -30,14 +30,12 @@ public class InventoryItemDetailsDialog
     private final AnInventoryItem anInventoryItem;
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
-    private JComboBox<String> statusField;
-    private JTextField skuField, quantityField, unitField, itemNameField;
+    private JTextField skuField, quantityField, unitField, statusField, itemNameField;
     private JLabel sku, statusLabel, unit, expDateLbl, quantity, itemNameLabel;
     private JButton btnOK, btnCancel;
     private GridBagConstraints gbc;
     private Date expDate, sqlExpDate;
-    private ItemStatusType statuses;
-
+    
     UtilDateModel expModel = new UtilDateModel();
     JDatePanelImpl expDatePanel;
     JDatePickerImpl expDatePicker;
@@ -111,7 +109,7 @@ public class InventoryItemDetailsDialog
         p.put("text.today", "Today");
         p.put("text.month", "Month");
         p.put("text.year", "Year");
-        expDatePanel = new JDatePanelImpl(expModel, p);
+        expDatePanel = new JDatePanelImpl(expModel,p);
 
         gbc = new GridBagConstraints();
         setLayout(new GridBagLayout());
@@ -193,7 +191,7 @@ public class InventoryItemDetailsDialog
         gbc.gridwidth = 1;
         add(statusLabel, gbc);
         //Text Field
-        statusField = new JComboBox<String>(ItemStatusType.getStatuses());
+        statusField = new JTextField(7);
 
         gbc.gridx = 5;
         gbc.gridy = 3;
@@ -230,10 +228,10 @@ public class InventoryItemDetailsDialog
      */
     private void saveAction() {
         JOptionPane.showMessageDialog(null, "Successfully Updated");
-
+        
         expDate = (Date) expDatePicker.getModel().getValue();
-        sqlExpDate = Utilities.convertToSQLDate(expDate);
-        System.out.println(sqlExpDate);
+            sqlExpDate = Utilities.convertToSQLDate(expDate);
+            System.out.println(sqlExpDate);
 
 //TODO:  implement save.
         /*if (successfullySaved) {

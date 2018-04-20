@@ -1,34 +1,14 @@
 package trackit;
 
 import java.sql.*;
-import java.util.ArrayList;
-import trackit.DAL.SQLHelperInventoryItem;
 
 /**
  * BAL Layer: Works with the Inventory tab.
  *
- * @author Bond, Steven
+ * @author Bond
  */
 public class Inventory
         extends GridClass<AnInventoryItem> {
-
-    SQLHelperInventoryItem helper = new SQLHelperInventoryItem();
-    ArrayList<AnInventoryItem> inventoryItems;
-
-    /**
-     * Pulls SQL info from database to load into JTable
-     */
-    public ArrayList<AnInventoryItem> getSQL() {
-        try {
-            System.out.println("\nSelectAll");
-            inventoryItems = helper.selectAll();
-        } catch (SQLException exSQL) {
-            System.out.println("SQL error = " + exSQL.getLocalizedMessage());
-        } catch (Exception ex) {
-            System.out.println("Generic error = " + ex.getLocalizedMessage());
-        }
-        return inventoryItems;
-    }
 
     /**
      * Loads all rows from the database to the grid.

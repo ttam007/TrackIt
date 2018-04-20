@@ -37,12 +37,12 @@ public class OrderItemsFrame
     private JTextField tfOrderNumber, tfSupplier, tfStatus, tfOrderDate, tfExpectedDate, tfBlank;
     private JTable mainTable;
     private Date orderDate, expectedDate, sqlOrderDate, sqlExpectedDate;
-
+    
     UtilDateModel orderModel = new UtilDateModel();
     UtilDateModel expectedModel = new UtilDateModel();
     JDatePanelImpl orderDatePanel, expectedDatePanel;
     JDatePickerImpl orderDatePicker, expectedDatePicker;
-
+    
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     /**
@@ -98,9 +98,9 @@ public class OrderItemsFrame
         p.put("text.today", "Today");
         p.put("text.month", "Month");
         p.put("text.year", "Year");
-        orderDatePanel = new JDatePanelImpl(orderModel, p);
-        expectedDatePanel = new JDatePanelImpl(expectedModel, p);
-
+        orderDatePanel = new JDatePanelImpl(orderModel,p);
+        expectedDatePanel = new JDatePanelImpl(expectedModel,p);
+         
         //Add all components here and set properties.
         setLayout(new BorderLayout());
 
@@ -137,6 +137,7 @@ public class OrderItemsFrame
         btmInnerBx.add(lblExpectedDate);
         expectedDatePicker = new JDatePickerImpl(expectedDatePanel, new DateLabelFormatter());
         btmInnerBx.add(expectedDatePicker);
+        
 
         topBox.add(topInnerBx);
         topBox.add(btmInnerBx);

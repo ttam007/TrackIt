@@ -3,6 +3,7 @@ package trackit.UI;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import org.jdatepicker.impl.JDatePickerImpl;
 import trackit.*;
 
 /**
@@ -29,7 +30,8 @@ public class OrderItemDetailsDialog
     JLabel lblName, lblQuantity, lblPrice, lblStatus, lblExtPrice;
     JTextField tfName, tfQuantity, tfPrice, tfStatus, tfExtPrice;
     JButton btnOK, btnCancel;
-
+    GridBagConstraints gbc;
+            
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     /**
@@ -84,8 +86,8 @@ public class OrderItemDetailsDialog
     private void initializeComponents() {
 
         //TODO:  add additional components here.
-        int frameWidth = 660;
-        int frameHeight = 150;
+        int frameWidth = 500; //originally 660
+        int frameHeight = 250; //originally 150
         Dimension dimFrame = new Dimension(frameWidth, frameHeight);
         this.setTitle(Utilities.getWindowCaption(WINDOW_NAME));
         this.setPreferredSize(dimFrame);
@@ -96,60 +98,99 @@ public class OrderItemDetailsDialog
         this.setVisible(true);
         this.getRootPane().setDefaultButton(btnOK);
 
-        //Add all components here and set properties.
-        Box nameBx, priceBx, statusBx, submitBx, combine;
+        gbc = new GridBagConstraints();
+        setLayout(new GridBagLayout());
+        gbc.insets = new Insets(2, 2, 5, 0);
+        gbc.anchor = GridBagConstraints.LINE_START;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        pnlCenter = new JPanel();
-        add(pnlCenter, BorderLayout.CENTER);
+        // Item Name Label Initialized
+        lblName = new JLabel("Item Name: ");
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        add(lblName, gbc);
 
-        nameBx = Box.createHorizontalBox();
-        lblName = new JLabel("Item Name:");
-        nameBx.add(lblName);
-        tfName = new JTextField(20);
-        nameBx.add(tfName);
+        // Item Name Text Field
+        tfName = new JTextField(25);
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.gridwidth = 5;
+        add(tfName, gbc);
 
-        priceBx = Box.createHorizontalBox();
-        lblQuantity = new JLabel("    Quantity:");
-        priceBx.add(lblQuantity);
-        tfQuantity = new JTextField(20);
-        priceBx.add(tfQuantity);
-        lblPrice = new JLabel("         Price:");
-        priceBx.add(lblPrice);
-        tfPrice = new JTextField(20);
-        priceBx.add(tfPrice);
+        // Initialize Sku label and text field
+        lblQuantity = new JLabel("Quantity: ");
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 1;
+        add(lblQuantity, gbc);
+        
+        tfQuantity = new JTextField(7);
+        tfQuantity.setEditable(this.isCreateMode);
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.gridwidth = 5;
+        add(tfQuantity, gbc);
+        // Init Quantity
+        //Label
+        lblPrice = new JLabel("Price: ");
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 1;
+        add(lblPrice, gbc);
+        
+        // Field
+        tfPrice = new JTextField(7);
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        gbc.gridwidth = 3;
+        add(tfPrice, gbc);
+        
+        // Init Exp Date Label and Field
+        lblStatus = new JLabel("Status: ");
+        gbc.gridx = 4;
+        gbc.gridy = 2;
+        gbc.gridwidth = 1;
+        add(lblStatus, gbc);
+        
+        tfStatus = new JTextField(10);
+        gbc.gridx = 5;
+        gbc.gridy = 2;
+        gbc.gridwidth = 1;
+        add(tfStatus, gbc);
+        // Unit
+        //Label
+        lblExtPrice = new JLabel("Ext Price: ");
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 1;
+        add(lblExtPrice, gbc);
+        // Field
+        tfExtPrice = new JTextField(7);
 
-        statusBx = Box.createHorizontalBox();
-        lblStatus = new JLabel("        Status:");
-        statusBx.add(lblStatus);
-        tfStatus = new JTextField(20);
-        statusBx.add(tfStatus);
-        lblExtPrice = new JLabel("     Ext Price:");
-        statusBx.add(lblExtPrice);
-        tfExtPrice = new JTextField(20);
-        statusBx.add(tfExtPrice);
+        gbc.gridx = 1;
+        gbc.gridy = 3;
+        gbc.gridwidth = 3;
+        add(tfExtPrice, gbc);
 
-        submitBx = Box.createHorizontalBox();
-        btnOK = new JButton("OK");
-        submitBx.add(btnOK);
-
-        this.btnOK.addActionListener((ActionEvent e) -> {
+        // Init Ok Button
+        btnOK = new JButton("Ok");
+        gbc.gridx = 5;
+        gbc.gridy = 4;
+        gbc.gridwidth = 1;
+        add(btnOK, gbc);
+        btnOK.addActionListener((ActionEvent e) -> {
             saveAction();
         });
 
+        //Cancel
         btnCancel = new JButton("Cancel");
-        submitBx.add(btnCancel);
-
-        this.btnCancel.addActionListener((ActionEvent e) -> {
+        gbc.gridx = 6;
+        gbc.gridy = 4;
+        gbc.gridwidth = 1;
+        add(btnCancel, gbc);
+        btnCancel.addActionListener((ActionEvent e) -> {
             cancelAction();
         });
-
-        combine = Box.createVerticalBox();
-        combine.add(nameBx);
-        combine.add(priceBx);
-        combine.add(statusBx);
-        combine.add(submitBx);
-
-        pnlCenter.add(combine);
 
         //Finalizations
         pack();

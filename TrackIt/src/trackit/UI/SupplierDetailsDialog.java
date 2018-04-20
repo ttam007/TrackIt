@@ -3,6 +3,7 @@ package trackit.UI;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import org.jdatepicker.impl.JDatePickerImpl;
 import trackit.*;
 
 /**
@@ -29,6 +30,7 @@ public class SupplierDetailsDialog
     JLabel lblName, lblAddress;
     JTextField tfName, tfAddress;
     JButton btnOK, btnCancel;
+    GridBagConstraints gbc;
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -84,7 +86,7 @@ public class SupplierDetailsDialog
     private void initializeComponents() {
         //Setup main frame
         int frameWidth = 500;
-        int frameHeight = 110;
+        int frameHeight = 200; //originally 110
         Dimension dimFrame = new Dimension(frameWidth, frameHeight);
         this.setTitle(Utilities.getWindowCaption(WINDOW_NAME));
         this.setPreferredSize(dimFrame);
@@ -95,42 +97,59 @@ public class SupplierDetailsDialog
         this.setVisible(true);
         this.getRootPane().setDefaultButton(btnOK);
 
-        //Add all components here and set properties.
-        Box nameBx, addressBx, submitBx, combine;
+        gbc = new GridBagConstraints();
+        setLayout(new GridBagLayout());
+        gbc.insets = new Insets(2, 2, 5, 0);
+        gbc.anchor = GridBagConstraints.LINE_START;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        
+        // Supplier Name Label 
+        lblName = new JLabel("Supplier Name: ");
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        add(lblName, gbc);
 
-        pnlCenter = new JPanel();
-        add(pnlCenter, BorderLayout.CENTER);
+        // Supplier Name Text Field
+        tfName = new JTextField(25);
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.gridwidth = 5;
+        add(tfName, gbc);
 
-        nameBx = Box.createHorizontalBox();
-        lblName = new JLabel("Supplier Name:   ");
-        nameBx.add(lblName);
-        tfName = new JTextField(20);
-        nameBx.add(tfName);
-        addressBx = Box.createHorizontalBox();
-        lblAddress = new JLabel("Website Address:");
-        addressBx.add(lblAddress);
-        tfAddress = new JTextField(20);
-        addressBx.add(tfAddress);
-        submitBx = Box.createHorizontalBox();
-        btnOK = new JButton("OK");
-        submitBx.add(btnOK);
-
-        this.btnOK.addActionListener((ActionEvent e) -> {
+        // Website Address label
+        lblAddress = new JLabel("Website Address: ");
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 1;
+        add(lblAddress, gbc);
+        
+        //Website Address Text Field
+        tfAddress = new JTextField(25);
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.gridwidth = 5;
+        add(tfAddress, gbc);
+        
+        
+        // Init Ok Button
+        btnOK = new JButton("Ok");
+        gbc.gridx = 3;
+        gbc.gridy = 4;
+        gbc.gridwidth = 1;
+        add(btnOK, gbc);
+        btnOK.addActionListener((ActionEvent e) -> {
             saveAction();
         });
 
+        //Cancel
         btnCancel = new JButton("Cancel");
-        submitBx.add(btnCancel);
-
-        this.btnCancel.addActionListener((ActionEvent e) -> {
+        gbc.gridx = 4;
+        gbc.gridy = 4;
+        gbc.gridwidth = 1;
+        add(btnCancel, gbc);
+        btnCancel.addActionListener((ActionEvent e) -> {
             cancelAction();
         });
-        combine = Box.createVerticalBox();
-        combine.add(nameBx);
-        combine.add(addressBx);
-        combine.add(submitBx);
-
-        pnlCenter.add(combine);
 
         //Finalizations
         pack();
