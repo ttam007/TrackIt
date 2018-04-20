@@ -14,6 +14,10 @@ public class DALTestDriver {
 
     private final String password;
 
+    /**
+     *
+     * @param password
+     */
     public DALTestDriver(String password) {
         this.password = password;
         setDefaultConnection();
@@ -47,7 +51,8 @@ public class DALTestDriver {
         System.out.println("\ntestMySQLJarConnection");
 
         try {
-            String myDriver = "com.mysql.jdbc.Driver";
+            String myDriver;
+            myDriver = "com.mysql.jdbc.Driver";
             Class.forName(myDriver);
             try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/TrackItDB", "root", password)) {
                 String query = "insert into lookups (listName, listValue) values (?, ?)";
@@ -181,9 +186,9 @@ public class DALTestDriver {
         try {
             System.out.println("\nSelectAll");
             ArrayList<ASupplier> suppliers = helper.selectAll();
-            for (ASupplier anItem : suppliers) {
+            suppliers.stream().forEach((anItem) -> {
                 printSupplier(anItem);
-            }
+            });
 
             System.out.println("\nSelectOne");
             aSupplier = helper.selectOne(2);
@@ -231,9 +236,9 @@ public class DALTestDriver {
         try {
             System.out.println("\nSelectAll");
             ArrayList<AnOrderItem> orderItems = helper.selectAll();
-            for (AnOrderItem anItem : orderItems) {
+            orderItems.stream().forEach((anItem) -> {
                 printOrderItem(anItem);
-            }
+            });
 
             System.out.println("\nSelectOne");
             anOrderItem = helper.selectOne(2);
@@ -283,9 +288,9 @@ public class DALTestDriver {
         try {
             System.out.println("\nSelectAll");
             ArrayList<AnOrder> order = helper.selectAll();
-            for (AnOrder anItem : order) {
+            order.stream().forEach((anItem) -> {
                 printOrder(anItem);
-            }
+            });
 
             System.out.println("\nSelectOne");
             anOrder = helper.selectOne(2);
@@ -335,9 +340,9 @@ public class DALTestDriver {
         try {
             System.out.println("\nSelectAll");
             ArrayList<AnInventoryItem> inventoryItem = helper.selectAll();
-            for (AnInventoryItem anItem : inventoryItem) {
+            inventoryItem.stream().forEach((anItem) -> {
                 printInventoryItem(anItem);
-            }
+            });
 
             System.out.println("\nSelectOne");
             anInventoryItem = helper.selectOne(2);

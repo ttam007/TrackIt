@@ -120,7 +120,7 @@ public class InventoryItemDetailsDialog
         add(unit, gbc);
         // Field
         unitField = new JTextField(7);
-        
+
         gbc.gridx = 1;
         gbc.gridy = 3;
         gbc.gridwidth = 3;
