@@ -77,7 +77,9 @@ public class OrdersPanel
         mainTableModel = new DefaultTableModel(TABLE_LABELS, 0);
         Orders test = new Orders();
         mainTable = new JTable(mainTableModel);
-        mainTable.setEnabled(false);
+
+        mainTable.setDefaultEditor(Object.class, null);
+        mainTable.getTableHeader().setReorderingAllowed(false);
         // Add action listener to JTable
         mainTable.getSelectionModel().addListSelectionListener((e) -> {
             //if the row is bigger than -1 than we need to enable the buttons
