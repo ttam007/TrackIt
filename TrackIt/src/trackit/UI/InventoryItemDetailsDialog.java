@@ -28,8 +28,13 @@ public class InventoryItemDetailsDialog
     // <editor-fold defaultstate="collapsed" desc="Private Fields">
     private final boolean isCreateMode;
     private final AnInventoryItem anInventoryItem;
+    private final Inventory bll = new Inventory();
+    private DialogResultType dialogResult = DialogResultType.NONE;
+    private final UtilDateModel expModel = new UtilDateModel();
+
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
+<<<<<<< HEAD
     private JTextField skuField, quantityField, unitField, statusField, itemNameField;
     private JLabel sku, statusLabel, unit, expDateLbl, quantity, itemNameLabel;
     private JButton btnOK, btnCancel;
@@ -39,6 +44,16 @@ public class InventoryItemDetailsDialog
     UtilDateModel expModel = new UtilDateModel();
     JDatePanelImpl expDatePanel;
     JDatePickerImpl expDatePicker;
+=======
+    private JComboBox<String> statusField;
+    private JTextField tfSku, tfQuantity, tfSizeUnit, tfDescription;
+    private JLabel sku, statusLabel, unit, expDateLbl, quantity, itemNameLabel;
+    private JButton btnOK, btnCancel;
+    private GridBagConstraints gbc;
+
+    private JDatePanelImpl expDatePanel;
+    private JDatePickerImpl expDatePicker;
+>>>>>>> Dev
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
@@ -53,14 +68,15 @@ public class InventoryItemDetailsDialog
     public InventoryItemDetailsDialog(boolean useCreateMode, AnInventoryItem anInventoryItem) {
         this.isCreateMode = useCreateMode;
         if (this.isCreateMode) {
-            this.anInventoryItem = null;
+            this.anInventoryItem = new AnInventoryItem();
         } else if (anInventoryItem == null) {
-            throw new IllegalArgumentException("When 'useCreateMode' = true, then a non-null anInventoryItem must be provided.");
+            throw new IllegalArgumentException("When 'useCreateMode' = false, then a non-null anInventoryItem must be provided.");
         } else {
             this.anInventoryItem = anInventoryItem;
         }
 
-        this.initializeComponents();
+        initializeComponents();
+        populateComponents();
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
@@ -97,14 +113,15 @@ public class InventoryItemDetailsDialog
         int frameHeight = 250;//Originally 400.
         Dimension dimFrame = new Dimension(frameWidth, frameHeight);
         this.setTitle(Utilities.getWindowCaption(WINDOW_NAME));
-        this.setSize(dimFrame);
         this.setPreferredSize(dimFrame);
-        this.setModal(true);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new CloseQuery());
         this.getRootPane().setDefaultButton(btnOK);
+        this.setModal(true);
+
+        //Add all components here and set properties.
         Properties p = new Properties();
         p.put("text.today", "Today");
         p.put("text.month", "Month");
@@ -124,12 +141,12 @@ public class InventoryItemDetailsDialog
         add(itemNameLabel, gbc);
 
         // Item Name Text Field
-        itemNameField = new JTextField(25);
+        tfDescription = new JTextField(25);
 
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.gridwidth = 5;
-        add(itemNameField, gbc);
+        add(tfDescription, gbc);
 
         // Initialize Sku label and text field
         sku = new JLabel("SKU: ");
@@ -137,12 +154,12 @@ public class InventoryItemDetailsDialog
         gbc.gridy = 1;
         gbc.gridwidth = 1;
         add(sku, gbc);
-        skuField = new JTextField(25);
+        tfSku = new JTextField(25);
 
         gbc.gridx = 1;
         gbc.gridy = 1;
         gbc.gridwidth = 5;
-        add(skuField, gbc);
+        add(tfSku, gbc);
         // Init Quantity
         //Label
         quantity = new JLabel("Quantity: ");
@@ -151,12 +168,12 @@ public class InventoryItemDetailsDialog
         gbc.gridwidth = 1;
         add(quantity, gbc);
         // Field
-        quantityField = new JTextField(7);
-        quantityField.setEditable(this.isCreateMode);
+        tfQuantity = new JTextField(7);
+        tfQuantity.setEditable(this.isCreateMode);
         gbc.gridx = 1;
         gbc.gridy = 2;
         gbc.gridwidth = 3;
-        add(quantityField, gbc);
+        add(tfQuantity, gbc);
         // Init Exp Date Label and Field
         expDateLbl = new JLabel("Exp Date: ");
         gbc.gridx = 4;
@@ -177,12 +194,12 @@ public class InventoryItemDetailsDialog
         gbc.gridwidth = 1;
         add(unit, gbc);
         // Field
-        unitField = new JTextField(7);
+        tfSizeUnit = new JTextField(7);
 
         gbc.gridx = 1;
         gbc.gridy = 3;
         gbc.gridwidth = 3;
-        add(unitField, gbc);
+        add(tfSizeUnit, gbc);
 
         // Init Status Label and Field
         statusLabel = new JLabel("Status: ");
@@ -191,7 +208,11 @@ public class InventoryItemDetailsDialog
         gbc.gridwidth = 1;
         add(statusLabel, gbc);
         //Text Field
+<<<<<<< HEAD
         statusField = new JTextField(7);
+=======
+        statusField = new JComboBox<>(ItemStatusType.getStatuses());
+>>>>>>> Dev
 
         gbc.gridx = 5;
         gbc.gridy = 3;
@@ -204,7 +225,7 @@ public class InventoryItemDetailsDialog
         gbc.gridy = 4;
         gbc.gridwidth = 1;
         add(btnOK, gbc);
-        btnOK.addActionListener((ActionEvent e) -> {
+        this.btnOK.addActionListener((ActionEvent e) -> {
             saveAction();
         });
 
@@ -214,19 +235,52 @@ public class InventoryItemDetailsDialog
         gbc.gridy = 4;
         gbc.gridwidth = 1;
         add(btnCancel, gbc);
-        btnCancel.addActionListener((ActionEvent e) -> {
+        this.btnCancel.addActionListener((ActionEvent e) -> {
             cancelAction();
         });
 
-        this.pack();
+        pack();
+    }
+
+    /**
+     * Populates all the UI components from the object in memory.
+     */
+    private void populateComponents() {
+        this.tfDescription.setText(this.anInventoryItem.getDescription());
+        this.tfSku.setText(this.anInventoryItem.getSku());
+        this.tfSizeUnit.setText(this.anInventoryItem.getSizeUnit());
+        this.tfQuantity.setText(this.anInventoryItem.getQuantity().toString());
+        this.statusField.getEditor().setItem(this.anInventoryItem.getItemStatus().getText());
+    }
+
+    /**
+     * Populates the object in memory from all the UI components.
+     */
+    private boolean populateObject() {
+        boolean returnValue = false;
+        //TODO:  sort this out so boolean return is used instead of try/catch block.
+        try {
+            this.anInventoryItem.setDescription(this.tfDescription.getText());
+            this.anInventoryItem.setSku(this.tfSku.getText());
+            this.anInventoryItem.setQuantity(Integer.parseInt(this.tfQuantity.getText()));
+            this.anInventoryItem.setSizeUnit(this.tfSizeUnit.getText());
+            this.anInventoryItem.setItemStatus(this.statusField.getSelectedItem().toString());
+            java.util.Date expDate = (Date) expDatePicker.getModel().getValue();
+            this.anInventoryItem.setExpirationDate(Utilities.convertToSQLDate(expDate));
+            returnValue = true;
+        } catch (java.sql.SQLException exSQL) {
+            JOptionPane.showMessageDialog(this, this.anInventoryItem.getErrorMessage(),
+                    Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+        }
+        return returnValue;
     }
 
     /**
      * Handles the save action. If any errors, then display error message
      * instead.
-     *
      */
     private void saveAction() {
+<<<<<<< HEAD
         JOptionPane.showMessageDialog(null, "Successfully Updated");
         
         expDate = (Date) expDatePicker.getModel().getValue();
@@ -235,32 +289,43 @@ public class InventoryItemDetailsDialog
 
 //TODO:  implement save.
         /*if (successfullySaved) {
+=======
+        if (populateObject()) {
+            if (this.bll.save(this.anInventoryItem)) {
+                this.dialogResult = DialogResultType.OK;
+                JOptionPane.showMessageDialog(null, "Successfully Saved.");
+                this.setVisible(false);
+>>>>>>> Dev
                 this.dispose();
             } else {
-               //TODO:  catch errors and display them.  Do not exit dialog if an error occurs.
-            }*/
-        this.dispose();
+                this.dialogResult = DialogResultType.CANCEL;
+                JOptionPane.showMessageDialog(this, this.bll.getErrorMessage(),
+                        Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 
     /**
-     * Handles the cancel action. If any errors, then display error message
-     * instead.
-     *
+     * Handles the cancel action.
      */
     private void cancelAction() {
         JOptionPane.showMessageDialog(null, "Change Cancelled");
-        //TODO:  close window and return to prior window.
+        this.dialogResult = DialogResultType.CANCEL;
+        this.setVisible(false);
         this.dispose();
     }
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
     /**
-     * Displays the frame.
+     * Displays the dialog.
+     *
+     * @return The DialogReturnType which tells how the dialog was closed.
      */
-    public void display() {
+    public DialogResultType display() {
         System.out.println(String.format("Displaying %s...", WINDOW_NAME));
         setVisible(true);
+        return this.dialogResult;
     }
 
     // </editor-fold>

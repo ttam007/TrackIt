@@ -23,6 +23,8 @@ public class OrderItemDetailsDialog
     // <editor-fold defaultstate="expanded" desc="Private Fields">
     private final boolean isCreateMode;
     private final AnOrderItem anOrderItem;
+    private final OrderItems bll = new OrderItems();
+    private DialogResultType dialogResult = DialogResultType.NONE;
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
@@ -45,14 +47,15 @@ public class OrderItemDetailsDialog
     public OrderItemDetailsDialog(boolean useCreateMode, AnOrderItem anOrderItem) {
         this.isCreateMode = useCreateMode;
         if (this.isCreateMode) {
-            this.anOrderItem = null;
+            this.anOrderItem = new AnOrderItem();
         } else if (anOrderItem == null) {
-            throw new IllegalArgumentException("When 'useCreateMode' = true, then a non-null anOrderItem must be provided.");
+            throw new IllegalArgumentException("When 'useCreateMode' = false, then a non-null anOrderItem must be provided.");
         } else {
             this.anOrderItem = anOrderItem;
         }
 
-        this.initializeComponents();
+        initializeComponents();
+        populateComponents();
     }
 
     // </editor-fold>
@@ -84,10 +87,16 @@ public class OrderItemDetailsDialog
      * initialize the items
      */
     private void initializeComponents() {
+<<<<<<< HEAD
 
         //TODO:  add additional components here.
         int frameWidth = 500; //originally 660
         int frameHeight = 250; //originally 150
+=======
+        //Setup main frame
+        int frameWidth = 660;
+        int frameHeight = 150;
+>>>>>>> Dev
         Dimension dimFrame = new Dimension(frameWidth, frameHeight);
         this.setTitle(Utilities.getWindowCaption(WINDOW_NAME));
         this.setPreferredSize(dimFrame);
@@ -95,8 +104,8 @@ public class OrderItemDetailsDialog
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new CloseQuery());
-        this.setVisible(true);
         this.getRootPane().setDefaultButton(btnOK);
+        this.setModal(true);
 
         gbc = new GridBagConstraints();
         setLayout(new GridBagLayout());
@@ -197,40 +206,73 @@ public class OrderItemDetailsDialog
     }
 
     /**
-     * Handles the save action. If any errors, then display error message
-     * instead.
-     *
+     * Populates all the UI components from the object in memory.
      */
-    private void saveAction() {
-        JOptionPane.showMessageDialog(null, "Successfully Updated");
-        //TODO:  implement save.
-        /*if (successfullySaved) {
-                this.dispose();
-            } else {
-               //TODO:  catch errors and display them.  Do not exit dialog if an error occurs.
-            }*/
-        this.dispose();
+    private void populateComponents() {
+        this.tfName.setText(this.anOrderItem.getDescription());
+        this.tfStatus.setText(this.anOrderItem.getItemStatus().getText());
+        this.tfQuantity.setText(this.anOrderItem.getQuantityOrdered().toString());
+        this.tfPrice.setText(this.anOrderItem.getPrice().toString());
     }
 
     /**
-     * Handles the cancel action. If any errors, then display error message
+     * Populates the object in memory from all the UI components.
+     */
+    private boolean populateObject() {
+        boolean returnValue = false;
+        //TODO:  sort this out so boolean return is used instead of try/catch block.
+        try {
+            this.anOrderItem.setDescription(this.tfName.getText());
+            this.anOrderItem.setQuantityOrdered(Integer.parseInt(this.tfQuantity.getText()));
+            this.anOrderItem.setPrice(Double.parseDouble(this.tfPrice.getText()));
+            returnValue = true;
+        } catch (java.sql.SQLException exSQL) {
+            JOptionPane.showMessageDialog(this, this.anOrderItem.getErrorMessage(),
+                    Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+        }
+        return returnValue;
+    }
+
+    /**
+     * Handles the save action. If any errors, then display error message
      * instead.
-     *
+     */
+    private void saveAction() {
+        if (populateObject()) {
+            if (this.bll.save(this.anOrderItem)) {
+                this.dialogResult = DialogResultType.OK;
+                JOptionPane.showMessageDialog(null, "Successfully Saved.");
+                this.setVisible(false);
+                this.dispose();
+            } else {
+                this.dialogResult = DialogResultType.CANCEL;
+                JOptionPane.showMessageDialog(this, this.bll.getErrorMessage(),
+                        Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    /**
+     * Handles the cancel action.
      */
     private void cancelAction() {
-        JOptionPane.showMessageDialog(null, "Changed Cancelled");
-        //TODO:  close window and return to prior window.
+        JOptionPane.showMessageDialog(null, "Change Cancelled");
+        this.dialogResult = DialogResultType.CANCEL;
+        this.setVisible(false);
         this.dispose();
     }
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
     /**
-     * Displays the frame.
+     * Displays the dialog.
+     *
+     * @return The DialogReturnType which tells how the dialog was closed.
      */
-    public void display() {
+    public DialogResultType display() {
         System.out.println(String.format("Displaying %s...", WINDOW_NAME));
         setVisible(true);
+        return this.dialogResult;
     }
 
     // </editor-fold>

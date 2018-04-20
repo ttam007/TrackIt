@@ -45,7 +45,7 @@ public abstract class DatabaseObject {
      *
      * @return
      */
-    protected String getErrorMessage() {
+    public String getErrorMessage() {
         return this.errorMessage;
     }
 

@@ -13,7 +13,7 @@ import trackit.DAL.SQLHelperOrder;
 public class AnOrder
         extends DatabaseObject {
 
-    // <editor-fold defaultstate="expanded" desc="Private Fields">
+    // <editor-fold defaultstate="collapsed" desc="Private Fields">
     private static final SQLHelperOrder HELPER = new SQLHelperOrder();
     private String description = "New Order";
     /**
@@ -25,7 +25,7 @@ public class AnOrder
     private java.sql.Date dateExpected = null;
 
     // </editor-fold>
-    // <editor-fold defaultstate="expanded" desc="Constructors">
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
     /**
      * An order
      */
@@ -34,7 +34,7 @@ public class AnOrder
     }
 
     // </editor-fold>
-    // <editor-fold defaultstate="expanded" desc="Setters & Getters">
+    // <editor-fold defaultstate="collapsed" desc="Setters & Getters">
     @Override
     public void setPrimaryKey(Integer aPrimaryKey)
             throws SQLException {
@@ -159,7 +159,7 @@ public class AnOrder
     }
 
     // </editor-fold>
-    // <editor-fold defaultstate="expanded" desc="Protected Methods">
+    // <editor-fold defaultstate="collapsed" desc="Protected Methods">
     @Override
     protected boolean isAlreadyInDatabase() {
         boolean returnValue = false;
@@ -173,12 +173,12 @@ public class AnOrder
         } catch (SQLException exSQL) {
         } catch (Exception ex) {
         }
+
         return returnValue;
-        //return !(primaryKey.equals(SQLHelper.INVALID_PRIMARY_KEY));
     }
 
     // </editor-fold>
-    // <editor-fold defaultstate="expanded" desc="Public Static Methods">
+    // <editor-fold defaultstate="collapsed" desc="Public Static Methods">
     /**
      * Gets all the objects from the database.
      *

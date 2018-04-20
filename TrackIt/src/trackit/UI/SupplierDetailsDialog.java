@@ -10,7 +10,7 @@ import trackit.*;
  * UI Layer: Handles all aspects of the Create ASupplier and Edit ASupplier
  * dialog.
  *
- * @author Douglas
+ * @author Douglas, Steven
  */
 public class SupplierDetailsDialog
         extends JDialog {
@@ -24,6 +24,8 @@ public class SupplierDetailsDialog
     // <editor-fold defaultstate="collapsed" desc="Private Fields">
     private final boolean isCreateMode;
     private final ASupplier aSupplier;
+    private final Suppliers bll = new Suppliers();
+    private DialogResultType dialogResult = DialogResultType.NONE;
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     JPanel pnlCenter;
@@ -45,14 +47,15 @@ public class SupplierDetailsDialog
     public SupplierDetailsDialog(boolean useCreateMode, ASupplier aSupplier) {
         this.isCreateMode = useCreateMode;
         if (this.isCreateMode) {
-            this.aSupplier = null;
+            this.aSupplier = new ASupplier();
         } else if (aSupplier == null) {
-            throw new IllegalArgumentException("When 'useCreateMode' = true, then a non-null aSupplier must be provided.");
+            throw new IllegalArgumentException("When 'useCreateMode' = false, then a non-null aSupplier must be provided.");
         } else {
             this.aSupplier = aSupplier;
         }
 
         initializeComponents();
+        populateComponents();
     }
 
     // </editor-fold>
@@ -94,8 +97,8 @@ public class SupplierDetailsDialog
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new CloseQuery());
-        this.setVisible(true);
         this.getRootPane().setDefaultButton(btnOK);
+        this.setModal(true);
 
         gbc = new GridBagConstraints();
         setLayout(new GridBagLayout());
@@ -143,11 +146,16 @@ public class SupplierDetailsDialog
 
         //Cancel
         btnCancel = new JButton("Cancel");
+<<<<<<< HEAD
         gbc.gridx = 4;
         gbc.gridy = 4;
         gbc.gridwidth = 1;
         add(btnCancel, gbc);
         btnCancel.addActionListener((ActionEvent e) -> {
+=======
+        submitBx.add(btnCancel);
+        this.btnCancel.addActionListener((ActionEvent e) -> {
+>>>>>>> Dev
             cancelAction();
         });
 
@@ -156,40 +164,70 @@ public class SupplierDetailsDialog
     }
 
     /**
-     * Handles the save action. If any errors, then display error message
-     * instead.
-     *
+     * Populates all the UI components from the object in memory.
      */
-    private void saveAction() {
-        JOptionPane.showMessageDialog(null, "Successfully Updated");
-        //TODO:  implement save.
-        /*if (successfullySaved) {
-                this.dispose();
-            } else {
-               //TODO:  catch errors and display them.  Do not exit dialog if an error occurs.
-            }*/
-        this.dispose();
+    private void populateComponents() {
+        this.tfName.setText(this.aSupplier.getNickname());
+        this.tfAddress.setText(this.aSupplier.getUrl());
     }
 
     /**
-     * Handles the cancel action. If any errors, then display error message
+     * Populates the object in memory from all the UI components.
+     */
+    private boolean populateObject() {
+        boolean returnValue = false;
+        //TODO:  sort this out so boolean return is used instead of try/catch block.
+        try {
+            this.aSupplier.setNickname(this.tfName.getText());
+            this.aSupplier.setUrl(this.tfAddress.getText());
+            returnValue = true;
+        } catch (java.sql.SQLException exSQL) {
+            JOptionPane.showMessageDialog(this, this.aSupplier.getErrorMessage(),
+                    Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+        }
+        return returnValue;
+    }
+
+    /**
+     * Handles the save action. If any errors, then display error message
      * instead.
-     *
+     */
+    private void saveAction() {
+        if (populateObject()) {
+            if (this.bll.save(this.aSupplier)) {
+                this.dialogResult = DialogResultType.OK;
+                JOptionPane.showMessageDialog(null, "Successfully Saved.");
+                this.setVisible(false);
+                this.dispose();
+            } else {
+                this.dialogResult = DialogResultType.CANCEL;
+                JOptionPane.showMessageDialog(this, this.bll.getErrorMessage(),
+                        Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    /**
+     * Handles the cancel action.
      */
     private void cancelAction() {
         JOptionPane.showMessageDialog(null, "Change Cancelled");
-        //TODO:  close window and return to prior window.
+        this.dialogResult = DialogResultType.CANCEL;
+        this.setVisible(false);
         this.dispose();
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
 
     /**
-     * Displays the frame.
+     * Displays the dialog.
+     *
+     * @return The DialogReturnType which tells how the dialog was closed.
      */
-    public void display() {
+    public DialogResultType display() {
         System.out.println(String.format("Displaying %s...", WINDOW_NAME));
         setVisible(true);
+        return this.dialogResult;
     }
 
     // </editor-fold>

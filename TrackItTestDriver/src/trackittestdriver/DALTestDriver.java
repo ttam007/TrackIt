@@ -306,7 +306,7 @@ public class DALTestDriver {
             anOrder = helper.selectOne(pk);
             printOrder(anOrder);
 
-            System.out.println("\nUpdate");
+            /*System.out.println("\nUpdate");
             AnOrder anOrderUpdate = new AnOrder();
             anOrderUpdate.setPrimaryKey(pk);
             anOrderUpdate.setDescription("Cleaning Supplies");
@@ -320,7 +320,7 @@ public class DALTestDriver {
             pk = 2;
             helper.delete(pk);
             anOrder = helper.selectOne(pk);
-            printOrder(anOrder);
+            printOrder(anOrder);*/
         } catch (SQLException exSQL) {
             System.out.println("SQL error = " + exSQL.getLocalizedMessage());
         } catch (Exception ex) {
@@ -338,7 +338,7 @@ public class DALTestDriver {
         AnInventoryItem anInventoryItem;
         Integer pk;
         try {
-            System.out.println("\nSelectAll");
+            /*System.out.println("\nSelectAll");
             ArrayList<AnInventoryItem> inventoryItem = helper.selectAll();
             for (AnInventoryItem anItem : inventoryItem) {
                 printInventoryItem(anItem);
@@ -368,10 +368,10 @@ public class DALTestDriver {
             anInventoryItemUpdate.setItemStatus(ItemStatusType.DO_NOT_ORDER);
             helper.update(anInventoryItemUpdate);
             anInventoryItem = helper.selectOne(anInventoryItemUpdate.getPrimaryKey());
-            printInventoryItem(anInventoryItem);
+            printInventoryItem(anInventoryItem);*/
 
             System.out.println("\nDelete");
-            pk = 2;
+            pk = 5;
             helper.delete(pk);
             anInventoryItem = helper.selectOne(pk);
             printInventoryItem(anInventoryItem);

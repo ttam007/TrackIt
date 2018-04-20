@@ -1,23 +1,3 @@
-/*lookups*/
-CALL sp_Lookups_Insert ('listName', 'listValue');
-CALL sp_Lookups_Select ('listName');
-CALL sp_Lookups_SelectAll();
-
-CALL sp_Lookups_Update('listName', 'listValue2');
-CALL sp_Lookups_Select ('listName');
-
-CALL sp_Lookups_Delete ('listName');
-CALL sp_Lookups_Select ('listName');
-CALL sp_Lookups_SelectAll();
-
-CALL sp_Lookups_Insert ('listName', 'listValue3');
-CALL sp_Lookups_Insert ('listName', 'listValue4');
-CALL sp_Lookups_Insert ('listName', 'listValue3'); /*negative testing*/
-CALL sp_Lookups_SelectAll();
-
-CALL sp_Lookups_Delete (null);
-CALL sp_Lookups_SelectAll(); 
-
 /*inventoryItems*/
 SET @inventoryItemId = null;
 CALL sp_inventoryItems_Insert (@inventoryItemId, 5, '2018-04-16', 'Widget', '12345-ABC', '16 ounce', 'Available');

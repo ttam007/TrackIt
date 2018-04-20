@@ -9,6 +9,24 @@ import java.sql.*;
  */
 public class Inventory
         extends GridClass<AnInventoryItem> {
+<<<<<<< HEAD
+=======
+    /**
+     * Pulls SQL info from database to load into JTable
+     */
+    public ArrayList<AnInventoryItem> getSQL() {
+        try {
+            System.out.println("\nSelectAll");
+         SQLHelperInventoryItem helper = new SQLHelperInventoryItem();
+       rows = helper.selectAll();
+        } catch (SQLException exSQL) {
+            System.out.println("SQL error = " + exSQL.getLocalizedMessage());
+        } catch (Exception ex) {
+            System.out.println("Generic error = " + ex.getLocalizedMessage());
+        }
+        return rows;
+    }
+>>>>>>> Dev
 
     /**
      * Loads all rows from the database to the grid.
@@ -48,6 +66,26 @@ public class Inventory
             this.errorMessage = exSQL.getLocalizedMessage();
         } catch (Exception ex) {
             this.errorMessage = ex.getLocalizedMessage();
+        }
+        return returnValue;
+    }
+
+    /**
+     * Saves an object to the database.
+     *
+     * @return True = The object was successfully saved; False = There was an
+     * error.
+     */
+    @Override
+    public boolean save(AnInventoryItem anObj) {
+        boolean returnValue = false;
+        try {
+            AnInventoryItem.save(anObj);
+            returnValue = true;
+        } catch (java.sql.SQLException exSQL) {
+            anObj.setErrorMessage(exSQL.getLocalizedMessage());
+        } catch (Exception ex) {
+            anObj.setErrorMessage(ex.getLocalizedMessage());
         }
         return returnValue;
     }
