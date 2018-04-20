@@ -1,8 +1,8 @@
 package trackit.DAL;
 
-import trackit.ASupplier;
 import java.sql.*;
 import java.util.*;
+import trackit.ASupplier;
 
 /**
  * DAL Layer: Converts a row in database table Suppliers into a ASupplier object
@@ -17,6 +17,10 @@ public class SQLHelperSupplier
     /**
      *
      */
+    public static final String COLUMN_PK = "supplierId";
+    /**
+     *
+     */
     public static final String COLUMN_NICKNAME = "nickname";
 
     /**
@@ -26,12 +30,8 @@ public class SQLHelperSupplier
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
-    static {
-        COLUMN_PK = "supplierId";
-    }
-
     /**
-     * supplier help for mysql
+     * Default constructor.
      */
     public SQLHelperSupplier() {
 
@@ -95,7 +95,7 @@ public class SQLHelperSupplier
     public ASupplier selectOne(Integer primaryKey)
             throws SQLException, Exception {
         HashMap<Integer, SprocParameter> params = new HashMap<>();
-        params.put(0, new SprocParameterInteger(COLUMN_PK, primaryKey.toString(), ParameterDirection.IN));
+        params.put(0, new SprocParameterInteger(SQLHelperSupplier.COLUMN_PK, primaryKey.toString(), ParameterDirection.IN));
 
         ArrayList<ASupplier> results = execSproc("sp_Suppliers_Select", params);
         if (results.isEmpty()) {
@@ -109,10 +109,10 @@ public class SQLHelperSupplier
     public Integer insert(ASupplier anObject)
             throws SQLException, Exception {
         HashMap<Integer, SprocParameter> params = new HashMap<>();
-        SprocParameterInteger outParam = new SprocParameterInteger(COLUMN_PK, anObject.getPrimaryKey().toString(), ParameterDirection.OUT);
+        SprocParameterInteger outParam = new SprocParameterInteger(SQLHelperSupplier.COLUMN_PK, anObject.getPrimaryKey().toString(), ParameterDirection.OUT);
         params.put(0, outParam);
-        params.put(1, new SprocParameterVarchar(COLUMN_NICKNAME, anObject.getNickname(), ParameterDirection.IN));
-        params.put(2, new SprocParameterVarchar(COLUMN_URL, anObject.getUrl(), ParameterDirection.IN));
+        params.put(1, new SprocParameterVarchar(SQLHelperSupplier.COLUMN_NICKNAME, anObject.getNickname(), ParameterDirection.IN));
+        params.put(2, new SprocParameterVarchar(SQLHelperSupplier.COLUMN_URL, anObject.getUrl(), ParameterDirection.IN));
 
         execSproc("sp_Suppliers_Insert", params);
         Integer primaryKey = Integer.parseInt(outParam.getValue());
@@ -124,9 +124,9 @@ public class SQLHelperSupplier
     public void update(ASupplier anObject)
             throws SQLException, Exception {
         HashMap<Integer, SprocParameter> params = new HashMap<>();
-        params.put(0, new SprocParameterInteger(COLUMN_PK, anObject.getPrimaryKey().toString(), ParameterDirection.IN));
-        params.put(1, new SprocParameterVarchar(COLUMN_NICKNAME, anObject.getNickname(), ParameterDirection.IN));
-        params.put(2, new SprocParameterVarchar(COLUMN_URL, anObject.getUrl(), ParameterDirection.IN));
+        params.put(0, new SprocParameterInteger(SQLHelperSupplier.COLUMN_PK, anObject.getPrimaryKey().toString(), ParameterDirection.IN));
+        params.put(1, new SprocParameterVarchar(SQLHelperSupplier.COLUMN_NICKNAME, anObject.getNickname(), ParameterDirection.IN));
+        params.put(2, new SprocParameterVarchar(SQLHelperSupplier.COLUMN_URL, anObject.getUrl(), ParameterDirection.IN));
 
         execSproc("sp_Suppliers_Update", params);
     }
@@ -135,7 +135,7 @@ public class SQLHelperSupplier
     public void delete(Integer primaryKey)
             throws SQLException, Exception {
         HashMap<Integer, SprocParameter> params = new HashMap<>();
-        params.put(0, new SprocParameterInteger(COLUMN_PK, primaryKey.toString(), ParameterDirection.IN));
+        params.put(0, new SprocParameterInteger(SQLHelperSupplier.COLUMN_PK, primaryKey.toString(), ParameterDirection.IN));
 
         execSproc("sp_Suppliers_Delete", params);
     }
@@ -155,7 +155,7 @@ public class SQLHelperSupplier
     @Override
     public Integer doNullCheck(String columnName, Integer aValue)
             throws SQLException {
-        if (aValue == null && columnName.equalsIgnoreCase(COLUMN_PK)) {
+        if (aValue == null && columnName.equalsIgnoreCase(SQLHelperSupplier.COLUMN_PK)) {
             throw new NonNullableValueException();
         } else {
             return aValue;
@@ -165,7 +165,7 @@ public class SQLHelperSupplier
     @Override
     public String doNullCheck(String columnName, String aValue)
             throws SQLException {
-        if (aValue == null && columnName.equalsIgnoreCase(COLUMN_NICKNAME)) {
+        if (aValue == null && columnName.equalsIgnoreCase(SQLHelperSupplier.COLUMN_NICKNAME)) {
             throw new NonNullableValueException();
         } else {
             return aValue;

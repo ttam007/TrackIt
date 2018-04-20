@@ -1,8 +1,6 @@
 package trackit;
 
 import java.sql.*;
-import java.util.ArrayList;
-import trackit.DAL.SQLHelperSupplier;
 
 /**
  * BLL Layer: Works with the Suppliers Tab.
@@ -11,24 +9,6 @@ import trackit.DAL.SQLHelperSupplier;
  */
 public class Suppliers
         extends GridClass<ASupplier> {
-
-    SQLHelperSupplier helper = new SQLHelperSupplier();
-    ArrayList<ASupplier> suppliers;
-
-    /**
-     * Pulls SQL info from database to load into JTable
-     */
-    public ArrayList<ASupplier> getSQL() {
-        try {
-            System.out.println("\nSelectAll");
-            suppliers = helper.selectAll();
-        } catch (SQLException exSQL) {
-            System.out.println("SQL error = " + exSQL.getLocalizedMessage());
-        } catch (Exception ex) {
-            System.out.println("Generic error = " + ex.getLocalizedMessage());
-        }
-        return suppliers;
-    }
 
     /**
      * Loads all rows from the database to the grid.
@@ -68,6 +48,26 @@ public class Suppliers
             this.errorMessage = exSQL.getLocalizedMessage();
         } catch (Exception ex) {
             this.errorMessage = ex.getLocalizedMessage();
+        }
+        return returnValue;
+    }
+
+    /**
+     * Saves an object to the database.
+     *
+     * @return True = The object was successfully saved; False = There was an
+     * error.
+     */
+    @Override
+    public boolean save(ASupplier anObj) {
+        boolean returnValue = false;
+        try {
+            ASupplier.save(anObj);
+            returnValue = true;
+        } catch (java.sql.SQLException exSQL) {
+            anObj.setErrorMessage(exSQL.getLocalizedMessage());
+        } catch (Exception ex) {
+            anObj.setErrorMessage(ex.getLocalizedMessage());
         }
         return returnValue;
     }

@@ -55,9 +55,9 @@ public class InventoryItemDetailsDialog
     public InventoryItemDetailsDialog(boolean useCreateMode, AnInventoryItem anInventoryItem) {
         this.isCreateMode = useCreateMode;
         if (this.isCreateMode) {
-            this.anInventoryItem = null;
+            this.anInventoryItem = new AnInventoryItem();
         } else if (anInventoryItem == null) {
-            throw new IllegalArgumentException("When 'useCreateMode' = true, then a non-null anInventoryItem must be provided.");
+            throw new IllegalArgumentException("When 'useCreateMode' = false, then a non-null anInventoryItem must be provided.");
         } else {
             this.anInventoryItem = anInventoryItem;
         }

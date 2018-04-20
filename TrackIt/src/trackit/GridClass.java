@@ -40,6 +40,15 @@ public abstract class GridClass<T extends DatabaseObject> {
     protected abstract boolean save();
 
     /**
+     * Saves specified object to the database.
+     *
+     * @param anObj The object to be saved.
+     * @return True = The object was successfully saved; False = There was an
+     * error.
+     */
+    protected abstract boolean save(T anObj);
+
+    /**
      * Removes a row from the database and updates the list of T objects in
      * memory.
      *

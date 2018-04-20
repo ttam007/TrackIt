@@ -73,6 +73,26 @@ public class Inventory
     }
 
     /**
+     * Saves an object to the database.
+     *
+     * @return True = The object was successfully saved; False = There was an
+     * error.
+     */
+    @Override
+    public boolean save(AnInventoryItem anObj) {
+        boolean returnValue = false;
+        try {
+            AnInventoryItem.save(anObj);
+            returnValue = true;
+        } catch (java.sql.SQLException exSQL) {
+            anObj.setErrorMessage(exSQL.getLocalizedMessage());
+        } catch (Exception ex) {
+            anObj.setErrorMessage(ex.getLocalizedMessage());
+        }
+        return returnValue;
+    }
+
+    /**
      * Removes a row from the database.
      *
      * @param primaryKey The primary key of the row to remove.

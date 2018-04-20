@@ -1,8 +1,8 @@
 package trackit.DAL;
 
-import trackit.AnOrder;
 import java.sql.*;
 import java.util.*;
+import trackit.AnOrder;
 
 /**
  * DAL Layer: Converts a row in database table Orders into an AnOrder object and
@@ -14,6 +14,10 @@ public class SQLHelperOrder
         extends SQLHelper<AnOrder> {
 
     // <editor-fold defaultstate="collapsed" desc="Database Columns">
+    /**
+     *
+     */
+    public static final String COLUMN_PK = "orderId";
     /**
      *
      */
@@ -41,12 +45,8 @@ public class SQLHelperOrder
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
-    static {
-        COLUMN_PK = "orderId";
-    }
-
     /**
-     * sql help order for dbase
+     * Default constructor.
      */
     public SQLHelperOrder() {
 
@@ -113,7 +113,7 @@ public class SQLHelperOrder
     public AnOrder selectOne(Integer primaryKey)
             throws SQLException, Exception {
         HashMap<Integer, SprocParameter> params = new HashMap<>();
-        params.put(0, new SprocParameterInteger(COLUMN_PK, primaryKey.toString(), ParameterDirection.IN));
+        params.put(0, new SprocParameterInteger(SQLHelperOrder.COLUMN_PK, primaryKey.toString(), ParameterDirection.IN));
 
         ArrayList<AnOrder> results = execSproc("sp_Orders_Select", params);
         if (results.isEmpty()) {
@@ -127,14 +127,14 @@ public class SQLHelperOrder
     public Integer insert(AnOrder anObject)
             throws SQLException, Exception {
         HashMap<Integer, SprocParameter> params = new HashMap<>();
-        SprocParameterInteger outParam = new SprocParameterInteger(COLUMN_PK, anObject.getPrimaryKey().toString(), ParameterDirection.OUT);
+        SprocParameterInteger outParam = new SprocParameterInteger(SQLHelperOrder.COLUMN_PK, anObject.getPrimaryKey().toString(), ParameterDirection.OUT);
         params.put(0, outParam);
-        params.put(1, new SprocParameterVarchar(COLUMN_DESCRIPTION, anObject.getDescription(), ParameterDirection.IN));
-        params.put(2, new SprocParameterInteger(COLUMN_ORDEREDFROM, anObject.getOrderedFrom().toString(), ParameterDirection.IN));
-        params.put(3, new SprocParameterVarchar(COLUMN_ORDERSTATUS, anObject.getOrderStatus().getText(), ParameterDirection.IN));
-        params.put(4, new SprocParameterDate(COLUMN_DATEORDERED, anObject.getDateOrdered().toString(), ParameterDirection.IN));
+        params.put(1, new SprocParameterVarchar(SQLHelperOrder.COLUMN_DESCRIPTION, anObject.getDescription(), ParameterDirection.IN));
+        params.put(2, new SprocParameterInteger(SQLHelperOrder.COLUMN_ORDEREDFROM, anObject.getOrderedFrom().toString(), ParameterDirection.IN));
+        params.put(3, new SprocParameterVarchar(SQLHelperOrder.COLUMN_ORDERSTATUS, anObject.getOrderStatus().getText(), ParameterDirection.IN));
+        params.put(4, new SprocParameterDate(SQLHelperOrder.COLUMN_DATEORDERED, anObject.getDateOrdered().toString(), ParameterDirection.IN));
         String dateExpected = (anObject.getDateExpected() == null ? null : anObject.getDateExpected().toString());
-        params.put(5, new SprocParameterDate(COLUMN_DATEEXPECTED, dateExpected, ParameterDirection.IN));
+        params.put(5, new SprocParameterDate(SQLHelperOrder.COLUMN_DATEEXPECTED, dateExpected, ParameterDirection.IN));
 
         execSproc("sp_Orders_Insert", params);
         Integer primaryKey = Integer.parseInt(outParam.getValue());
@@ -146,13 +146,13 @@ public class SQLHelperOrder
     public void update(AnOrder anObject)
             throws SQLException, Exception {
         HashMap<Integer, SprocParameter> params = new HashMap<>();
-        params.put(0, new SprocParameterInteger(COLUMN_PK, anObject.getPrimaryKey().toString(), ParameterDirection.IN));
-        params.put(1, new SprocParameterVarchar(COLUMN_DESCRIPTION, anObject.getDescription(), ParameterDirection.IN));
-        params.put(2, new SprocParameterInteger(COLUMN_ORDEREDFROM, anObject.getOrderedFrom().toString(), ParameterDirection.IN));
-        params.put(3, new SprocParameterVarchar(COLUMN_ORDERSTATUS, anObject.getOrderStatus().getText(), ParameterDirection.IN));
-        params.put(4, new SprocParameterDate(COLUMN_DATEORDERED, anObject.getDateOrdered().toString(), ParameterDirection.IN));
+        params.put(0, new SprocParameterInteger(SQLHelperOrder.COLUMN_PK, anObject.getPrimaryKey().toString(), ParameterDirection.IN));
+        params.put(1, new SprocParameterVarchar(SQLHelperOrder.COLUMN_DESCRIPTION, anObject.getDescription(), ParameterDirection.IN));
+        params.put(2, new SprocParameterInteger(SQLHelperOrder.COLUMN_ORDEREDFROM, anObject.getOrderedFrom().toString(), ParameterDirection.IN));
+        params.put(3, new SprocParameterVarchar(SQLHelperOrder.COLUMN_ORDERSTATUS, anObject.getOrderStatus().getText(), ParameterDirection.IN));
+        params.put(4, new SprocParameterDate(SQLHelperOrder.COLUMN_DATEORDERED, anObject.getDateOrdered().toString(), ParameterDirection.IN));
         String dateExpected = (anObject.getDateExpected() == null ? null : anObject.getDateExpected().toString());
-        params.put(5, new SprocParameterDate(COLUMN_DATEEXPECTED, dateExpected, ParameterDirection.IN));
+        params.put(5, new SprocParameterDate(SQLHelperOrder.COLUMN_DATEEXPECTED, dateExpected, ParameterDirection.IN));
 
         execSproc("sp_Orders_Update", params);
     }
@@ -161,7 +161,7 @@ public class SQLHelperOrder
     public void delete(Integer primaryKey)
             throws SQLException, Exception {
         HashMap<Integer, SprocParameter> params = new HashMap<>();
-        params.put(0, new SprocParameterInteger(COLUMN_PK, primaryKey.toString(), ParameterDirection.IN));
+        params.put(0, new SprocParameterInteger(SQLHelperOrder.COLUMN_PK, primaryKey.toString(), ParameterDirection.IN));
 
         execSproc("sp_Orders_Delete", params);
     }
@@ -169,7 +169,7 @@ public class SQLHelperOrder
     @Override
     public java.sql.Date doNullCheck(String columnName, java.sql.Date aValue)
             throws SQLException {
-        if (aValue == null && columnName.equalsIgnoreCase(COLUMN_DATEORDERED)) {
+        if (aValue == null && columnName.equalsIgnoreCase(SQLHelperOrder.COLUMN_DATEORDERED)) {
             throw new NonNullableValueException();
         } else {
             return aValue;
@@ -186,8 +186,8 @@ public class SQLHelperOrder
     public Integer doNullCheck(String columnName, Integer aValue)
             throws SQLException {
         if (aValue == null
-                && (columnName.equalsIgnoreCase(COLUMN_PK)
-                || columnName.equalsIgnoreCase(COLUMN_ORDEREDFROM))) {
+                && (columnName.equalsIgnoreCase(SQLHelperOrder.COLUMN_PK)
+                || columnName.equalsIgnoreCase(SQLHelperOrder.COLUMN_ORDEREDFROM))) {
             throw new NonNullableValueException();
         } else {
             return aValue;
@@ -198,8 +198,8 @@ public class SQLHelperOrder
     public String doNullCheck(String columnName, String aValue)
             throws SQLException {
         if (aValue == null
-                && (columnName.equalsIgnoreCase(COLUMN_DESCRIPTION)
-                || columnName.equalsIgnoreCase(COLUMN_ORDERSTATUS))) {
+                && (columnName.equalsIgnoreCase(SQLHelperOrder.COLUMN_DESCRIPTION)
+                || columnName.equalsIgnoreCase(SQLHelperOrder.COLUMN_ORDERSTATUS))) {
             throw new NonNullableValueException();
         } else {
             return aValue;

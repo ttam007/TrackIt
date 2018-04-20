@@ -31,6 +31,8 @@ public class Utilities {
      * The correct format of all SQL dates.
      */
     public static final String SQL_DATE_FORMAT = "yyyy-MM-dd";
+    
+    public static final String ERROR_MSG_CAPTION = "Error";
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Fields">
