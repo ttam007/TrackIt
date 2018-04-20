@@ -41,7 +41,7 @@ public class ASupplier
      * @param aNickname
      * @throws SQLException
      */
-    public void setNickname(String aNickname)
+    public final void setNickname(String aNickname)
             throws SQLException {
         this.nickname = HELPER.doNullCheck(SQLHelperSupplier.COLUMN_NICKNAME, aNickname);
     }
@@ -61,7 +61,7 @@ public class ASupplier
      * @param aURL
      * @throws SQLException
      */
-    public void setUrl(String aURL)
+    public final void setUrl(String aURL)
             throws SQLException {
         this.url = HELPER.doNullCheck(SQLHelperSupplier.COLUMN_URL, aURL);
     }

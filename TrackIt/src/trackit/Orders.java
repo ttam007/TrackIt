@@ -11,10 +11,10 @@ import trackit.DAL.SQLHelperOrder;
  */
 public class Orders
         extends GridClass<AnOrder> {
-    
+
     SQLHelperOrder helper = new SQLHelperOrder();
     ArrayList<AnOrder> orders;
-    
+
     /**
      * Pulls SQL info from database to load into JTable
      */
@@ -29,7 +29,7 @@ public class Orders
         }
         return orders;
     }
-    
+
     /**
      * Loads all rows from the database to the grid.
      *
@@ -68,6 +68,26 @@ public class Orders
             this.errorMessage = exSQL.getLocalizedMessage();
         } catch (Exception ex) {
             this.errorMessage = ex.getLocalizedMessage();
+        }
+        return returnValue;
+    }
+
+    /**
+     * Saves an object to the database.
+     *
+     * @return True = The object was successfully saved; False = There was an
+     * error.
+     */
+    @Override
+    public boolean save(AnOrder anObj) {
+        boolean returnValue = false;
+        try {
+            AnOrder.save(anObj);
+            returnValue = true;
+        } catch (java.sql.SQLException exSQL) {
+            anObj.setErrorMessage(exSQL.getLocalizedMessage());
+        } catch (Exception ex) {
+            anObj.setErrorMessage(ex.getLocalizedMessage());
         }
         return returnValue;
     }

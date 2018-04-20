@@ -23,7 +23,8 @@ public class SupplierDetailsDialog
     // <editor-fold defaultstate="collapsed" desc="Private Fields">
     private final boolean isCreateMode;
     private final ASupplier aSupplier;
-    private static boolean dialogResult = false;
+    private final Suppliers bll = new Suppliers();
+    private DialogResultType dialogResult = DialogResultType.NONE;
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     JPanel pnlCenter;
@@ -42,8 +43,6 @@ public class SupplierDetailsDialog
      * useCreateMode is true.
      */
     public SupplierDetailsDialog(boolean useCreateMode, ASupplier aSupplier) {
-        dialogResult = false;
-
         this.isCreateMode = useCreateMode;
         if (this.isCreateMode) {
             this.aSupplier = new ASupplier();
@@ -96,8 +95,8 @@ public class SupplierDetailsDialog
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new CloseQuery());
-        this.setVisible(true);
         this.getRootPane().setDefaultButton(btnOK);
+        this.setModal(true);
 
         //Add all components here and set properties.
         Box nameBx, addressBx, submitBx, combine;
@@ -141,7 +140,7 @@ public class SupplierDetailsDialog
     }
 
     /**
-     * Populates all the UI components from this.aSupplier.
+     * Populates all the UI components from the object in memory.
      */
     private void populateComponents() {
         this.tfName.setText(this.aSupplier.getNickname());
@@ -149,20 +148,39 @@ public class SupplierDetailsDialog
     }
 
     /**
+     * Populates the object in memory from all the UI components.
+     */
+    private boolean populateObject() {
+        boolean returnValue = false;
+        //TODO:  sort this out so boolean return is used instead of try/catch block.
+        try {
+            this.aSupplier.setNickname(this.tfName.getText());
+            this.aSupplier.setUrl(this.tfAddress.getText());
+            returnValue = true;
+        } catch (java.sql.SQLException exSQL) {
+            JOptionPane.showMessageDialog(this, this.aSupplier.getErrorMessage(),
+                    Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+        }
+        return returnValue;
+    }
+
+    /**
      * Handles the save action. If any errors, then display error message
      * instead.
-     *
      */
     private void saveAction() {
-        JOptionPane.showMessageDialog(null, "Successfully Updated");
-        //TODO:  implement save.
-        /*if (successfullySaved) {
+        if (populateObject()) {
+            if (this.bll.save(this.aSupplier)) {
+                this.dialogResult = DialogResultType.OK;
+                JOptionPane.showMessageDialog(null, "Successfully Saved.");
+                this.setVisible(false);
                 this.dispose();
             } else {
-               //TODO:  catch errors and display them.  Do not exit dialog if an error occurs.
-            }*/
-        dialogResult = true;
-        this.dispose();
+                this.dialogResult = DialogResultType.CANCEL;
+                JOptionPane.showMessageDialog(this, this.bll.getErrorMessage(),
+                        Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 
     /**
@@ -172,8 +190,8 @@ public class SupplierDetailsDialog
      */
     private void cancelAction() {
         JOptionPane.showMessageDialog(null, "Change Cancelled");
-        //TODO:  close window and return to prior window.
-        dialogResult = false;
+        this.dialogResult = DialogResultType.CANCEL;
+        this.setVisible(false);
         this.dispose();
     }
     // </editor-fold>
@@ -181,14 +199,13 @@ public class SupplierDetailsDialog
 
     /**
      * Displays the frame.
+     *
+     * @return The DialogReturnType which tells how the dialog was closed.
      */
-    public void display() {
+    public DialogResultType display() {
         System.out.println(String.format("Displaying %s...", WINDOW_NAME));
         setVisible(true);
-    }
-
-    public static boolean getDialogResult() {
-        return dialogResult;
+        return this.dialogResult;
     }
 
     // </editor-fold>
