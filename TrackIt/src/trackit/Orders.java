@@ -1,15 +1,34 @@
 package trackit;
 
 import java.sql.*;
-import trackit.DAL.AnOrder;
+import java.util.ArrayList;
+import trackit.DAL.SQLHelperOrder;
 
 /**
  * BLL Layer: Works with the Orders Tab.
  *
- * @author
+ * @author Bond, Steven
  */
 public class Orders
         extends GridClass<AnOrder> {
+
+    SQLHelperOrder helper = new SQLHelperOrder();
+    ArrayList<AnOrder> orders;
+
+    /**
+     * Pulls SQL info from database to load into JTable
+     */
+    public ArrayList<AnOrder> getSQL() {
+        try {
+            System.out.println("\nSelectAll");
+            orders = helper.selectAll();
+        } catch (SQLException exSQL) {
+            System.out.println("SQL error = " + exSQL.getLocalizedMessage());
+        } catch (Exception ex) {
+            System.out.println("Generic error = " + ex.getLocalizedMessage());
+        }
+        return orders;
+    }
 
     /**
      * Loads all rows from the database to the grid.

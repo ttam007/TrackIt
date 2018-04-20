@@ -28,9 +28,9 @@ public class Utilities {
     public static final String PROGRAM_NAME_LONG = "Home Inventory Tracking System";
 
     /**
-     * The DATE_FORMATTER used so all dates are in standard SQL date format.
+     * The correct format of all SQL dates.
      */
-    public static final DateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd");
+    public static final String SQL_DATE_FORMAT = "yyyy-MM-dd";
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Fields">
@@ -114,7 +114,16 @@ public class Utilities {
      */
     public static java.util.Date convertToUtilDate(String aValue)
             throws ParseException {
-        return DATE_FORMATTER.parse(aValue);
+        return getDateFormatter().parse(aValue);
     }
 
+    /**
+     * This dateFormatter must be used so all dates are in standard SQL date
+     * format. Must keep in method since public static field is not thread safe.
+     *
+     * @return
+     */
+    public static SimpleDateFormat getDateFormatter() {
+        return new SimpleDateFormat(SQL_DATE_FORMAT);
+    }
 }
