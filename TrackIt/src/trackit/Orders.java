@@ -12,22 +12,20 @@ import trackit.DAL.SQLHelperOrder;
 public class Orders
         extends GridClass<AnOrder> {
 
-    SQLHelperOrder helper = new SQLHelperOrder();
-    ArrayList<AnOrder> orders;
-
     /**
      * Pulls SQL info from database to load into JTable
      */
     public ArrayList<AnOrder> getSQL() {
         try {
             System.out.println("\nSelectAll");
-            orders = helper.selectAll();
+            SQLHelperOrder helper = new SQLHelperOrder();
+            rows = helper.selectAll();
         } catch (SQLException exSQL) {
             System.out.println("SQL error = " + exSQL.getLocalizedMessage());
         } catch (Exception ex) {
             System.out.println("Generic error = " + ex.getLocalizedMessage());
         }
-        return orders;
+        return rows;
     }
 
     /**

@@ -184,9 +184,7 @@ public class SupplierDetailsDialog
     }
 
     /**
-     * Handles the cancel action. If any errors, then display error message
-     * instead.
-     *
+     * Handles the cancel action.
      */
     private void cancelAction() {
         JOptionPane.showMessageDialog(null, "Change Cancelled");
@@ -198,7 +196,7 @@ public class SupplierDetailsDialog
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
 
     /**
-     * Displays the frame.
+     * Displays the dialog.
      *
      * @return The DialogReturnType which tells how the dialog was closed.
      */

@@ -4,8 +4,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.*;
 import javax.swing.*;
-import trackit.*;
 import javax.swing.table.DefaultTableModel;
+import trackit.*;
 
 /**
  * UI Layer: Handles all aspects of the Inventory panel.
@@ -74,7 +74,6 @@ public class InventoryItemsPanel
         this.setLayout(border);
         createUIComponents();
         this.setSize(new Dimension(1100, 700));
-        this.display();
     }
 
     /**
@@ -187,7 +186,6 @@ public class InventoryItemsPanel
      * Refreshes the list of items that are displayed in the grid.
      */
     private void refreshItems() {
-
         this.inventoryItems.clear();
 
         //TODO:  load items from database.
