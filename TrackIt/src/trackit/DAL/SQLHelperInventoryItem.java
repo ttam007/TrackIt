@@ -1,5 +1,6 @@
 package trackit.DAL;
 
+import trackit.AnInventoryItem;
 import java.sql.*;
 import java.util.*;
 

@@ -43,7 +43,15 @@ public class SQLHelperItem {
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
-    String doNullCheck(String columnName, String aValue)
+    /**
+     * Checks to see if any column that is not nullable has a null value.
+     *
+     * @param columnName The column to check.
+     * @param aValue The value to check.
+     * @return Either the parameter aValue or throws NonNullableValueException.
+     * @throws SQLException When aValue is NULL and NULL is not allowed.
+     */
+    public String doNullCheck(String columnName, String aValue)
             throws SQLException {
         if (aValue == null
                 && (columnName.equalsIgnoreCase(COLUMN_DESCRIPTION)
