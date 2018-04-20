@@ -4,20 +4,26 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
 import trackit.*;
-import trackit.DAL.*;
 
 /**
  * UI Layer: Handles all aspects of the AnOrder Details dialog. This is a
  * combination of the Edit AnOrder Details and the OrderItems grid.
  *
- * @author Douglas, Bond
+ * @author Douglas, Bond, Steven
  */
 public class OrderItemsFrame
         extends JFrame {
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
-    private static final String WINDOW_NAME = "Order Details";
+    /**
+     * The name of the window.
+     */
+    public static final String WINDOW_NAME = "Order Details";
+    private static final String[] TABLE_LABELS = {"Item Name", "Unit", "SKU", "Quantity", "Price", "Ext Price"};
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Fields">
     private final ArrayList<AnOrderItem> orderItems = new ArrayList<>();
@@ -29,9 +35,13 @@ public class OrderItemsFrame
     private JPanel pnlTop, pnlCenter, pnlBtm, pnlBtmLeft, pnlBtmRight;
     private JLabel lblOrderNumber, lblSupplier, lblStatus, lblOrderDate, lblExpectedDate, lblBlank;
     private JTextField tfOrderNumber, tfSupplier, tfStatus, tfOrderDate, tfExpectedDate, tfBlank;
-    private final String[] ordersLabel = {"Item Name", "Unit", "SKU", "Quantity", "Price", "Ext Price"};
-    private JTable ordersTable;
-    private int selectedRow;
+    private JTable mainTable;
+    private Date orderDate, expectedDate, sqlOrderDate, sqlExpectedDate;
+
+    UtilDateModel orderModel = new UtilDateModel();
+    UtilDateModel expectedModel = new UtilDateModel();
+    JDatePanelImpl orderDatePanel, expectedDatePanel;
+    JDatePickerImpl orderDatePicker, expectedDatePicker;
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -42,8 +52,31 @@ public class OrderItemsFrame
         initializeComponents();
         getValues();
     }
+
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
+    /**
+     * Added solely to prevent serialization and Inspector items related to
+     * such.
+     *
+     * @param stream
+     * @throws java.io.IOException
+     */
+    private void writeObject(java.io.ObjectOutputStream stream) throws java.io.IOException {
+        throw new java.io.NotSerializableException(getClass().getName());
+    }
+
+    /**
+     * Added solely to prevent serialization and Inspector items related to
+     * such.
+     *
+     * @param stream
+     * @throws java.io.IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject(java.io.ObjectInputStream stream) throws java.io.IOException, ClassNotFoundException {
+        throw new java.io.NotSerializableException(getClass().getName());
+    }
 
     /**
      * Sets up all components used in this frame.
@@ -61,6 +94,12 @@ public class OrderItemsFrame
         addWindowListener(new CloseQuery());
         setVisible(true);
         this.getRootPane().setDefaultButton(btnOK);
+        Properties p = new Properties();
+        p.put("text.today", "Today");
+        p.put("text.month", "Month");
+        p.put("text.year", "Year");
+        orderDatePanel = new JDatePanelImpl(orderModel, p);
+        expectedDatePanel = new JDatePanelImpl(expectedModel, p);
 
         //Add all components here and set properties.
         setLayout(new BorderLayout());
@@ -82,8 +121,8 @@ public class OrderItemsFrame
 
         lblOrderDate = new JLabel("      Order Date:");
         topInnerBx.add(lblOrderDate);
-        tfOrderDate = new JTextField(20);
-        topInnerBx.add(tfOrderDate);
+        orderDatePicker = new JDatePickerImpl(orderDatePanel, new DateLabelFormatter());
+        topInnerBx.add(orderDatePicker);
 
         btmInnerBx = Box.createHorizontalBox();
         lblStatus = new JLabel("            Status:");
@@ -96,8 +135,8 @@ public class OrderItemsFrame
 
         lblExpectedDate = new JLabel("                                                     Expected Date:");
         btmInnerBx.add(lblExpectedDate);
-        tfExpectedDate = new JTextField(20);
-        btmInnerBx.add(tfExpectedDate);
+        expectedDatePicker = new JDatePickerImpl(expectedDatePanel, new DateLabelFormatter());
+        btmInnerBx.add(expectedDatePicker);
 
         topBox.add(topInnerBx);
         topBox.add(btmInnerBx);
@@ -109,25 +148,25 @@ public class OrderItemsFrame
         btnCheckIn = new JButton("Check In");
         middleBox.add(btnCheckIn);
         btnCheckIn.addActionListener((ActionEvent e) -> {
-            //TODO
-            JOptionPane.showMessageDialog(null, "Item Checked In");
+            //TODO:  Call into BLL for check-in.
+            JOptionPane.showMessageDialog(this, "Item Checked In");
         });
 
         btnCheckInAll = new JButton("Check In All");
         middleBox.add(btnCheckInAll);
         btnCheckInAll.addActionListener((ActionEvent e) -> {
-            //TODO
-            JOptionPane.showMessageDialog(null, "All Items Checked In");
+            //TODO:  Call into BLL for check-in.
+            JOptionPane.showMessageDialog(this, "All Items Checked In");
         });
 
         bottomBox = Box.createHorizontalBox();
 
         //add data to suppliers arraylist 
         Object[][] testData = {{"paper", "pk", "12-34563487-0", "7", "$12.95", "$276.23"}, {"paper", "pk", "12-34563487-0", "7", "$12.95", "$276.23"}, {"paper", "pk", "12-34563487-0", "7", "$12.95", "$276.23"}};
-        ordersTable = new JTable(testData, ordersLabel);
-        JScrollPane scrollPane = new JScrollPane(ordersTable);
-        ordersTable.setFillsViewportHeight(true);
-        ordersTable.setDefaultEditor(Object.class, null);
+        mainTable = new JTable(testData, TABLE_LABELS);
+        JScrollPane scrollPane = new JScrollPane(mainTable);
+        mainTable.setFillsViewportHeight(true);
+        mainTable.setDefaultEditor(Object.class, null);
 
         add(scrollPane, BorderLayout.CENTER);
 
@@ -143,35 +182,47 @@ public class OrderItemsFrame
         btnAddItem = new JButton("Add Item");
         pnlBtm.add(btnAddItem);
         btnAddItem.addActionListener((ActionEvent e) -> {
-            //TODO
-            OrderItemDetailsDialog oid = new OrderItemDetailsDialog(true);
-            oid.display();
+            OrderItemDetailsDialog dlgAdd = new OrderItemDetailsDialog(true, null);
+            dlgAdd.display();
         });
 
         btnCreate = new JButton("Create");
         pnlBtm.add(btnCreate);
         btnCreate.addActionListener((ActionEvent e) -> {
-            InventoryItemDetailsDialog iidAddItem = new InventoryItemDetailsDialog(true);
-            iidAddItem.display();
+            InventoryItemDetailsDialog dlgCreate = new InventoryItemDetailsDialog(true, null);
+            dlgCreate.display();
         });
 
         btnEdit = new JButton("Edit");
         pnlBtm.add(btnEdit);
         btnEdit.addActionListener((ActionEvent e) -> {
-            //TODO
-            OrderItemDetailsDialog oid = new OrderItemDetailsDialog(false);
-            oid.display();
+            int selectedRow = this.mainTable.getSelectedRow();
+            if (selectedRow < 0) {
+                JOptionPane.showMessageDialog(null, "Select item to remove");
+            } else {
+                AnOrderItem anOrderItem = new AnOrderItem();
+                //TODO: Set anOrderItem to the value of selectedRow.
+                OrderItemDetailsDialog dlgEdit = new OrderItemDetailsDialog(false, anOrderItem);
+                dlgEdit.display();
+            }
         });
 
         btnRemove = new JButton("Remove");
         pnlBtm.add(btnRemove);
         btnRemove.addActionListener((ActionEvent e) -> {
+            int selectedRow = this.mainTable.getSelectedRow();
+            if (selectedRow < 0) {
+                JOptionPane.showMessageDialog(null, "Select item to remove");
+            } else {
+                //TODO: remove item from db
+                JOptionPane.showMessageDialog(null, "Item removed");
+            }
+            //TODO: surround below in a for loop
             /*
-            //TODO:  surrond below in a for loop
-            if (bal.remove()) {
+            if (bll.remove()) {
                 //TODO:  close window and return to prior window.
             } else {
-                //TODO:  display bal.getErrorMessage() and stay on this window.
+                //TODO:  display bll.getErrorMessage() and stay on this window.
             }
              */
         });
@@ -179,21 +230,17 @@ public class OrderItemsFrame
         btnOK = new JButton("OK");
         pnlBtm.add(btnOK);
         btnOK.addActionListener((ActionEvent e) -> {
-
-            /*
-            //TODO:  surrond below in a for loop
-            if (!bal.save()) {
-                //TODO:  display bal.getErrorMessage();
-            }
-             */
-            this.dispose();
+            saveAction();
+            orderDate = (Date) orderDatePicker.getModel().getValue();
+            sqlOrderDate = Utilities.convertToSQLDate(orderDate);
+            expectedDate = (Date) expectedDatePicker.getModel().getValue();
+            sqlExpectedDate = Utilities.convertToSQLDate(expectedDate);
         });
 
         btnCancel = new JButton("Cancel");
         pnlBtm.add(btnCancel);
         btnCancel.addActionListener((ActionEvent e) -> {
-            //TODO:  close window and return to prior window.
-            this.dispose();
+            cancelAction();
         });
 
         add(pnlBtm, BorderLayout.SOUTH);
@@ -202,7 +249,35 @@ public class OrderItemsFrame
         pack();
     }
 
+    /**
+     * Handles the save action. If any errors, then display error message
+     * instead.
+     *
+     */
+    private void saveAction() {
+        JOptionPane.showMessageDialog(null, "Successfully Updated");
+        //TODO:  implement save.
+        /*if (successfullySaved) {
+                this.dispose();
+            } else {
+               //TODO:  catch errors and display them.  Do not exit dialog if an error occurs.
+            }*/
+        this.dispose();
+    }
+
+    /**
+     * Handles the cancel action. If any errors, then display error message
+     * instead.
+     *
+     */
+    private void cancelAction() {
+        JOptionPane.showMessageDialog(null, "Change Cancelled");
+        //TODO:  close window and return to prior window.
+        this.dispose();
+    }
+
     private void getValues() {
+        //TODO:  if we need this?
         /*if (bll.load()) {
             this.orderItems.addAll(bll.getItems());
         }*/
@@ -223,22 +298,19 @@ public class OrderItemsFrame
     /**
      * Handles all aspects of closing the program.
      */
-    private static class CloseQuery
+    private class CloseQuery
             extends WindowAdapter {
 
         @Override
         public void windowClosing(WindowEvent e) {
-            JFrame frame = (JFrame) e.getSource();
+            JFrame frame = OrderItemsFrame.this;
             int result = JOptionPane.showConfirmDialog(frame,
                     "Do you want to save?", "Close Query",
                     JOptionPane.YES_NO_OPTION);
             if (result == JOptionPane.YES_OPTION) {
-                //TODO
-                //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.dispose();
+                saveAction();
             } else {
-                //TODO
-                frame.dispose();
+                cancelAction();
             }
         }
     }

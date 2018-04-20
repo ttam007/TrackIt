@@ -2,14 +2,19 @@ package trackit.UI;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Date;
+import java.util.Properties;
 import javax.swing.*;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
 import trackit.*;
 
 /**
  * UI Layer: Handles all aspects of the Create Inventory Item and Edit Inventory
  * Item dialog.
  *
- * @author Bond
+ * @author Bond, Steven, Diaz
  */
 public class InventoryItemDetailsDialog
         extends JDialog {
@@ -20,20 +25,69 @@ public class InventoryItemDetailsDialog
      */
     public static final String WINDOW_NAME = "Inventory Item Details";
     // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Private Fields">
     private final boolean isCreateMode;
-    private JTextField skuField, quantityField, expDateField, unitField, statusField, itemNameField;
-    private JLabel sku, statusLabel, unit, quantity, expDate, itemNameLabel;
+    private final AnInventoryItem anInventoryItem;
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Components">
+    private JComboBox<String> statusField;
+    private JTextField skuField, quantityField, unitField, itemNameField;
+    private JLabel sku, statusLabel, unit, expDateLbl, quantity, itemNameLabel;
     private JButton btnOK, btnCancel;
     private GridBagConstraints gbc;
+    private Date expDate, sqlExpDate;
+    private ItemStatusType statuses;
+
+    UtilDateModel expModel = new UtilDateModel();
+    JDatePanelImpl expDatePanel;
+    JDatePickerImpl expDatePicker;
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
 
     /**
+     * Creates a new dialog for working with a single Inventory Item.
      *
-     * @param useCreateMode
+     * @param useCreateMode True = use for a new Inventory Item; False = use to
+     * edit the specified Inventory Item.
+     * @param anInventoryItem The Inventory Item to be edited. This value is
+     * ignored if useCreateMode is true.
      */
-    public InventoryItemDetailsDialog(boolean useCreateMode) {
-        // super("Inventory Item Details", new AnInventoryItem());
+    public InventoryItemDetailsDialog(boolean useCreateMode, AnInventoryItem anInventoryItem) {
         this.isCreateMode = useCreateMode;
+        if (this.isCreateMode) {
+            this.anInventoryItem = null;
+        } else if (anInventoryItem == null) {
+            throw new IllegalArgumentException("When 'useCreateMode' = true, then a non-null anInventoryItem must be provided.");
+        } else {
+            this.anInventoryItem = anInventoryItem;
+        }
+
         this.initializeComponents();
+    }
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Private Methods">
+
+    /**
+     * Added solely to prevent serialization and Inspector items related to
+     * such.
+     *
+     * @param stream
+     * @throws java.io.IOException
+     */
+    private void writeObject(java.io.ObjectOutputStream stream) throws java.io.IOException {
+        throw new java.io.NotSerializableException(getClass().getName());
+    }
+
+    /**
+     * Added solely to prevent serialization and Inspector items related to
+     * such.
+     *
+     * @param stream
+     * @throws java.io.IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject(java.io.ObjectInputStream stream) throws java.io.IOException, ClassNotFoundException {
+        throw new java.io.NotSerializableException(getClass().getName());
     }
 
     /**
@@ -52,6 +106,12 @@ public class InventoryItemDetailsDialog
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new CloseQuery());
+        this.getRootPane().setDefaultButton(btnOK);
+        Properties p = new Properties();
+        p.put("text.today", "Today");
+        p.put("text.month", "Month");
+        p.put("text.year", "Year");
+        expDatePanel = new JDatePanelImpl(expModel, p);
 
         gbc = new GridBagConstraints();
         setLayout(new GridBagLayout());
@@ -100,17 +160,17 @@ public class InventoryItemDetailsDialog
         gbc.gridwidth = 3;
         add(quantityField, gbc);
         // Init Exp Date Label and Field
-        expDate = new JLabel("Exp Date: ");
+        expDateLbl = new JLabel("Exp Date: ");
         gbc.gridx = 4;
         gbc.gridy = 2;
         gbc.gridwidth = 1;
-        add(expDate, gbc);
-        expDateField = new JTextField(7);
+        add(expDateLbl, gbc);
+        expDatePicker = new JDatePickerImpl(expDatePanel, new DateLabelFormatter());
 
         gbc.gridx = 5;
         gbc.gridy = 2;
         gbc.gridwidth = 1;
-        add(expDateField, gbc);
+        add(expDatePicker, gbc);
         // Unit
         //Label
         unit = new JLabel("Unit: ");
@@ -133,7 +193,7 @@ public class InventoryItemDetailsDialog
         gbc.gridwidth = 1;
         add(statusLabel, gbc);
         //Text Field
-        statusField = new JTextField(7);
+        statusField = new JComboBox<String>(ItemStatusType.getStatuses());
 
         gbc.gridx = 5;
         gbc.gridy = 3;
@@ -147,8 +207,7 @@ public class InventoryItemDetailsDialog
         gbc.gridwidth = 1;
         add(btnOK, gbc);
         btnOK.addActionListener((ActionEvent e) -> {
-            //TODO
-            this.dispose();
+            saveAction();
         });
 
         //Cancel
@@ -158,13 +217,46 @@ public class InventoryItemDetailsDialog
         gbc.gridwidth = 1;
         add(btnCancel, gbc);
         btnCancel.addActionListener((ActionEvent e) -> {
-            //TODO
-            this.dispose();
+            cancelAction();
         });
 
         this.pack();
     }
 
+    /**
+     * Handles the save action. If any errors, then display error message
+     * instead.
+     *
+     */
+    private void saveAction() {
+        JOptionPane.showMessageDialog(null, "Successfully Updated");
+
+        expDate = (Date) expDatePicker.getModel().getValue();
+        sqlExpDate = Utilities.convertToSQLDate(expDate);
+        System.out.println(sqlExpDate);
+
+//TODO:  implement save.
+        /*if (successfullySaved) {
+                this.dispose();
+            } else {
+               //TODO:  catch errors and display them.  Do not exit dialog if an error occurs.
+            }*/
+        this.dispose();
+    }
+
+    /**
+     * Handles the cancel action. If any errors, then display error message
+     * instead.
+     *
+     */
+    private void cancelAction() {
+        JOptionPane.showMessageDialog(null, "Change Cancelled");
+        //TODO:  close window and return to prior window.
+        this.dispose();
+    }
+
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Public Methods">
     /**
      * Displays the frame.
      */
@@ -173,6 +265,7 @@ public class InventoryItemDetailsDialog
         setVisible(true);
     }
 
+    // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="SubClasses">
     /**
      * Handles all aspects of closing the program.
@@ -186,13 +279,9 @@ public class InventoryItemDetailsDialog
                     "Do you want to save?", "Close Query",
                     JOptionPane.YES_NO_OPTION);
             if (result == JOptionPane.YES_OPTION) {
-                //TODO
-                JOptionPane.showMessageDialog(null, "Successfully Updated");
-                frame.dispose();
+                saveAction();
             } else {
-                //TODO
-                JOptionPane.showMessageDialog(null, "Changed Cancelled");
-                frame.dispose();
+                cancelAction();
             }
         }
     }

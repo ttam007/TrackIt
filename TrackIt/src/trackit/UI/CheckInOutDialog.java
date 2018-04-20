@@ -4,7 +4,6 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import trackit.*;
-import trackit.DAL.AnInventoryItem;
 
 /**
  * UI Layer: Handles all aspects of the Check In/Out dialog.
@@ -22,7 +21,7 @@ public class CheckInOutDialog
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
 
-    private final AnInventoryItem testItem = null;
+    private final AnInventoryItem anItem = null;
 
     //private final InventoryItem testItem = new InventoryItem();
     // </editor-fold>
@@ -87,7 +86,7 @@ public class CheckInOutDialog
         /**
          * corrected to address compile warning
          */
-        JComboBox<String> itemComboBox = new JComboBox<>(itemStrings);
+        itemComboBox = new JComboBox<>(itemStrings);
         itemBx.add(itemComboBox);
         qtyBx = Box.createHorizontalBox();
         qtyLabel = new JLabel("Quantity");
@@ -99,18 +98,13 @@ public class CheckInOutDialog
         btnOK = new JButton("OK");
         submitBx.add(btnOK);
         this.btnOK.addActionListener((ActionEvent e) -> {
-            //TODO
-            /*if(!testItem.save()) {
-                
-            }*/
-            this.dispose();
+            saveAction();
         });
 
         btnCancel = new JButton("Cancel");
         submitBx.add(btnCancel);
         this.btnCancel.addActionListener((ActionEvent e) -> {
-            //TODO:  close window and return to prior window.
-            this.dispose();
+            cancelAction();
         });
 
         //add all of the boxes together
@@ -124,6 +118,33 @@ public class CheckInOutDialog
         //Finalizations
         pack();
 
+    }
+
+    /**
+     * Handles the save action. If any errors, then display error message
+     * instead.
+     *
+     */
+    private void saveAction() {
+        JOptionPane.showMessageDialog(null, "Successfully Updated");
+        //TODO:  implement save.
+        /*if (successfullySaved) {
+                this.dispose();
+            } else {
+               //TODO:  catch errors and display them.  Do not exit dialog if an error occurs.
+            }*/
+        this.dispose();
+    }
+
+    /**
+     * Handles the cancel action. If any errors, then display error message
+     * instead.
+     *
+     */
+    private void cancelAction() {
+        JOptionPane.showMessageDialog(null, "Change Cancelled");
+        //TODO:  close window and return to prior window.
+        this.dispose();
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
@@ -150,13 +171,9 @@ public class CheckInOutDialog
                     "Do you want to save?", "Close Query",
                     JOptionPane.YES_NO_OPTION);
             if (result == JOptionPane.YES_OPTION) {
-                //TODO
-                JOptionPane.showMessageDialog(null, "Successfully Updated");
-                frame.dispose();
+                saveAction();
             } else {
-                //TODO
-                JOptionPane.showMessageDialog(null, "Changed Cancelled");
-                frame.dispose();
+                cancelAction();
             }
         }
     }
