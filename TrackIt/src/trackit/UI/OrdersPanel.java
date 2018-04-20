@@ -8,7 +8,6 @@ import javax.swing.table.DefaultTableModel;
 import trackit.AnOrder;
 import trackit.Orders;
 
-
 /**
  * UI Layer: Handles all aspects of the Order panel.
  *
@@ -24,7 +23,7 @@ public class OrdersPanel
     public static final String TAB_NAME = "Orders";
     private static final String[] TABLE_LABELS = {"Order Date", "Order Number", "Supplier", "Status", "Total"};
     private final ArrayList<AnOrder> orders = new ArrayList<>();
-    
+
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
     private final AnOrder bll = new AnOrder();
@@ -36,7 +35,6 @@ public class OrdersPanel
     private OrderItemsFrame details;
 // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
-    
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -76,7 +74,7 @@ public class OrdersPanel
         setLayout(new BorderLayout());
 
         //add data to suppliers arraylist
-        mainTableModel= new DefaultTableModel(TABLE_LABELS,0);
+        mainTableModel = new DefaultTableModel(TABLE_LABELS, 0);
         Orders test = new Orders();
         mainTable = new JTable(mainTableModel);
         mainTable.setEnabled(false);
@@ -90,7 +88,7 @@ public class OrdersPanel
         });
         mainTable.setBounds(30, 40, 200, 200);
         initTableData(test.getSQL());
-        
+
         sp = new JScrollPane(mainTable);
 
         add(sp, BorderLayout.CENTER);
@@ -150,24 +148,24 @@ public class OrdersPanel
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
-   public static String[] getColumnNames(){
-        return TABLE_LABELS;   
+    public static String[] getColumnNames() {
+        return TABLE_LABELS;
     }
-   
-   private void initTableData(ArrayList<AnOrder> test){
+
+    private void initTableData(ArrayList<AnOrder> test) {
         System.out.println(test);
 
-        for(AnOrder e : test){
-            Object[] data = {e.getDescription(),e.getOrderedFrom(),e.getOrderStatus(), e.getDateOrdered(), e.getDateExpected()};
+        for (AnOrder e : test) {
+            Object[] data = {e.getDescription(), e.getOrderedFrom(), e.getOrderStatus(), e.getDateOrdered(), e.getDateExpected()};
             mainTableModel.addRow(data);
         }
     }
-   
-   private void toggleDisableButton() {
+
+    private void toggleDisableButton() {
         btnEdit.setEnabled(disableButtons);
         btnRemove.setEnabled(disableButtons);
-    } 
-   
+    }
+
     /**
      * Displays the frame.
      */

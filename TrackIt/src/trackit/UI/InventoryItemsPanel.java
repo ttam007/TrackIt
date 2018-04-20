@@ -6,6 +6,7 @@ import java.util.*;
 import javax.swing.*;
 import trackit.*;
 import javax.swing.table.DefaultTableModel;
+
 /**
  * UI Layer: Handles all aspects of the Inventory panel.
  *
@@ -88,7 +89,7 @@ public class InventoryItemsPanel
     private void setButtons() {
 
         btnCreate = new JButton("Create");
-        btnCreate.setSize(new Dimension(10,50));
+        btnCreate.setSize(new Dimension(10, 50));
         btnCreate.addActionListener((ActionEvent e) -> {
             InventoryItemDetailsDialog dlgCreate = new InventoryItemDetailsDialog(true, null);
             dlgCreate.display();
@@ -138,14 +139,13 @@ public class InventoryItemsPanel
         });
     }
 
-
     /**
      * populates table data in a way that is dynamic
      */
-    private void initTableData(ArrayList<AnInventoryItem> test){
-        if(test!=null){
-            for(AnInventoryItem e : test){
-                Object[] data = {e.getItemId(),e.getQuantity(),e.getSizeUnit(),e.getSku(),e.getExpirationDate(),e.getItemStatus()};
+    private void initTableData(ArrayList<AnInventoryItem> test) {
+        if (test != null) {
+            for (AnInventoryItem e : test) {
+                Object[] data = {e.getItemId(), e.getQuantity(), e.getSizeUnit(), e.getSku(), e.getExpirationDate(), e.getItemStatus()};
                 mainTableModel.addRow(data);
             }
         }
@@ -153,7 +153,7 @@ public class InventoryItemsPanel
 
     private void createUIComponents() {
 
-        mainTableModel= new DefaultTableModel(TABLE_LABELS,0);
+        mainTableModel = new DefaultTableModel(TABLE_LABELS, 0);
 
         Inventory test = new Inventory();
         mainTable = new JTable(mainTableModel);
@@ -188,8 +188,6 @@ public class InventoryItemsPanel
      */
     private void refreshItems() {
 
-
-
         this.inventoryItems.clear();
 
         //TODO:  load items from database.
@@ -203,7 +201,6 @@ public class InventoryItemsPanel
     public void display() {
         setVisible(true);
     }
-
 
     // </editor-fold>
 }

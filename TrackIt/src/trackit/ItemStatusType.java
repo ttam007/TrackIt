@@ -73,7 +73,7 @@ public enum ItemStatusType {
     /**
      * returns the array of status. Used in the InventoryItemsDialog
      */
-    public static String[] getStatuses(){
+    public static String[] getStatuses() {
         return STATUS_TEXT;
     }
     // </editor-fold>

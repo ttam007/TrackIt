@@ -27,7 +27,6 @@ public class DashboardPanel
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
-
     /**
      * Creates new form DashboardUI
      */
@@ -42,8 +41,8 @@ public class DashboardPanel
         //String sb = "- 5 items are out of stock\n- Milk will expire in 3 days\n- Order arriving today\n";
         StringBuilder sb = new StringBuilder();
 
-        for(Dashboard d : dashboards){
-            sb.append(d.toString()+"\n");
+        for (Dashboard d : dashboards) {
+            sb.append(d.toString() + "\n");
         }
         dashboardInfo = new JTextArea(35, 90);
         dashboardInfo.setText(sb.toString());
