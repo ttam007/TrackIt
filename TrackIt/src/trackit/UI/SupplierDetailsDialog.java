@@ -9,7 +9,7 @@ import trackit.*;
  * UI Layer: Handles all aspects of the Create ASupplier and Edit ASupplier
  * dialog.
  *
- * @author Douglas
+ * @author Douglas, Steven
  */
 public class SupplierDetailsDialog
         extends JDialog {
@@ -124,7 +124,6 @@ public class SupplierDetailsDialog
 
         btnCancel = new JButton("Cancel");
         submitBx.add(btnCancel);
-
         this.btnCancel.addActionListener((ActionEvent e) -> {
             cancelAction();
         });
