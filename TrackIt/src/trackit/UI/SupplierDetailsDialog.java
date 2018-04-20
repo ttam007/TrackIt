@@ -23,6 +23,7 @@ public class SupplierDetailsDialog
     // <editor-fold defaultstate="collapsed" desc="Private Fields">
     private final boolean isCreateMode;
     private final ASupplier aSupplier;
+    private static boolean dialogResult = false;
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     JPanel pnlCenter;
@@ -41,16 +42,19 @@ public class SupplierDetailsDialog
      * useCreateMode is true.
      */
     public SupplierDetailsDialog(boolean useCreateMode, ASupplier aSupplier) {
+        dialogResult = false;
+
         this.isCreateMode = useCreateMode;
         if (this.isCreateMode) {
-            this.aSupplier = null;
+            this.aSupplier = new ASupplier();
         } else if (aSupplier == null) {
-            throw new IllegalArgumentException("When 'useCreateMode' = true, then a non-null aSupplier must be provided.");
+            throw new IllegalArgumentException("When 'useCreateMode' = false, then a non-null aSupplier must be provided.");
         } else {
             this.aSupplier = aSupplier;
         }
 
         initializeComponents();
+        populateComponents();
     }
 
     // </editor-fold>
@@ -137,6 +141,14 @@ public class SupplierDetailsDialog
     }
 
     /**
+     * Populates all the UI components from this.aSupplier.
+     */
+    private void populateComponents() {
+        this.tfName.setText(this.aSupplier.getNickname());
+        this.tfAddress.setText(this.aSupplier.getUrl());
+    }
+
+    /**
      * Handles the save action. If any errors, then display error message
      * instead.
      *
@@ -149,6 +161,7 @@ public class SupplierDetailsDialog
             } else {
                //TODO:  catch errors and display them.  Do not exit dialog if an error occurs.
             }*/
+        dialogResult = true;
         this.dispose();
     }
 
@@ -160,6 +173,7 @@ public class SupplierDetailsDialog
     private void cancelAction() {
         JOptionPane.showMessageDialog(null, "Change Cancelled");
         //TODO:  close window and return to prior window.
+        dialogResult = false;
         this.dispose();
     }
     // </editor-fold>
@@ -171,6 +185,10 @@ public class SupplierDetailsDialog
     public void display() {
         System.out.println(String.format("Displaying %s...", WINDOW_NAME));
         setVisible(true);
+    }
+
+    public static boolean getDialogResult() {
+        return dialogResult;
     }
 
     // </editor-fold>

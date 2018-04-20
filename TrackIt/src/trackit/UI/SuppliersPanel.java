@@ -5,10 +5,7 @@ import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import trackit.ASupplier;
-import trackit.Suppliers;
-
-
+import trackit.*;
 
 /**
  * UI Layer: Handles all aspects of the Suppliers panel.
@@ -23,29 +20,32 @@ public class SuppliersPanel
      * The name of the panel.
      */
     public static final String TAB_NAME = "Suppliers";
-    private final ArrayList<ASupplier> suppliers = new ArrayList<>();
+    private static final String[] TABLE_LABELS = {"Supplier", "Web Address"};
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
+    private HashMap<Integer, ASupplier> suppliers = new HashMap<>();
+    Suppliers bll = new Suppliers();
+    /**
+     * Use this variable to toggle edit and remove buttons on and off.
+     */
+    private boolean disableButtons = false;
+    //SupplierDetailsDialog details;
+
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Components">
     private JTable mainTable;
     private JButton btnCreate, btnRemove, btnEdit;
     private DefaultTableModel mainTableModel;
     private JScrollPane sp;
-    private boolean disableButtons = false;//use this variable to toggle edit and remove buttons on and off
-    private static final String[] TABLE_LABELS = {"Supplier", "Web Address"};
-    // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Components">
-
-    SupplierDetailsDialog details;
-
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
+
     /**
      * Supplier UI
      */
     public SuppliersPanel() {
         initializeComponents();
         refreshItems();
-        this.display();
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
@@ -77,17 +77,13 @@ public class SuppliersPanel
         setLayout(new BorderLayout());
 
         //add data to suppliers arraylist
-
-
-        mainTableModel= new DefaultTableModel(TABLE_LABELS,0);
+        mainTableModel = new DefaultTableModel(TABLE_LABELS, 0);
 
         // mainTable = new JTable(data, TABLE_LABELS);
-        Suppliers test = new Suppliers();
         mainTable = new JTable(mainTableModel);
         mainTable.setDefaultEditor(Object.class, null);
 
-
-             // Add action listener to JTable
+        // Add action listener to JTable
         mainTable.getSelectionModel().addListSelectionListener((e) -> {
             //if the row is bigger than -1 than we need to enable the buttons
             if (mainTable.getSelectedRow() > -1) {
@@ -96,7 +92,6 @@ public class SuppliersPanel
             }
         });
         mainTable.setBounds(30, 40, 200, 200);
-        initTableData(test.getSQL());
 
         sp = new JScrollPane(mainTable);
 
@@ -106,24 +101,27 @@ public class SuppliersPanel
 
         btnCreate = new JButton("Create");
         btnCreate.addActionListener((ActionEvent e) -> {
-            //System.out.print("create supply");
             SupplierDetailsDialog dlgCreate = new SupplierDetailsDialog(true, null);
             dlgCreate.display();
+            if (SupplierDetailsDialog.getDialogResult()) {
+                this.refreshItems();
+            }
         });
 
         btnEdit = new JButton("Edit");
         btnEdit.setEnabled(disableButtons);
         btnEdit.addActionListener((ActionEvent e) -> {
-            //System.out.print("Edit supply");
             //If list item selected then edit item else select item.
             int selectedRow = mainTable.getSelectedRow();
             if (selectedRow < 0) {
                 JOptionPane.showMessageDialog(this, "Select item to edit");
             } else {
-                ASupplier aSupplier = new ASupplier();
-                //TODO: Set aSupplier to the value of selectedRow.
+                ASupplier aSupplier = this.suppliers.get(selectedRow);
                 SupplierDetailsDialog dlgEdit = new SupplierDetailsDialog(false, aSupplier);
                 dlgEdit.display();
+                if (SupplierDetailsDialog.getDialogResult()) {
+                    this.refreshItems();
+                }
             }
         });
 
@@ -135,7 +133,15 @@ public class SuppliersPanel
                 JOptionPane.showMessageDialog(null, "Select item to remove");
             } else {
                 //TODO: remove item from db
-                JOptionPane.showMessageDialog(null, "Item removed");
+                ASupplier aSupplier = this.suppliers.get(selectedRow);
+                if (this.bll.remove(aSupplier.getPrimaryKey())) {
+                    this.refreshItems();
+                    JOptionPane.showMessageDialog(null,
+                            String.format("Item %s has been removed.", aSupplier.getNickname()));
+                } else {
+                    JOptionPane.showMessageDialog(this, this.bll.getErrorMessage(),
+                            Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+                }
             }
             //TODO: surround below in a for loop
             /*
@@ -152,14 +158,6 @@ public class SuppliersPanel
         btmSup.add(btnRemove);
 
         add(btmSup, BorderLayout.SOUTH);
-
-    }
-
-    // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Public Methods">
-
-    public static String[] getColumnNames(){
-        return TABLE_LABELS;
     }
 
     private void toggleDisableButton() {
@@ -167,32 +165,35 @@ public class SuppliersPanel
         btnRemove.setEnabled(disableButtons);
     }
 
-
-    private void initTableData(ArrayList<ASupplier> test){
-        if(test !=null){
-            for(ASupplier e : test){
-                Object[] data = {e.getNickname(),e.getUrl()};
+    private void initTableData(ArrayList<ASupplier> aList) {
+        if (this.suppliers != null) {
+            int counter = 0;
+            for (ASupplier aSupplier : aList) {
+                Object[] data = {aSupplier.getNickname(), aSupplier.getUrl()};
                 mainTableModel.addRow(data);
+                this.suppliers.put(counter, aSupplier);
+                counter++;
             }
         }
-
     }
 
+    private void refreshItems() {
+        this.suppliers.clear();
+        if (bll.load()) {
+            ArrayList<ASupplier> aList = bll.getList();
+            initTableData(aList);
+        } else {
+            JOptionPane.showMessageDialog(this, bll.getErrorMessage(),
+                    Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Public Methods">
     /**
      * Displays the frame.
      *
      */
-
-    private void refreshItems() {
-
-
-
-        this.suppliers.clear();
-
-        //TODO:  load items from database.
-    }
-
     public void display() {
         setVisible(true);
     }

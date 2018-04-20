@@ -43,9 +43,9 @@ public class OrderItemDetailsDialog
     public OrderItemDetailsDialog(boolean useCreateMode, AnOrderItem anOrderItem) {
         this.isCreateMode = useCreateMode;
         if (this.isCreateMode) {
-            this.anOrderItem = null;
+            this.anOrderItem = new AnOrderItem();
         } else if (anOrderItem == null) {
-            throw new IllegalArgumentException("When 'useCreateMode' = true, then a non-null anOrderItem must be provided.");
+            throw new IllegalArgumentException("When 'useCreateMode' = false, then a non-null anOrderItem must be provided.");
         } else {
             this.anOrderItem = anOrderItem;
         }

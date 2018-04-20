@@ -14,22 +14,7 @@ public class Suppliers
     
     SQLHelperSupplier helper = new SQLHelperSupplier();
     ArrayList<ASupplier> suppliers;
-    
-    /**
-     * Pulls SQL info from database to load into JTable
-     */
-    public ArrayList<ASupplier> getSQL() {
-        try {
-            System.out.println("\nSelectAll");
-            suppliers = helper.selectAll();
-        } catch (SQLException exSQL) {
-            System.out.println("SQL error = " + exSQL.getLocalizedMessage());
-        } catch (Exception ex) {
-            System.out.println("Generic error = " + ex.getLocalizedMessage());
-        }
-        return suppliers;
-    }
-    
+  
     /**
      * Loads all rows from the database to the grid.
      *

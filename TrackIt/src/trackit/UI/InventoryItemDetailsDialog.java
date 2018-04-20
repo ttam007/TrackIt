@@ -37,7 +37,7 @@ public class InventoryItemDetailsDialog
     private GridBagConstraints gbc;
     private Date expDate, sqlExpDate;
     private ItemStatusType statuses;
-    
+
     UtilDateModel expModel = new UtilDateModel();
     JDatePanelImpl expDatePanel;
     JDatePickerImpl expDatePicker;
@@ -55,9 +55,9 @@ public class InventoryItemDetailsDialog
     public InventoryItemDetailsDialog(boolean useCreateMode, AnInventoryItem anInventoryItem) {
         this.isCreateMode = useCreateMode;
         if (this.isCreateMode) {
-            this.anInventoryItem = null;
+            this.anInventoryItem = new AnInventoryItem();
         } else if (anInventoryItem == null) {
-            throw new IllegalArgumentException("When 'useCreateMode' = true, then a non-null anInventoryItem must be provided.");
+            throw new IllegalArgumentException("When 'useCreateMode' = false, then a non-null anInventoryItem must be provided.");
         } else {
             this.anInventoryItem = anInventoryItem;
         }
@@ -111,7 +111,7 @@ public class InventoryItemDetailsDialog
         p.put("text.today", "Today");
         p.put("text.month", "Month");
         p.put("text.year", "Year");
-        expDatePanel = new JDatePanelImpl(expModel,p);
+        expDatePanel = new JDatePanelImpl(expModel, p);
 
         gbc = new GridBagConstraints();
         setLayout(new GridBagLayout());
@@ -230,10 +230,10 @@ public class InventoryItemDetailsDialog
      */
     private void saveAction() {
         JOptionPane.showMessageDialog(null, "Successfully Updated");
-        
+
         expDate = (Date) expDatePicker.getModel().getValue();
-            sqlExpDate = Utilities.convertToSQLDate(expDate);
-            System.out.println(sqlExpDate);
+        sqlExpDate = Utilities.convertToSQLDate(expDate);
+        System.out.println(sqlExpDate);
 
 //TODO:  implement save.
         /*if (successfullySaved) {
