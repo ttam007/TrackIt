@@ -102,8 +102,7 @@ public class SuppliersPanel
         btnCreate = new JButton("Create");
         btnCreate.addActionListener((ActionEvent e) -> {
             SupplierDetailsDialog dlgCreate = new SupplierDetailsDialog(true, null);
-            dlgCreate.display();
-            if (SupplierDetailsDialog.getDialogResult()) {
+            if (dlgCreate.display() == DialogResultType.OK) {
                 this.refreshItems();
             }
         });
@@ -118,8 +117,7 @@ public class SuppliersPanel
             } else {
                 ASupplier aSupplier = this.suppliers.get(selectedRow);
                 SupplierDetailsDialog dlgEdit = new SupplierDetailsDialog(false, aSupplier);
-                dlgEdit.display();
-                if (SupplierDetailsDialog.getDialogResult()) {
+                if (dlgEdit.display() == DialogResultType.OK) {
                     this.refreshItems();
                 }
             }
@@ -132,25 +130,16 @@ public class SuppliersPanel
             if (selectedRow < 0) {
                 JOptionPane.showMessageDialog(null, "Select item to remove");
             } else {
-                //TODO: remove item from db
                 ASupplier aSupplier = this.suppliers.get(selectedRow);
                 if (this.bll.remove(aSupplier.getPrimaryKey())) {
                     this.refreshItems();
                     JOptionPane.showMessageDialog(null,
-                            String.format("Item %s has been removed.", aSupplier.getNickname()));
+                            String.format("%s has been removed.", aSupplier.getNickname()));
                 } else {
                     JOptionPane.showMessageDialog(this, this.bll.getErrorMessage(),
                             Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
                 }
             }
-            //TODO: surround below in a for loop
-            /*
-            if (bll.remove()) {
-                //TODO:  close window and return to prior window.
-            } else {
-                //TODO:  display bll.getErrorMessage() and stay on this window.
-            }
-             */
         });
 
         btmSup.add(btnCreate);
@@ -178,7 +167,13 @@ public class SuppliersPanel
     }
 
     private void refreshItems() {
+        //Clear the ArrayList and JTable, which should be done backwards.
         this.suppliers.clear();
+        for (int i = mainTableModel.getRowCount() - 1; i >= 0; i--) {
+            mainTableModel.removeRow(i);
+        }
+
+        //Now load fresh data from database.
         if (bll.load()) {
             ArrayList<ASupplier> aList = bll.getList();
             initTableData(aList);
