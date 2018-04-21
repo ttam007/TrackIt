@@ -192,7 +192,7 @@ public class OrderItemsFrame
         combine.add(bottomBox);
         add(combine, BorderLayout.CENTER);
 
-        pnlBtm = new JPanel();
+        pnlBtm = new JPanel(new GridLayout(0, 8, 2, 0));
 
         btnAddItem = new JButton("Add Item");
         pnlBtm.add(btnAddItem);

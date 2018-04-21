@@ -14,7 +14,7 @@ import trackit.*;
  * UI Layer: Handles all aspects of the Create Inventory Item and Edit Inventory
  * Item dialog.
  *
- * @author Bond, Steven
+ * @author Bond, Steven, Diaz
  */
 public class InventoryItemDetailsDialog
         extends JDialog {
@@ -34,17 +34,6 @@ public class InventoryItemDetailsDialog
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
-<<<<<<< HEAD
-    private JTextField skuField, quantityField, unitField, statusField, itemNameField;
-    private JLabel sku, statusLabel, unit, expDateLbl, quantity, itemNameLabel;
-    private JButton btnOK, btnCancel;
-    private GridBagConstraints gbc;
-    private Date expDate, sqlExpDate;
-    
-    UtilDateModel expModel = new UtilDateModel();
-    JDatePanelImpl expDatePanel;
-    JDatePickerImpl expDatePicker;
-=======
     private JComboBox<String> statusField;
     private JTextField tfSku, tfQuantity, tfSizeUnit, tfDescription;
     private JLabel sku, statusLabel, unit, expDateLbl, quantity, itemNameLabel;
@@ -53,7 +42,6 @@ public class InventoryItemDetailsDialog
 
     private JDatePanelImpl expDatePanel;
     private JDatePickerImpl expDatePicker;
->>>>>>> Dev
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
@@ -126,7 +114,7 @@ public class InventoryItemDetailsDialog
         p.put("text.today", "Today");
         p.put("text.month", "Month");
         p.put("text.year", "Year");
-        expDatePanel = new JDatePanelImpl(expModel,p);
+        expDatePanel = new JDatePanelImpl(expModel, p);
 
         gbc = new GridBagConstraints();
         setLayout(new GridBagLayout());
@@ -207,10 +195,9 @@ public class InventoryItemDetailsDialog
         gbc.gridy = 3;
         gbc.gridwidth = 1;
         add(statusLabel, gbc);
-        
         //Text Field
-        statusField = new JTextField(7);
         statusField = new JComboBox<>(ItemStatusType.getStatuses());
+
         gbc.gridx = 5;
         gbc.gridy = 3;
         gbc.gridwidth = 1;
@@ -277,28 +264,18 @@ public class InventoryItemDetailsDialog
      * instead.
      */
     private void saveAction() {
-        JOptionPane.showMessageDialog(null, "Successfully Updated");
-        
-        expDate = (Date) expDatePicker.getModel().getValue();
-            sqlExpDate = Utilities.convertToSQLDate(expDate);
-            System.out.println(sqlExpDate);
-
-//TODO:  implement save.
-        /*if (successfullySaved) {
-
         if (populateObject()) {
             if (this.bll.save(this.anInventoryItem)) {
                 this.dialogResult = DialogResultType.OK;
                 JOptionPane.showMessageDialog(null, "Successfully Saved.");
                 this.setVisible(false);
-
                 this.dispose();
             } else {
                 this.dialogResult = DialogResultType.CANCEL;
                 JOptionPane.showMessageDialog(this, this.bll.getErrorMessage(),
                         Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
             }
-        }*/
+        }
     }
 
     /**

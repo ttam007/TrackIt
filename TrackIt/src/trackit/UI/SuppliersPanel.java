@@ -4,18 +4,13 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
-<<<<<<< HEAD
-import trackit.ASupplier;
-import trackit.SuppliersTableModel;
-=======
 import javax.swing.table.DefaultTableModel;
 import trackit.*;
->>>>>>> Dev
 
 /**
  * UI Layer: Handles all aspects of the Suppliers panel.
  *
- * @author Douglas
+ * @author Douglas, Diaz, Steven
  */
 public class SuppliersPanel
         extends JPanel {
@@ -25,18 +20,6 @@ public class SuppliersPanel
      * The name of the panel.
      */
     public static final String TAB_NAME = "Suppliers";
-<<<<<<< HEAD
-    public static final String[] TABLE_LABELS = {"Supplier", "Web Address"};
-    // </editor-fold>
-    // <editor-fold defaultstate="expanded" desc="Private Fields">
-    private final ArrayList<ASupplier> suppliers = new ArrayList<>();
-    // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Components">
-    JButton btnCreate, btnRemove, btnEdit;
-    JTable mainTable;
-    SupplierDetailsDialog details;
-
-=======
     public static final String[] TABLE_LABELS = {"Supplier", "Web Address"};
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
@@ -54,7 +37,6 @@ public class SuppliersPanel
     private JButton btnCreate, btnRemove, btnEdit;
     private DefaultTableModel mainTableModel;
     private JScrollPane sp;
->>>>>>> Dev
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
@@ -63,10 +45,7 @@ public class SuppliersPanel
      */
     public SuppliersPanel() {
         initializeComponents();
-<<<<<<< HEAD
-=======
         refreshItems();
->>>>>>> Dev
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
@@ -97,16 +76,6 @@ public class SuppliersPanel
     private void initializeComponents() {
         setLayout(new BorderLayout());
 
-<<<<<<< HEAD
-        //add data to suppliers arraylist 
-        Object[][] suppliersTestData = {{"Amazon", "http://www.amazon.com"}, {"Walmart", "http://www.walmart.com"}, {"Ebay", "http://www.ebay.com"}};
-        mainTable = new JTable(new SuppliersTableModel());
-        JScrollPane suppliersScrollPane = new JScrollPane(mainTable);
-        mainTable.setFillsViewportHeight(true);
-        mainTable.setDefaultEditor(Object.class, null);
-
-        add(suppliersScrollPane, BorderLayout.CENTER);
-=======
         //add data to suppliers arraylist
         mainTableModel = new DefaultTableModel(TABLE_LABELS, 0);
 
@@ -127,9 +96,8 @@ public class SuppliersPanel
         sp = new JScrollPane(mainTable);
 
         add(sp, BorderLayout.CENTER);
->>>>>>> Dev
 
-        JPanel btmSup = new JPanel();
+        JPanel btmSup = new JPanel(new GridLayout(0, 8, 2, 0));
 
         btnCreate = new JButton("Create");
         btnCreate.addActionListener((ActionEvent e) -> {
@@ -141,6 +109,7 @@ public class SuppliersPanel
         });
 
         btnEdit = new JButton("Edit");
+        btnEdit.setEnabled(disableButtons);
         btnEdit.addActionListener((ActionEvent e) -> {
             //If list item selected then edit item else select item.
             int selectedRow = mainTable.getSelectedRow();
@@ -157,6 +126,7 @@ public class SuppliersPanel
         });
 
         btnRemove = new JButton("Remove");
+        btnRemove.setEnabled(disableButtons);
         btnRemove.addActionListener((ActionEvent e) -> {
             int selectedRow = this.mainTable.getSelectedRow();
             if (selectedRow < 0) {
@@ -178,25 +148,7 @@ public class SuppliersPanel
         btmSup.add(btnEdit);
         btmSup.add(btnRemove);
 
-        add(btmSup, BorderLayout.SOUTH);
-<<<<<<< HEAD
-
-    }
-
-    // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Public Methods">
-    
-    public static String[] getColumnNames(){
-        return TABLE_LABELS;   
-    }
-    
-    /**
-     * Displays the frame.
-     *  
-     */
-    
-    
-=======
+        add(btmSup, BorderLayout.PAGE_END);
     }
 
     private void toggleDisableButton() {
@@ -239,7 +191,6 @@ public class SuppliersPanel
      * Displays the frame.
      *
      */
->>>>>>> Dev
     public void display() {
         setVisible(true);
     }

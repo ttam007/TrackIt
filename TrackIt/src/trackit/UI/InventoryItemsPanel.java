@@ -29,7 +29,7 @@ public class InventoryItemsPanel
     // <editor-fold defaultstate="collapsed" desc="Components">
     private JTable mainTable;
     private JButton btnCreate, btnEdit, btnRemove, btnCheckInOut;
-    private final Object[][] data;
+    private DefaultTableModel mainTableModel;
     private JScrollPane sp;
     private boolean disableButtons = false;//use this variable to toggle edit and remove buttons on and off
 
@@ -39,8 +39,6 @@ public class InventoryItemsPanel
      * Inventory items ui
      */
     public InventoryItemsPanel() {
-        data = new Object[20][20];
-
         initializeComponents();
         refreshItems();
     }
@@ -139,24 +137,6 @@ public class InventoryItemsPanel
             checkIn.display();
         });
     }
-
-
-    private void createUIComponents() {
-
-        data[0][0] = "Gauze";
-        data[0][1] = "3.0";
-        data[0][2] = "oz";
-        data[0][3] = "231441414";
-        data[0][4] = "04-27-2018";
-        data[0][5] = "Expired";
-        data[1][0] = "Gauze";
-        data[1][1] = "3.0";
-        data[1][2] = "oz";
-        data[1][3] = "231441414";
-        data[1][4] = "04-27-2018";
-        data[1][5] = "Expired";
-
-        mainTable = new JTable(data, TABLE_LABELS);
 
     /**
      * populates table data in a way that is dynamic
