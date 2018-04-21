@@ -23,8 +23,8 @@ public class InventoryItemsPanel
     private static final String[] TABLE_LABELS = new String[]{"Item Name", "Qty", "Unit", "SKU", "Expiration", "Status"};
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
-    private HashMap<Integer, AnInventoryItem> inventoryItems = new HashMap<>();
-    Inventory bll = new Inventory();
+    private final HashMap<Integer, AnInventoryItem> inventoryItems = new HashMap<>();
+    private final Inventory bll = new Inventory();
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     private JTable mainTable;
@@ -171,8 +171,6 @@ public class InventoryItemsPanel
         });
         mainTable.setBounds(30, 40, 200, 200);
 
-        
-
         setButtons();
         sp = new JScrollPane(mainTable);
 
@@ -214,5 +212,13 @@ public class InventoryItemsPanel
         setVisible(true);
     }
 
+    /**
+     * Gets the array of table column headers.
+     *
+     * @return The array of column headers.
+     */
+    public static String[] getColumnHeaders() {
+        return TABLE_LABELS.clone();
+    }
     // </editor-fold>
 }

@@ -2,6 +2,7 @@ package trackit;
 
 import java.sql.*;
 import java.text.*;
+import java.util.*;
 
 /**
  * This is a static class that only has global constants and "fire and forget"
@@ -31,7 +32,10 @@ public class Utilities {
      * The correct format of all SQL dates.
      */
     public static final String SQL_DATE_FORMAT = "yyyy-MM-dd";
-    
+
+    /**
+     * Default caption for error dialog boxes.
+     */
     public static final String ERROR_MSG_CAPTION = "Error";
 
     // </editor-fold>
@@ -127,5 +131,19 @@ public class Utilities {
      */
     public static SimpleDateFormat getDateFormatter() {
         return new SimpleDateFormat(SQL_DATE_FORMAT);
+    }
+
+    /**
+     * Since the Date class is depreciated for many of its methods, use this to
+     * get a Calendar object set to the same date as the specified Date class
+     * instance.
+     *
+     * @param aDate An instance of the Date class with a specific date.
+     * @return A Calendar instance set to the specified date.
+     */
+    public static Calendar getCalendarWithDate(java.util.Date aDate) {
+        Calendar aCalendar = new GregorianCalendar();
+        aCalendar.setTime(aDate);
+        return aCalendar;
     }
 }

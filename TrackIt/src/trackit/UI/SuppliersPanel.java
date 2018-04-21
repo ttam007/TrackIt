@@ -20,11 +20,11 @@ public class SuppliersPanel
      * The name of the panel.
      */
     public static final String TAB_NAME = "Suppliers";
-    public static final String[] TABLE_LABELS = {"Supplier", "Web Address"};
+    private static final String[] TABLE_LABELS = {"Supplier", "Web Address"};
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
-    private HashMap<Integer, ASupplier> suppliers = new HashMap<>();
-    Suppliers bll = new Suppliers();
+    private final HashMap<Integer, ASupplier> suppliers = new HashMap<>();
+    private final Suppliers bll = new Suppliers();
     /**
      * Use this variable to toggle edit and remove buttons on and off.
      */
@@ -193,6 +193,15 @@ public class SuppliersPanel
      */
     public void display() {
         setVisible(true);
+    }
+
+    /**
+     * Gets the array of table column headers.
+     *
+     * @return The array of column headers.
+     */
+    public static String[] getColumnHeaders() {
+        return TABLE_LABELS.clone();
     }
     // </editor-fold>
 }

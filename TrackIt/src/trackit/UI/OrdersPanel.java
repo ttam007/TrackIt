@@ -7,14 +7,13 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import trackit.*;
 
-
 /**
  * UI Layer: Handles all aspects of the Order panel.
  *
  * @author Douglas, Steven, Diaz
  */
 public class OrdersPanel
-        extends JPanel {    
+        extends JPanel {
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
     /**
@@ -25,9 +24,9 @@ public class OrdersPanel
 
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
-    private HashMap<Integer, AnOrder> orders = new HashMap<>();
-    Orders bll = new Orders();
-    
+    private final HashMap<Integer, AnOrder> orders = new HashMap<>();
+    private final Orders bll = new Orders();
+
     private JButton btnCreate, btnRemove, btnEdit;
     private JTable mainTable;
     private DefaultTableModel mainTableModel;
@@ -71,8 +70,6 @@ public class OrdersPanel
         throw new java.io.NotSerializableException(getClass().getName());
     }
 
-    
-    
     private void initializeComponents() {
         setLayout(new BorderLayout());
 
@@ -163,13 +160,11 @@ public class OrdersPanel
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
-  
-
     private void toggleDisableButton() {
         btnEdit.setEnabled(disableButtons);
         btnRemove.setEnabled(disableButtons);
     }
-    
+
     private void initTableData(ArrayList<AnOrder> aList) {
         if (this.orders != null) {
             int counter = 0;
@@ -181,7 +176,7 @@ public class OrdersPanel
             }
         }
     }
-    
+
     private void refreshItems() {
         //Clear the ArrayList and JTable, which should be done backwards.
         this.orders.clear();
@@ -198,12 +193,21 @@ public class OrdersPanel
                     Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+
     /**
      * Displays the frame.
      */
     public void display() {
         setVisible(true);
+    }
+
+    /**
+     * Gets the array of table column headers.
+     *
+     * @return The array of column headers.
+     */
+    public static String[] getColumnHeaders() {
+        return TABLE_LABELS.clone();
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="SubClasses">
