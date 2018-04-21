@@ -33,6 +33,7 @@ public class CheckInOutDialog
     JLabel itemNameLabel, qtyLabel;
     JTextField qtyTextField;
     String[] itemStrings = {"soap", "shampoo", "conditioner", "paper towels", "mouthwash"};
+    GridBagConstraints gbc;
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -50,71 +51,85 @@ public class CheckInOutDialog
      */
     private void initializeComponents() {
         //Setup main frame
-        int frameWidth = 640;
-        int frameHeight = 400;
+        int frameWidth = 500;
+        int frameHeight = 250;//originally 110
         Dimension dimFrame = new Dimension(frameWidth, frameHeight);
         this.setTitle(Utilities.getWindowCaption(WINDOW_NAME));
         this.setSize(dimFrame);
         this.setPreferredSize(dimFrame);
-        this.setModal(true);
+        //this.setModal(true);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new CloseQuery());
         this.getRootPane().setDefaultButton(btnOK);
 
-        //Add all components here and set properties.
-        Box buttonBx, itemBx, qtyBx, submitBx, combine;
+        gbc = new GridBagConstraints();
+        setLayout(new GridBagLayout());
+        gbc.insets = new Insets(2, 2, 5, 0);
+        gbc.anchor = GridBagConstraints.LINE_START;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        pnlMain = new JPanel();
-        add(pnlMain, BorderLayout.CENTER);
-
-        //create the Radio Buttons and add them to a group
-        buttonBx = Box.createHorizontalBox();
         ButtonGroup checkGroup = new ButtonGroup();
         inButton = new JRadioButton("Check In");
         outButton = new JRadioButton("Check Out");
         checkGroup.add(inButton);
         checkGroup.add(outButton);
         inButton.setSelected(true);
-        buttonBx.add(inButton);
-        buttonBx.add(outButton);
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        add(inButton, gbc);
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        add(outButton, gbc);
 
-        itemBx = Box.createHorizontalBox();
-        itemNameLabel = new JLabel("Item Name");
-        itemBx.add(itemNameLabel);
-        /**
-         * corrected to address compile warning
-         */
+        // Supplier Name Label 
+        itemNameLabel = new JLabel("Item Name: ");
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        add(itemNameLabel, gbc);
+
+        // Supplier Name Text Field
         itemComboBox = new JComboBox<>(itemStrings);
-        itemBx.add(itemComboBox);
-        qtyBx = Box.createHorizontalBox();
-        qtyLabel = new JLabel("Quantity");
-        qtyBx.add(qtyLabel);
-        qtyTextField = new JTextField();
-        qtyBx.add(qtyTextField);
-        submitBx = Box.createHorizontalBox();
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.gridwidth = 5;
+        add(itemComboBox, gbc);
 
-        btnOK = new JButton("OK");
-        submitBx.add(btnOK);
-        this.btnOK.addActionListener((ActionEvent e) -> {
+        // Website Address label
+        qtyLabel = new JLabel("Quantity: ");
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 1;
+        add(qtyLabel, gbc);
+
+        //Website Address Text Field
+        qtyTextField = new JTextField(7);
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        gbc.gridwidth = 5;
+        add(qtyTextField, gbc);
+
+        // Init Ok Button
+        btnOK = new JButton("Ok");
+        gbc.gridx = 3;
+        gbc.gridy = 4;
+        gbc.gridwidth = 1;
+        add(btnOK, gbc);
+        btnOK.addActionListener((ActionEvent e) -> {
             saveAction();
         });
 
+        //Cancel
         btnCancel = new JButton("Cancel");
-        submitBx.add(btnCancel);
-        this.btnCancel.addActionListener((ActionEvent e) -> {
+        gbc.gridx = 4;
+        gbc.gridy = 4;
+        gbc.gridwidth = 1;
+        add(btnCancel, gbc);
+        btnCancel.addActionListener((ActionEvent e) -> {
             cancelAction();
         });
 
-        //add all of the boxes together
-        combine = Box.createVerticalBox();
-        combine.add(buttonBx);
-        combine.add(itemBx);
-        combine.add(qtyBx);
-        combine.add(submitBx);
-
-        pnlMain.add(combine);
         //Finalizations
         pack();
 

@@ -4,13 +4,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.*;
 import javax.swing.*;
-import trackit.*;
 import javax.swing.table.DefaultTableModel;
+import trackit.*;
 
 /**
  * UI Layer: Handles all aspects of the Inventory panel.
  *
- * @author Brian Diaz, Steven
+ * @author Brian Diaz
  */
 public class InventoryItemsPanel
         extends JPanel {
@@ -23,8 +23,8 @@ public class InventoryItemsPanel
     private static final String[] TABLE_LABELS = new String[]{"Item Name", "Qty", "Unit", "SKU", "Expiration", "Status"};
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
-    private final ArrayList<AnInventoryItem> inventoryItems = new ArrayList<>();
-
+    private final HashMap<Integer, AnInventoryItem> inventoryItems = new HashMap<>();
+    private final Inventory bll = new Inventory();
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     private JTable mainTable;
@@ -39,7 +39,6 @@ public class InventoryItemsPanel
      * Inventory items ui
      */
     public InventoryItemsPanel() {
-
         initializeComponents();
         refreshItems();
     }
@@ -74,7 +73,6 @@ public class InventoryItemsPanel
         this.setLayout(border);
         createUIComponents();
         this.setSize(new Dimension(1100, 700));
-        this.display();
     }
 
     /**
@@ -89,25 +87,28 @@ public class InventoryItemsPanel
     private void setButtons() {
 
         btnCreate = new JButton("Create");
-        btnCreate.setSize(new Dimension(10, 50));
         btnCreate.addActionListener((ActionEvent e) -> {
             InventoryItemDetailsDialog dlgCreate = new InventoryItemDetailsDialog(true, null);
-            dlgCreate.display();
+            dlgCreate.setLocationRelativeTo(sp);
+            if (dlgCreate.display() == DialogResultType.OK) {
+                this.refreshItems();
+            }
         });
 
         btnEdit = new JButton("Edit");
         btnEdit.setEnabled(disableButtons);
-
         btnEdit.addActionListener((ActionEvent e) -> {
             //If list item selected then edit item else select item.
             int selectedRow = this.mainTable.getSelectedRow();
             if (selectedRow < 0) {
                 JOptionPane.showMessageDialog(this, "Select item to edit");
             } else {
-                AnInventoryItem anInventoryItem = new AnInventoryItem();
-                //TODO: Set anInventoryItem to the value of selectedRow.
+                AnInventoryItem anInventoryItem = this.inventoryItems.get(selectedRow);
                 InventoryItemDetailsDialog dlgEdit = new InventoryItemDetailsDialog(false, anInventoryItem);
-                dlgEdit.display();
+                dlgEdit.setLocationRelativeTo(sp);
+                if (dlgEdit.display() == DialogResultType.OK) {
+                    this.refreshItems();
+                }
             }
         });
 
@@ -118,18 +119,16 @@ public class InventoryItemsPanel
             if (selectedRow < 0) {
                 JOptionPane.showMessageDialog(null, "Select item to remove");
             } else {
-                //TODO: remove item from db
-                JOptionPane.showMessageDialog(null, "Item removed");
+                AnInventoryItem anInventoryItem = this.inventoryItems.get(selectedRow);
+                if (this.bll.remove(anInventoryItem.getPrimaryKey())) {
+                    this.refreshItems();
+                    JOptionPane.showMessageDialog(null,
+                            String.format("%s has been removed.", anInventoryItem.getDescription()));
+                } else {
+                    JOptionPane.showMessageDialog(this, this.bll.getErrorMessage(),
+                            Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+                }
             }
-
-            //TODO: surround below in a for loop
-            /*
-            if (bll.remove()) {
-                //TODO:  close window and return to prior window.
-            } else {
-                //TODO:  display bll.getErrorMessage() and stay on this window.
-            }
-             */
         });
 
         btnCheckInOut = new JButton("Check In/Out");
@@ -142,11 +141,14 @@ public class InventoryItemsPanel
     /**
      * populates table data in a way that is dynamic
      */
-    private void initTableData(ArrayList<AnInventoryItem> test) {
-        if (test != null) {
-            for (AnInventoryItem e : test) {
-                Object[] data = {e.getItemId(), e.getQuantity(), e.getSizeUnit(), e.getSku(), e.getExpirationDate(), e.getItemStatus()};
+    private void initTableData(ArrayList<AnInventoryItem> aList) {
+        if (this.inventoryItems != null) {
+            int counter = 0;
+            for (AnInventoryItem anInventoryItem : aList) {
+                Object[] data = {anInventoryItem.getDescription(), anInventoryItem.getQuantity(), anInventoryItem.getSizeUnit(), anInventoryItem.getSku(), anInventoryItem.getExpirationDate(), anInventoryItem.getItemStatus()};
                 mainTableModel.addRow(data);
+                this.inventoryItems.put(counter, anInventoryItem);
+                counter++;
             }
         }
     }
@@ -155,9 +157,10 @@ public class InventoryItemsPanel
 
         mainTableModel = new DefaultTableModel(TABLE_LABELS, 0);
 
-        Inventory test = new Inventory();
         mainTable = new JTable(mainTableModel);
+        mainTable.getTableHeader().setReorderingAllowed(false);
         mainTable.setDefaultEditor(Object.class, null);
+
         // Add action listener to JTable
         mainTable.getSelectionModel().addListSelectionListener((e) -> {
             //if the row is bigger than -1 than we need to enable the buttons
@@ -167,15 +170,14 @@ public class InventoryItemsPanel
             }
         });
         mainTable.setBounds(30, 40, 200, 200);
-        initTableData(test.getSQL());
 
         setButtons();
         sp = new JScrollPane(mainTable);
 
         add(sp, BorderLayout.CENTER);
 
-        //JPanel buttonHolder = new JPanel(new GridLayout(0, 8, 2, 0));
-        JPanel buttonHolder = new JPanel(new GridLayout(0, 12, 2, 0));
+        JPanel buttonHolder = new JPanel(new GridLayout(0, 8, 2, 0));
+
         buttonHolder.add(btnCreate);
         buttonHolder.add(btnEdit);
         buttonHolder.add(btnRemove);
@@ -187,10 +189,18 @@ public class InventoryItemsPanel
      * Refreshes the list of items that are displayed in the grid.
      */
     private void refreshItems() {
-
         this.inventoryItems.clear();
+        for (int i = mainTableModel.getRowCount() - 1; i >= 0; i--) {
+            mainTableModel.removeRow(i);
+        }
 
-        //TODO:  load items from database.
+        if (bll.load()) {
+            ArrayList<AnInventoryItem> aList = bll.getList();
+            initTableData(aList);
+        } else {
+            JOptionPane.showMessageDialog(this, bll.getErrorMessage(),
+                    Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     // </editor-fold>
@@ -202,5 +212,13 @@ public class InventoryItemsPanel
         setVisible(true);
     }
 
+    /**
+     * Gets the array of table column headers.
+     *
+     * @return The array of column headers.
+     */
+    public static String[] getColumnHeaders() {
+        return TABLE_LABELS.clone();
+    }
     // </editor-fold>
 }

@@ -5,8 +5,7 @@ import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import trackit.AnOrder;
-import trackit.Orders;
+import trackit.*;
 
 /**
  * UI Layer: Handles all aspects of the Order panel.
@@ -21,18 +20,18 @@ public class OrdersPanel
      * The name of the panel.
      */
     public static final String TAB_NAME = "Orders";
-    private static final String[] TABLE_LABELS = {"Order Date", "Order Number", "Supplier", "Status", "Total"};
-    private final ArrayList<AnOrder> orders = new ArrayList<>();
+    private static final String[] TABLE_LABELS = {"Description", "Supplier", "Status", "Order Date", "Expected Date"};
 
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
-    private final AnOrder bll = new AnOrder();
+    private final HashMap<Integer, AnOrder> orders = new HashMap<>();
+    private final Orders bll = new Orders();
+
     private JButton btnCreate, btnRemove, btnEdit;
     private JTable mainTable;
     private DefaultTableModel mainTableModel;
     private JScrollPane sp;
     private boolean disableButtons = false;//use this variable to toggle edit and remove buttons on and off
-    private OrderItemsFrame details;
 // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
 
@@ -43,6 +42,7 @@ public class OrdersPanel
      */
     public OrdersPanel() {
         initializeComponents();
+        refreshItems();
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
@@ -75,9 +75,9 @@ public class OrdersPanel
 
         //add data to suppliers arraylist
         mainTableModel = new DefaultTableModel(TABLE_LABELS, 0);
-        Orders test = new Orders();
         mainTable = new JTable(mainTableModel);
-        mainTable.setEnabled(false);
+        mainTable.setDefaultEditor(Object.class, null);
+        mainTable.getTableHeader().setReorderingAllowed(false);
         // Add action listener to JTable
         mainTable.getSelectionModel().addListSelectionListener((e) -> {
             //if the row is bigger than -1 than we need to enable the buttons
@@ -87,7 +87,6 @@ public class OrdersPanel
             }
         });
         mainTable.setBounds(30, 40, 200, 200);
-        initTableData(test.getSQL());
 
         sp = new JScrollPane(mainTable);
 
@@ -95,13 +94,15 @@ public class OrdersPanel
 
         add(sp, BorderLayout.CENTER);
 
-        JPanel btmSup = new JPanel();
+        JPanel btmSup = new JPanel(new GridLayout(0, 8, 2, 0));
 
         btnCreate = new JButton("Create");
-
         btnCreate.addActionListener((ActionEvent e) -> {
-            System.out.print("create order");
-            details = new OrderItemsFrame();
+            OrderItemsFrame dlgCreate = new OrderItemsFrame(true, null);
+            dlgCreate.setLocationRelativeTo(sp);
+            if (dlgCreate.display() == DialogResultType.OK) {
+                this.refreshItems();
+            }
         });
 
         btnEdit = new JButton("Edit");
@@ -113,8 +114,12 @@ public class OrdersPanel
             if (selectedRow < 0) {
                 JOptionPane.showMessageDialog(null, "Select item to edit");
             } else {
-                details = new OrderItemsFrame();
-                //TODO: enter item info of selected item
+                AnOrder anOrder = this.orders.get(selectedRow);
+                OrderItemsFrame dlgEdit = new OrderItemsFrame(false, anOrder);
+                dlgEdit.setLocationRelativeTo(sp);
+                if (dlgEdit.display() == DialogResultType.OK) {
+                    this.refreshItems();
+                }
             }
         });
 
@@ -125,8 +130,15 @@ public class OrdersPanel
             if (selectedRow < 0) {
                 JOptionPane.showMessageDialog(null, "Select item to remove");
             } else {
-                //TODO: remove item from db
-                JOptionPane.showMessageDialog(null, "Item removed");
+                AnOrder anOrder = this.orders.get(selectedRow);
+                if (this.bll.remove(anOrder.getPrimaryKey())) {
+                    this.refreshItems();
+                    JOptionPane.showMessageDialog(null,
+                            String.format("%s has been removed.", anOrder.getDescription()));
+                } else {
+                    JOptionPane.showMessageDialog(this, this.bll.getErrorMessage(),
+                            Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+                }
             }
             //TODO: surround below in a for loop
             /*
@@ -148,22 +160,38 @@ public class OrdersPanel
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
-    public static String[] getColumnNames() {
-        return TABLE_LABELS;
-    }
-
-    private void initTableData(ArrayList<AnOrder> test) {
-        System.out.println(test);
-
-        for (AnOrder e : test) {
-            Object[] data = {e.getDescription(), e.getOrderedFrom(), e.getOrderStatus(), e.getDateOrdered(), e.getDateExpected()};
-            mainTableModel.addRow(data);
-        }
-    }
-
     private void toggleDisableButton() {
         btnEdit.setEnabled(disableButtons);
         btnRemove.setEnabled(disableButtons);
+    }
+
+    private void initTableData(ArrayList<AnOrder> aList) {
+        if (this.orders != null) {
+            int counter = 0;
+            for (AnOrder anOrder : aList) {
+                Object[] data = {anOrder.getDescription(), anOrder.getOrderedFrom(), anOrder.getDateOrdered(), anOrder.getOrderStatus(), anOrder.getDateExpected()};
+                mainTableModel.addRow(data);
+                this.orders.put(counter, anOrder);
+                counter++;
+            }
+        }
+    }
+
+    private void refreshItems() {
+        //Clear the ArrayList and JTable, which should be done backwards.
+        this.orders.clear();
+        for (int i = mainTableModel.getRowCount() - 1; i >= 0; i--) {
+            mainTableModel.removeRow(i);
+        }
+
+        //Now load fresh data from database.
+        if (bll.load()) {
+            ArrayList<AnOrder> aList = bll.getList();
+            initTableData(aList);
+        } else {
+            JOptionPane.showMessageDialog(this, bll.getErrorMessage(),
+                    Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -171,6 +199,15 @@ public class OrdersPanel
      */
     public void display() {
         setVisible(true);
+    }
+
+    /**
+     * Gets the array of table column headers.
+     *
+     * @return The array of column headers.
+     */
+    public static String[] getColumnHeaders() {
+        return TABLE_LABELS.clone();
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="SubClasses">

@@ -37,6 +37,7 @@ public class LoginFrame
      */
     public LoginFrame() {
         initializeComponents();
+        this.tfUsername.requestFocusInWindow();
     }
 
     /**
@@ -49,6 +50,7 @@ public class LoginFrame
         this();
 
         this.tfUsername.setText(userName);
+        this.pfPassword.requestFocusInWindow();
     }
 
     // </editor-fold>

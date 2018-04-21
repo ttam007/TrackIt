@@ -24,17 +24,19 @@ public class OrderItemsFrame
      */
     public static final String WINDOW_NAME = "Order Details";
     private static final String[] TABLE_LABELS = {"Item Name", "Unit", "SKU", "Quantity", "Price", "Ext Price"};
-    // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Private Fields">
-    private final ArrayList<AnOrderItem> orderItems = new ArrayList<>();
-    private final AnOrder bll = new AnOrder();
+    private final boolean isCreateMode;
+    private final AnOrder anOrder;
+    private final Orders bll = new Orders();
+    private DialogResultType dialogResult = DialogResultType.NONE;
 
+// </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Private Fields">
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     private JButton btnCheckIn, btnCheckInAll, btnCreate, btnEdit, btnRemove, btnOK, btnAddItem, btnCancel;
     private JPanel pnlTop, pnlCenter, pnlBtm, pnlBtmLeft, pnlBtmRight;
-    private JLabel lblOrderNumber, lblSupplier, lblStatus, lblOrderDate, lblExpectedDate, lblBlank;
-    private JTextField tfOrderNumber, tfSupplier, tfStatus, tfOrderDate, tfExpectedDate, tfBlank;
+    private JLabel lblDescription, lblSupplier, lblStatus, lblOrderDate, lblExpectedDate, lblBlank;
+    private JTextField tfDescription, tfSupplier, tfStatus, tfOrderDate, tfExpectedDate, tfBlank;
     private JTable mainTable;
     private Date orderDate, expectedDate, sqlOrderDate, sqlExpectedDate;
 
@@ -46,11 +48,23 @@ public class OrderItemsFrame
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     /**
-     * order item window
+     * Creates an instance of this frame.
+     *
+     * @param useCreateMode True = an Order will be created; False = an existing
+     * Order will be edited.
+     * @param anOrder The Order to be edited.
      */
-    public OrderItemsFrame() {
+    public OrderItemsFrame(boolean useCreateMode, AnOrder anOrder) {
+        this.isCreateMode = useCreateMode;
+        if (this.isCreateMode) {
+            this.anOrder = new AnOrder();
+        } else if (anOrder == null) {
+            throw new IllegalArgumentException("When 'useCreateMode' = false, then a non-null anInventoryItem must be provided.");
+        } else {
+            this.anOrder = anOrder;
+        }
+
         initializeComponents();
-        getValues();
     }
 
     // </editor-fold>
@@ -109,10 +123,10 @@ public class OrderItemsFrame
         topBox = Box.createVerticalBox();
 
         topInnerBx = Box.createHorizontalBox();
-        lblOrderNumber = new JLabel("Order Number:");
-        topInnerBx.add(lblOrderNumber);
-        tfOrderNumber = new JTextField(20);
-        topInnerBx.add(tfOrderNumber);
+        lblDescription = new JLabel("Order Description:");
+        topInnerBx.add(lblDescription);
+        tfDescription = new JTextField(20);
+        topInnerBx.add(tfDescription);
 
         lblSupplier = new JLabel("Supplier:");
         topInnerBx.add(lblSupplier);
@@ -177,7 +191,7 @@ public class OrderItemsFrame
         combine.add(bottomBox);
         add(combine, BorderLayout.CENTER);
 
-        pnlBtm = new JPanel();
+        pnlBtm = new JPanel(new GridLayout(0, 8, 2, 0));
 
         btnAddItem = new JButton("Add Item");
         pnlBtm.add(btnAddItem);
@@ -231,10 +245,6 @@ public class OrderItemsFrame
         pnlBtm.add(btnOK);
         btnOK.addActionListener((ActionEvent e) -> {
             saveAction();
-            orderDate = (Date) orderDatePicker.getModel().getValue();
-            sqlOrderDate = Utilities.convertToSQLDate(orderDate);
-            expectedDate = (Date) expectedDatePicker.getModel().getValue();
-            sqlExpectedDate = Utilities.convertToSQLDate(expectedDate);
         });
 
         btnCancel = new JButton("Cancel");
@@ -254,15 +264,41 @@ public class OrderItemsFrame
      * instead.
      *
      */
+    /*private void populateComponents() {
+        this.tfDescription.setText(this.anOrder.getDescription());
+        this.tfSupplier.getEditor().setItem(this.anOrder.getOrderedFrom().getText());
+        this.OrderDatePicker = sqlOrderDate = Utilities.convertToSQLDate((Date) orderDatePicker.getModel().getValue()); 
+    }*/
+    private boolean populateObject() {
+        boolean returnValue = false;
+        //TODO:  sort this out so boolean return is used instead of try/catch block.
+        try {
+            this.anOrder.setDescription(this.tfDescription.getText());
+            this.anOrder.setOrderedFrom(Integer.parseInt(this.tfSupplier.getText()));
+            this.anOrder.setDateOrdered(Utilities.convertToSQLDate((Date) this.orderDatePicker.getModel().getValue()));
+            this.anOrder.setOrderStatus(this.tfStatus.getText());
+            this.anOrder.setDateExpected(Utilities.convertToSQLDate((Date) this.expectedDatePicker.getModel().getValue()));
+            returnValue = true;
+        } catch (java.sql.SQLException exSQL) {
+            JOptionPane.showMessageDialog(this, this.anOrder.getErrorMessage(),
+                    Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+        }
+        return returnValue;
+    }
+
     private void saveAction() {
-        JOptionPane.showMessageDialog(null, "Successfully Updated");
-        //TODO:  implement save.
-        /*if (successfullySaved) {
+        if (populateObject()) {
+            if (this.bll.save(this.anOrder)) {
+                this.dialogResult = DialogResultType.OK;
+                JOptionPane.showMessageDialog(null, "Successfully Saved.");
+                this.setVisible(false);
                 this.dispose();
             } else {
-               //TODO:  catch errors and display them.  Do not exit dialog if an error occurs.
-            }*/
-        this.dispose();
+                this.dialogResult = DialogResultType.CANCEL;
+                JOptionPane.showMessageDialog(this, this.bll.getErrorMessage(),
+                        Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 
     /**
@@ -276,21 +312,17 @@ public class OrderItemsFrame
         this.dispose();
     }
 
-    private void getValues() {
-        //TODO:  if we need this?
-        /*if (bll.load()) {
-            this.orderItems.addAll(bll.getItems());
-        }*/
-    }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
-
     /**
      * Displays the frame.
+     *
+     * @return The DialogReturnType which tells how the dialog was closed.
      */
-    public void display() {
+    public DialogResultType display() {
         System.out.println(String.format("Displaying %s...", WINDOW_NAME));
         setVisible(true);
+        return this.dialogResult;
     }
 
     // </editor-fold>
