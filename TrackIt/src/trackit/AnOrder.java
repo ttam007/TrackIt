@@ -146,7 +146,11 @@ public class AnOrder
      * @return
      */
     public java.sql.Date getDateOrdered() {
-        return (java.sql.Date) this.dateOrdered.clone();
+        if (this.dateOrdered == null) {
+            return null;
+        } else {
+            return (java.sql.Date) this.dateOrdered.clone();
+        }
     }
 
     /**
@@ -158,6 +162,21 @@ public class AnOrder
     public void setDateExpected(java.sql.Date aDateExpected)
             throws SQLException {
         this.dateExpected = HELPER.doNullCheck(SQLHelperOrder.COLUMN_DATEEXPECTED, aDateExpected);
+    }
+
+    /**
+     * This can not be null.
+     *
+     * @param aDateExpected
+     * @throws SQLException
+     */
+    public void setDateExpected(java.util.Date aDateExpected)
+            throws SQLException {
+        java.sql.Date sqlDate = null;
+        if (aDateExpected != null) {
+            sqlDate = Utilities.convertToSQLDate(aDateExpected);
+        }
+        setDateOrdered(sqlDate);
     }
 
     /**

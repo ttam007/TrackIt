@@ -3,6 +3,9 @@ package trackit;
 import java.sql.*;
 import java.text.*;
 import java.util.*;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
 
 /**
  * This is a static class that only has global constants and "fire and forget"
@@ -77,6 +80,8 @@ public class Utilities {
         sb.append(String.format("Error Code = %s\r", ex.getErrorCode()));
         return sb.toString();
     }
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Public Static Methods - Dates">
 
     /**
      * Converts from a standard java Date to a SQL Date class.
@@ -86,7 +91,11 @@ public class Utilities {
      * aDate.
      */
     public static java.sql.Date convertToSQLDate(java.util.Date aDate) {
-        return new java.sql.Date(aDate.getTime());
+        if (aDate == null) {
+            return null;
+        } else {
+            return new java.sql.Date(aDate.getTime());
+        }
     }
 
     /**
@@ -98,7 +107,11 @@ public class Utilities {
      */
     public static java.sql.Date convertToSQLDate(String aValue)
             throws ParseException {
-        return convertToSQLDate(convertToUtilDate(aValue));
+        if (aValue == null) {
+            return null;
+        } else {
+            return convertToSQLDate(convertToUtilDate(aValue));
+        }
     }
 
     /**
@@ -108,7 +121,11 @@ public class Utilities {
      * @return A SQL Date object with the same date as parameter aDate.
      */
     public static java.util.Date convertToUtilDate(java.sql.Date aDate) {
-        return new java.util.Date(aDate.getTime());
+        if (aDate == null) {
+            return null;
+        } else {
+            return new java.util.Date(aDate.getTime());
+        }
     }
 
     /**
@@ -120,7 +137,11 @@ public class Utilities {
      */
     public static java.util.Date convertToUtilDate(String aValue)
             throws ParseException {
-        return getDateFormatter().parse(aValue);
+        if (aValue == null) {
+            return null;
+        } else {
+            return getDateFormatter().parse(aValue);
+        }
     }
 
     /**
@@ -139,11 +160,58 @@ public class Utilities {
      * instance.
      *
      * @param aDate An instance of the Date class with a specific date.
-     * @return A Calendar instance set to the specified date.
+     * @return A Calendar instance set to the specified date; however, if aDate
+     * parameter is null, then null is returned.
      */
     public static Calendar getCalendarWithDate(java.util.Date aDate) {
-        Calendar aCalendar = new GregorianCalendar();
-        aCalendar.setTime(aDate);
+        Calendar aCalendar = null;
+        if (aDate != null) {
+            aCalendar = new GregorianCalendar();
+            aCalendar.setTime(aDate);
+        }
         return aCalendar;
+    }
+
+    /**
+     * Creates a date picker object.
+     *
+     * @return The date picker object.
+     */
+    public static JDatePickerImpl getDatePicker() {
+        Properties p = new Properties();
+        p.put("text.today", "Today");
+        p.put("text.month", "Month");
+        p.put("text.year", "Year");
+
+        UtilDateModel expModel = new UtilDateModel();
+        expModel.setSelected(true);
+
+        JDatePanelImpl aDatePanel = new JDatePanelImpl(expModel, p);
+        return new JDatePickerImpl(aDatePanel, new DateLabelFormatter());
+    }
+
+    /**
+     * Sets the specified date in the specified date picker.
+     *
+     * @param aDatePicker The date picker to set the date in.
+     * @param aDate The date to be set in the date picker.
+     */
+    public static void setDatePickersDate(JDatePickerImpl aDatePicker, java.util.Date aDate) {
+        setDatePickersDate(aDatePicker, Utilities.convertToSQLDate(aDate));
+    }
+
+    /**
+     * Sets the specified date in the specified date picker.
+     *
+     * @param aDatePicker The date picker to set the date in.
+     * @param aDate The date to be set in the date picker.
+     */
+    public static void setDatePickersDate(JDatePickerImpl aDatePicker, java.sql.Date aDate) {
+        if (aDate == null) {
+            aDatePicker.getModel().setValue(null);
+        } else {
+            Calendar aCalendar = Utilities.getCalendarWithDate(aDate);
+            aDatePicker.getModel().setDate(aCalendar.get(Calendar.YEAR), aCalendar.get(Calendar.MONTH), aCalendar.get(Calendar.DAY_OF_MONTH));
+        }
     }
 }
