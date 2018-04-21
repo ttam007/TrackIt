@@ -10,9 +10,10 @@ import trackit.UI.SuppliersPanel;
  *
  * @author SLunsford
  */
-public class SuppliersTableModel extends AbstractTableModel {
+public class SuppliersTableModel
+        extends AbstractTableModel {
 
-    SQLHelperSupplier helper = new SQLHelperSupplier();
+    private final SQLHelperSupplier helper = new SQLHelperSupplier();
     private final String[] columnNames = SuppliersPanel.TABLE_LABELS;
     ArrayList<ASupplier> suppliers;
     Object[] allSuppliers = getSQL().toArray();

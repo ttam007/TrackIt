@@ -23,8 +23,8 @@ public class SuppliersPanel
     public static final String[] TABLE_LABELS = {"Supplier", "Web Address"};
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
-    private HashMap<Integer, ASupplier> suppliers = new HashMap<>();
-    Suppliers bll = new Suppliers();
+    private final HashMap<Integer, ASupplier> suppliers = new HashMap<>();
+    private final Suppliers bll = new Suppliers();
     /**
      * Use this variable to toggle edit and remove buttons on and off.
      */

@@ -21,44 +21,43 @@ public enum ItemStatusType {
      */
     DO_NOT_ORDER(2);
     // </editor-fold>
-
+    // <editor-fold defaultstate="collapsed" desc="Constants">
+    public static final String[] STATUS_TEXT = new String[]{
+        "Available", "Discontinued", "Do Not Order"};
+    // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Fields">
     private final int value;
-    private static final String[] STATUS_TEXT;
-    // </editor-fold>
 
+    // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     private ItemStatusType(int value) {
         this.value = value;
     }
-    // </editor-fold>
 
+    // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
     /**
+     * Gets the Integer equivalent of the enumerated value.
      *
-     * @return
+     * @return The Integer equivalent of the enumerated value.
      */
     public int getValue() {
         return this.value;
     }
 
     /**
+     * Gets the String equivalent of the enumerated value.
      *
-     * @return
+     * @return The String equivalent of the enumerated value.
      */
     public String getText() {
         return STATUS_TEXT[this.value];
     }
 
-    static {
-        //TODO:  get values from database.
-        STATUS_TEXT = new String[]{"Available", "Discontinued", "Do Not Order"};
-    }
-
     /**
-     * Gets the enumerated value from its string equivalent.
+     * Gets the enumerated value from its String equivalent.
      *
-     * @param aValue The string equivalent of the enumerated value.
+     * @param aValue The String equivalent of the enumerated value.
      * @return The enumerated value.
      */
     public static ItemStatusType getType(String aValue) {

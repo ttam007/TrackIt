@@ -20,11 +20,11 @@ public class InventoryItemsPanel
      * The name of the panel.
      */
     public static final String TAB_NAME = "Inventory";
-    private static final String[] TABLE_LABELS = new String[]{"Item Name", "Qty", "Unit", "SKU", "Expiration", "Status"};
+    public static final String[] TABLE_LABELS = new String[]{"Item Name", "Qty", "Unit", "SKU", "Expiration", "Status"};
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
     private final HashMap<Integer, AnInventoryItem> inventoryItems = new HashMap<>();
-    Inventory bll = new Inventory();
+    private final Inventory bll = new Inventory();
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     private JTable mainTable;
@@ -170,8 +170,6 @@ public class InventoryItemsPanel
             }
         });
         mainTable.setBounds(30, 40, 200, 200);
-
-        
 
         setButtons();
         sp = new JScrollPane(mainTable);

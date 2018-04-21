@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package trackit;
 
 import java.sql.SQLException;
@@ -15,10 +10,11 @@ import trackit.UI.OrdersPanel;
  *
  * @author SLunsford
  */
-public class OrdersTableModel extends AbstractTableModel {
+public class OrdersTableModel
+        extends AbstractTableModel {
 
-    SQLHelperOrder helper = new SQLHelperOrder();
-    private final String[] columnNames = OrdersPanel.getColumnNames();
+    private final SQLHelperOrder helper = new SQLHelperOrder();
+    private final String[] columnNames = OrdersPanel.TABLE_LABELS;
     ArrayList<AnOrder> orders;
     Object[] allOrders = getSQL().toArray();
 
