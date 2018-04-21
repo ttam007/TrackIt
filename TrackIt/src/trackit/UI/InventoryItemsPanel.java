@@ -23,7 +23,7 @@ public class InventoryItemsPanel
     private static final String[] TABLE_LABELS = new String[]{"Item Name", "Qty", "Unit", "SKU", "Expiration", "Status"};
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
-    private HashMap<Integer, AnInventoryItem> inventoryItems = new HashMap<>();
+    private final HashMap<Integer, AnInventoryItem> inventoryItems = new HashMap<>();
     Inventory bll = new Inventory();
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">

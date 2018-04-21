@@ -128,6 +128,21 @@ public class AnOrder
     /**
      * This can not be null.
      *
+     * @param aDateOrdered
+     * @throws SQLException
+     */
+    public void setDateOrdered(java.util.Date aDateOrdered)
+            throws SQLException {
+        java.sql.Date sqlDate = null;
+        if (aDateOrdered != null) {
+            sqlDate = Utilities.convertToSQLDate(aDateOrdered);
+        }
+        setDateOrdered(sqlDate);
+    }
+
+    /**
+     * This can not be null.
+     *
      * @return
      */
     public java.sql.Date getDateOrdered() {

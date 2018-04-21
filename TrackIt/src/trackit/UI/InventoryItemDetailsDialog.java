@@ -2,12 +2,9 @@ package trackit.UI;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Date;
-import java.util.Properties;
+import java.util.*;
 import javax.swing.*;
-import org.jdatepicker.impl.JDatePanelImpl;
-import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.UtilDateModel;
+import org.jdatepicker.impl.*;
 import trackit.*;
 
 /**
@@ -235,6 +232,9 @@ public class InventoryItemDetailsDialog
         this.tfSizeUnit.setText(this.anInventoryItem.getSizeUnit());
         this.tfQuantity.setText(this.anInventoryItem.getQuantity().toString());
         this.statusField.getEditor().setItem(this.anInventoryItem.getItemStatus().getText());
+        Calendar aCalendar = Utilities.getCalendarWithDate(this.anInventoryItem.getExpirationDate());
+        this.expDatePicker.getModel().setDate(aCalendar.get(Calendar.YEAR),
+                aCalendar.get(Calendar.MONTH), aCalendar.get(Calendar.DAY_OF_MONTH));
     }
 
     /**
@@ -250,7 +250,7 @@ public class InventoryItemDetailsDialog
             this.anInventoryItem.setSizeUnit(this.tfSizeUnit.getText());
             this.anInventoryItem.setItemStatus(this.statusField.getSelectedItem().toString());
             java.util.Date expDate = (Date) expDatePicker.getModel().getValue();
-            this.anInventoryItem.setExpirationDate(Utilities.convertToSQLDate(expDate));
+            this.anInventoryItem.setExpirationDate(expDate);
             returnValue = true;
         } catch (java.sql.SQLException exSQL) {
             JOptionPane.showMessageDialog(this, this.anInventoryItem.getErrorMessage(),
