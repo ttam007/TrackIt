@@ -232,9 +232,9 @@ public class InventoryItemDetailsDialog
         this.tfSizeUnit.setText(this.anInventoryItem.getSizeUnit());
         this.tfQuantity.setText(this.anInventoryItem.getQuantity().toString());
         this.statusField.getEditor().setItem(this.anInventoryItem.getItemStatus().getText());
-        Calendar aCalendar = Utilities.getCalendarWithDate(this.anInventoryItem.getExpirationDate());
-        this.expDatePicker.getModel().setDate(aCalendar.get(Calendar.YEAR),
-                aCalendar.get(Calendar.MONTH), aCalendar.get(Calendar.DAY_OF_MONTH));
+        //Calendar aCalendar = Utilities.getCalendarWithDate(this.anInventoryItem.getExpirationDate());
+        //this.expDatePicker.getModel().setDate(aCalendar.get(Calendar.YEAR),
+        //        aCalendar.get(Calendar.MONTH), aCalendar.get(Calendar.DAY_OF_MONTH));
     }
 
     /**
