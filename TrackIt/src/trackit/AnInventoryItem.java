@@ -120,7 +120,7 @@ public class AnInventoryItem
     @Override
     protected boolean isAlreadyInDatabase() {
         boolean returnValue = false;
-        
+
         try {
             if (this.primaryKey == null) {
                 returnValue = false;
@@ -130,7 +130,7 @@ public class AnInventoryItem
         } catch (SQLException exSQL) {
         } catch (Exception ex) {
         }
-        
+
         return returnValue;
     }
 
@@ -211,7 +211,7 @@ public class AnInventoryItem
      */
     public ArrayList<AnInventoryItem> getExpiredItems() {
         ArrayList<AnInventoryItem> returnList = new ArrayList<>();
-        
+
         try {
             java.util.Date aUtilDate = Calendar.getInstance().getTime();
             java.sql.Date aSQLDate = Utilities.convertToSQLDate(aUtilDate);
@@ -226,10 +226,10 @@ public class AnInventoryItem
         } catch (Exception ex) {
             //TODO: handle this
         }
-        
+
         return returnList;
     }
-    
+
     @Override
     public void changeQuantity(int amountToChangeBy)
             throws NegativeAmountException {

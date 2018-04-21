@@ -69,7 +69,7 @@ public class CheckInOutDialog
         gbc.insets = new Insets(2, 2, 5, 0);
         gbc.anchor = GridBagConstraints.LINE_START;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        
+
         ButtonGroup checkGroup = new ButtonGroup();
         inButton = new JRadioButton("Check In");
         outButton = new JRadioButton("Check Out");
@@ -82,7 +82,7 @@ public class CheckInOutDialog
         gbc.gridx = 2;
         gbc.gridy = 0;
         add(outButton, gbc);
-        
+
         // Supplier Name Label 
         itemNameLabel = new JLabel("Item Name: ");
         gbc.gridx = 0;
@@ -102,14 +102,14 @@ public class CheckInOutDialog
         gbc.gridy = 2;
         gbc.gridwidth = 1;
         add(qtyLabel, gbc);
-        
+
         //Website Address Text Field
         qtyTextField = new JTextField(7);
         gbc.gridx = 1;
         gbc.gridy = 2;
         gbc.gridwidth = 5;
         add(qtyTextField, gbc);
-        
+
         // Init Ok Button
         btnOK = new JButton("Ok");
         gbc.gridx = 3;

@@ -103,7 +103,7 @@ public class SupplierDetailsDialog
         setLayout(new GridBagLayout());
         gbc.insets = new Insets(2, 2, 5, 0);
         gbc.anchor = GridBagConstraints.LINE_START;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        //gbc.fill = GridBagConstraints.HORIZONTAL;
 
         // Supplier Name Label 
         lblName = new JLabel("Supplier Name: ");
@@ -133,7 +133,7 @@ public class SupplierDetailsDialog
         add(tfAddress, gbc);
 
         // Init Ok Button
-        btnOK = new JButton("Ok");
+        btnOK = new JButton("OK");
         gbc.gridx = 3;
         gbc.gridy = 4;
         gbc.gridwidth = 1;

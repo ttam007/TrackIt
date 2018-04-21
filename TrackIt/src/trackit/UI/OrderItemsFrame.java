@@ -121,44 +121,105 @@ public class OrderItemsFrame
         Box topBox, topInnerBx, btmInnerBx, middleBox, bottomBox, combine;
 
         topBox = Box.createVerticalBox();
-
-        topInnerBx = Box.createHorizontalBox();
+        JPanel pnlTopBpx = new JPanel();
+        pnlTopBpx.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(1,2,5,0);
+        gbc.anchor = GridBagConstraints.LINE_START;
+        //gbc.fill = GridBagConstraints.HORIZONTAL;
+        
+        //topInnerBx = Box.createHorizontalBox();
         lblDescription = new JLabel("Order Description:");
-        topInnerBx.add(lblDescription);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        pnlTopBpx.add(lblDescription, gbc);
+        //topInnerBx.add(lblDescription);
         tfDescription = new JTextField(20);
-        topInnerBx.add(tfDescription);
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        pnlTopBpx.add(tfDescription, gbc);
+        //topInnerBx.add(tfDescription);
 
         lblSupplier = new JLabel("Supplier:");
-        topInnerBx.add(lblSupplier);
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        pnlTopBpx.add(lblSupplier, gbc);
+        //topInnerBx.add(lblSupplier);
         tfSupplier = new JTextField(20);
-        topInnerBx.add(tfSupplier);
+        gbc.gridx = 3;
+        gbc.gridy = 0;
+        pnlTopBpx.add(tfSupplier, gbc);
+        //topInnerBx.add(tfSupplier);
 
-        lblOrderDate = new JLabel("      Order Date:");
-        topInnerBx.add(lblOrderDate);
+        lblOrderDate = new JLabel("Order Date:");
+        gbc.gridx = 4;
+        gbc.gridy = 0;
+        pnlTopBpx.add(lblOrderDate, gbc);
+        //topInnerBx.add(lblOrderDate);
         orderDatePicker = new JDatePickerImpl(orderDatePanel, new DateLabelFormatter());
-        topInnerBx.add(orderDatePicker);
+        gbc.gridx = 5;
+        gbc.gridy = 0;
+        pnlTopBpx.add(orderDatePicker, gbc);
+        //topInnerBx.add(orderDatePicker);
 
-        btmInnerBx = Box.createHorizontalBox();
-        lblStatus = new JLabel("            Status:");
-        btmInnerBx.add(lblStatus);
+        //btmInnerBx = Box.createHorizontalBox();
+        lblStatus = new JLabel("Status:");
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        pnlTopBpx.add(lblStatus, gbc);
+        //btmInnerBx.add(lblStatus);
         tfStatus = new JTextField(20);
-        btmInnerBx.add(tfStatus);
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        pnlTopBpx.add(tfStatus, gbc);
+        //btmInnerBx.add(tfStatus);
 
-        lblStatus = new JLabel("                          ");
-        btmInnerBx.add(lblStatus);
+        //lblStatus = new JLabel("                          ");
+        //btmInnerBx.add(lblStatus);
 
-        lblExpectedDate = new JLabel("                                                     Expected Date:");
-        btmInnerBx.add(lblExpectedDate);
+        lblExpectedDate = new JLabel("Expected Date:");
+        gbc.gridx = 4;
+        gbc.gridy = 1;
+        pnlTopBpx.add(lblExpectedDate, gbc);
+        //btmInnerBx.add(lblExpectedDate);
         expectedDatePicker = new JDatePickerImpl(expectedDatePanel, new DateLabelFormatter());
-        btmInnerBx.add(expectedDatePicker);
+        gbc.gridx = 5;
+        gbc.gridy = 1;
+        pnlTopBpx.add(expectedDatePicker, gbc);
+        //btmInnerBx.add(expectedDatePicker);
 
-        topBox.add(topInnerBx);
-        topBox.add(btmInnerBx);
+        //topBox.add(topInnerBx);
+        //topBox.add(btmInnerBx);
+        
+        //middleBox = Box.createHorizontalBox();
+        //JPanel pnlMiddleBox = new JPanel(new GridLayout(0, 8, 2, 0));
+        btnCheckIn = new JButton("Check In");
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        pnlTopBpx.add(btnCheckIn, gbc);
+        //middleBox.add(btnCheckIn);
+        btnCheckIn.addActionListener((ActionEvent e) -> {
+            //TODO:  Call into BLL for check-in.
+            JOptionPane.showMessageDialog(this, "Item Checked In");
+        });
 
+        btnCheckInAll = new JButton("Check In All");
+        gbc.gridx = 1;
+        gbc.gridy = GridBagConstraints.RELATIVE;
+        pnlTopBpx.add(btnCheckInAll, gbc);
+        //middleBox.add(btnCheckInAll);
+        btnCheckInAll.addActionListener((ActionEvent e) -> {
+            //TODO:  Call into BLL for check-in.
+            JOptionPane.showMessageDialog(this, "All Items Checked In");
+        });
+
+        //btnCheckInAll.setPreferredSize(btnCheckIn.getPreferredSize());
+        
+        topBox.add(pnlTopBpx);
         add(topBox, BorderLayout.NORTH);
 
-        middleBox = Box.createHorizontalBox();
-
+        /*middleBox = Box.createHorizontalBox();
+        JPanel pnlMiddleBox = new JPanel(new GridLayout(0, 8, 2, 0));
         btnCheckIn = new JButton("Check In");
         middleBox.add(btnCheckIn);
         btnCheckIn.addActionListener((ActionEvent e) -> {
@@ -173,6 +234,7 @@ public class OrderItemsFrame
             JOptionPane.showMessageDialog(this, "All Items Checked In");
         });
 
+        btnCheckInAll.setPreferredSize(btnCheckIn.getPreferredSize());*/
         bottomBox = Box.createHorizontalBox();
 
         //add data to suppliers arraylist 
@@ -187,7 +249,7 @@ public class OrderItemsFrame
         bottomBox.add(scrollPane);
 
         combine = Box.createVerticalBox();
-        combine.add(middleBox);
+        //combine.add(middleBox);
         combine.add(bottomBox);
         add(combine, BorderLayout.CENTER);
 

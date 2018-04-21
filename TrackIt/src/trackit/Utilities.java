@@ -143,9 +143,7 @@ public class Utilities {
      */
     public static Calendar getCalendarWithDate(java.util.Date aDate) {
         Calendar aCalendar = new GregorianCalendar();
-        if (aDate != null) {
-            aCalendar.setTime(aDate);
-        }
+        aCalendar.setTime(aDate);
         return aCalendar;
     }
 }
