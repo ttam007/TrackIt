@@ -31,8 +31,6 @@ public class OrderItemsFrame
 
 // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Fields">
-
-
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     private JButton btnCheckIn, btnCheckInAll, btnCreate, btnEdit, btnRemove, btnOK, btnAddItem, btnCancel;
@@ -41,16 +39,20 @@ public class OrderItemsFrame
     private JTextField tfDescription, tfSupplier, tfStatus, tfOrderDate, tfExpectedDate, tfBlank;
     private JTable mainTable;
     private Date orderDate, expectedDate, sqlOrderDate, sqlExpectedDate;
-    
+
     UtilDateModel orderModel = new UtilDateModel();
     UtilDateModel expectedModel = new UtilDateModel();
     JDatePanelImpl orderDatePanel, expectedDatePanel;
     JDatePickerImpl orderDatePicker, expectedDatePicker;
-    
+
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     /**
-     * order item window
+     * Creates an instance of this frame.
+     *
+     * @param useCreateMode True = an Order will be created; False = an existing
+     * Order will be edited.
+     * @param anOrder The Order to be edited.
      */
     public OrderItemsFrame(boolean useCreateMode, AnOrder anOrder) {
         this.isCreateMode = useCreateMode;
@@ -64,8 +66,6 @@ public class OrderItemsFrame
 
         initializeComponents();
     }
-    
-
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
@@ -112,9 +112,9 @@ public class OrderItemsFrame
         p.put("text.today", "Today");
         p.put("text.month", "Month");
         p.put("text.year", "Year");
-        orderDatePanel = new JDatePanelImpl(orderModel,p);
-        expectedDatePanel = new JDatePanelImpl(expectedModel,p);
-         
+        orderDatePanel = new JDatePanelImpl(orderModel, p);
+        expectedDatePanel = new JDatePanelImpl(expectedModel, p);
+
         //Add all components here and set properties.
         setLayout(new BorderLayout());
 
@@ -151,7 +151,6 @@ public class OrderItemsFrame
         btmInnerBx.add(lblExpectedDate);
         expectedDatePicker = new JDatePickerImpl(expectedDatePanel, new DateLabelFormatter());
         btmInnerBx.add(expectedDatePicker);
-        
 
         topBox.add(topInnerBx);
         topBox.add(btmInnerBx);
@@ -245,7 +244,7 @@ public class OrderItemsFrame
         btnOK = new JButton("OK");
         pnlBtm.add(btnOK);
         btnOK.addActionListener((ActionEvent e) -> {
-            saveAction();           
+            saveAction();
         });
 
         btnCancel = new JButton("Cancel");
@@ -270,7 +269,6 @@ public class OrderItemsFrame
         this.tfSupplier.getEditor().setItem(this.anOrder.getOrderedFrom().getText());
         this.OrderDatePicker = sqlOrderDate = Utilities.convertToSQLDate((Date) orderDatePicker.getModel().getValue()); 
     }*/
-    
     private boolean populateObject() {
         boolean returnValue = false;
         //TODO:  sort this out so boolean return is used instead of try/catch block.
@@ -287,7 +285,7 @@ public class OrderItemsFrame
         }
         return returnValue;
     }
-    
+
     private void saveAction() {
         if (populateObject()) {
             if (this.bll.save(this.anOrder)) {
@@ -316,9 +314,10 @@ public class OrderItemsFrame
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
-
     /**
      * Displays the frame.
+     *
+     * @return The DialogReturnType which tells how the dialog was closed.
      */
     public DialogResultType display() {
         System.out.println(String.format("Displaying %s...", WINDOW_NAME));

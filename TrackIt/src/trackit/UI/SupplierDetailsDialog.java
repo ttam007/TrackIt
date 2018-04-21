@@ -3,7 +3,6 @@ package trackit.UI;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import org.jdatepicker.impl.JDatePickerImpl;
 import trackit.*;
 
 /**
@@ -105,7 +104,7 @@ public class SupplierDetailsDialog
         gbc.insets = new Insets(2, 2, 5, 0);
         gbc.anchor = GridBagConstraints.LINE_START;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        
+
         // Supplier Name Label 
         lblName = new JLabel("Supplier Name: ");
         gbc.gridx = 0;
@@ -125,15 +124,14 @@ public class SupplierDetailsDialog
         gbc.gridy = 1;
         gbc.gridwidth = 1;
         add(lblAddress, gbc);
-        
+
         //Website Address Text Field
         tfAddress = new JTextField(25);
         gbc.gridx = 1;
         gbc.gridy = 1;
         gbc.gridwidth = 5;
         add(tfAddress, gbc);
-        
-        
+
         // Init Ok Button
         btnOK = new JButton("Ok");
         gbc.gridx = 3;

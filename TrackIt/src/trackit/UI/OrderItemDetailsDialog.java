@@ -3,7 +3,6 @@ package trackit.UI;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import org.jdatepicker.impl.JDatePickerImpl;
 import trackit.*;
 
 /**
@@ -33,7 +32,7 @@ public class OrderItemDetailsDialog
     JTextField tfName, tfQuantity, tfPrice, tfStatus, tfExtPrice;
     JButton btnOK, btnCancel;
     GridBagConstraints gbc;
-            
+
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     /**
@@ -88,7 +87,6 @@ public class OrderItemDetailsDialog
      */
     private void initializeComponents() {
 
-
         //TODO:  add additional components here.
         int frameWidth = 500; //originally 660
         int frameHeight = 250; //originally 150
@@ -127,7 +125,7 @@ public class OrderItemDetailsDialog
         gbc.gridy = 1;
         gbc.gridwidth = 1;
         add(lblQuantity, gbc);
-        
+
         tfQuantity = new JTextField(7);
         tfQuantity.setEditable(this.isCreateMode);
         gbc.gridx = 1;
@@ -141,21 +139,21 @@ public class OrderItemDetailsDialog
         gbc.gridy = 2;
         gbc.gridwidth = 1;
         add(lblPrice, gbc);
-        
+
         // Field
         tfPrice = new JTextField(7);
         gbc.gridx = 1;
         gbc.gridy = 2;
         gbc.gridwidth = 3;
         add(tfPrice, gbc);
-        
+
         // Init Exp Date Label and Field
         lblStatus = new JLabel("Status: ");
         gbc.gridx = 4;
         gbc.gridy = 2;
         gbc.gridwidth = 1;
         add(lblStatus, gbc);
-        
+
         tfStatus = new JTextField(10);
         gbc.gridx = 5;
         gbc.gridy = 2;

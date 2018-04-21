@@ -3,7 +3,6 @@ package trackit;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
-import trackit.DAL.SQLHelperSupplier;
 import trackit.UI.SuppliersPanel;
 
 /**
@@ -13,10 +12,25 @@ import trackit.UI.SuppliersPanel;
 public class SuppliersTableModel
         extends AbstractTableModel {
 
-    private final SQLHelperSupplier helper = new SQLHelperSupplier();
-    private final String[] columnNames = SuppliersPanel.TABLE_LABELS;
-    ArrayList<ASupplier> suppliers;
-    Object[] allSuppliers = getSQL().toArray();
+    private final String[] columnNames = SuppliersPanel.getColumnHeaders();
+    private Object[] allSuppliers;
+
+    /**
+     * Default Constructor.
+     */
+    public SuppliersTableModel() {
+        initializeVariables();
+
+        /* Use this code if allSuppliers can be final.
+        try {
+            ArrayList<ASupplier> suppliers = ASupplier.loadAll();
+            allSuppliers = suppliers.toArray();
+        } catch (SQLException exSQL) {
+            System.out.println("SQL error = " + exSQL.getLocalizedMessage());
+        } catch (Exception ex) {
+            System.out.println("Generic error = " + ex.getLocalizedMessage());
+        }*/
+    }
 
     @Override
     public int getRowCount() {
@@ -38,16 +52,14 @@ public class SuppliersTableModel
         return allSuppliers[i];
     }
 
-    ArrayList<ASupplier> getSQL() {
+    private void initializeVariables() {
         try {
-            System.out.println("\nSelectAll");
-            suppliers = helper.selectAll();
+            ArrayList<ASupplier> suppliers = ASupplier.loadAll();
+            allSuppliers = suppliers.toArray();
         } catch (SQLException exSQL) {
             System.out.println("SQL error = " + exSQL.getLocalizedMessage());
         } catch (Exception ex) {
             System.out.println("Generic error = " + ex.getLocalizedMessage());
         }
-        return suppliers;
     }
-
 }

@@ -20,7 +20,7 @@ public class OrdersPanel
      * The name of the panel.
      */
     public static final String TAB_NAME = "Orders";
-    public static final String[] TABLE_LABELS = {"Description", "Supplier", "Status", "Order Date", "Expected Date"};
+    private static final String[] TABLE_LABELS = {"Description", "Supplier", "Status", "Order Date", "Expected Date"};
 
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
@@ -199,6 +199,15 @@ public class OrdersPanel
      */
     public void display() {
         setVisible(true);
+    }
+
+    /**
+     * Gets the array of table column headers.
+     *
+     * @return The array of column headers.
+     */
+    public static String[] getColumnHeaders() {
+        return TABLE_LABELS.clone();
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="SubClasses">

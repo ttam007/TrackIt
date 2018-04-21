@@ -33,6 +33,9 @@ public class Utilities {
      */
     public static final String SQL_DATE_FORMAT = "yyyy-MM-dd";
 
+    /**
+     * Default caption for error dialog boxes.
+     */
     public static final String ERROR_MSG_CAPTION = "Error";
 
     // </editor-fold>

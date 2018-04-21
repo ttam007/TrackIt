@@ -7,8 +7,17 @@ package trackit.UI;
  */
 public enum DialogResultType {
     // <editor-fold defaultstate="expanded" desc="Enumeration">
+    /**
+     *
+     */
     NONE,
+    /**
+     *
+     */
     CANCEL,
+    /**
+     *
+     */
     OK;
     // </editor-fold>
 }

@@ -22,8 +22,10 @@ public enum ItemStatusType {
     DO_NOT_ORDER(2);
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constants">
-    public static final String[] STATUS_TEXT = new String[]{
-        "Available", "Discontinued", "Do Not Order"};
+    private static final String[] STATUS_TEXT = new String[]{
+        "Available",
+        "Discontinued",
+        "Do Not Order"};
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Fields">
     private final int value;
@@ -52,6 +54,15 @@ public enum ItemStatusType {
      */
     public String getText() {
         return STATUS_TEXT[this.value];
+    }
+
+    /**
+     * Gets the array of all String equivalent values for this enumeration.
+     *
+     * @return
+     */
+    public static String[] getTextForAll() {
+        return STATUS_TEXT.clone();
     }
 
     /**

@@ -20,7 +20,7 @@ public class InventoryItemsPanel
      * The name of the panel.
      */
     public static final String TAB_NAME = "Inventory";
-    public static final String[] TABLE_LABELS = new String[]{"Item Name", "Qty", "Unit", "SKU", "Expiration", "Status"};
+    private static final String[] TABLE_LABELS = new String[]{"Item Name", "Qty", "Unit", "SKU", "Expiration", "Status"};
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
     private final HashMap<Integer, AnInventoryItem> inventoryItems = new HashMap<>();
@@ -212,5 +212,13 @@ public class InventoryItemsPanel
         setVisible(true);
     }
 
+    /**
+     * Gets the array of table column headers.
+     *
+     * @return The array of column headers.
+     */
+    public static String[] getColumnHeaders() {
+        return TABLE_LABELS.clone();
+    }
     // </editor-fold>
 }
