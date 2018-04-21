@@ -176,7 +176,7 @@ public class OrderItemDetailsDialog
 
         // Init Ok Button
         btnOK = new JButton("Ok");
-        gbc.gridx = 5;
+        gbc.gridx = 3;
         gbc.gridy = 4;
         gbc.gridwidth = 1;
         add(btnOK, gbc);
@@ -186,7 +186,7 @@ public class OrderItemDetailsDialog
 
         //Cancel
         btnCancel = new JButton("Cancel");
-        gbc.gridx = 6;
+        gbc.gridx = 4;
         gbc.gridy = 4;
         gbc.gridwidth = 1;
         add(btnCancel, gbc);
