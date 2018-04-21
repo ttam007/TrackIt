@@ -2,7 +2,6 @@ SET @inventoryItemId = null;
 CALL sp_inventoryItems_Insert (@inventoryItemId, 5, '2018-04-16', 'Widget', '12345-ABC', '16 ounce', 'Available');
 CALL sp_inventoryItems_Insert (@inventoryItemId, 10, '2018-04-16', 'Widget', '12345-ABC', '16 ounce', 'Available');
 CALL sp_inventoryItems_Insert (@inventoryItemId, 10, '2018-04-16', 'Widget', '12345-ABC', '16 ounce', 'Available');
-CALL sp_inventoryItems_Insert (@inventoryItemId, 11, '2018-04-16', 'Widget', '12345-ABC', '16 ounce', 'Junk'); /*negative testing*/
 
 SET @supplierId = null;
 CALL sp_Suppliers_Insert (@supplierId, 'Bonds Busing', 'www.bbus.com');
@@ -26,4 +25,4 @@ CALL sp_OrderItems_Insert (@orderItemId, 1, 1, 5, 15.50);
 CALL sp_OrderItems_Insert (@orderItemId, 1, 1, 1, 10);
 CALL sp_OrderItems_Insert (@orderItemId, 1, 2, 2, 10);
 CALL sp_OrderItems_Insert (@orderItemId, 3, 3, 3, 10);
-CALL sp_OrderItems_Insert (@orderItemId, 3, 4, 4, 10);
+CALL sp_OrderItems_Insert (@orderItemId, 3, 1, 4, 10);
