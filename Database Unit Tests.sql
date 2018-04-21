@@ -33,8 +33,8 @@ CALL sp_Suppliers_Delete (4);
 CALL sp_Suppliers_Select (4);
 CALL sp_Suppliers_SelectAll();
 
-CALL sp_Suppliers_Insert ('Bonds Busing2', 'www.bbus.com', @supplierId);
-CALL sp_Suppliers_Insert ('Bonds Busing3', 'www.bbus.com', @supplierId);
+CALL sp_Suppliers_Insert (@supplierId, 'Bonds Busing2', 'www.bbus.com');
+CALL sp_Suppliers_Insert (@supplierId, 'Etsy', 'www.etsy.com');
 CALL sp_Suppliers_SelectAll();
 
 CALL sp_Suppliers_Delete (null);
