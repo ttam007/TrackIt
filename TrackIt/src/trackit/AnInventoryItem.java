@@ -20,7 +20,7 @@ public class AnInventoryItem
     private java.sql.Date expirationDate;
 
     // </editor-fold>
-    // <editor-fold defaultstate="expanded" desc="Constructors">
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
     /**
      * Default constructor.
      */
@@ -29,7 +29,7 @@ public class AnInventoryItem
     }
 
     // </editor-fold>
-    // <editor-fold defaultstate="expanded" desc="Setters & Getters">
+    // <editor-fold defaultstate="collapsed" desc="Setters & Getters">
     @Override
     public void setPrimaryKey(Integer aPrimaryKey)
             throws SQLException {
@@ -90,6 +90,21 @@ public class AnInventoryItem
     /**
      * This can be null.
      *
+     * @param anExpirationDate
+     * @throws SQLException
+     */
+    public void setExpirationDate(java.util.Date anExpirationDate)
+            throws SQLException {
+        java.sql.Date sqlDate = null;
+        if (anExpirationDate != null) {
+            sqlDate = Utilities.convertToSQLDate(anExpirationDate);
+        }
+        setExpirationDate(sqlDate);
+    }
+
+    /**
+     * This can be null.
+     *
      * @return
      */
     public java.sql.Date getExpirationDate() {
@@ -99,9 +114,28 @@ public class AnInventoryItem
             return (java.sql.Date) this.expirationDate.clone();
         }
     }
-    // </editor-fold>
-    // <editor-fold defaultstate="expanded" desc="Public Static Methods">
 
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Protected Methods">
+    @Override
+    protected boolean isAlreadyInDatabase() {
+        boolean returnValue = false;
+
+        try {
+            if (this.primaryKey == null) {
+                returnValue = false;
+            } else {
+                returnValue = (AnInventoryItem.load(this.getPrimaryKey()) != null);
+            }
+        } catch (SQLException exSQL) {
+        } catch (Exception ex) {
+        }
+
+        return returnValue;
+    }
+
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Public Static Methods">
     /**
      * Gets all the objects from the database.
      *
@@ -168,7 +202,7 @@ public class AnInventoryItem
         HELPER.delete(primaryKey);
     }
     // </editor-fold>
-    // <editor-fold defaultstate="expanded" desc="Public Methods">
+    // <editor-fold defaultstate="collapsed" desc="Public Methods">
 
     /**
      * Gets a list of all expired items.

@@ -1,26 +1,36 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package trackit;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
-import trackit.DAL.SQLHelperSupplier;
 import trackit.UI.SuppliersPanel;
 
 /**
  *
  * @author SLunsford
  */
-public class SuppliersTableModel extends AbstractTableModel {
+public class SuppliersTableModel
+        extends AbstractTableModel {
 
-    SQLHelperSupplier helper = new SQLHelperSupplier();
-    private final String[] columnNames = SuppliersPanel.getColumnNames();
-    ArrayList<ASupplier> suppliers;
-    Object[] allSuppliers = getSQL().toArray();
+    private final String[] columnNames = SuppliersPanel.getColumnHeaders();
+    private Object[] allSuppliers;
+
+    /**
+     * Default Constructor.
+     */
+    public SuppliersTableModel() {
+        initializeVariables();
+
+        /* Use this code if allSuppliers can be final.
+        try {
+            ArrayList<ASupplier> suppliers = ASupplier.loadAll();
+            allSuppliers = suppliers.toArray();
+        } catch (SQLException exSQL) {
+            System.out.println("SQL error = " + exSQL.getLocalizedMessage());
+        } catch (Exception ex) {
+            System.out.println("Generic error = " + ex.getLocalizedMessage());
+        }*/
+    }
 
     @Override
     public int getRowCount() {
@@ -42,16 +52,14 @@ public class SuppliersTableModel extends AbstractTableModel {
         return allSuppliers[i];
     }
 
-    ArrayList<ASupplier> getSQL() {
+    private void initializeVariables() {
         try {
-            System.out.println("\nSelectAll");
-            suppliers = helper.selectAll();
+            ArrayList<ASupplier> suppliers = ASupplier.loadAll();
+            allSuppliers = suppliers.toArray();
         } catch (SQLException exSQL) {
             System.out.println("SQL error = " + exSQL.getLocalizedMessage());
         } catch (Exception ex) {
             System.out.println("Generic error = " + ex.getLocalizedMessage());
         }
-        return suppliers;
     }
-
 }

@@ -7,27 +7,26 @@ import trackit.DAL.SQLHelperOrder;
 /**
  * BLL Layer: Works with the Orders Tab.
  *
- * @author Bond, Steven
+ * @author
  */
 public class Orders
         extends GridClass<AnOrder> {
 
-    SQLHelperOrder helper = new SQLHelperOrder();
-    ArrayList<AnOrder> orders;
-
     /**
      * Pulls SQL info from database to load into JTable
+     * @return SQLHelperOrder
      */
     public ArrayList<AnOrder> getSQL() {
         try {
             System.out.println("\nSelectAll");
-            orders = helper.selectAll();
+            SQLHelperOrder helper = new SQLHelperOrder();
+            rows = helper.selectAll();
         } catch (SQLException exSQL) {
             System.out.println("SQL error = " + exSQL.getLocalizedMessage());
         } catch (Exception ex) {
             System.out.println("Generic error = " + ex.getLocalizedMessage());
         }
-        return orders;
+        return rows;
     }
 
     /**
@@ -68,6 +67,26 @@ public class Orders
             this.errorMessage = exSQL.getLocalizedMessage();
         } catch (Exception ex) {
             this.errorMessage = ex.getLocalizedMessage();
+        }
+        return returnValue;
+    }
+
+    /**
+     * Saves an object to the database.
+     *
+     * @return True = The object was successfully saved; False = There was an
+     * error.
+     */
+    @Override
+    public boolean save(AnOrder anObj) {
+        boolean returnValue = false;
+        try {
+            AnOrder.save(anObj);
+            returnValue = true;
+        } catch (java.sql.SQLException exSQL) {
+            anObj.setErrorMessage(exSQL.getLocalizedMessage());
+        } catch (Exception ex) {
+            anObj.setErrorMessage(ex.getLocalizedMessage());
         }
         return returnValue;
     }

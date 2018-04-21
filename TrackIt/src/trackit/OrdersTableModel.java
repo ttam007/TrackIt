@@ -1,26 +1,35 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package trackit;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
-import trackit.DAL.SQLHelperOrder;
 import trackit.UI.OrdersPanel;
 
 /**
  *
  * @author SLunsford
  */
-public class OrdersTableModel extends AbstractTableModel {
+public class OrdersTableModel
+        extends AbstractTableModel {
 
-    SQLHelperOrder helper = new SQLHelperOrder();
-    private final String[] columnNames = OrdersPanel.getColumnNames();
-    ArrayList<AnOrder> orders;
-    Object[] allOrders = getSQL().toArray();
+    private final String[] columnNames = OrdersPanel.getColumnHeaders();
+    private Object[] allOrders;
+
+    /**
+     * Default Constructor.
+     */
+    public OrdersTableModel() {
+        initializeVariables();
+        /* Use this code if allOrders can be final.
+        try {
+            ArrayList<AnOrder> orders = AnOrder.loadAll();
+            allOrders = orders.toArray();
+        } catch (SQLException exSQL) {
+            System.out.println("SQL error = " + exSQL.getLocalizedMessage());
+        } catch (Exception ex) {
+            System.out.println("Generic error = " + ex.getLocalizedMessage());
+        }*/
+    }
 
     @Override
     public int getRowCount() {
@@ -42,16 +51,14 @@ public class OrdersTableModel extends AbstractTableModel {
         return allOrders[i];
     }
 
-    ArrayList<AnOrder> getSQL() {
+    private void initializeVariables() {
         try {
-            System.out.println("\nSelectAll");
-            orders = helper.selectAll();
+            ArrayList<AnOrder> orders = AnOrder.loadAll();
+            allOrders = orders.toArray();
         } catch (SQLException exSQL) {
             System.out.println("SQL error = " + exSQL.getLocalizedMessage());
         } catch (Exception ex) {
             System.out.println("Generic error = " + ex.getLocalizedMessage());
         }
-        return orders;
     }
-
 }
