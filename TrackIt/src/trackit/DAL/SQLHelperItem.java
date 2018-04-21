@@ -54,10 +54,10 @@ public class SQLHelperItem {
     public String doNullCheck(String columnName, String aValue)
             throws SQLException {
         if (aValue == null
-                && (columnName.equalsIgnoreCase(COLUMN_DESCRIPTION)
-                || columnName.equalsIgnoreCase(COLUMN_SKU)
-                || columnName.equalsIgnoreCase(COLUMN_SIZEUNIT)
-                || columnName.equalsIgnoreCase(COLUMN_ITEMSTATUS))) {
+                && (columnName.equalsIgnoreCase(SQLHelperItem.COLUMN_DESCRIPTION)
+                || columnName.equalsIgnoreCase(SQLHelperItem.COLUMN_SKU)
+                || columnName.equalsIgnoreCase(SQLHelperItem.COLUMN_SIZEUNIT)
+                || columnName.equalsIgnoreCase(SQLHelperItem.COLUMN_ITEMSTATUS))) {
             throw new NonNullableValueException();
         } else {
             return aValue;

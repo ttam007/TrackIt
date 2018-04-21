@@ -1,8 +1,8 @@
 package trackit.DAL;
 
-import trackit.AnInventoryItem;
 import java.sql.*;
 import java.util.*;
+import trackit.AnInventoryItem;
 
 /**
  * DAL Layer: Converts a row in database table InventoryItems into an
@@ -20,6 +20,10 @@ public class SQLHelperInventoryItem
     /**
      *
      */
+    public static final String COLUMN_PK = "inventoryItemId";
+    /**
+     *
+     */
     public static final String COLUMN_ITEMID = "itemId";
 
     /**
@@ -34,10 +38,6 @@ public class SQLHelperInventoryItem
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
-    static {
-        COLUMN_PK = "inventoryItemId";
-    }
-
     /**
      * Default constructor.
      */
@@ -166,7 +166,7 @@ public class SQLHelperInventoryItem
     @Override
     public java.sql.Date doNullCheck(String columnName, java.sql.Date aValue)
             throws SQLException {
-        if (aValue == null && columnName.equalsIgnoreCase(COLUMN_EXPIRATIONDATE)) {
+        if (aValue == null && columnName.equalsIgnoreCase(SQLHelperInventoryItem.COLUMN_EXPIRATIONDATE)) {
             return aValue;
         } else {
             return aValue;
@@ -183,9 +183,9 @@ public class SQLHelperInventoryItem
     public Integer doNullCheck(String columnName, Integer aValue)
             throws SQLException {
         if (aValue == null
-                && (columnName.equalsIgnoreCase(COLUMN_PK)
-                || columnName.equalsIgnoreCase(COLUMN_ITEMID)
-                || columnName.equalsIgnoreCase(COLUMN_QUANTITY))) {
+                && (columnName.equalsIgnoreCase(SQLHelperInventoryItem.COLUMN_PK)
+                || columnName.equalsIgnoreCase(SQLHelperInventoryItem.COLUMN_ITEMID)
+                || columnName.equalsIgnoreCase(SQLHelperInventoryItem.COLUMN_QUANTITY))) {
             throw new NonNullableValueException();
         } else {
             return aValue;
