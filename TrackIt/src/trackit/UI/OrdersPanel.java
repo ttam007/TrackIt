@@ -26,14 +26,13 @@ public class OrdersPanel
     // <editor-fold defaultstate="expanded" desc="Private Fields">
     private final HashMap<Integer, AnOrder> orders = new HashMap<>();
     private final Orders bll = new Orders();
-
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Components">
     private JButton btnCreate, btnRemove, btnEdit;
     private JTable mainTable;
     private DefaultTableModel mainTableModel;
     private JScrollPane sp;
     private boolean disableButtons = false;//use this variable to toggle edit and remove buttons on and off
-// </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Components">
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -42,7 +41,7 @@ public class OrdersPanel
      */
     public OrdersPanel() {
         initializeComponents();
-        refreshItems();
+        refreshGrid();
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
@@ -101,7 +100,7 @@ public class OrdersPanel
             OrderItemsFrame dlgCreate = new OrderItemsFrame(true, null);
             dlgCreate.setLocationRelativeTo(sp);
             if (dlgCreate.display() == DialogResultType.OK) {
-                this.refreshItems();
+                this.refreshGrid();
             }
         });
 
@@ -118,7 +117,7 @@ public class OrdersPanel
                 OrderItemsFrame dlgEdit = new OrderItemsFrame(false, anOrder);
                 dlgEdit.setLocationRelativeTo(sp);
                 if (dlgEdit.display() == DialogResultType.OK) {
-                    this.refreshItems();
+                    this.refreshGrid();
                 }
             }
         });
@@ -132,22 +131,13 @@ public class OrdersPanel
             } else {
                 AnOrder anOrder = this.orders.get(selectedRow);
                 if (this.bll.remove(anOrder.getPrimaryKey())) {
-                    this.refreshItems();
-                    JOptionPane.showMessageDialog(null,
-                            String.format("%s has been removed.", anOrder.getDescription()));
+                    this.refreshGrid();
+                    //JOptionPane.showMessageDialog(null, String.format("%s has been removed.", anOrder.getDescription()));
                 } else {
                     JOptionPane.showMessageDialog(this, this.bll.getErrorMessage(),
                             Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
                 }
             }
-            //TODO: surround below in a for loop
-            /*
-            if (bll.remove()) {
-                //TODO:  close window and return to prior window.
-            } else {
-                //TODO:  display bll.getErrorMessage() and stay on this window.
-            }
-             */
         });
 
         btmSup.add(btnCreate);
@@ -158,8 +148,6 @@ public class OrdersPanel
 
     }
 
-    // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Public Methods">
     private void toggleDisableButton() {
         btnEdit.setEnabled(disableButtons);
         btnRemove.setEnabled(disableButtons);
@@ -177,7 +165,10 @@ public class OrdersPanel
         }
     }
 
-    private void refreshItems() {
+    /**
+     * Refreshes the grid with current data from the database.
+     */
+    private void refreshGrid() {
         //Clear the ArrayList and JTable, which should be done backwards.
         this.orders.clear();
         for (int i = mainTableModel.getRowCount() - 1; i >= 0; i--) {
@@ -185,14 +176,16 @@ public class OrdersPanel
         }
 
         //Now load fresh data from database.
-        if (bll.load()) {
-            ArrayList<AnOrder> aList = bll.getList();
+        if (this.bll.load()) {
+            ArrayList<AnOrder> aList = this.bll.getList();
             initTableData(aList);
         } else {
             JOptionPane.showMessageDialog(this, bll.getErrorMessage(),
                     Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
         }
     }
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Public Methods">
 
     /**
      * Displays the frame.

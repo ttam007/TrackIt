@@ -33,8 +33,8 @@ public class SuppliersPanel
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
-    private JTable mainTable;
     private JButton btnCreate, btnRemove, btnEdit;
+    private JTable mainTable;
     private DefaultTableModel mainTableModel;
     private JScrollPane sp;
     // </editor-fold>
@@ -45,7 +45,7 @@ public class SuppliersPanel
      */
     public SuppliersPanel() {
         initializeComponents();
-        refreshItems();
+        refreshGrid();
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
@@ -76,11 +76,8 @@ public class SuppliersPanel
     private void initializeComponents() {
         setLayout(new BorderLayout());
 
-        //add data to suppliers arraylist
         mainTableModel = new DefaultTableModel(TABLE_LABELS, 0);
-
-        // mainTable = new JTable(data, TABLE_LABELS);
-        mainTable = new JTable(mainTableModel);
+  mainTable = new JTable(mainTableModel);
         mainTable.setDefaultEditor(Object.class, null);
         mainTable.getTableHeader().setReorderingAllowed(false);
         // Add action listener to JTable
@@ -104,7 +101,7 @@ public class SuppliersPanel
             SupplierDetailsDialog dlgCreate = new SupplierDetailsDialog(true, null);
             dlgCreate.setLocationRelativeTo(sp);
             if (dlgCreate.display() == DialogResultType.OK) {
-                this.refreshItems();
+                this.refreshGrid();
             }
         });
 
@@ -120,7 +117,7 @@ public class SuppliersPanel
                 SupplierDetailsDialog dlgEdit = new SupplierDetailsDialog(false, aSupplier);
                 dlgEdit.setLocationRelativeTo(sp);
                 if (dlgEdit.display() == DialogResultType.OK) {
-                    this.refreshItems();
+                    this.refreshGrid();
                 }
             }
         });
@@ -134,7 +131,7 @@ public class SuppliersPanel
             } else {
                 ASupplier aSupplier = this.suppliers.get(selectedRow);
                 if (this.bll.remove(aSupplier.getPrimaryKey())) {
-                    this.refreshItems();
+                    this.refreshGrid();
                     JOptionPane.showMessageDialog(null,
                             String.format("%s has been removed.", aSupplier.getNickname()));
                 } else {
@@ -168,7 +165,10 @@ public class SuppliersPanel
         }
     }
 
-    private void refreshItems() {
+    /**
+     * Refreshes the grid with current data from the database.
+     */
+    private void refreshGrid() {
         //Clear the ArrayList and JTable, which should be done backwards.
         this.suppliers.clear();
         for (int i = mainTableModel.getRowCount() - 1; i >= 0; i--) {
@@ -176,8 +176,8 @@ public class SuppliersPanel
         }
 
         //Now load fresh data from database.
-        if (bll.load()) {
-            ArrayList<ASupplier> aList = bll.getList();
+        if (this.bll.load()) {
+            ArrayList<ASupplier> aList = this.bll.getList();
             initTableData(aList);
         } else {
             JOptionPane.showMessageDialog(this, bll.getErrorMessage(),
