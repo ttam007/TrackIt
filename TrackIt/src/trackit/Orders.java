@@ -12,9 +12,9 @@ import trackit.DAL.SQLHelperOrder;
 public class Orders
         extends GridClass<AnOrder> {
 
-
     /**
      * Pulls SQL info from database to load into JTable
+     * @return SQLHelperOrder
      */
     public ArrayList<AnOrder> getSQL() {
         try {
