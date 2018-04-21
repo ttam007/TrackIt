@@ -97,7 +97,7 @@ public class OrdersPanel
 
         add(sp, BorderLayout.CENTER);
 
-        JPanel btmSup = new JPanel();
+        JPanel btmSup = new JPanel(new GridLayout(0, 8, 2, 0));
 
         btnCreate = new JButton("Create");
         btnCreate.addActionListener((ActionEvent e) -> {

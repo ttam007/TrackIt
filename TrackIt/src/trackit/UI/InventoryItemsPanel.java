@@ -10,7 +10,7 @@ import trackit.*;
 /**
  * UI Layer: Handles all aspects of the Inventory panel.
  *
- * @author Brian Diaz, Steven
+ * @author Brian Diaz
  */
 public class InventoryItemsPanel
         extends JPanel {
@@ -87,7 +87,6 @@ public class InventoryItemsPanel
     private void setButtons() {
 
         btnCreate = new JButton("Create");
-        btnCreate.setSize(new Dimension(10, 50));
         btnCreate.addActionListener((ActionEvent e) -> {
             InventoryItemDetailsDialog dlgCreate = new InventoryItemDetailsDialog(true, null);
             dlgCreate.setLocationRelativeTo(sp);
@@ -161,6 +160,7 @@ public class InventoryItemsPanel
         mainTable = new JTable(mainTableModel);
         mainTable.getTableHeader().setReorderingAllowed(false);
         mainTable.setDefaultEditor(Object.class, null);
+
         // Add action listener to JTable
         mainTable.getSelectionModel().addListSelectionListener((e) -> {
             //if the row is bigger than -1 than we need to enable the buttons
@@ -170,6 +170,7 @@ public class InventoryItemsPanel
             }
         });
         mainTable.setBounds(30, 40, 200, 200);
+
         
 
         setButtons();
@@ -177,8 +178,8 @@ public class InventoryItemsPanel
 
         add(sp, BorderLayout.CENTER);
 
-        //JPanel buttonHolder = new JPanel(new GridLayout(0, 8, 2, 0));
-        JPanel buttonHolder = new JPanel(new GridLayout(0, 12, 2, 0));
+        JPanel buttonHolder = new JPanel(new GridLayout(0, 8, 2, 0));
+
         buttonHolder.add(btnCreate);
         buttonHolder.add(btnEdit);
         buttonHolder.add(btnRemove);

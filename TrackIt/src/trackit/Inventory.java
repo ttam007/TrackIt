@@ -7,10 +7,11 @@ import trackit.DAL.SQLHelperInventoryItem;
 /**
  * BAL Layer: Works with the Inventory tab.
  *
- * @author Bond, Steven
+ * @author Bond
  */
 public class Inventory
         extends GridClass<AnInventoryItem> {
+
     /**
      * Pulls SQL info from database to load into JTable
      */

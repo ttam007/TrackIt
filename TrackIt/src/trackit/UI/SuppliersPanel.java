@@ -97,7 +97,7 @@ public class SuppliersPanel
 
         add(sp, BorderLayout.CENTER);
 
-        JPanel btmSup = new JPanel();
+        JPanel btmSup = new JPanel(new GridLayout(0, 8, 2, 0));
 
         btnCreate = new JButton("Create");
         btnCreate.addActionListener((ActionEvent e) -> {
@@ -148,7 +148,7 @@ public class SuppliersPanel
         btmSup.add(btnEdit);
         btmSup.add(btnRemove);
 
-        add(btmSup, BorderLayout.SOUTH);
+        add(btmSup, BorderLayout.PAGE_END);
     }
 
     private void toggleDisableButton() {

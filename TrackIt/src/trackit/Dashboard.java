@@ -34,27 +34,8 @@ public class Dashboard {
     public void refresh() {
     }
 
-    /**
-     * @return description
-     */
-    public String getDescription() {
-        return this.description;
-    }
-
-    /**
-     * @return title
-     */
-    public String getTitle() {
-        return this.title;
-    }
-
-    /**
-     *
-     * @return A String that will contain the content of each string
-     */
     @Override
     public String toString() {
-
-        return this.getDescription();
+        return "";
     }
 }

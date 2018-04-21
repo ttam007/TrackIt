@@ -7,10 +7,11 @@ import trackit.DAL.SQLHelperOrder;
 /**
  * BLL Layer: Works with the Orders Tab.
  *
- * @author Bond, Steven
+ * @author
  */
 public class Orders
         extends GridClass<AnOrder> {
+
 
     /**
      * Pulls SQL info from database to load into JTable

@@ -15,7 +15,6 @@ import javax.swing.JFormattedTextField.AbstractFormatter;
  * @author Steven
  */
 public class DateLabelFormatter extends AbstractFormatter {
-
     private final SimpleDateFormat dateFormatter = Utilities.getDateFormatter();
 
     @Override

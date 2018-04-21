@@ -1,25 +1,30 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package trackit;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
-import trackit.DAL.SQLHelperSupplier;
-import trackit.UI.SuppliersPanel;
+import trackit.DAL.SQLHelperOrder;
+import trackit.UI.OrdersPanel;
 
 /**
  *
  * @author SLunsford
  */
-public class SuppliersTableModel extends AbstractTableModel {
+public class OrdersTableModel extends AbstractTableModel {
 
-    SQLHelperSupplier helper = new SQLHelperSupplier();
-    private final String[] columnNames = SuppliersPanel.TABLE_LABELS;
-    ArrayList<ASupplier> suppliers;
-    Object[] allSuppliers = getSQL().toArray();
+    SQLHelperOrder helper = new SQLHelperOrder();
+    private final String[] columnNames = OrdersPanel.getColumnNames();
+    ArrayList<AnOrder> orders;
+    Object[] allOrders = getSQL().toArray();
 
     @Override
     public int getRowCount() {
-        return allSuppliers.length;
+        return allOrders.length;
     }
 
     @Override
@@ -34,19 +39,19 @@ public class SuppliersTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int i, int i1) {
-        return allSuppliers[i];
+        return allOrders[i];
     }
 
-    ArrayList<ASupplier> getSQL() {
+    ArrayList<AnOrder> getSQL() {
         try {
             System.out.println("\nSelectAll");
-            suppliers = helper.selectAll();
+            orders = helper.selectAll();
         } catch (SQLException exSQL) {
             System.out.println("SQL error = " + exSQL.getLocalizedMessage());
         } catch (Exception ex) {
             System.out.println("Generic error = " + ex.getLocalizedMessage());
         }
-        return suppliers;
+        return orders;
     }
 
 }
