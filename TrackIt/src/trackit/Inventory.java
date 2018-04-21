@@ -14,12 +14,13 @@ public class Inventory
 
     /**
      * Pulls SQL info from database to load into JTable
+     * @return SQLHelperInventoryItem
      */
     public ArrayList<AnInventoryItem> getSQL() {
         try {
             System.out.println("\nSelectAll");
-         SQLHelperInventoryItem helper = new SQLHelperInventoryItem();
-       rows = helper.selectAll();
+            SQLHelperInventoryItem helper = new SQLHelperInventoryItem();
+            rows = helper.selectAll();
         } catch (SQLException exSQL) {
             System.out.println("SQL error = " + exSQL.getLocalizedMessage());
         } catch (Exception ex) {
