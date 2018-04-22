@@ -18,7 +18,7 @@ public abstract class AnItem
     /**
      *
      */
-    protected String description = "New Item";
+    protected String description = "";
 
     /**
      *

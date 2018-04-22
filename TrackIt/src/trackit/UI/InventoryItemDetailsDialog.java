@@ -91,12 +91,12 @@ public class InventoryItemDetailsDialog
      */
     private void initializeComponents() {
         //Setup main frame
-        int frameWidth = 500;// Originally 640
-        int frameHeight = 250;//Originally 400.
+        int frameWidth = 500;
+        int frameHeight = 250;
         Dimension dimFrame = new Dimension(frameWidth, frameHeight);
         this.setTitle(Utilities.getWindowCaption(WINDOW_NAME));
         this.setPreferredSize(dimFrame);
-        this.setLocationRelativeTo(null);
+        //this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new CloseQuery());
@@ -235,8 +235,8 @@ public class InventoryItemDetailsDialog
         try {
             this.anInventoryItem.setDescription(this.tfDescription.getText());
             this.anInventoryItem.setSku(this.tfSku.getText());
-            this.anInventoryItem.setQuantity(Integer.parseInt(this.tfQuantity.getText()));
             this.anInventoryItem.setSizeUnit(this.tfSizeUnit.getText());
+            this.anInventoryItem.setQuantity(Integer.parseInt(this.tfQuantity.getText()));
             this.anInventoryItem.setItemStatus(this.statusField.getSelectedItem().toString());
             java.util.Date expDate = (Date) expDatePicker.getModel().getValue();
             this.anInventoryItem.setExpirationDate(expDate);

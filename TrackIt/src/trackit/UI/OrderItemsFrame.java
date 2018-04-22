@@ -253,7 +253,10 @@ public class OrderItemsFrame
         pnlBtm.add(btnAddItem);
         btnAddItem.addActionListener((ActionEvent e) -> {
             OrderItemDetailsDialog dlgAdd = new OrderItemDetailsDialog(true, null);
-            dlgAdd.display();
+            dlgAdd.setLocationRelativeTo(this);
+            if (dlgAdd.display() == DialogResultType.OK) {
+                this.refreshGrid();
+            }
         });
 
         btnCreate = new JButton("Create");
@@ -271,12 +274,14 @@ public class OrderItemsFrame
         btnEdit.addActionListener((ActionEvent e) -> {
             int selectedRow = this.mainTable.getSelectedRow();
             if (selectedRow < 0) {
-                JOptionPane.showMessageDialog(null, "Select item to remove");
+                JOptionPane.showMessageDialog(this, "Select item to remove");
             } else {
-                AnOrderItem anOrderItem = new AnOrderItem();
-                //TODO: Set anOrderItem to the value of selectedRow.
+                AnOrderItem anOrderItem = this.orderItems.get(selectedRow);
                 OrderItemDetailsDialog dlgEdit = new OrderItemDetailsDialog(false, anOrderItem);
-                dlgEdit.display();
+                dlgEdit.setLocationRelativeTo(this);
+                if (dlgEdit.display() == DialogResultType.OK) {
+                    this.refreshGrid();
+                }
             }
         });
 
@@ -287,17 +292,16 @@ public class OrderItemsFrame
             if (selectedRow < 0) {
                 JOptionPane.showMessageDialog(null, "Select item to remove");
             } else {
-                //TODO: remove item from db
-                JOptionPane.showMessageDialog(null, "Item removed");
+                AnOrderItem anOrderItem = this.orderItems.get(selectedRow);
+                if (this.bllOrderItems.remove(anOrderItem.getPrimaryKey())) {
+                    this.refreshGrid();
+                    JOptionPane.showMessageDialog(null,
+                            String.format("%s has been removed.", anOrderItem.getDescription()));
+                } else {
+                    JOptionPane.showMessageDialog(this, this.bllOrderItems.getErrorMessage(),
+                            Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+                }
             }
-            //TODO: surround below in a for loop
-            /*
-            if (bll.remove()) {
-                //TODO:  close window and return to prior window.
-            } else {
-                //TODO:  display bll.getErrorMessage() and stay on this window.
-            }
-             */
         });
 
         btnOK = new JButton("OK");

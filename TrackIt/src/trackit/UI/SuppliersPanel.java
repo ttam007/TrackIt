@@ -77,7 +77,7 @@ public class SuppliersPanel
         setLayout(new BorderLayout());
 
         mainTableModel = new DefaultTableModel(TABLE_LABELS, 0);
-  mainTable = new JTable(mainTableModel);
+        mainTable = new JTable(mainTableModel);
         mainTable.setDefaultEditor(Object.class, null);
         mainTable.getTableHeader().setReorderingAllowed(false);
         // Add action listener to JTable
@@ -99,7 +99,7 @@ public class SuppliersPanel
         btnCreate = new JButton("Create");
         btnCreate.addActionListener((ActionEvent e) -> {
             SupplierDetailsDialog dlgCreate = new SupplierDetailsDialog(true, null);
-            dlgCreate.setLocationRelativeTo(sp);
+            dlgCreate.setLocationRelativeTo(this);
             if (dlgCreate.display() == DialogResultType.OK) {
                 this.refreshGrid();
             }
@@ -115,7 +115,7 @@ public class SuppliersPanel
             } else {
                 ASupplier aSupplier = this.suppliers.get(selectedRow);
                 SupplierDetailsDialog dlgEdit = new SupplierDetailsDialog(false, aSupplier);
-                dlgEdit.setLocationRelativeTo(sp);
+                dlgEdit.setLocationRelativeTo(this);
                 if (dlgEdit.display() == DialogResultType.OK) {
                     this.refreshGrid();
                 }

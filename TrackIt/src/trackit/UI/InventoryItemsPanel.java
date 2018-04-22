@@ -89,7 +89,7 @@ public class InventoryItemsPanel
         btnCreate = new JButton("Create");
         btnCreate.addActionListener((ActionEvent e) -> {
             InventoryItemDetailsDialog dlgCreate = new InventoryItemDetailsDialog(true, null);
-            dlgCreate.setLocationRelativeTo(sp);
+            dlgCreate.setLocationRelativeTo(this);
             if (dlgCreate.display() == DialogResultType.OK) {
                 this.refreshItems();
             }
@@ -105,7 +105,7 @@ public class InventoryItemsPanel
             } else {
                 AnInventoryItem anInventoryItem = this.inventoryItems.get(selectedRow);
                 InventoryItemDetailsDialog dlgEdit = new InventoryItemDetailsDialog(false, anInventoryItem);
-                dlgEdit.setLocationRelativeTo(sp);
+                dlgEdit.setLocationRelativeTo(this);
                 if (dlgEdit.display() == DialogResultType.OK) {
                     this.refreshItems();
                 }
