@@ -14,6 +14,7 @@ public class Orders
 
     /**
      * Pulls SQL info from database to load into JTable
+     *
      * @return SQLHelperOrder
      */
     public ArrayList<AnOrder> getSQL() {
