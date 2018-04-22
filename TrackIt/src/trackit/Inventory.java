@@ -14,6 +14,7 @@ public class Inventory
 
     /**
      * Pulls SQL info from database to load into JTable
+     *
      * @return SQLHelperInventoryItem
      */
     public ArrayList<AnInventoryItem> getSQL() {

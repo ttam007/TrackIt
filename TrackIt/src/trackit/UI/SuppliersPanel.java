@@ -77,6 +77,7 @@ public class SuppliersPanel
         setLayout(new BorderLayout());
 
         mainTableModel = new DefaultTableModel(TABLE_LABELS, 0);
+
   mainTable = new JTable(mainTableModel);
         mainTable.setDefaultEditor(Object.class, null);
         mainTable.getTableHeader().setReorderingAllowed(false);
