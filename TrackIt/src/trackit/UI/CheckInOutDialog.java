@@ -4,14 +4,13 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import trackit.*;
-import trackit.DAL.AnInventoryItem;
 
 /**
  * UI Layer: Handles all aspects of the Check In/Out dialog.
  *
  * @author Steven, Bond
  */
-public class CheckInOutUI
+public class CheckInOutDialog
         extends JDialog {
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
@@ -22,7 +21,7 @@ public class CheckInOutUI
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
 
-    private final AnInventoryItem testItem = null;
+    private final AnInventoryItem anItem = null;
 
     //private final InventoryItem testItem = new InventoryItem();
     // </editor-fold>
@@ -34,13 +33,14 @@ public class CheckInOutUI
     JLabel itemNameLabel, qtyLabel;
     JTextField qtyTextField;
     String[] itemStrings = {"soap", "shampoo", "conditioner", "paper towels", "mouthwash"};
+    GridBagConstraints gbc;
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     /**
      * Check In/Out UI
      */
-    public CheckInOutUI() {
+    public CheckInOutDialog() {
         initializeComponents();
     }
     // </editor-fold>
@@ -51,79 +51,115 @@ public class CheckInOutUI
      */
     private void initializeComponents() {
         //Setup main frame
-        int frameWidth = 640;
-        int frameHeight = 400;
+        int frameWidth = 500;
+        int frameHeight = 250;//originally 110
         Dimension dimFrame = new Dimension(frameWidth, frameHeight);
         this.setTitle(Utilities.getWindowCaption(WINDOW_NAME));
         this.setSize(dimFrame);
         this.setPreferredSize(dimFrame);
-        this.setModal(true);
+        //this.setModal(true);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new CloseQuery());
         this.getRootPane().setDefaultButton(btnOK);
 
-        //Add all components here and set properties.
-        Box buttonBx, itemBx, qtyBx, submitBx, combine;
+        gbc = new GridBagConstraints();
+        setLayout(new GridBagLayout());
+        gbc.insets = new Insets(2, 2, 5, 0);
+        gbc.anchor = GridBagConstraints.LINE_START;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        pnlMain = new JPanel();
-        add(pnlMain, BorderLayout.CENTER);
-
-        //create the Radio Buttons and add them to a group
-        buttonBx = Box.createHorizontalBox();
         ButtonGroup checkGroup = new ButtonGroup();
         inButton = new JRadioButton("Check In");
         outButton = new JRadioButton("Check Out");
         checkGroup.add(inButton);
         checkGroup.add(outButton);
         inButton.setSelected(true);
-        buttonBx.add(inButton);
-        buttonBx.add(outButton);
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        add(inButton, gbc);
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        add(outButton, gbc);
 
-        itemBx = Box.createHorizontalBox();
-        itemNameLabel = new JLabel("Item Name");
-        itemBx.add(itemNameLabel);
-        /**
-         * corrected to address compile warning
-         */
-        JComboBox<String> itemComboBox = new JComboBox<>(itemStrings);
-        itemBx.add(itemComboBox);
-        qtyBx = Box.createHorizontalBox();
-        qtyLabel = new JLabel("Quantity");
-        qtyBx.add(qtyLabel);
-        qtyTextField = new JTextField();
-        qtyBx.add(qtyTextField);
-        submitBx = Box.createHorizontalBox();
+        // Supplier Name Label 
+        itemNameLabel = new JLabel("Item Name: ");
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        add(itemNameLabel, gbc);
 
-        btnOK = new JButton("OK");
-        submitBx.add(btnOK);
-        this.btnOK.addActionListener((ActionEvent e) -> {
-            //TODO
-            /*if(!testItem.save()) {
-                
-            }*/
-            this.dispose();
+        // Supplier Name Text Field
+        itemComboBox = new JComboBox<>(itemStrings);
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.gridwidth = 5;
+        add(itemComboBox, gbc);
+
+        // Website Address label
+        qtyLabel = new JLabel("Quantity: ");
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 1;
+        add(qtyLabel, gbc);
+
+        //Website Address Text Field
+        qtyTextField = new JTextField(7);
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        gbc.gridwidth = 5;
+        add(qtyTextField, gbc);
+
+        // Init Ok Button
+        btnOK = new JButton("Ok");
+        gbc.gridx = 3;
+        gbc.gridy = 4;
+        gbc.gridwidth = 1;
+        add(btnOK, gbc);
+        btnOK.addActionListener((ActionEvent e) -> {
+            saveAction();
         });
 
+        //Cancel
         btnCancel = new JButton("Cancel");
-        submitBx.add(btnCancel);
-        this.btnCancel.addActionListener((ActionEvent e) -> {
-            //TODO:  close window and return to prior window.
-            this.dispose();
+        gbc.gridx = 4;
+        gbc.gridy = 4;
+        gbc.gridwidth = 1;
+        add(btnCancel, gbc);
+        btnCancel.addActionListener((ActionEvent e) -> {
+            cancelAction();
         });
 
-        //add all of the boxes together
-        combine = Box.createVerticalBox();
-        combine.add(buttonBx);
-        combine.add(itemBx);
-        combine.add(qtyBx);
-        combine.add(submitBx);
-
-        pnlMain.add(combine);
         //Finalizations
         pack();
 
+    }
+
+    /**
+     * Handles the save action. If any errors, then display error message
+     * instead.
+     *
+     */
+    private void saveAction() {
+        JOptionPane.showMessageDialog(null, "Successfully Updated");
+        //TODO:  implement save.
+        /*if (successfullySaved) {
+                this.dispose();
+            } else {
+               //TODO:  catch errors and display them.  Do not exit dialog if an error occurs.
+            }*/
+        this.dispose();
+    }
+
+    /**
+     * Handles the cancel action. If any errors, then display error message
+     * instead.
+     *
+     */
+    private void cancelAction() {
+        JOptionPane.showMessageDialog(null, "Change Cancelled");
+        //TODO:  close window and return to prior window.
+        this.dispose();
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
@@ -145,18 +181,14 @@ public class CheckInOutUI
 
         @Override
         public void windowClosing(WindowEvent e) {
-            JDialog frame = CheckInOutUI.this;
+            JDialog frame = CheckInOutDialog.this;
             int result = JOptionPane.showConfirmDialog(frame,
                     "Do you want to save?", "Close Query",
                     JOptionPane.YES_NO_OPTION);
             if (result == JOptionPane.YES_OPTION) {
-                //TODO
-                JOptionPane.showMessageDialog(null, "Successfully Updated");
-                frame.dispose();
+                saveAction();
             } else {
-                //TODO
-                JOptionPane.showMessageDialog(null, "Changed Cancelled");
-                frame.dispose();
+                cancelAction();
             }
         }
     }
