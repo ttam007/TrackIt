@@ -27,7 +27,6 @@ public class InventoryItemDetailsDialog
     private final AnInventoryItem anInventoryItem;
     private final Inventory bll = new Inventory();
     private DialogResultType dialogResult = DialogResultType.NONE;
-    private final UtilDateModel expModel = new UtilDateModel();
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
@@ -36,8 +35,6 @@ public class InventoryItemDetailsDialog
     private JLabel sku, statusLabel, unit, expDateLbl, quantity, itemNameLabel;
     private JButton btnOK, btnCancel;
     private GridBagConstraints gbc;
-
-    private JDatePanelImpl expDatePanel;
     private JDatePickerImpl expDatePicker;
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -107,12 +104,6 @@ public class InventoryItemDetailsDialog
         this.setModal(true);
 
         //Add all components here and set properties.
-        Properties p = new Properties();
-        p.put("text.today", "Today");
-        p.put("text.month", "Month");
-        p.put("text.year", "Year");
-        expDatePanel = new JDatePanelImpl(expModel, p);
-
         gbc = new GridBagConstraints();
         setLayout(new GridBagLayout());
         gbc.insets = new Insets(2, 2, 5, 0);
@@ -165,7 +156,7 @@ public class InventoryItemDetailsDialog
         gbc.gridy = 2;
         gbc.gridwidth = 1;
         add(expDateLbl, gbc);
-        expDatePicker = new JDatePickerImpl(expDatePanel, new DateLabelFormatter());
+        expDatePicker = Utilities.getDatePicker();
 
         gbc.gridx = 5;
         gbc.gridy = 2;
@@ -232,9 +223,7 @@ public class InventoryItemDetailsDialog
         this.tfSizeUnit.setText(this.anInventoryItem.getSizeUnit());
         this.tfQuantity.setText(this.anInventoryItem.getQuantity().toString());
         this.statusField.getEditor().setItem(this.anInventoryItem.getItemStatus().getText());
-        Calendar aCalendar = Utilities.getCalendarWithDate(this.anInventoryItem.getExpirationDate());
-        this.expDatePicker.getModel().setDate(aCalendar.get(Calendar.YEAR),
-                aCalendar.get(Calendar.MONTH), aCalendar.get(Calendar.DAY_OF_MONTH));
+        Utilities.setDatePickersDate(this.expDatePicker, this.anInventoryItem.getExpirationDate());
     }
 
     /**
@@ -267,7 +256,7 @@ public class InventoryItemDetailsDialog
         if (populateObject()) {
             if (this.bll.save(this.anInventoryItem)) {
                 this.dialogResult = DialogResultType.OK;
-                JOptionPane.showMessageDialog(null, "Successfully Saved.");
+                //JOptionPane.showMessageDialog(null, "Successfully Saved.");
                 this.setVisible(false);
                 this.dispose();
             } else {
@@ -282,7 +271,7 @@ public class InventoryItemDetailsDialog
      * Handles the cancel action.
      */
     private void cancelAction() {
-        JOptionPane.showMessageDialog(null, "Change Cancelled");
+        //JOptionPane.showMessageDialog(null, "Change Cancelled");
         this.dialogResult = DialogResultType.CANCEL;
         this.setVisible(false);
         this.dispose();
@@ -296,7 +285,6 @@ public class InventoryItemDetailsDialog
      * @return The DialogReturnType which tells how the dialog was closed.
      */
     public DialogResultType display() {
-        System.out.println(String.format("Displaying %s...", WINDOW_NAME));
         setVisible(true);
         return this.dialogResult;
     }

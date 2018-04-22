@@ -176,7 +176,7 @@ public class OrderItemDetailsDialog
 
         // Init Ok Button
         btnOK = new JButton("Ok");
-        gbc.gridx = 5;
+        gbc.gridx = 3;
         gbc.gridy = 4;
         gbc.gridwidth = 1;
         add(btnOK, gbc);
@@ -186,7 +186,7 @@ public class OrderItemDetailsDialog
 
         //Cancel
         btnCancel = new JButton("Cancel");
-        gbc.gridx = 6;
+        gbc.gridx = 4;
         gbc.gridy = 4;
         gbc.gridwidth = 1;
         add(btnCancel, gbc);
@@ -234,7 +234,7 @@ public class OrderItemDetailsDialog
         if (populateObject()) {
             if (this.bll.save(this.anOrderItem)) {
                 this.dialogResult = DialogResultType.OK;
-                JOptionPane.showMessageDialog(null, "Successfully Saved.");
+                //JOptionPane.showMessageDialog(null, "Successfully Saved.");
                 this.setVisible(false);
                 this.dispose();
             } else {
@@ -249,7 +249,7 @@ public class OrderItemDetailsDialog
      * Handles the cancel action.
      */
     private void cancelAction() {
-        JOptionPane.showMessageDialog(null, "Change Cancelled");
+        //JOptionPane.showMessageDialog(null, "Change Cancelled");
         this.dialogResult = DialogResultType.CANCEL;
         this.setVisible(false);
         this.dispose();
@@ -263,7 +263,6 @@ public class OrderItemDetailsDialog
      * @return The DialogReturnType which tells how the dialog was closed.
      */
     public DialogResultType display() {
-        System.out.println(String.format("Displaying %s...", WINDOW_NAME));
         setVisible(true);
         return this.dialogResult;
     }
