@@ -1,7 +1,13 @@
 package trackittestdriver;
 
+import trackit.AnOrderItem;
+import trackit.AnOrder;
+import trackit.AnItem;
+import trackit.AnInventoryItem;
+import trackit.ASupplier;
 import java.sql.*;
 import java.util.*;
+import trackit.*;
 import trackit.DAL.*;
 
 /**
@@ -117,7 +123,7 @@ public class DALTestDriver {
                     aSupplier.getPrimaryKey(), aSupplier.getNickname(), aSupplier.getUrl()));
         }
     }
-    
+
     private void printOrderItem(AnOrderItem anOrderItem) {
         if (anOrderItem == null) {
             System.out.println("OrderItem is null.");
@@ -125,8 +131,8 @@ public class DALTestDriver {
             System.out.println(String.format("OrderItem:  PK = %d; Order ID = %d;"
                     + " Quantity Ordered = %d; quantity checked in = %d; Price = %f;"
                     + " Extended Price = %f",
-                    anOrderItem.getPrimaryKey(), anOrderItem.getOrderId(), 
-                    anOrderItem.getQuantityOrdered(), anOrderItem.getQuantityCheckedIn(), 
+                    anOrderItem.getPrimaryKey(), anOrderItem.getOrderId(),
+                    anOrderItem.getQuantityOrdered(), anOrderItem.getQuantityCheckedIn(),
                     anOrderItem.getPrice(), anOrderItem.getExtendedPrice()));
         }
     }
@@ -137,36 +143,37 @@ public class DALTestDriver {
         } else {
             System.out.println(String.format("Order:  PK = %d; Description = %s; "
                     + "Ordered From = %s; Order Status = %s; Date Ordered = %s; "
-                    + "Extended Price = %s", 
-                    anOrder.getPrimaryKey(), anOrder.getDescription(), 
-                    anOrder.getOrderedFrom(), anOrder.getOrderStatus(), 
+                    + "Extended Price = %s",
+                    anOrder.getPrimaryKey(), anOrder.getDescription(),
+                    anOrder.getOrderedFrom(), anOrder.getOrderStatus(),
                     anOrder.getDateOrdered(), anOrder.getDateExpected()));
         }
     }
-    
+
     private void printItem(AnItem anItem) {
         if (anItem == null) {
             System.out.println("Order is null.");
         } else {
             System.out.println(String.format("Order:  PK = %d; Description = %s; "
-                    + "SKU = %s; Size Unit = %s; Item Status = %s;", 
-                    anItem.getPrimaryKey(), anItem.getDescription(), 
-                    anItem.getSku(), anItem.getSizeUnit(), 
+                    + "SKU = %s; Size Unit = %s; Item Status = %s;",
+                    anItem.getPrimaryKey(), anItem.getDescription(),
+                    anItem.getSku(), anItem.getSizeUnit(),
                     anItem.getItemStatus()));
         }
     }
-    
+
     private void printInventoryItem(AnInventoryItem anInventoryItem) {
         if (anInventoryItem == null) {
             System.out.println("Order is null.");
         } else {
             System.out.println(String.format("Order:  PK = %d; Description = %s; "
-                    + "SKU = %s; Size Unit = %s; Item Status = %s;", 
-                    anInventoryItem.getPrimaryKey(), anInventoryItem.getDescription(), 
-                    anInventoryItem.getSku(), anInventoryItem.getSizeUnit(), 
+                    + "SKU = %s; Size Unit = %s; Item Status = %s;",
+                    anInventoryItem.getPrimaryKey(), anInventoryItem.getDescription(),
+                    anInventoryItem.getSku(), anInventoryItem.getSizeUnit(),
                     anInventoryItem.getItemStatus()));
         }
     }
+
     /**
      * Tests all CRUD operations for the ASupplier's sprocs.
      */
@@ -216,7 +223,7 @@ public class DALTestDriver {
             System.out.println("Generic error = " + ex.getLocalizedMessage());
         }
     }
-    
+
     /**
      * Tests all CRUD operations for the AnOrderItem's sprocs.
      */
@@ -239,9 +246,9 @@ public class DALTestDriver {
 
             System.out.println("\nInsert");
             AnOrderItem anOrderItemInsert = new AnOrderItem();
-            anOrderItemInsert.setOrderId(46532);
+            anOrderItemInsert.setOrderId(3);
+            anOrderItemInsert.setItemId(1);
             anOrderItemInsert.setQuantityOrdered(3);
-            anOrderItemInsert.setQuantityCheckedIn(2);
             anOrderItemInsert.setPrice(2.39);
             pk = helper.insert(anOrderItemInsert);
             anOrderItem = helper.selectOne(pk);
@@ -250,9 +257,9 @@ public class DALTestDriver {
             System.out.println("\nUpdate");
             AnOrderItem anOrderItemUpdate = new AnOrderItem();
             anOrderItemUpdate.setPrimaryKey(pk);
-            anOrderItemUpdate.setOrderId(46532);
-            anOrderItemUpdate.setQuantityCheckedIn(3);
-            anOrderItemUpdate.setPrice(2.49);
+            anOrderItemUpdate.setQuantityOrdered(20);
+            anOrderItemUpdate.setQuantityCheckedIn(10);
+            anOrderItemUpdate.setPrice(5.05);
             helper.update(anOrderItemUpdate);
             anOrderItem = helper.selectOne(anOrderItemUpdate.getPrimaryKey());
             printOrderItem(anOrderItem);
@@ -268,7 +275,7 @@ public class DALTestDriver {
             System.out.println("Generic error = " + ex.getLocalizedMessage());
         }
     }
-    
+
     /**
      * Tests all CRUD operations for the AnOrder's sprocs.
      */
@@ -293,17 +300,18 @@ public class DALTestDriver {
             AnOrder anOrderInsert = new AnOrder();
             anOrderInsert.setDescription("Cleaning Supplies");
             anOrderInsert.setOrderedFrom(2);
-            anOrderInsert.setOrderStatus("In Progress");
+            anOrderInsert.setOrderStatus("Created");
+            anOrderInsert.setDateOrdered(Utilities.convertToSQLDate("2018-04-15"));
             pk = helper.insert(anOrderInsert);
             anOrder = helper.selectOne(pk);
             printOrder(anOrder);
 
-            System.out.println("\nUpdate");
+            /*System.out.println("\nUpdate");
             AnOrder anOrderUpdate = new AnOrder();
             anOrderUpdate.setPrimaryKey(pk);
             anOrderUpdate.setDescription("Cleaning Supplies");
-            anOrderUpdate.setOrderedFrom(1);
-            anOrderUpdate.setOrderStatus("Shipped");
+            anOrderUpdate.setOrderedFrom(2);
+            anOrderUpdate.setOrderStatus(OrderStatusType.SHIPPED);
             helper.update(anOrderUpdate);
             anOrder = helper.selectOne(anOrderUpdate.getPrimaryKey());
             printOrder(anOrder);
@@ -312,66 +320,14 @@ public class DALTestDriver {
             pk = 2;
             helper.delete(pk);
             anOrder = helper.selectOne(pk);
-            printOrder(anOrder);
+            printOrder(anOrder);*/
         } catch (SQLException exSQL) {
             System.out.println("SQL error = " + exSQL.getLocalizedMessage());
         } catch (Exception ex) {
             System.out.println("Generic error = " + ex.getLocalizedMessage());
         }
     }
-    
-    /**
-     * Tests all CRUD operations for the AnItem's sprocs.
-     */
-    public void testSQLHelperItem() {
-        System.out.println("\n\ntestSQLHelper");
 
-        SQLHelperItem helper = new SQLHelperItem();
-        AnItem anItem;
-        Integer pk;
-        try {
-            System.out.println("\nSelectAll");
-            ArrayList<AnItem> items = helper.selectAll();
-            for (AnItem anItem : items) {
-                printItem(anItem);
-            }
-
-            System.out.println("\nSelectOne");
-            anItem = helper.selectOne(2);
-            printItem(anItem);
-
-            System.out.println("\nInsert");
-            anItem anItemInsert = new anItem();
-            anItemInsert.setOrderId(46532);
-            anItemInsert.setQuantityOrdered(3);
-            anItemInsert.setQuantityCheckedIn(2);
-            anItemInsert.setPrice(2.39);
-            pk = helper.insert(anItemInsert);
-            anItem = helper.selectOne(pk);
-            printItem(anItem);
-
-            System.out.println("\nUpdate");
-            anItem anItemUpdate = new anItem();
-            anItemUpdate.setPrimaryKey(pk);
-            anItemUpdate.setOrderId(46532);
-            anItemUpdate.setQuantityCheckedIn(3);
-            anItemUpdate.setPrice(2.49);
-            helper.update(anItemUpdate);
-            anItem = helper.selectOne(anItemUpdate.getPrimaryKey());
-            printItem(anItem);
-
-            System.out.println("\nDelete");
-            pk = 2;
-            helper.delete(pk);
-            anItem = helper.selectOne(pk);
-            printItem(AnItem);
-        } catch (SQLException exSQL) {
-            System.out.println("SQL error = " + exSQL.getLocalizedMessage());
-        } catch (Exception ex) {
-            System.out.println("Generic error = " + ex.getLocalizedMessage());
-        }
-    }
-    
     /**
      * Tests all CRUD operations for the AnInventoryItem's sprocs.
      */
@@ -382,7 +338,7 @@ public class DALTestDriver {
         AnInventoryItem anInventoryItem;
         Integer pk;
         try {
-            System.out.println("\nSelectAll");
+            /*System.out.println("\nSelectAll");
             ArrayList<AnInventoryItem> inventoryItem = helper.selectAll();
             for (AnInventoryItem anItem : inventoryItem) {
                 printInventoryItem(anItem);
@@ -397,8 +353,8 @@ public class DALTestDriver {
             AnInventoryItem anInventoryItemInsert = new AnInventoryItem();
             anInventoryItemInsert.setDescription("toothpaste");
             anInventoryItemInsert.setSku("4352");
-            anInventoryItemInsert.setSizeUnit("tube");
-            anInventoryItemInsert.setItemStatus("in stock");
+            anInventoryItemInsert.setSizeUnit("1 tube");
+            anInventoryItemInsert.setItemStatus("Available");
             pk = helper.insert(anInventoryItemInsert);
             anInventoryItem = helper.selectOne(pk);
             printInventoryItem(anInventoryItem);
@@ -409,13 +365,13 @@ public class DALTestDriver {
             anInventoryItemUpdate.setDescription("toothpaste");
             anInventoryItemUpdate.setSku("4352");
             anInventoryItemUpdate.setSizeUnit("box");
-            anInventoryItemUpdate.setItemStatus("not in use");
+            anInventoryItemUpdate.setItemStatus(ItemStatusType.DO_NOT_ORDER);
             helper.update(anInventoryItemUpdate);
             anInventoryItem = helper.selectOne(anInventoryItemUpdate.getPrimaryKey());
-            printInventoryItem(anInventoryItem);
+            printInventoryItem(anInventoryItem);*/
 
             System.out.println("\nDelete");
-            pk = 2;
+            pk = 5;
             helper.delete(pk);
             anInventoryItem = helper.selectOne(pk);
             printInventoryItem(anInventoryItem);

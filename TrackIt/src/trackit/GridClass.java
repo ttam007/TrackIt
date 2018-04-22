@@ -1,7 +1,6 @@
 package trackit;
 
 import java.util.*;
-import trackit.DAL.*;
 
 /**
  * BLL Layer: For all classes that deal with grids in the UI.
@@ -12,17 +11,19 @@ import trackit.DAL.*;
 public abstract class GridClass<T extends DatabaseObject> {
 
     /**
-     *
+     * A list of all T objects in memory. Used to populate grids and what would
+     * be loaded from/saved to the database.
      */
     protected ArrayList<T> rows = new ArrayList<>();
 
     /**
-     *
+     * The last error message generated.
      */
     protected String errorMessage;
 
     /**
-     * Loads all rows from the database to the grid.
+     * Loads all rows from the database to the grid and updates the list of T
+     * objects in memory.
      *
      * @return True = The rows were successfully loaded; False = There was an
      * error.
@@ -30,7 +31,8 @@ public abstract class GridClass<T extends DatabaseObject> {
     protected abstract boolean load();
 
     /**
-     * Saves all rows to the database from the grid.
+     * Saves all rows to the database from the grid and updates the list of T
+     * objects in memory.
      *
      * @return True = The rows were successfully saved; False = There was an
      * error.
@@ -38,7 +40,17 @@ public abstract class GridClass<T extends DatabaseObject> {
     protected abstract boolean save();
 
     /**
-     * Removes a row from the database.
+     * Saves specified object to the database.
+     *
+     * @param anObj The object to be saved.
+     * @return True = The object was successfully saved; False = There was an
+     * error.
+     */
+    protected abstract boolean save(T anObj);
+
+    /**
+     * Removes a row from the database and updates the list of T objects in
+     * memory.
      *
      * @param primaryKey The primary key of the row to be removed.
      * @return True = The row was successfully removed; False = There was an
@@ -47,10 +59,20 @@ public abstract class GridClass<T extends DatabaseObject> {
     protected abstract boolean remove(Integer primaryKey);
 
     /**
+     * Gets the list of all T objects that are currently in memory.
      *
      * @return
      */
     public ArrayList<T> getList() {
         return this.rows;
+    }
+
+    /**
+     * Gets the last error message generated.
+     *
+     * @return
+     */
+    public String getErrorMessage() {
+        return this.errorMessage;
     }
 }

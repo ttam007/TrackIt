@@ -17,11 +17,6 @@ public abstract class SQLHelper<T>
      * This value can never be a primary key.
      */
     public final static Integer INVALID_PRIMARY_KEY = 0;
-    /**
-     * Should be final, but java doesn't allow this with the inheritance that we
-     * are using. Thus, it is only set in child constructors.
-     */
-    static String COLUMN_PK;
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Protected Fields">
 
@@ -33,7 +28,7 @@ public abstract class SQLHelper<T>
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     /**
-     * sql helper for dbase
+     * Default Constructor.
      */
     protected SQLHelper() {
     }
@@ -278,6 +273,8 @@ public abstract class SQLHelper<T>
     public abstract void delete(Integer primaryKey)
             throws SQLException, Exception;
 
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Public Methods">
     /**
      * Checks to see if any column that is not nullable has a null value.
      *
@@ -286,7 +283,7 @@ public abstract class SQLHelper<T>
      * @return True = either column allows nulls or value is not null; False =
      * column doesn't allow nulls and value is null.
      */
-    protected boolean tryNullCheck(String columnName, java.sql.Date aValue) {
+    public boolean tryNullCheck(String columnName, java.sql.Date aValue) {
         try {
             doNullCheck(columnName, aValue);
             return true;
@@ -303,7 +300,7 @@ public abstract class SQLHelper<T>
      * @return Either the parameter aValue or throws NonNullableValueException.
      * @throws SQLException When aValue is NULL and NULL is not allowed.
      */
-    protected abstract java.sql.Date doNullCheck(String columnName, java.sql.Date aValue)
+    public abstract java.sql.Date doNullCheck(String columnName, java.sql.Date aValue)
             throws SQLException;
 
     /**
@@ -314,7 +311,7 @@ public abstract class SQLHelper<T>
      * @return True = either column allows nulls or value is not null; False =
      * column doesn't allow nulls and value is null.
      */
-    protected boolean tryNullCheck(String columnName, Double aValue) {
+    public boolean tryNullCheck(String columnName, Double aValue) {
         try {
             doNullCheck(columnName, aValue);
             return true;
@@ -331,7 +328,7 @@ public abstract class SQLHelper<T>
      * @return Either the parameter aValue or throws NonNullableValueException.
      * @throws SQLException When aValue is NULL and NULL is not allowed.
      */
-    protected abstract Double doNullCheck(String columnName, Double aValue)
+    public abstract Double doNullCheck(String columnName, Double aValue)
             throws SQLException;
 
     /**
@@ -342,7 +339,7 @@ public abstract class SQLHelper<T>
      * @return True = either column allows nulls or value is not null; False =
      * column doesn't allow nulls and value is null.
      */
-    protected boolean tryNullCheck(String columnName, Integer aValue) {
+    public boolean tryNullCheck(String columnName, Integer aValue) {
         try {
             doNullCheck(columnName, aValue);
             return true;
@@ -359,7 +356,7 @@ public abstract class SQLHelper<T>
      * @return Either the parameter aValue or throws NonNullableValueException.
      * @throws SQLException When aValue is NULL and NULL is not allowed.
      */
-    protected abstract Integer doNullCheck(String columnName, Integer aValue)
+    public abstract Integer doNullCheck(String columnName, Integer aValue)
             throws SQLException;
 
     /**
@@ -370,7 +367,7 @@ public abstract class SQLHelper<T>
      * @return True = either column allows nulls or value is not null; False =
      * column doesn't allow nulls and value is null.
      */
-    protected boolean tryNullCheck(String columnName, String aValue) {
+    public boolean tryNullCheck(String columnName, String aValue) {
         try {
             doNullCheck(columnName, aValue);
             return true;
@@ -387,7 +384,7 @@ public abstract class SQLHelper<T>
      * @return Either the parameter aValue or throws NonNullableValueException.
      * @throws SQLException When aValue is NULL and NULL is not allowed.
      */
-    protected abstract String doNullCheck(String columnName, String aValue)
+    public abstract String doNullCheck(String columnName, String aValue)
             throws SQLException;
     // </editor-fold>
 }
