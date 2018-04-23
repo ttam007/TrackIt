@@ -24,8 +24,16 @@ public class OrdersPanel
 
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
+    /**
+     * Integer key = The row in the grid of the AnOrder object.
+     */
     private final HashMap<Integer, AnOrder> orders = new HashMap<>();
-    private final Orders bll = new Orders();
+    private final Orders bllOrders = new Orders();
+    /**
+     * Integer key = The ASupplier's primary key.
+     */
+    private final HashMap<Integer, ASupplier> suppliers = new HashMap<>();
+    private final Suppliers bllSuppliers = new Suppliers();
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     private JButton btnCreate, btnRemove, btnEdit;
@@ -130,7 +138,7 @@ public class OrdersPanel
                 JOptionPane.showMessageDialog(null, "Select item to remove");
             } else {
                 AnOrder anOrder = this.orders.get(selectedRow);
-                if (this.bll.remove(anOrder.getPrimaryKey())) {
+                if (this.bllOrders.remove(anOrder.getPrimaryKey())) {
                     this.refreshGrid();
                     //JOptionPane.showMessageDialog(null, String.format("%s has been removed.", anOrder.getDescription()));
                 } else {
@@ -153,11 +161,15 @@ public class OrdersPanel
         btnRemove.setEnabled(disableButtons);
     }
 
-    private void initTableData(ArrayList<AnOrder> aList) {
+    private void initTableData(ArrayList<AnOrder> listOrders) {
         if (this.orders != null) {
             int counter = 0;
-            for (AnOrder anOrder : aList) {
-                Object[] data = {anOrder.getDescription(), anOrder.getOrderedFrom(), anOrder.getDateOrdered(), anOrder.getOrderStatus(), anOrder.getDateExpected()};
+            for (AnOrder anOrder : listOrders) {
+                //{"Description", "Supplier", "Status", "Order Date", "Expected Date"};
+                Object[] data = {anOrder.getDescription(),
+                    this.suppliers.get(anOrder.getOrderedFrom()).getNickname(),
+                    anOrder.getDateOrdered(), anOrder.getOrderStatus(),
+                    anOrder.getDateExpected()};
                 mainTableModel.addRow(data);
                 this.orders.put(counter, anOrder);
                 counter++;
@@ -176,9 +188,19 @@ public class OrdersPanel
         }
 
         //Now load fresh data from database.
-        if (this.bll.load()) {
-            ArrayList<AnOrder> aList = this.bll.getList();
-            initTableData(aList);
+        if (this.bllSuppliers.load()) {
+            ArrayList<ASupplier> listSuppliers = this.bllSuppliers.getList();
+            for (ASupplier aSupplier : listSuppliers) {
+                this.suppliers.put(aSupplier.getPrimaryKey(), aSupplier);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
+                    Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+        }
+
+        if (this.bllOrders.load()) {
+            ArrayList<AnOrder> listOrders = this.bllOrders.getList();
+            initTableData(listOrders);
         } else {
             JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
                     Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);

@@ -1,10 +1,5 @@
 package trackittestdriver;
 
-import trackit.AnOrderItem;
-import trackit.AnOrder;
-import trackit.AnItem;
-import trackit.AnInventoryItem;
-import trackit.ASupplier;
 import java.sql.*;
 import java.util.*;
 import trackit.*;
@@ -102,12 +97,12 @@ public class DALTestDriver {
                 System.out.println("Connection = " + conn.getConnection());
             } else {
                 System.out.println("Invalid Connection");
-                System.out.println("SQLConnector's errorMessage = " + conn.getErrorMessage());
+                System.out.println("SQLConnector's errorMessage = " + Utilities.getErrorMessage());
             }
 
         } catch (SQLException exSQL) {
             System.out.println("SQL error = " + exSQL.getLocalizedMessage());
-            System.out.println("SQLConnector's errorMessage = " + conn.getErrorMessage());
+            System.out.println("SQLConnector's errorMessage = " + Utilities.getErrorMessage());
         } catch (Exception ex) {
             System.out.println("Generic error = " + ex.getLocalizedMessage());
         }

@@ -26,6 +26,15 @@ public abstract class GridClass<T extends DatabaseObject> {
     protected abstract boolean load();
 
     /**
+     * Loads an single object from the database into rows.
+     *
+     * @param primaryKey The primary key of the object to be loaded.
+     * @return True = The object was successfully retrieved; False = There was
+     * an error.
+     */
+    protected abstract boolean load(Integer primaryKey);
+
+    /**
      * Saves all rows to the database from the grid and updates the list of T
      * objects in memory.
      *

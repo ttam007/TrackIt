@@ -183,9 +183,9 @@ public class InventoryItemDetailsDialog
         gbc.gridy = 3;
         gbc.gridwidth = 1;
         add(statusLabel, gbc);
+
         //Text Field
         statusField = new JComboBox<>(ItemStatusType.getTextForAll());
-
         gbc.gridx = 5;
         gbc.gridy = 3;
         gbc.gridwidth = 1;
