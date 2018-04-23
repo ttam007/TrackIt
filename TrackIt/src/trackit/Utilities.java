@@ -304,5 +304,17 @@ public class Utilities {
             aDatePicker.getModel().setDate(aCalendar.get(Calendar.YEAR), aCalendar.get(Calendar.MONTH), aCalendar.get(Calendar.DAY_OF_MONTH));
         }
     }
+
+    /**
+     * Gets the current date from the specified date picker.
+     *
+     * @param aDatePicker The date picker to get the date from.
+     * @return The date in the date picker.
+     */
+    public static java.util.Date getDatePickersDate(JDatePickerImpl aDatePicker) {
+        UtilDateModel aModel = (UtilDateModel) aDatePicker.getModel();
+        return aModel.getValue();
+    }
+
     // </editor-fold>
 }

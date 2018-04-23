@@ -31,6 +31,28 @@ public class OrderItems
     }
 
     /**
+     * Loads an single object from the database into rows.
+     *
+     * @param primaryKey The primary key of the object to be loaded.
+     * @return True = The object was successfully retrieved; False = There was
+     * an error.
+     */
+    @Override
+    public boolean load(Integer primaryKey) {
+        boolean returnValue = false;
+        try {
+            rows.clear();
+            rows.add(AnOrderItem.load(primaryKey));
+            returnValue = true;
+        } catch (SQLException exSQL) {
+            Utilities.setErrorMessage(exSQL);
+        } catch (Exception ex) {
+            Utilities.setErrorMessage(ex);
+        }
+        return returnValue;
+    }
+
+    /**
      * Saves all rows to the database from the grid.
      *
      * @return True = The rows were successfully saved; False = There was an
@@ -45,7 +67,7 @@ public class OrderItems
             }
             returnValue = true;
         } catch (SQLException exSQL) {
-           Utilities.setErrorMessage(exSQL);
+            Utilities.setErrorMessage(exSQL);
         } catch (Exception ex) {
             Utilities.setErrorMessage(ex);
         }
@@ -65,7 +87,7 @@ public class OrderItems
             AnOrderItem.save(anObj);
             returnValue = true;
         } catch (java.sql.SQLException exSQL) {
-          Utilities.setErrorMessage(exSQL);
+            Utilities.setErrorMessage(exSQL);
         } catch (Exception ex) {
             Utilities.setErrorMessage(ex);
         }
@@ -86,7 +108,7 @@ public class OrderItems
             AnOrderItem.remove(primaryKey);
             returnValue = true;
         } catch (SQLException exSQL) {
-           Utilities.setErrorMessage(exSQL);
+            Utilities.setErrorMessage(exSQL);
         } catch (Exception ex) {
             Utilities.setErrorMessage(ex);
         }
