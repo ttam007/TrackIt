@@ -111,7 +111,7 @@ public class CheckInOutDialog
         add(qtyTextField, gbc);
 
         // Init Ok Button
-        btnOK = new JButton("Ok");
+        btnOK = new JButton(Utilities.BUTTON_OK);
         gbc.gridx = 3;
         gbc.gridy = 4;
         gbc.gridwidth = 1;
@@ -121,7 +121,7 @@ public class CheckInOutDialog
         });
 
         //Cancel
-        btnCancel = new JButton("Cancel");
+        btnCancel = new JButton(Utilities.BUTTON_CANCEL);
         gbc.gridx = 4;
         gbc.gridy = 4;
         gbc.gridwidth = 1;

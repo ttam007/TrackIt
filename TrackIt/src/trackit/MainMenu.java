@@ -1,7 +1,6 @@
 package trackit;
 
 import java.util.*;
-import trackit.UI.*;
 
 /**
  *
@@ -48,20 +47,5 @@ public class MainMenu {
         Login login = new Login();
         login.startLogout();
         //TODO:  close the Main Menu UI; done in MainMenuFrame
-    }
-
-    /**
-     * exit app
-     */
-    public void exit() {
-        //TODO:  close all other windows?
-    }
-
-    /**
-     * start the application
-     */
-    public void start() {
-        MainMenuFrame dlgMain = new MainMenuFrame();
-        dlgMain.display();
     }
 }

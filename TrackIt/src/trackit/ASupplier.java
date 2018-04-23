@@ -43,6 +43,10 @@ public class ASupplier
      */
     public final void setNickname(String aNickname)
             throws SQLException {
+        if (HELPER.tryNullCheck(SQLHelperSupplier.COLUMN_NICKNAME, aNickname)
+                && aNickname.trim().equals("")) {
+            throw new NonEmptyStringException("Name");
+        }
         this.nickname = HELPER.doNullCheck(SQLHelperSupplier.COLUMN_NICKNAME, aNickname);
     }
 

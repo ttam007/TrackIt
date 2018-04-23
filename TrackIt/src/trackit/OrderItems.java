@@ -23,9 +23,9 @@ public class OrderItems
             rows = AnOrderItem.loadAll();
             returnValue = true;
         } catch (SQLException exSQL) {
-            this.errorMessage = exSQL.getLocalizedMessage();
+            Utilities.setErrorMessage(exSQL);
         } catch (Exception ex) {
-            this.errorMessage = ex.getLocalizedMessage();
+            Utilities.setErrorMessage(ex);
         }
         return returnValue;
     }
@@ -45,9 +45,9 @@ public class OrderItems
             }
             returnValue = true;
         } catch (SQLException exSQL) {
-            this.errorMessage = exSQL.getLocalizedMessage();
+           Utilities.setErrorMessage(exSQL);
         } catch (Exception ex) {
-            this.errorMessage = ex.getLocalizedMessage();
+            Utilities.setErrorMessage(ex);
         }
         return returnValue;
     }
@@ -65,9 +65,9 @@ public class OrderItems
             AnOrderItem.save(anObj);
             returnValue = true;
         } catch (java.sql.SQLException exSQL) {
-            anObj.setErrorMessage(exSQL.getLocalizedMessage());
+          Utilities.setErrorMessage(exSQL);
         } catch (Exception ex) {
-            anObj.setErrorMessage(ex.getLocalizedMessage());
+            Utilities.setErrorMessage(ex);
         }
         return returnValue;
     }
@@ -86,9 +86,9 @@ public class OrderItems
             AnOrderItem.remove(primaryKey);
             returnValue = true;
         } catch (SQLException exSQL) {
-            this.errorMessage = exSQL.getLocalizedMessage();
+           Utilities.setErrorMessage(exSQL);
         } catch (Exception ex) {
-            this.errorMessage = ex.getLocalizedMessage();
+            Utilities.setErrorMessage(ex);
         }
         return returnValue;
     }
