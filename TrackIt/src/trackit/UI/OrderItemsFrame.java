@@ -34,6 +34,11 @@ public class OrderItemsFrame
     //For the grid.
     private final HashMap<Integer, AnOrderItem> orderItems = new HashMap<>();
     private final OrderItems bllOrderItems = new OrderItems();
+
+    /**
+     * Used to toggle edit and remove buttons on and off.
+     */
+    private boolean makeButtonsEnabled = false;
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     private JButton btnCheckIn, btnCheckInAll, btnCreate, btnEdit, btnRemove, btnOK, btnAddItem, btnCancel;
@@ -67,6 +72,7 @@ public class OrderItemsFrame
         initializeComponents();
         populateComponents();
         refreshGrid();
+        toggleDisableButton();
     }
 
     // </editor-fold>
@@ -237,6 +243,29 @@ public class OrderItemsFrame
         scrollPane = new JScrollPane(mainTable);
         mainTable.setFillsViewportHeight(true);
         mainTable.setDefaultEditor(Object.class, null);
+        mainTable.getSelectionModel().addListSelectionListener((e) -> {
+            //if the row is bigger than -1 than we need to enable the buttons
+            if (mainTable.getSelectedRow() > -1) {
+                makeButtonsEnabled = true;
+                toggleDisableButton();
+            }
+        });
+        mainTable.addMouseListener(new MouseAdapter() {
+            /**
+             * https://stackoverflow.com/questions/14852719/double-click-listener-on-jtable-in-java
+             *
+             * @param mouseEvent
+             */
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+                JTable table = (JTable) mouseEvent.getSource();
+                Point point = mouseEvent.getPoint();
+                int row = table.rowAtPoint(point);
+                if (mouseEvent.getClickCount() == 2) {// && table.getSelectedRow() != -1) {
+                    editAction();
+                }
+            }
+        });
 
         add(scrollPane, BorderLayout.CENTER);
 
@@ -272,17 +301,7 @@ public class OrderItemsFrame
         btnEdit = new JButton(Utilities.BUTTON_EDIT);
         pnlBtm.add(btnEdit);
         btnEdit.addActionListener((ActionEvent e) -> {
-            int selectedRow = this.mainTable.getSelectedRow();
-            if (selectedRow < 0) {
-                JOptionPane.showMessageDialog(this, "Select item to remove");
-            } else {
-                AnOrderItem anOrderItem = this.orderItems.get(selectedRow);
-                OrderItemDetailsDialog dlgEdit = new OrderItemDetailsDialog(false, anOrderItem);
-                dlgEdit.setLocationRelativeTo(this);
-                if (dlgEdit.display() == DialogResultType.OK) {
-                    this.refreshGrid();
-                }
-            }
+            editAction();
         });
 
         btnRemove = new JButton(Utilities.BUTTON_REMOVE);
@@ -388,6 +407,11 @@ public class OrderItemsFrame
         this.dispose();
     }
 
+    private void toggleDisableButton() {
+        btnEdit.setEnabled(makeButtonsEnabled);
+        btnRemove.setEnabled(makeButtonsEnabled);
+    }
+
     private void initTableData(ArrayList<AnOrderItem> aList) {
         if (this.orderItems != null) {
             int counter = 0;
@@ -420,6 +444,23 @@ public class OrderItemsFrame
         } else {
             JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
                     Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    /**
+     * Pops the detail item dialog if an item is selected.
+     */
+    private void editAction() {
+        int selectedRow = this.mainTable.getSelectedRow();
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(this, "Select item to remove");
+        } else {
+            AnOrderItem anOrderItem = this.orderItems.get(selectedRow);
+            OrderItemDetailsDialog dlgEdit = new OrderItemDetailsDialog(false, anOrderItem);
+            dlgEdit.setLocationRelativeTo(this);
+            if (dlgEdit.display() == DialogResultType.OK) {
+                this.refreshGrid();
+            }
         }
     }
     // </editor-fold>

@@ -2,6 +2,8 @@ package trackit.UI;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -31,7 +33,7 @@ public class InventoryItemsPanel
     private JButton btnCreate, btnEdit, btnRemove, btnCheckInOut;
     private DefaultTableModel mainTableModel;
     private JScrollPane sp;
-    private boolean disableButtons = false;//use this variable to toggle edit and remove buttons on and off
+    private boolean makeButtonsEnabled = false;//use this variable to toggle edit and remove buttons on and off
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -41,6 +43,7 @@ public class InventoryItemsPanel
     public InventoryItemsPanel() {
         initializeComponents();
         refreshItems();
+        toggleDisableButton();
     }
 
     // </editor-fold>
@@ -71,17 +74,58 @@ public class InventoryItemsPanel
     private void initializeComponents() {
         BorderLayout border = new BorderLayout();
         this.setLayout(border);
-        createUIComponents();
         this.setSize(new Dimension(1100, 700));
+
+        mainTableModel = new DefaultTableModel(TABLE_LABELS, 0);
+
+        mainTable = new JTable(mainTableModel);
+        mainTable.getTableHeader().setReorderingAllowed(false);
+        mainTable.setDefaultEditor(Object.class, null);
+        mainTable.getSelectionModel().addListSelectionListener((e) -> {
+            //if the row is bigger than -1 than we need to enable the buttons
+            if (mainTable.getSelectedRow() > -1) {
+                makeButtonsEnabled = true;
+                toggleDisableButton();
+            }
+        });
+        mainTable.addMouseListener(new MouseAdapter() {
+            /**
+             * https://stackoverflow.com/questions/14852719/double-click-listener-on-jtable-in-java
+             *
+             * @param mouseEvent
+             */
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+                JTable table = (JTable) mouseEvent.getSource();
+                Point point = mouseEvent.getPoint();
+                int row = table.rowAtPoint(point);
+                if (mouseEvent.getClickCount() == 2) {// && table.getSelectedRow() != -1) {
+                    editAction();
+                }
+            }
+        });
+        mainTable.setBounds(30, 40, 200, 200);
+
+        setButtons();
+        sp = new JScrollPane(mainTable);
+
+        add(sp, BorderLayout.CENTER);
+
+        JPanel buttonHolder = new JPanel(new GridLayout(0, 8, 2, 0));
+
+        buttonHolder.add(btnCreate);
+        buttonHolder.add(btnEdit);
+        buttonHolder.add(btnRemove);
+        buttonHolder.add(btnCheckInOut);
+        add(buttonHolder, BorderLayout.PAGE_END);
     }
 
     /**
      * Toggles whether buttons will be enabled or not.
      */
     private void toggleDisableButton() {
-
-        btnEdit.setEnabled(disableButtons);
-        btnRemove.setEnabled(disableButtons);
+        btnEdit.setEnabled(makeButtonsEnabled);
+        btnRemove.setEnabled(makeButtonsEnabled);
     }
 
     private void setButtons() {
@@ -96,24 +140,11 @@ public class InventoryItemsPanel
         });
 
         btnEdit = new JButton(Utilities.BUTTON_EDIT);
-        btnEdit.setEnabled(disableButtons);
         btnEdit.addActionListener((ActionEvent e) -> {
-            //If list item selected then edit item else select item.
-            int selectedRow = this.mainTable.getSelectedRow();
-            if (selectedRow < 0) {
-                JOptionPane.showMessageDialog(this, "Select item to edit");
-            } else {
-                AnInventoryItem anInventoryItem = this.inventoryItems.get(selectedRow);
-                InventoryItemDetailsDialog dlgEdit = new InventoryItemDetailsDialog(false, anInventoryItem);
-                dlgEdit.setLocationRelativeTo(this);
-                if (dlgEdit.display() == DialogResultType.OK) {
-                    this.refreshItems();
-                }
-            }
+            editAction();
         });
 
         btnRemove = new JButton(Utilities.BUTTON_REMOVE);
-        btnRemove.setEnabled(disableButtons);
         btnRemove.addActionListener((ActionEvent e) -> {
             int selectedRow = this.mainTable.getSelectedRow();
             if (selectedRow < 0) {
@@ -153,38 +184,6 @@ public class InventoryItemsPanel
         }
     }
 
-    private void createUIComponents() {
-
-        mainTableModel = new DefaultTableModel(TABLE_LABELS, 0);
-
-        mainTable = new JTable(mainTableModel);
-        mainTable.getTableHeader().setReorderingAllowed(false);
-        mainTable.setDefaultEditor(Object.class, null);
-
-        // Add action listener to JTable
-        mainTable.getSelectionModel().addListSelectionListener((e) -> {
-            //if the row is bigger than -1 than we need to enable the buttons
-            if (mainTable.getSelectedRow() > -1) {
-                disableButtons = true;
-                toggleDisableButton();
-            }
-        });
-        mainTable.setBounds(30, 40, 200, 200);
-
-        setButtons();
-        sp = new JScrollPane(mainTable);
-
-        add(sp, BorderLayout.CENTER);
-
-        JPanel buttonHolder = new JPanel(new GridLayout(0, 8, 2, 0));
-
-        buttonHolder.add(btnCreate);
-        buttonHolder.add(btnEdit);
-        buttonHolder.add(btnRemove);
-        buttonHolder.add(btnCheckInOut);
-        add(buttonHolder, BorderLayout.PAGE_END);
-    }
-
     /**
      * Refreshes the list of items that are displayed in the grid.
      */
@@ -200,6 +199,23 @@ public class InventoryItemsPanel
         } else {
             JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
                     Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    /**
+     * Pops the detail item dialog if an item is selected.
+     */
+    private void editAction() {
+        int selectedRow = this.mainTable.getSelectedRow();
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(this, "Select item to edit");
+        } else {
+            AnInventoryItem anInventoryItem = this.inventoryItems.get(selectedRow);
+            InventoryItemDetailsDialog dlgEdit = new InventoryItemDetailsDialog(false, anInventoryItem);
+            dlgEdit.setLocationRelativeTo(this);
+            if (dlgEdit.display() == DialogResultType.OK) {
+                this.refreshItems();
+            }
         }
     }
 

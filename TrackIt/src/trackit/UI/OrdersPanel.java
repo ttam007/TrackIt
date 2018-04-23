@@ -34,13 +34,17 @@ public class OrdersPanel
      */
     private final HashMap<Integer, ASupplier> suppliers = new HashMap<>();
     private final Suppliers bllSuppliers = new Suppliers();
+
+    /**
+     * Used to toggle edit and remove buttons on and off.
+     */
+    private boolean makeButtonsEnabled = false;
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     private JButton btnCreate, btnRemove, btnEdit;
     private JTable mainTable;
     private DefaultTableModel mainTableModel;
     private JScrollPane sp;
-    private boolean disableButtons = false;//use this variable to toggle edit and remove buttons on and off
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -50,6 +54,7 @@ public class OrdersPanel
     public OrdersPanel() {
         initializeComponents();
         refreshGrid();
+        toggleDisableButton();
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
@@ -89,10 +94,27 @@ public class OrdersPanel
         mainTable.getSelectionModel().addListSelectionListener((e) -> {
             //if the row is bigger than -1 than we need to enable the buttons
             if (mainTable.getSelectedRow() > -1) {
-                disableButtons = true;
+                makeButtonsEnabled = true;
                 toggleDisableButton();
             }
         });
+        mainTable.addMouseListener(new MouseAdapter() {
+            /**
+             * https://stackoverflow.com/questions/14852719/double-click-listener-on-jtable-in-java
+             *
+             * @param mouseEvent
+             */
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+                JTable table = (JTable) mouseEvent.getSource();
+                Point point = mouseEvent.getPoint();
+                int row = table.rowAtPoint(point);
+                if (mouseEvent.getClickCount() == 2) {// && table.getSelectedRow() != -1) {
+                    editAction();
+                }
+            }
+        });
+
         mainTable.setBounds(30, 40, 200, 200);
 
         sp = new JScrollPane(mainTable);
@@ -113,25 +135,11 @@ public class OrdersPanel
         });
 
         btnEdit = new JButton(Utilities.BUTTON_EDIT);
-        btnEdit.setEnabled(disableButtons);
         btnEdit.addActionListener((ActionEvent e) -> {
-            System.out.print("Edit order");
-            //if list item selected edit item else select item
-            int selectedRow = mainTable.getSelectedRow();
-            if (selectedRow < 0) {
-                JOptionPane.showMessageDialog(null, "Select item to edit");
-            } else {
-                AnOrder anOrder = this.orders.get(selectedRow);
-                OrderItemsFrame dlgEdit = new OrderItemsFrame(false, anOrder);
-                dlgEdit.setLocationRelativeTo(sp);
-                if (dlgEdit.display() == DialogResultType.OK) {
-                    this.refreshGrid();
-                }
-            }
+            editAction();
         });
 
         btnRemove = new JButton(Utilities.BUTTON_REMOVE);
-        btnRemove.setEnabled(disableButtons);
         btnRemove.addActionListener((ActionEvent e) -> {
             int selectedRow = this.mainTable.getSelectedRow();
             if (selectedRow < 0) {
@@ -157,8 +165,8 @@ public class OrdersPanel
     }
 
     private void toggleDisableButton() {
-        btnEdit.setEnabled(disableButtons);
-        btnRemove.setEnabled(disableButtons);
+        btnEdit.setEnabled(makeButtonsEnabled);
+        btnRemove.setEnabled(makeButtonsEnabled);
     }
 
     private void initTableData(ArrayList<AnOrder> listOrders) {
@@ -204,6 +212,23 @@ public class OrdersPanel
         } else {
             JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
                     Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    /**
+     * Pops the detail item dialog if an item is selected.
+     */
+    private void editAction() {
+        int selectedRow = mainTable.getSelectedRow();
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(null, "Select item to edit");
+        } else {
+            AnOrder anOrder = this.orders.get(selectedRow);
+            OrderItemsFrame dlgEdit = new OrderItemsFrame(false, anOrder);
+            dlgEdit.setLocationRelativeTo(sp);
+            if (dlgEdit.display() == DialogResultType.OK) {
+                this.refreshGrid();
+            }
         }
     }
     // </editor-fold>
