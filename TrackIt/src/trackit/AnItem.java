@@ -56,12 +56,16 @@ public abstract class AnItem
     /**
      * This can not be null.
      *
-     * @param description
+     * @param aDescription
      * @throws SQLException
      */
-    public void setDescription(String description)
+    public void setDescription(String aDescription)
             throws SQLException {
-        this.description = HELPER.doNullCheck(SQLHelperItem.COLUMN_DESCRIPTION, description);
+        if (HELPER.tryNullCheck(SQLHelperItem.COLUMN_DESCRIPTION, aDescription)
+                && aDescription.trim().equals("")) {
+            throw new NonEmptyStringException("Description");
+        }
+        this.description = HELPER.doNullCheck(SQLHelperItem.COLUMN_DESCRIPTION, aDescription);
     }
 
     /**

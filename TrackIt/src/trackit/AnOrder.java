@@ -49,6 +49,10 @@ public class AnOrder
      */
     public void setDescription(String aDescription)
             throws SQLException {
+        if (HELPER.tryNullCheck(SQLHelperOrder.COLUMN_DESCRIPTION, aDescription)
+                && aDescription.trim().equals("")) {
+            throw new NonEmptyStringException("Description");
+        }
         this.description = HELPER.doNullCheck(SQLHelperOrder.COLUMN_DESCRIPTION, aDescription);
     }
 

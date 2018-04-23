@@ -192,7 +192,7 @@ public class InventoryItemDetailsDialog
         add(statusField, gbc);
 
         // Init Ok Button
-        btnOK = new JButton("Ok");
+        btnOK = new JButton(Utilities.BUTTON_OK);
         gbc.gridx = 3;
         gbc.gridy = 4;
         gbc.gridwidth = 1;
@@ -202,7 +202,7 @@ public class InventoryItemDetailsDialog
         });
 
         //Cancel
-        btnCancel = new JButton("Cancel");
+        btnCancel = new JButton(Utilities.BUTTON_CANCEL);
         gbc.gridx = 4;
         gbc.gridy = 4;
         gbc.gridwidth = 1;
@@ -241,8 +241,9 @@ public class InventoryItemDetailsDialog
             java.util.Date expDate = (Date) expDatePicker.getModel().getValue();
             this.anInventoryItem.setExpirationDate(expDate);
             returnValue = true;
-        } catch (java.sql.SQLException exSQL) {
-            JOptionPane.showMessageDialog(this, this.anInventoryItem.getErrorMessage(),
+        } catch (java.sql.SQLException | RuntimeException ex) {
+            Utilities.setErrorMessage(ex);
+            JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
                     Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
         }
         return returnValue;
@@ -261,7 +262,7 @@ public class InventoryItemDetailsDialog
                 this.dispose();
             } else {
                 this.dialogResult = DialogResultType.CANCEL;
-                JOptionPane.showMessageDialog(this, this.bll.getErrorMessage(),
+                JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
                         Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
             }
         }

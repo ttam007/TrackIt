@@ -187,7 +187,7 @@ public class OrderItemsFrame
         //topBox.add(btmInnerBx);
         //middleBox = Box.createHorizontalBox();
         //JPanel pnlMiddleBox = new JPanel(new GridLayout(0, 8, 2, 0));
-        btnCheckIn = new JButton("Check In");
+        btnCheckIn = new JButton(Utilities.BUTTON_CHECKIN);
         gbc.gridx = 0;
         gbc.gridy = 2;
         pnlTopBpx.add(btnCheckIn, gbc);
@@ -197,7 +197,7 @@ public class OrderItemsFrame
             JOptionPane.showMessageDialog(this, "Item Checked In");
         });
 
-        btnCheckInAll = new JButton("Check In All");
+        btnCheckInAll = new JButton(Utilities.BUTTON_CHECKINALL);
         gbc.gridx = 1;
         gbc.gridy = GridBagConstraints.RELATIVE;
         pnlTopBpx.add(btnCheckInAll, gbc);
@@ -249,7 +249,7 @@ public class OrderItemsFrame
 
         pnlBtm = new JPanel(new GridLayout(0, 8, 2, 0));
 
-        btnAddItem = new JButton("Add Item");
+        btnAddItem = new JButton(Utilities.BUTTON_ADD);
         pnlBtm.add(btnAddItem);
         btnAddItem.addActionListener((ActionEvent e) -> {
             OrderItemDetailsDialog dlgAdd = new OrderItemDetailsDialog(true, null);
@@ -259,7 +259,7 @@ public class OrderItemsFrame
             }
         });
 
-        btnCreate = new JButton("Create");
+        btnCreate = new JButton(Utilities.BUTTON_CREATE);
         pnlBtm.add(btnCreate);
         btnCreate.addActionListener((ActionEvent e) -> {
             InventoryItemDetailsDialog dlgCreate = new InventoryItemDetailsDialog(true, null);
@@ -269,7 +269,7 @@ public class OrderItemsFrame
             }
         });
 
-        btnEdit = new JButton("Edit");
+        btnEdit = new JButton(Utilities.BUTTON_EDIT);
         pnlBtm.add(btnEdit);
         btnEdit.addActionListener((ActionEvent e) -> {
             int selectedRow = this.mainTable.getSelectedRow();
@@ -285,7 +285,7 @@ public class OrderItemsFrame
             }
         });
 
-        btnRemove = new JButton("Remove");
+        btnRemove = new JButton(Utilities.BUTTON_REMOVE);
         pnlBtm.add(btnRemove);
         btnRemove.addActionListener((ActionEvent e) -> {
             int selectedRow = this.mainTable.getSelectedRow();
@@ -298,19 +298,19 @@ public class OrderItemsFrame
                     JOptionPane.showMessageDialog(null,
                             String.format("%s has been removed.", anOrderItem.getDescription()));
                 } else {
-                    JOptionPane.showMessageDialog(this, this.bllOrderItems.getErrorMessage(),
+                    JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
                             Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
 
-        btnOK = new JButton("OK");
+        btnOK = new JButton(Utilities.BUTTON_OK);
         pnlBtm.add(btnOK);
         btnOK.addActionListener((ActionEvent e) -> {
             saveAction();
         });
 
-        btnCancel = new JButton("Cancel");
+        btnCancel = new JButton(Utilities.BUTTON_CANCEL);
         pnlBtm.add(btnCancel);
         btnCancel.addActionListener((ActionEvent e) -> {
             cancelAction();
@@ -349,8 +349,9 @@ public class OrderItemsFrame
             this.anOrder.setDateOrdered((Date) this.orderDatePicker.getModel().getValue());
             this.anOrder.setDateExpected((Date) this.expectedDatePicker.getModel().getValue());
             returnValue = true;
-        } catch (java.sql.SQLException exSQL) {
-            JOptionPane.showMessageDialog(this, this.anOrder.getErrorMessage(),
+        } catch (java.sql.SQLException | RuntimeException ex) {
+            Utilities.setErrorMessage(ex);
+            JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
                     Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
         }
         return returnValue;
@@ -369,7 +370,7 @@ public class OrderItemsFrame
                 this.dispose();
             } else {
                 this.dialogResult = DialogResultType.CANCEL;
-                JOptionPane.showMessageDialog(this, this.bllOrders.getErrorMessage(),
+                JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
                         Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -417,7 +418,7 @@ public class OrderItemsFrame
             ArrayList<AnOrderItem> aList = this.bllOrderItems.getList();
             initTableData(aList);
         } else {
-            JOptionPane.showMessageDialog(this, bllOrderItems.getErrorMessage(),
+            JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
                     Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
         }
     }

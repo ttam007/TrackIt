@@ -86,7 +86,7 @@ public class InventoryItemsPanel
 
     private void setButtons() {
 
-        btnCreate = new JButton("Create");
+        btnCreate = new JButton(Utilities.BUTTON_CREATE);
         btnCreate.addActionListener((ActionEvent e) -> {
             InventoryItemDetailsDialog dlgCreate = new InventoryItemDetailsDialog(true, null);
             dlgCreate.setLocationRelativeTo(this);
@@ -95,7 +95,7 @@ public class InventoryItemsPanel
             }
         });
 
-        btnEdit = new JButton("Edit");
+        btnEdit = new JButton(Utilities.BUTTON_EDIT);
         btnEdit.setEnabled(disableButtons);
         btnEdit.addActionListener((ActionEvent e) -> {
             //If list item selected then edit item else select item.
@@ -112,7 +112,7 @@ public class InventoryItemsPanel
             }
         });
 
-        btnRemove = new JButton("Remove");
+        btnRemove = new JButton(Utilities.BUTTON_REMOVE);
         btnRemove.setEnabled(disableButtons);
         btnRemove.addActionListener((ActionEvent e) -> {
             int selectedRow = this.mainTable.getSelectedRow();
@@ -125,13 +125,13 @@ public class InventoryItemsPanel
                     JOptionPane.showMessageDialog(null,
                             String.format("%s has been removed.", anInventoryItem.getDescription()));
                 } else {
-                    JOptionPane.showMessageDialog(this, this.bll.getErrorMessage(),
+                    JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
                             Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
 
-        btnCheckInOut = new JButton("Check In/Out");
+        btnCheckInOut = new JButton(Utilities.BUTTON_CHECKINOUT);
         btnCheckInOut.addActionListener((ActionEvent e) -> {
             CheckInOutDialog checkIn = new CheckInOutDialog();
             checkIn.display();
@@ -198,7 +198,7 @@ public class InventoryItemsPanel
             ArrayList<AnInventoryItem> aList = bll.getList();
             initTableData(aList);
         } else {
-            JOptionPane.showMessageDialog(this, bll.getErrorMessage(),
+            JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
                     Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
         }
     }

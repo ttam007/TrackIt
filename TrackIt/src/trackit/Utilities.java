@@ -15,7 +15,7 @@ import org.jdatepicker.impl.UtilDateModel;
  */
 public class Utilities {
 
-    // <editor-fold defaultstate="expanded" desc="Constants">
+    // <editor-fold defaultstate="collapsed" desc="Constants-Labels">
     /**
      * The name of the team that created this program.
      */
@@ -32,20 +32,82 @@ public class Utilities {
     public static final String PROGRAM_NAME_LONG = "Home Inventory Tracking System";
 
     /**
-     * The correct format of all SQL dates.
-     */
-    public static final String SQL_DATE_FORMAT = "yyyy-MM-dd";
-
-    /**
      * Default caption for error dialog boxes.
      */
     public static final String ERROR_MSG_CAPTION = "Error";
 
+    /**
+     * Default text for OK buttons.
+     */
+    public static final String BUTTON_OK = "OK";
+
+    /**
+     * Default text for Cancel buttons.
+     */
+    public static final String BUTTON_CANCEL = "Cancel";
+
+    /**
+     * Default text for Cancel buttons.
+     */
+    public static final String BUTTON_CREATE = "Create";
+
+    /**
+     * Default text for Cancel buttons.
+     */
+    public static final String BUTTON_EDIT = "Edit";
+
+    /**
+     * Default text for Cancel buttons.
+     */
+    public static final String BUTTON_REMOVE = "Remove";
+
+    /**
+     * Default text for Add buttons.
+     */
+    public static final String BUTTON_ADD = "Add Item";
+
+    /**
+     * Default text for Check In buttons.
+     */
+    public static final String BUTTON_CHECKIN = "Check In";
+
+    /**
+     * Default text for Check In/Out buttons.
+     */
+    public static final String BUTTON_CHECKINOUT = "Check In/Out";
+
+    /**
+     * Default text for Check In All buttons.
+     */
+    public static final String BUTTON_CHECKINALL = "Check In All";
+
+    /**
+     * Default text for Login buttons.
+     */
+    public static final String BUTTON_LOGIN = "Login";
+
+    /**
+     * Default text for Logout buttons.
+     */
+    public static final String BUTTON_LOGOUT = "Logout";
+
+    /**
+     * Default text for Exit buttons.
+     */
+    public static final String BUTTON_EXIT = "Exit";
+
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Constants-Other">
+    /**
+     * The correct format of all SQL dates.
+     */
+    public static final String SQL_DATE_FORMAT = "yyyy-MM-dd";
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Fields">
-    //There shouldn't be any private fields in this class.
+    private static String errorMessage;
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
+
     /**
      * Can never create an instance of this class.
      */
@@ -53,17 +115,45 @@ public class Utilities {
     }
 
     // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Public Methods">
+    // <editor-fold defaultstate="collapsed" desc="Public Instance Methods">
     //There shouldn't be any public instance methods in this class.
     // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Public Static Methods">
+    // <editor-fold defaultstate="expanded" desc="Public Static Methods">
     /**
+     * Gets the caption of the window (frame/dialog) in a consistent formatting.
      *
-     * @param windowName
-     * @return
+     * @param windowName The name of the window.
+     * @return The window's caption.
      */
     public static String getWindowCaption(String windowName) {
         return String.format("%s %s - %s", TEAM_NAME, PROGRAM_NAME_SHORT, windowName);
+    }
+
+    /**
+     * Stores the generated error message for retrieval by another class.
+     *
+     * @param anErrorMessage The error message generated.
+     */
+    public static void setErrorMessage(String anErrorMessage) {
+        Utilities.errorMessage = anErrorMessage;
+    }
+
+    /**
+     * Stores the generated error message for retrieval by another class.
+     *
+     * @param ex The Exception error generated.
+     */
+    public static void setErrorMessage(Exception ex) {
+        Utilities.errorMessage = ex.getLocalizedMessage();
+    }
+
+    /**
+     * This will always have the last error message generated.
+     *
+     * @return The last error generated.
+     */
+    public static String getErrorMessage() {
+        return Utilities.errorMessage;
     }
 
     /**
@@ -75,13 +165,13 @@ public class Utilities {
      */
     public static String buildErrorMessage(SQLException ex) {
         StringBuilder sb = new StringBuilder();
-        //sb.append(String.format("Error = %s\r", ex.getLocalizedMessage()));
+        sb.append(String.format("Error = %s\r", ex.getLocalizedMessage()));
         sb.append(String.format("SQL State = %s\r", ex.getSQLState()));
         sb.append(String.format("Error Code = %s\r", ex.getErrorCode()));
         return sb.toString();
     }
     // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Public Static Methods - Dates">
+    // <editor-fold defaultstate="expanded" desc="Public Static Methods - Dates">
 
     /**
      * Converts from a standard java Date to a SQL Date class.
@@ -214,4 +304,5 @@ public class Utilities {
             aDatePicker.getModel().setDate(aCalendar.get(Calendar.YEAR), aCalendar.get(Calendar.MONTH), aCalendar.get(Calendar.DAY_OF_MONTH));
         }
     }
+    // </editor-fold>
 }

@@ -89,13 +89,13 @@ public class MainMenuFrame
         add(tabpane, BorderLayout.CENTER);
 
         JPanel pnlBottom = new JPanel();
-        btnLogout = new JButton("Log Out");
+        btnLogout = new JButton(Utilities.BUTTON_LOGOUT);
         btnLogout.addActionListener((ActionEvent e) -> {
             setVisible(false);
             LoginFrame login = new LoginFrame();
             login.display();
         });
-        btnExit = new JButton("Exit");
+        btnExit = new JButton(Utilities.BUTTON_EXIT);
         btnExit.addActionListener((ActionEvent e) -> {
             CloseQuery qry = new CloseQuery();
             qry.windowClosing(null);

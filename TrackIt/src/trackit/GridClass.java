@@ -17,11 +17,6 @@ public abstract class GridClass<T extends DatabaseObject> {
     protected ArrayList<T> rows = new ArrayList<>();
 
     /**
-     * The last error message generated.
-     */
-    protected String errorMessage;
-
-    /**
      * Loads all rows from the database to the grid and updates the list of T
      * objects in memory.
      *
@@ -65,14 +60,5 @@ public abstract class GridClass<T extends DatabaseObject> {
      */
     public ArrayList<T> getList() {
         return this.rows;
-    }
-
-    /**
-     * Gets the last error message generated.
-     *
-     * @return
-     */
-    public String getErrorMessage() {
-        return this.errorMessage;
     }
 }

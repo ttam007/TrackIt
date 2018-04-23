@@ -1,8 +1,6 @@
 package trackit;
 
 import java.sql.*;
-import java.util.ArrayList;
-import trackit.DAL.SQLHelperInventoryItem;
 
 /**
  * BAL Layer: Works with the Inventory tab.
@@ -11,23 +9,6 @@ import trackit.DAL.SQLHelperInventoryItem;
  */
 public class Inventory
         extends GridClass<AnInventoryItem> {
-
-    /**
-     * Pulls SQL info from database to load into JTable
-     * @return SQLHelperInventoryItem
-     */
-    public ArrayList<AnInventoryItem> getSQL() {
-        try {
-            System.out.println("\nSelectAll");
-            SQLHelperInventoryItem helper = new SQLHelperInventoryItem();
-            rows = helper.selectAll();
-        } catch (SQLException exSQL) {
-            System.out.println("SQL error = " + exSQL.getLocalizedMessage());
-        } catch (Exception ex) {
-            System.out.println("Generic error = " + ex.getLocalizedMessage());
-        }
-        return rows;
-    }
 
     /**
      * Loads all rows from the database to the grid.
@@ -42,9 +23,9 @@ public class Inventory
             rows = AnInventoryItem.loadAll();
             returnValue = true;
         } catch (SQLException exSQL) {
-            this.errorMessage = exSQL.getLocalizedMessage();
+            Utilities.setErrorMessage(exSQL);
         } catch (Exception ex) {
-            this.errorMessage = ex.getLocalizedMessage();
+            Utilities.setErrorMessage(ex);
         }
         return returnValue;
     }
@@ -64,9 +45,9 @@ public class Inventory
             }
             returnValue = true;
         } catch (SQLException exSQL) {
-            this.errorMessage = exSQL.getLocalizedMessage();
+            Utilities.setErrorMessage(exSQL);
         } catch (Exception ex) {
-            this.errorMessage = ex.getLocalizedMessage();
+            Utilities.setErrorMessage(ex);
         }
         return returnValue;
     }
@@ -84,9 +65,9 @@ public class Inventory
             AnInventoryItem.save(anObj);
             returnValue = true;
         } catch (java.sql.SQLException exSQL) {
-            anObj.setErrorMessage(exSQL.getLocalizedMessage());
+            Utilities.setErrorMessage(exSQL);
         } catch (Exception ex) {
-            anObj.setErrorMessage(ex.getLocalizedMessage());
+            Utilities.setErrorMessage(ex);
         }
         return returnValue;
     }
@@ -105,9 +86,9 @@ public class Inventory
             AnInventoryItem.remove(primaryKey);
             returnValue = true;
         } catch (SQLException exSQL) {
-            this.errorMessage = exSQL.getLocalizedMessage();
+            Utilities.setErrorMessage(exSQL);
         } catch (Exception ex) {
-            this.errorMessage = ex.getLocalizedMessage();
+            Utilities.setErrorMessage(ex);
         }
         return returnValue;
     }

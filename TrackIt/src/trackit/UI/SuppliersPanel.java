@@ -96,7 +96,7 @@ public class SuppliersPanel
 
         JPanel btmSup = new JPanel(new GridLayout(0, 8, 2, 0));
 
-        btnCreate = new JButton("Create");
+        btnCreate = new JButton(Utilities.BUTTON_CREATE);
         btnCreate.addActionListener((ActionEvent e) -> {
             SupplierDetailsDialog dlgCreate = new SupplierDetailsDialog(true, null);
             dlgCreate.setLocationRelativeTo(this);
@@ -105,7 +105,7 @@ public class SuppliersPanel
             }
         });
 
-        btnEdit = new JButton("Edit");
+        btnEdit = new JButton(Utilities.BUTTON_EDIT);
         btnEdit.setEnabled(disableButtons);
         btnEdit.addActionListener((ActionEvent e) -> {
             //If list item selected then edit item else select item.
@@ -122,7 +122,7 @@ public class SuppliersPanel
             }
         });
 
-        btnRemove = new JButton("Remove");
+        btnRemove = new JButton(Utilities.BUTTON_REMOVE);
         btnRemove.setEnabled(disableButtons);
         btnRemove.addActionListener((ActionEvent e) -> {
             int selectedRow = this.mainTable.getSelectedRow();
@@ -135,7 +135,7 @@ public class SuppliersPanel
                     JOptionPane.showMessageDialog(null,
                             String.format("%s has been removed.", aSupplier.getNickname()));
                 } else {
-                    JOptionPane.showMessageDialog(this, this.bll.getErrorMessage(),
+                    JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
                             Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
                 }
             }
@@ -180,7 +180,7 @@ public class SuppliersPanel
             ArrayList<ASupplier> aList = this.bll.getList();
             initTableData(aList);
         } else {
-            JOptionPane.showMessageDialog(this, bll.getErrorMessage(),
+            JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
                     Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
         }
     }

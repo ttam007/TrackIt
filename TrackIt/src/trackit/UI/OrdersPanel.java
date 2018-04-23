@@ -95,7 +95,7 @@ public class OrdersPanel
 
         JPanel btmSup = new JPanel(new GridLayout(0, 8, 2, 0));
 
-        btnCreate = new JButton("Create");
+        btnCreate = new JButton(Utilities.BUTTON_CREATE);
         btnCreate.addActionListener((ActionEvent e) -> {
             OrderItemsFrame dlgCreate = new OrderItemsFrame(true, null);
             dlgCreate.setLocationRelativeTo(sp);
@@ -104,7 +104,7 @@ public class OrdersPanel
             }
         });
 
-        btnEdit = new JButton("Edit");
+        btnEdit = new JButton(Utilities.BUTTON_EDIT);
         btnEdit.setEnabled(disableButtons);
         btnEdit.addActionListener((ActionEvent e) -> {
             System.out.print("Edit order");
@@ -122,7 +122,7 @@ public class OrdersPanel
             }
         });
 
-        btnRemove = new JButton("Remove");
+        btnRemove = new JButton(Utilities.BUTTON_REMOVE);
         btnRemove.setEnabled(disableButtons);
         btnRemove.addActionListener((ActionEvent e) -> {
             int selectedRow = this.mainTable.getSelectedRow();
@@ -134,7 +134,7 @@ public class OrdersPanel
                     this.refreshGrid();
                     //JOptionPane.showMessageDialog(null, String.format("%s has been removed.", anOrder.getDescription()));
                 } else {
-                    JOptionPane.showMessageDialog(this, this.bll.getErrorMessage(),
+                    JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
                             Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
                 }
             }
@@ -180,7 +180,7 @@ public class OrdersPanel
             ArrayList<AnOrder> aList = this.bll.getList();
             initTableData(aList);
         } else {
-            JOptionPane.showMessageDialog(this, bll.getErrorMessage(),
+            JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
                     Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
         }
     }

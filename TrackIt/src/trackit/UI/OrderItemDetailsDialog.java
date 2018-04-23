@@ -57,7 +57,7 @@ public class OrderItemDetailsDialog
         } else {
             this.anOrderItem = anOrderItem;
         }
-        
+
         initializeComponents();
         populateComponents();
     }
@@ -187,7 +187,7 @@ public class OrderItemDetailsDialog
         add(tfExtPrice, gbc);
 
         //Ok Button
-        btnOK = new JButton("Ok");
+        btnOK = new JButton(Utilities.BUTTON_OK);
         gbc.gridx = 3;
         gbc.gridy = 4;
         gbc.gridwidth = 1;
@@ -197,7 +197,7 @@ public class OrderItemDetailsDialog
         });
 
         //Cancel Button
-        btnCancel = new JButton("Cancel");
+        btnCancel = new JButton(Utilities.BUTTON_CANCEL);
         gbc.gridx = 4;
         gbc.gridy = 4;
         gbc.gridwidth = 1;
@@ -233,8 +233,9 @@ public class OrderItemDetailsDialog
             this.anOrderItem.setQuantityOrdered(Integer.parseInt(this.tfQuantityOrdered.getText()));
             this.anOrderItem.setPrice(Double.parseDouble(this.tfPrice.getText()));
             returnValue = true;
-        } catch (java.sql.SQLException exSQL) {
-            JOptionPane.showMessageDialog(this, this.anOrderItem.getErrorMessage(),
+        } catch (java.sql.SQLException | RuntimeException ex) {
+            Utilities.setErrorMessage(ex);
+            JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
                     Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
         }
         return returnValue;
@@ -253,7 +254,7 @@ public class OrderItemDetailsDialog
                 this.dispose();
             } else {
                 this.dialogResult = DialogResultType.CANCEL;
-                JOptionPane.showMessageDialog(this, this.anOrderItem.getErrorMessage(),
+                JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
                         Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -285,7 +286,7 @@ public class OrderItemDetailsDialog
             });
             return aList.toArray(arrayItems);
         } else {
-            JOptionPane.showMessageDialog(this, this.bllInventory.getErrorMessage(),
+            JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
                     Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
             return arrayItems;
         }
@@ -309,7 +310,7 @@ public class OrderItemDetailsDialog
      * Handles all aspects of closing the program.
      */
     private class CloseQuery extends WindowAdapter {
-        
+
         @Override
         public void windowClosing(WindowEvent e) {
             JDialog frame = OrderItemDetailsDialog.this;
@@ -323,13 +324,13 @@ public class OrderItemDetailsDialog
             }
         }
     }
-    
+
     private class ExtendedPriceUpdater implements FocusListener {
-        
+
         @Override
         public void focusGained(FocusEvent e) {
         }
-        
+
         @Override
         public void focusLost(FocusEvent e) {
             Integer quantity = Integer.parseInt(tfQuantityOrdered.getText());
@@ -337,7 +338,7 @@ public class OrderItemDetailsDialog
             Double extendedPrice = quantity * price;
             tfExtPrice.setText(extendedPrice.toString());
         }
-        
+
     }
     // </editor-fold>
 }
