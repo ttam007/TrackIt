@@ -45,5 +45,14 @@ public class DashboardPanel
         sp.setSize(new Dimension(1000, 400));
         add(sp);
     }
+
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Public Methods">
+    /**
+     * Refreshes all dashboard items on the panel.
+     */
+    public void refresh() {
+        
+    }
     // </editor-fold>
 }
