@@ -4,6 +4,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import trackit.*;
 
 /**
@@ -85,6 +87,10 @@ public class MainMenuFrame
         tabpane.add(InventoryItemsPanel.TAB_NAME, inventoryTab);
         tabpane.add(OrdersPanel.TAB_NAME, ordersTab);
         tabpane.add(SuppliersPanel.TAB_NAME, suppliersTab);
+        
+        tabpane.addChangeListener((ChangeEvent ce) -> {
+            refreshTabs();
+        });
 
         add(tabpane, BorderLayout.CENTER);
 
@@ -122,6 +128,13 @@ public class MainMenuFrame
      */
     public void display() {
         setVisible(true);
+    }
+    
+    private void refreshTabs() {
+        ordersTab.refreshGrid();
+        suppliersTab.refreshGrid();
+        inventoryTab.refreshGrid();
+        refreshDashBoards();
     }
 
     // </editor-fold>

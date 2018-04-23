@@ -188,7 +188,7 @@ public class OrdersPanel
     /**
      * Refreshes the grid with current data from the database.
      */
-    private void refreshGrid() {
+    public void refreshGrid() {
         //Clear the ArrayList and JTable, which should be done backwards.
         this.orders.clear();
         for (int i = mainTableModel.getRowCount() - 1; i >= 0; i--) {

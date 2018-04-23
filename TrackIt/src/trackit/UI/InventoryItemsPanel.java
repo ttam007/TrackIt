@@ -42,7 +42,7 @@ public class InventoryItemsPanel
      */
     public InventoryItemsPanel() {
         initializeComponents();
-        refreshItems();
+        refreshGrid();
         toggleDisableButton();
     }
 
@@ -135,7 +135,7 @@ public class InventoryItemsPanel
             InventoryItemDetailsDialog dlgCreate = new InventoryItemDetailsDialog(true, null);
             dlgCreate.setLocationRelativeTo(this);
             if (dlgCreate.display() == DialogResultType.OK) {
-                this.refreshItems();
+                this.refreshGrid();
             }
         });
 
@@ -152,7 +152,7 @@ public class InventoryItemsPanel
             } else {
                 AnInventoryItem anInventoryItem = this.inventoryItems.get(selectedRow);
                 if (this.bll.remove(anInventoryItem.getPrimaryKey())) {
-                    this.refreshItems();
+                    this.refreshGrid();
                     JOptionPane.showMessageDialog(null,
                             String.format("%s has been removed.", anInventoryItem.getDescription()));
                 } else {
@@ -187,7 +187,7 @@ public class InventoryItemsPanel
     /**
      * Refreshes the list of items that are displayed in the grid.
      */
-    private void refreshItems() {
+    public void refreshGrid() {
         this.inventoryItems.clear();
         for (int i = mainTableModel.getRowCount() - 1; i >= 0; i--) {
             mainTableModel.removeRow(i);
@@ -214,7 +214,7 @@ public class InventoryItemsPanel
             InventoryItemDetailsDialog dlgEdit = new InventoryItemDetailsDialog(false, anInventoryItem);
             dlgEdit.setLocationRelativeTo(this);
             if (dlgEdit.display() == DialogResultType.OK) {
-                this.refreshItems();
+                this.refreshGrid();
             }
         }
     }
