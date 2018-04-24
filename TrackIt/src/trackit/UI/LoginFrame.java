@@ -37,6 +37,7 @@ public class LoginFrame
      */
     public LoginFrame() {
         initializeComponents();
+        this.tfUsername.requestFocusInWindow();
     }
 
     /**
@@ -49,6 +50,7 @@ public class LoginFrame
         this();
 
         this.tfUsername.setText(userName);
+        this.pfPassword.requestFocusInWindow();
     }
 
     // </editor-fold>
@@ -114,7 +116,7 @@ public class LoginFrame
         pfPassword = new JPasswordField(20);
         passwordBx.add(pfPassword);
         submitBx = Box.createHorizontalBox();
-        btnLogin = new JButton("Log In");
+        btnLogin = new JButton(Utilities.BUTTON_LOGIN);
         submitBx.add(btnLogin);
         this.getRootPane().setDefaultButton(btnLogin);
 
@@ -135,8 +137,8 @@ public class LoginFrame
                 this.dispose();
             } else {
                 JOptionPane.showMessageDialog(this,
-                        "Error Logging in.  Error = " + bll.getErrorMessage(), "Error",
-                        JOptionPane.OK_OPTION);
+                        "Error Logging in.  Error = " + Utilities.getErrorMessage(),
+                        Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
                 if (this.bll.isTooManyLoginAttempts()) {
                     this.dispose();
                 }

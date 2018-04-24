@@ -4,9 +4,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
-import org.jdatepicker.impl.JDatePanelImpl;
-import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.UtilDateModel;
+import javax.swing.table.DefaultTableModel;
+import org.jdatepicker.impl.*;
 import trackit.*;
 
 /**
@@ -26,31 +25,55 @@ public class OrderItemsFrame
     private static final String[] TABLE_LABELS = {"Item Name", "Unit", "SKU", "Quantity", "Price", "Ext Price"};
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Fields">
-    private final ArrayList<AnOrderItem> orderItems = new ArrayList<>();
-    private final AnOrder bll = new AnOrder();
+    //For editing the Order.
+    private final boolean isCreateMode;
+    private final AnOrder anOrder;
+    private DialogResultType dialogResult = DialogResultType.NONE;
+    private final Orders bllOrders = new Orders();
 
+    //For the grid.
+    private final HashMap<Integer, AnOrderItem> orderItems = new HashMap<>();
+    private final OrderItems bllOrderItems = new OrderItems();
+
+    /**
+     * Used to toggle edit and remove buttons on and off.
+     */
+    private boolean makeButtonsEnabled = false;
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     private JButton btnCheckIn, btnCheckInAll, btnCreate, btnEdit, btnRemove, btnOK, btnAddItem, btnCancel;
     private JPanel pnlTop, pnlCenter, pnlBtm, pnlBtmLeft, pnlBtmRight;
-    private JLabel lblOrderNumber, lblSupplier, lblStatus, lblOrderDate, lblExpectedDate, lblBlank;
-    private JTextField tfOrderNumber, tfSupplier, tfStatus, tfOrderDate, tfExpectedDate, tfBlank;
+    private JLabel lblDescription, lblSupplier, lblStatus, lblOrderDate, lblExpectedDate;
+    private JTextField tfDescription, tfSupplier, tfStatus;
+    private JDatePickerImpl orderDatePicker, expectedDatePicker;
+    private JScrollPane scrollPane;
+    private JComboBox<ASupplier> cboSuppliers;
     private JTable mainTable;
-    private Date orderDate, expectedDate, sqlOrderDate, sqlExpectedDate;
-    
-    UtilDateModel orderModel = new UtilDateModel();
-    UtilDateModel expectedModel = new UtilDateModel();
-    JDatePanelImpl orderDatePanel, expectedDatePanel;
-    JDatePickerImpl orderDatePicker, expectedDatePicker;
-    
+    private DefaultTableModel mainTableModel;
+
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     /**
-     * order item window
+     * Creates an instance of this frame.
+     *
+     * @param useCreateMode True = an Order will be created; False = an existing
+     * Order will be edited.
+     * @param anOrder The Order to be edited.
      */
-    public OrderItemsFrame() {
+    public OrderItemsFrame(boolean useCreateMode, AnOrder anOrder) {
+        this.isCreateMode = useCreateMode;
+        if (this.isCreateMode) {
+            this.anOrder = new AnOrder();
+        } else if (anOrder == null) {
+            throw new IllegalArgumentException("When 'useCreateMode' = false, then a non-null anOrder must be provided.");
+        } else {
+            this.anOrder = anOrder;
+        }
+
         initializeComponents();
-        getValues();
+        populateComponents();
+        refreshGrid();
+        toggleDisableButton();
     }
 
     // </editor-fold>
@@ -94,58 +117,124 @@ public class OrderItemsFrame
         addWindowListener(new CloseQuery());
         setVisible(true);
         this.getRootPane().setDefaultButton(btnOK);
-        Properties p = new Properties();
-        p.put("text.today", "Today");
-        p.put("text.month", "Month");
-        p.put("text.year", "Year");
-        orderDatePanel = new JDatePanelImpl(orderModel,p);
-        expectedDatePanel = new JDatePanelImpl(expectedModel,p);
-         
+
         //Add all components here and set properties.
         setLayout(new BorderLayout());
 
         Box topBox, topInnerBx, btmInnerBx, middleBox, bottomBox, combine;
 
         topBox = Box.createVerticalBox();
+        JPanel pnlTopBpx = new JPanel();
+        pnlTopBpx.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(1, 2, 5, 0);
+        gbc.anchor = GridBagConstraints.LINE_START;
+        //gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        topInnerBx = Box.createHorizontalBox();
-        lblOrderNumber = new JLabel("Order Number:");
-        topInnerBx.add(lblOrderNumber);
-        tfOrderNumber = new JTextField(20);
-        topInnerBx.add(tfOrderNumber);
+        //topInnerBx = Box.createHorizontalBox();
+        lblDescription = new JLabel("Order Description:");
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        pnlTopBpx.add(lblDescription, gbc);
+        //topInnerBx.add(lblDescription);
+        tfDescription = new JTextField(20);
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        pnlTopBpx.add(tfDescription, gbc);
+        //topInnerBx.add(tfDescription);
 
         lblSupplier = new JLabel("Supplier:");
-        topInnerBx.add(lblSupplier);
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        pnlTopBpx.add(lblSupplier, gbc);
+        //topInnerBx.add(lblSupplier);
+        cboSuppliers = new JComboBox<>(getSupplierList());
         tfSupplier = new JTextField(20);
-        topInnerBx.add(tfSupplier);
+        gbc.gridx = 3;
+        gbc.gridy = 0;
+        //pnlTopBpx.add(cboSuppliers, gbc);
+        pnlTopBpx.add(tfSupplier);
+        cboSuppliers.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                super.focusGained(e);
 
-        lblOrderDate = new JLabel("      Order Date:");
-        topInnerBx.add(lblOrderDate);
-        orderDatePicker = new JDatePickerImpl(orderDatePanel, new DateLabelFormatter());
-        topInnerBx.add(orderDatePicker);
+                getSupplierList();
+                validate();
+            }
+        });
 
-        btmInnerBx = Box.createHorizontalBox();
-        lblStatus = new JLabel("            Status:");
-        btmInnerBx.add(lblStatus);
+        lblOrderDate = new JLabel("Order Date:");
+        gbc.gridx = 4;
+        gbc.gridy = 0;
+        pnlTopBpx.add(lblOrderDate, gbc);
+        //topInnerBx.add(lblOrderDate);
+        orderDatePicker = Utilities.getDatePicker(); //new JDatePickerImpl(orderDatePanel, new DateLabelFormatter());
+        gbc.gridx = 5;
+        gbc.gridy = 0;
+        pnlTopBpx.add(orderDatePicker, gbc);
+        //topInnerBx.add(orderDatePicker);
+
+        //btmInnerBx = Box.createHorizontalBox();
+        lblStatus = new JLabel("Status:");
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        pnlTopBpx.add(lblStatus, gbc);
+        //btmInnerBx.add(lblStatus);
         tfStatus = new JTextField(20);
-        btmInnerBx.add(tfStatus);
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        pnlTopBpx.add(tfStatus, gbc);
+        //btmInnerBx.add(tfStatus);
 
-        lblStatus = new JLabel("                          ");
-        btmInnerBx.add(lblStatus);
+        //lblStatus = new JLabel("                          ");
+        //btmInnerBx.add(lblStatus);
+        lblExpectedDate = new JLabel("Expected Date:");
+        gbc.gridx = 4;
+        gbc.gridy = 1;
+        pnlTopBpx.add(lblExpectedDate, gbc);
+        //btmInnerBx.add(lblExpectedDate);
+        expectedDatePicker = Utilities.getDatePicker(); //new JDatePickerImpl(expectedDatePanel, new DateLabelFormatter());
+        gbc.gridx = 5;
+        gbc.gridy = 1;
+        pnlTopBpx.add(expectedDatePicker, gbc);
+        expectedDatePicker.getModel().addPropertyChangeListener((e) -> {
+            if (e.getPropertyName().equals("value")) {
+                expectedDateLeaveAction((java.util.Date) e.getOldValue());
+            }
+        });
+        //btmInnerBx.add(expectedDatePicker);
 
-        lblExpectedDate = new JLabel("                                                     Expected Date:");
-        btmInnerBx.add(lblExpectedDate);
-        expectedDatePicker = new JDatePickerImpl(expectedDatePanel, new DateLabelFormatter());
-        btmInnerBx.add(expectedDatePicker);
-        
+        //topBox.add(topInnerBx);
+        //topBox.add(btmInnerBx);
+        //middleBox = Box.createHorizontalBox();
+        //JPanel pnlMiddleBox = new JPanel(new GridLayout(0, 8, 2, 0));
+        btnCheckIn = new JButton(Utilities.BUTTON_CHECKIN);
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        pnlTopBpx.add(btnCheckIn, gbc);
+        //middleBox.add(btnCheckIn);
+        btnCheckIn.addActionListener((ActionEvent e) -> {
+            //TODO:  Call into BLL for check-in.
+            JOptionPane.showMessageDialog(this, "Item Checked In");
+        });
 
-        topBox.add(topInnerBx);
-        topBox.add(btmInnerBx);
+        btnCheckInAll = new JButton(Utilities.BUTTON_CHECKINALL);
+        gbc.gridx = 1;
+        gbc.gridy = GridBagConstraints.RELATIVE;
+        pnlTopBpx.add(btnCheckInAll, gbc);
+        //middleBox.add(btnCheckInAll);
+        btnCheckInAll.addActionListener((ActionEvent e) -> {
+            //TODO:  Call into BLL for check-in.
+            JOptionPane.showMessageDialog(this, "All Items Checked In");
+        });
 
+        //btnCheckInAll.setPreferredSize(btnCheckIn.getPreferredSize());
+        topBox.add(pnlTopBpx);
         add(topBox, BorderLayout.NORTH);
 
-        middleBox = Box.createHorizontalBox();
-
+        /*middleBox = Box.createHorizontalBox();
+        JPanel pnlMiddleBox = new JPanel(new GridLayout(0, 8, 2, 0));
         btnCheckIn = new JButton("Check In");
         middleBox.add(btnCheckIn);
         btnCheckIn.addActionListener((ActionEvent e) -> {
@@ -160,85 +249,100 @@ public class OrderItemsFrame
             JOptionPane.showMessageDialog(this, "All Items Checked In");
         });
 
+        btnCheckInAll.setPreferredSize(btnCheckIn.getPreferredSize());*/
         bottomBox = Box.createHorizontalBox();
 
         //add data to suppliers arraylist 
         Object[][] testData = {{"paper", "pk", "12-34563487-0", "7", "$12.95", "$276.23"}, {"paper", "pk", "12-34563487-0", "7", "$12.95", "$276.23"}, {"paper", "pk", "12-34563487-0", "7", "$12.95", "$276.23"}};
-        mainTable = new JTable(testData, TABLE_LABELS);
-        JScrollPane scrollPane = new JScrollPane(mainTable);
+        mainTableModel = new DefaultTableModel(TABLE_LABELS, 0);
+        mainTable = new JTable(mainTableModel);
+        scrollPane = new JScrollPane(mainTable);
         mainTable.setFillsViewportHeight(true);
         mainTable.setDefaultEditor(Object.class, null);
-
-        add(scrollPane, BorderLayout.CENTER);
-
-        bottomBox.add(scrollPane);
-
-        combine = Box.createVerticalBox();
-        combine.add(middleBox);
-        combine.add(bottomBox);
-        add(combine, BorderLayout.CENTER);
-
-        pnlBtm = new JPanel();
-
-        btnAddItem = new JButton("Add Item");
-        pnlBtm.add(btnAddItem);
-        btnAddItem.addActionListener((ActionEvent e) -> {
-            OrderItemDetailsDialog dlgAdd = new OrderItemDetailsDialog(true, null);
-            dlgAdd.display();
+        mainTable.getSelectionModel().addListSelectionListener((e) -> {
+            //if the row is bigger than -1 than we need to enable the buttons
+            if (mainTable.getSelectedRow() > -1) {
+                makeButtonsEnabled = true;
+                toggleDisableButton();
+            }
         });
-
-        btnCreate = new JButton("Create");
-        pnlBtm.add(btnCreate);
-        btnCreate.addActionListener((ActionEvent e) -> {
-            InventoryItemDetailsDialog dlgCreate = new InventoryItemDetailsDialog(true, null);
-            dlgCreate.display();
-        });
-
-        btnEdit = new JButton("Edit");
-        pnlBtm.add(btnEdit);
-        btnEdit.addActionListener((ActionEvent e) -> {
-            int selectedRow = this.mainTable.getSelectedRow();
-            if (selectedRow < 0) {
-                JOptionPane.showMessageDialog(null, "Select item to remove");
-            } else {
-                AnOrderItem anOrderItem = new AnOrderItem();
-                //TODO: Set anOrderItem to the value of selectedRow.
-                OrderItemDetailsDialog dlgEdit = new OrderItemDetailsDialog(false, anOrderItem);
-                dlgEdit.display();
+        mainTable.addMouseListener(new MouseAdapter() {
+            /**
+             * https://stackoverflow.com/questions/14852719/double-click-listener-on-jtable-in-java
+             *
+             * @param mouseEvent
+             */
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+                JTable table = (JTable) mouseEvent.getSource();
+                Point point = mouseEvent.getPoint();
+                int row = table.rowAtPoint(point);
+                if (mouseEvent.getClickCount() == 2) {// && table.getSelectedRow() != -1) {
+                    editAction();
+                }
             }
         });
 
-        btnRemove = new JButton("Remove");
+        add(scrollPane, BorderLayout.CENTER);
+        bottomBox.add(scrollPane);
+
+        combine = Box.createVerticalBox();
+        combine.add(bottomBox);
+        add(combine, BorderLayout.CENTER);
+
+        pnlBtm = new JPanel(new GridLayout(0, 8, 2, 0));
+        btnAddItem = new JButton(Utilities.BUTTON_ADD);
+        pnlBtm.add(btnAddItem);
+        btnAddItem.addActionListener((ActionEvent e) -> {
+            OrderItemDetailsDialog dlgAdd = new OrderItemDetailsDialog(true, null);
+            dlgAdd.setLocationRelativeTo(this);
+            if (dlgAdd.display() == DialogResultType.OK) {
+                this.refreshGrid();
+            }
+        });
+
+        btnCreate = new JButton(Utilities.BUTTON_CREATE);
+        pnlBtm.add(btnCreate);
+        btnCreate.addActionListener((ActionEvent e) -> {
+            InventoryItemDetailsDialog dlgCreate = new InventoryItemDetailsDialog(true, null);
+            dlgCreate.setLocationRelativeTo(this);
+            if (dlgCreate.display() == DialogResultType.OK) {
+                this.refreshGrid();
+            }
+        });
+
+        btnEdit = new JButton(Utilities.BUTTON_EDIT);
+        pnlBtm.add(btnEdit);
+        btnEdit.addActionListener((ActionEvent e) -> {
+            editAction();
+        });
+
+        btnRemove = new JButton(Utilities.BUTTON_REMOVE);
         pnlBtm.add(btnRemove);
         btnRemove.addActionListener((ActionEvent e) -> {
             int selectedRow = this.mainTable.getSelectedRow();
             if (selectedRow < 0) {
                 JOptionPane.showMessageDialog(null, "Select item to remove");
             } else {
-                //TODO: remove item from db
-                JOptionPane.showMessageDialog(null, "Item removed");
+                AnOrderItem anOrderItem = this.orderItems.get(selectedRow);
+                if (this.bllOrderItems.remove(anOrderItem.getPrimaryKey())) {
+                    this.refreshGrid();
+                    JOptionPane.showMessageDialog(null,
+                            String.format("%s has been removed.", anOrderItem.getDescription()));
+                } else {
+                    JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
+                            Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+                }
             }
-            //TODO: surround below in a for loop
-            /*
-            if (bll.remove()) {
-                //TODO:  close window and return to prior window.
-            } else {
-                //TODO:  display bll.getErrorMessage() and stay on this window.
-            }
-             */
         });
 
-        btnOK = new JButton("OK");
+        btnOK = new JButton(Utilities.BUTTON_OK);
         pnlBtm.add(btnOK);
         btnOK.addActionListener((ActionEvent e) -> {
             saveAction();
-            orderDate = (Date) orderDatePicker.getModel().getValue();
-            sqlOrderDate = Utilities.convertToSQLDate(orderDate);
-            expectedDate = (Date) expectedDatePicker.getModel().getValue();
-            sqlExpectedDate = Utilities.convertToSQLDate(expectedDate);
         });
 
-        btnCancel = new JButton("Cancel");
+        btnCancel = new JButton(Utilities.BUTTON_CANCEL);
         pnlBtm.add(btnCancel);
         btnCancel.addActionListener((ActionEvent e) -> {
             cancelAction();
@@ -251,19 +355,57 @@ public class OrderItemsFrame
     }
 
     /**
+     * Populates all the UI components from the object in memory.
+     */
+    private void populateComponents() {
+        this.tfDescription.setText(this.anOrder.getDescription());
+        //TODO:  Convert Supplier component to a drop-down list.
+        //this.tfSupplier.getEditor().setItem(this.anOrder.getOrderedFrom().getText());
+        this.tfSupplier.setText("1");
+        //TODO:  Convert OrderStatus component to a drop-down list.
+        this.tfStatus.setText(OrderStatusType.ORDERED.getText());
+        Utilities.setDatePickersDate(this.orderDatePicker, this.anOrder.getDateOrdered());
+        Utilities.setDatePickersDate(this.expectedDatePicker, this.anOrder.getDateExpected());
+    }
+
+    /**
+     * Populates the object in memory from all the UI components.
+     */
+    private boolean populateObject() {
+        boolean returnValue = false;
+        //TODO:  sort this out so boolean return is used instead of try/catch block.
+        try {
+            this.anOrder.setDescription(this.tfDescription.getText());
+            //this.anOrder.setOrderedFrom(Integer.parseInt(this.tfSupplier.getText()));
+            //this.anOrder.setOrderStatus(this.tfStatus.getText());
+            this.anOrder.setDateOrdered((Date) this.orderDatePicker.getModel().getValue());
+            this.anOrder.setDateExpected((Date) this.expectedDatePicker.getModel().getValue());
+            returnValue = true;
+        } catch (java.sql.SQLException | RuntimeException ex) {
+            Utilities.setErrorMessage(ex);
+            JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
+                    Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+        }
+        return returnValue;
+    }
+
+    /**
      * Handles the save action. If any errors, then display error message
      * instead.
-     *
      */
     private void saveAction() {
-        JOptionPane.showMessageDialog(null, "Successfully Updated");
-        //TODO:  implement save.
-        /*if (successfullySaved) {
+        if (populateObject()) {
+            if (this.bllOrders.save(this.anOrder)) {
+                this.dialogResult = DialogResultType.OK;
+                //JOptionPane.showMessageDialog(null, "Successfully Saved.");
+                this.setVisible(false);
                 this.dispose();
             } else {
-               //TODO:  catch errors and display them.  Do not exit dialog if an error occurs.
-            }*/
-        this.dispose();
+                this.dialogResult = DialogResultType.CANCEL;
+                JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
+                        Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 
     /**
@@ -272,26 +414,109 @@ public class OrderItemsFrame
      *
      */
     private void cancelAction() {
-        JOptionPane.showMessageDialog(null, "Change Cancelled");
-        //TODO:  close window and return to prior window.
+        //JOptionPane.showMessageDialog(null, "Change Cancelled");
+        this.dialogResult = DialogResultType.CANCEL;
+        this.setVisible(false);
         this.dispose();
     }
 
-    private void getValues() {
-        //TODO:  if we need this?
-        /*if (bll.load()) {
-            this.orderItems.addAll(bll.getItems());
-        }*/
+    private void toggleDisableButton() {
+        btnEdit.setEnabled(makeButtonsEnabled);
+        btnRemove.setEnabled(makeButtonsEnabled);
+    }
+
+    private void initTableData(ArrayList<AnOrderItem> aList) {
+        if (this.orderItems != null) {
+            int counter = 0;
+            for (AnOrderItem anOrderItem : aList) {
+                //{"Item Name", "Unit", "SKU", "Quantity", "Price", "Ext Price"};
+                Object[] data = {anOrderItem.getDescription(), anOrderItem.getSizeUnit(),
+                    anOrderItem.getSku(), anOrderItem.getQuantityOrdered(),
+                    anOrderItem.getPrice(), anOrderItem.getExtendedPrice()};
+                mainTableModel.addRow(data);
+                this.orderItems.put(counter, anOrderItem);
+                counter++;
+            }
+        }
+    }
+
+    /**
+     * Refreshes the grid with current data from the database.
+     */
+    private void refreshGrid() {
+        //Clear the ArrayList and JTable, which should be done backwards.
+        this.orderItems.clear();
+        for (int i = mainTableModel.getRowCount() - 1; i >= 0; i--) {
+            mainTableModel.removeRow(i);
+        }
+
+        //Now load fresh data from database.
+        if (this.bllOrderItems.load()) {
+            ArrayList<AnOrderItem> aList = this.bllOrderItems.getList();
+            initTableData(aList);
+        } else {
+            JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
+                    Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    /**
+     * Pops the detail item dialog if an item is selected.
+     */
+    private void editAction() {
+        int selectedRow = this.mainTable.getSelectedRow();
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(this, "Select item to remove");
+        } else {
+            AnOrderItem anOrderItem = this.orderItems.get(selectedRow);
+            OrderItemDetailsDialog dlgEdit = new OrderItemDetailsDialog(false, anOrderItem);
+            dlgEdit.setLocationRelativeTo(this);
+            if (dlgEdit.display() == DialogResultType.OK) {
+                this.refreshGrid();
+            }
+        }
+    }
+
+    /**
+     * When focus is left, compare to the ordered date.
+     */
+    private void expectedDateLeaveAction(java.util.Date originalExpectedDate) {
+        java.util.Date orderedDate = Utilities.getDatePickersDate(orderDatePicker);
+        java.util.Date expectedDate = Utilities.getDatePickersDate(expectedDatePicker);
+        if (orderedDate != null && expectedDate != null
+                && expectedDate.before(orderedDate)) {
+            JOptionPane.showMessageDialog(OrderItemsFrame.this,
+                    "The expected date can't be prior to the ordered date.",
+                    "Date Issue", JOptionPane.INFORMATION_MESSAGE);
+            Utilities.setDatePickersDate(expectedDatePicker, originalExpectedDate);
+        }
+    }
+
+    private ASupplier[] getSupplierList() {
+        ASupplier[] arraySuppliers = new ASupplier[]{};
+        Suppliers bllSuppliers = new Suppliers();
+        ArrayList<ASupplier> listSuppliers = new ArrayList<>();
+
+        if (bllSuppliers.load()) {
+            listSuppliers = bllSuppliers.getList();
+        } else {
+            JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
+                    Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+        }
+        return listSuppliers.toArray(arraySuppliers);
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
 
     /**
      * Displays the frame.
+     *
+     * @return The DialogReturnType which tells how the dialog was closed.
      */
-    public void display() {
-        System.out.println(String.format("Displaying %s...", WINDOW_NAME));
+    public DialogResultType display() {
         setVisible(true);
+        return this.dialogResult;
+
     }
 
     // </editor-fold>
@@ -315,5 +540,5 @@ public class OrderItemsFrame
             }
         }
     }
-    // </editor-fold>
+// </editor-fold>
 }

@@ -1,23 +1,3 @@
-/*lookups*/
-CALL sp_Lookups_Insert ('listName', 'listValue');
-CALL sp_Lookups_Select ('listName');
-CALL sp_Lookups_SelectAll();
-
-CALL sp_Lookups_Update('listName', 'listValue2');
-CALL sp_Lookups_Select ('listName');
-
-CALL sp_Lookups_Delete ('listName');
-CALL sp_Lookups_Select ('listName');
-CALL sp_Lookups_SelectAll();
-
-CALL sp_Lookups_Insert ('listName', 'listValue3');
-CALL sp_Lookups_Insert ('listName', 'listValue4');
-CALL sp_Lookups_Insert ('listName', 'listValue3'); /*negative testing*/
-CALL sp_Lookups_SelectAll();
-
-CALL sp_Lookups_Delete (null);
-CALL sp_Lookups_SelectAll(); 
-
 /*inventoryItems*/
 SET @inventoryItemId = null;
 CALL sp_inventoryItems_Insert (@inventoryItemId, 5, '2018-04-16', 'Widget', '12345-ABC', '16 ounce', 'Available');
@@ -27,7 +7,7 @@ CALL sp_inventoryItems_SelectAll();
 
 CALL sp_inventoryItems_Update(4, 10, '2018-05-26', 'Widget', '12345-ABC', '16 ounce', 'Discontinued');
 CALL sp_inventoryItems_Select (4);
-CALL sp_inventoryItems_Delete (4);
+CALL sp_inventoryItems_Delete (2);
 CALL sp_inventoryItems_Select (4);
 CALL sp_inventoryItems_SelectAll();
 
@@ -53,8 +33,8 @@ CALL sp_Suppliers_Delete (4);
 CALL sp_Suppliers_Select (4);
 CALL sp_Suppliers_SelectAll();
 
-CALL sp_Suppliers_Insert ('Bonds Busing2', 'www.bbus.com', @supplierId);
-CALL sp_Suppliers_Insert ('Bonds Busing3', 'www.bbus.com', @supplierId);
+CALL sp_Suppliers_Insert (@supplierId, 'Bonds Busing2', 'www.bbus.com');
+CALL sp_Suppliers_Insert (@supplierId, 'Etsy', 'www.etsy.com');
 CALL sp_Suppliers_SelectAll();
 
 CALL sp_Suppliers_Delete (null);

@@ -1,35 +1,15 @@
 package trackit;
 
 import java.sql.*;
-import java.util.ArrayList;
-import trackit.DAL.SQLHelperOrder;
 
 /**
  * BLL Layer: Works with the Orders Tab.
  *
- * @author Bond, Steven
+ * @author
  */
 public class Orders
         extends GridClass<AnOrder> {
-    
-    SQLHelperOrder helper = new SQLHelperOrder();
-    ArrayList<AnOrder> orders;
-    
-    /**
-     * Pulls SQL info from database to load into JTable
-     */
-    public ArrayList<AnOrder> getSQL() {
-        try {
-            System.out.println("\nSelectAll");
-            orders = helper.selectAll();
-        } catch (SQLException exSQL) {
-            System.out.println("SQL error = " + exSQL.getLocalizedMessage());
-        } catch (Exception ex) {
-            System.out.println("Generic error = " + ex.getLocalizedMessage());
-        }
-        return orders;
-    }
-    
+
     /**
      * Loads all rows from the database to the grid.
      *
@@ -43,9 +23,31 @@ public class Orders
             rows = AnOrder.loadAll();
             returnValue = true;
         } catch (SQLException exSQL) {
-            this.errorMessage = exSQL.getLocalizedMessage();
+            Utilities.setErrorMessage(exSQL);
         } catch (Exception ex) {
-            this.errorMessage = ex.getLocalizedMessage();
+            Utilities.setErrorMessage(ex);
+        }
+        return returnValue;
+    }
+
+    /**
+     * Loads an single object from the database into rows.
+     *
+     * @param primaryKey The primary key of the object to be loaded.
+     * @return True = The object was successfully retrieved; False = There was
+     * an error.
+     */
+    @Override
+    public boolean load(Integer primaryKey) {
+        boolean returnValue = false;
+        try {
+            rows.clear();
+            rows.add(AnOrder.load(primaryKey));
+            returnValue = true;
+        } catch (SQLException exSQL) {
+            Utilities.setErrorMessage(exSQL);
+        } catch (Exception ex) {
+            Utilities.setErrorMessage(ex);
         }
         return returnValue;
     }
@@ -65,9 +67,29 @@ public class Orders
             }
             returnValue = true;
         } catch (SQLException exSQL) {
-            this.errorMessage = exSQL.getLocalizedMessage();
+            Utilities.setErrorMessage(exSQL);
         } catch (Exception ex) {
-            this.errorMessage = ex.getLocalizedMessage();
+            Utilities.setErrorMessage(ex);
+        }
+        return returnValue;
+    }
+
+    /**
+     * Saves an object to the database.
+     *
+     * @return True = The object was successfully saved; False = There was an
+     * error.
+     */
+    @Override
+    public boolean save(AnOrder anObj) {
+        boolean returnValue = false;
+        try {
+            AnOrder.save(anObj);
+            returnValue = true;
+        } catch (java.sql.SQLException exSQL) {
+            Utilities.setErrorMessage(exSQL);
+        } catch (Exception ex) {
+            Utilities.setErrorMessage(ex);
         }
         return returnValue;
     }
@@ -75,20 +97,22 @@ public class Orders
     /**
      * Removes a row from the database.
      *
-     * @param primaryKey The primary key of the row to remove.
+     * @param anObj The object in the row to remove.
      * @return True = The row was successfully removed; False = There was an
      * error.
      */
     @Override
-    public boolean remove(Integer primaryKey) {
+    public boolean remove(AnOrder anObj) {
         boolean returnValue = false;
         try {
-            AnOrder.remove(primaryKey);
-            returnValue = true;
+            if (!this.hasForeignKeyIssue(anObj)) {
+                AnOrder.remove(anObj.getPrimaryKey());
+                returnValue = true;
+            }
         } catch (SQLException exSQL) {
-            this.errorMessage = exSQL.getLocalizedMessage();
+            Utilities.setErrorMessage(exSQL);
         } catch (Exception ex) {
-            this.errorMessage = ex.getLocalizedMessage();
+            Utilities.setErrorMessage(ex);
         }
         return returnValue;
     }

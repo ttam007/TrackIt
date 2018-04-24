@@ -9,7 +9,7 @@ import trackit.*;
  * UI Layer: Handles all aspects of the Create ASupplier and Edit ASupplier
  * dialog.
  *
- * @author Douglas
+ * @author Douglas, Steven
  */
 public class SupplierDetailsDialog
         extends JDialog {
@@ -23,12 +23,15 @@ public class SupplierDetailsDialog
     // <editor-fold defaultstate="collapsed" desc="Private Fields">
     private final boolean isCreateMode;
     private final ASupplier aSupplier;
+    private final Suppliers bll = new Suppliers();
+    private DialogResultType dialogResult = DialogResultType.NONE;
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     JPanel pnlCenter;
     JLabel lblName, lblAddress;
     JTextField tfName, tfAddress;
     JButton btnOK, btnCancel;
+    GridBagConstraints gbc;
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -43,14 +46,15 @@ public class SupplierDetailsDialog
     public SupplierDetailsDialog(boolean useCreateMode, ASupplier aSupplier) {
         this.isCreateMode = useCreateMode;
         if (this.isCreateMode) {
-            this.aSupplier = null;
+            this.aSupplier = new ASupplier();
         } else if (aSupplier == null) {
-            throw new IllegalArgumentException("When 'useCreateMode' = true, then a non-null aSupplier must be provided.");
+            throw new IllegalArgumentException("When 'useCreateMode' = false, then a non-null aSupplier must be provided.");
         } else {
             this.aSupplier = aSupplier;
         }
-
+        
         initializeComponents();
+        populateComponents();
     }
 
     // </editor-fold>
@@ -84,7 +88,7 @@ public class SupplierDetailsDialog
     private void initializeComponents() {
         //Setup main frame
         int frameWidth = 500;
-        int frameHeight = 110;
+        int frameHeight = 200; //originally 110
         Dimension dimFrame = new Dimension(frameWidth, frameHeight);
         this.setTitle(Utilities.getWindowCaption(WINDOW_NAME));
         this.setPreferredSize(dimFrame);
@@ -92,85 +96,133 @@ public class SupplierDetailsDialog
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new CloseQuery());
-        this.setVisible(true);
         this.getRootPane().setDefaultButton(btnOK);
+        this.setModal(true);
+        
+        gbc = new GridBagConstraints();
+        setLayout(new GridBagLayout());
+        gbc.insets = new Insets(2, 2, 5, 0);
+        gbc.anchor = GridBagConstraints.LINE_START;
+        //gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        //Add all components here and set properties.
-        Box nameBx, addressBx, submitBx, combine;
+        // Supplier Name Label 
+        lblName = new JLabel("Supplier Name: ");
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        add(lblName, gbc);
 
-        pnlCenter = new JPanel();
-        add(pnlCenter, BorderLayout.CENTER);
+        // Supplier Name Text Field
+        tfName = new JTextField(25);
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.gridwidth = 5;
+        add(tfName, gbc);
 
-        nameBx = Box.createHorizontalBox();
-        lblName = new JLabel("Supplier Name:   ");
-        nameBx.add(lblName);
-        tfName = new JTextField(20);
-        nameBx.add(tfName);
-        addressBx = Box.createHorizontalBox();
-        lblAddress = new JLabel("Website Address:");
-        addressBx.add(lblAddress);
-        tfAddress = new JTextField(20);
-        addressBx.add(tfAddress);
-        submitBx = Box.createHorizontalBox();
-        btnOK = new JButton("OK");
-        submitBx.add(btnOK);
+        // Website Address label
+        lblAddress = new JLabel("Website Address: ");
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 1;
+        add(lblAddress, gbc);
 
-        this.btnOK.addActionListener((ActionEvent e) -> {
+        //Website Address Text Field
+        tfAddress = new JTextField(25);
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.gridwidth = 5;
+        add(tfAddress, gbc);
+
+        // Init Ok Button
+        btnOK = new JButton(Utilities.BUTTON_OK);
+        gbc.gridx = 3;
+        gbc.gridy = 4;
+        gbc.gridwidth = 1;
+        add(btnOK, gbc);
+        btnOK.addActionListener((ActionEvent e) -> {
             saveAction();
         });
 
-        btnCancel = new JButton("Cancel");
-        submitBx.add(btnCancel);
-
-        this.btnCancel.addActionListener((ActionEvent e) -> {
+        //Cancel
+        btnCancel = new JButton(Utilities.BUTTON_CANCEL);
+        gbc.gridx = 4;
+        gbc.gridy = 4;
+        gbc.gridwidth = 1;
+        add(btnCancel, gbc);
+        btnCancel.addActionListener((ActionEvent e) -> {
             cancelAction();
         });
-        combine = Box.createVerticalBox();
-        combine.add(nameBx);
-        combine.add(addressBx);
-        combine.add(submitBx);
-
-        pnlCenter.add(combine);
 
         //Finalizations
         pack();
     }
 
     /**
-     * Handles the save action. If any errors, then display error message
-     * instead.
-     *
+     * Populates all the UI components from the object in memory.
      */
-    private void saveAction() {
-        JOptionPane.showMessageDialog(null, "Successfully Updated");
-        //TODO:  implement save.
-        /*if (successfullySaved) {
-                this.dispose();
-            } else {
-               //TODO:  catch errors and display them.  Do not exit dialog if an error occurs.
-            }*/
-        this.dispose();
+    private void populateComponents() {
+        this.tfName.setText(this.aSupplier.getNickname());
+        this.tfAddress.setText(this.aSupplier.getUrl());
     }
 
     /**
-     * Handles the cancel action. If any errors, then display error message
+     * Populates the object in memory from all the UI components.
+     */
+    private boolean populateObject() {
+        boolean returnValue = false;
+        //TODO:  sort this out so boolean return is used instead of try/catch block.
+        try {
+            this.aSupplier.setNickname(this.tfName.getText());
+            this.aSupplier.setUrl(this.tfAddress.getText());
+            returnValue = true;
+        } catch (java.sql.SQLException | RuntimeException ex) {
+            Utilities.setErrorMessage(ex);
+            JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
+                    Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+        }
+        
+        return returnValue;
+    }
+
+    /**
+     * Handles the save action. If any errors, then display error message
      * instead.
-     *
+     */
+    private void saveAction() {
+        if (populateObject()) {
+            if (this.bll.save(this.aSupplier)) {
+                this.dialogResult = DialogResultType.OK;
+                //JOptionPane.showMessageDialog(null, "Successfully Saved.");
+                this.setVisible(false);
+                this.dispose();
+            } else {
+                this.dialogResult = DialogResultType.CANCEL;
+                JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
+                        Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    /**
+     * Handles the cancel action.
      */
     private void cancelAction() {
-        JOptionPane.showMessageDialog(null, "Change Cancelled");
-        //TODO:  close window and return to prior window.
+        //JOptionPane.showMessageDialog(null, "Change Cancelled");
+        this.dialogResult = DialogResultType.CANCEL;
+        this.setVisible(false);
         this.dispose();
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
 
     /**
-     * Displays the frame.
+     * Displays the dialog.
+     *
+     * @return The DialogReturnType which tells how the dialog was closed.
      */
-    public void display() {
+    public DialogResultType display() {
         System.out.println(String.format("Displaying %s...", WINDOW_NAME));
         setVisible(true);
+        return this.dialogResult;
     }
 
     // </editor-fold>
@@ -179,7 +231,7 @@ public class SupplierDetailsDialog
      * Handles all aspects of closing the program.
      */
     private class CloseQuery extends WindowAdapter {
-
+        
         @Override
         public void windowClosing(WindowEvent e) {
             JDialog frame = SupplierDetailsDialog.this;

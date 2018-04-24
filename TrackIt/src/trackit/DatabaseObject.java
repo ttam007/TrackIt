@@ -12,10 +12,9 @@ public abstract class DatabaseObject {
 
     // <editor-fold defaultstate="expanded" desc="Protected Fields">
     /**
-     *
+     * The primary key of the database object.
      */
     protected Integer primaryKey = null;
-    private String errorMessage;
 
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Protected Methods">
@@ -27,26 +26,6 @@ public abstract class DatabaseObject {
      */
     protected boolean isAlreadyInDatabase() {
         return !(primaryKey.equals(SQLHelper.INVALID_PRIMARY_KEY));
-    }
-
-    /**
-     *
-     * @param errorMessage
-     */
-    protected void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
-    }
-
-    /**
-     * The getter for the errorMessage field. Will be either cleared or set with
-     * an error message when a method from the IDataAwareObject interface is
-     * called. The error message is only valid for the last interface method
-     * call.
-     *
-     * @return
-     */
-    protected String getErrorMessage() {
-        return this.errorMessage;
     }
 
     /**

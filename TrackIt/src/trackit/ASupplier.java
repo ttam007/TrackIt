@@ -13,13 +13,13 @@ import trackit.DAL.SQLHelperSupplier;
 public class ASupplier
         extends DatabaseObject {
 
-    // <editor-fold defaultstate="expanded" desc="Private Fields">
+    // <editor-fold defaultstate="collapsed" desc="Private Fields">
     private static final SQLHelperSupplier HELPER = new SQLHelperSupplier();
     private String nickname = null;
     private String url = null;
 
     // </editor-fold>
-    // <editor-fold defaultstate="expanded" desc="Constructors">
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
     /**
      * A supplier entry
      */
@@ -28,7 +28,7 @@ public class ASupplier
     }
 
     // </editor-fold>
-    // <editor-fold defaultstate="expanded" desc="Setters & Getters">
+    // <editor-fold defaultstate="collapsed" desc="Setters & Getters">
     @Override
     public void setPrimaryKey(Integer aPrimaryKey)
             throws SQLException {
@@ -41,8 +41,12 @@ public class ASupplier
      * @param aNickname
      * @throws SQLException
      */
-    public void setNickname(String aNickname)
+    public final void setNickname(String aNickname)
             throws SQLException {
+        if (HELPER.tryNullCheck(SQLHelperSupplier.COLUMN_NICKNAME, aNickname)
+                && aNickname.trim().equals("")) {
+            throw new NonEmptyStringException("Name");
+        }
         this.nickname = HELPER.doNullCheck(SQLHelperSupplier.COLUMN_NICKNAME, aNickname);
     }
 
@@ -61,7 +65,7 @@ public class ASupplier
      * @param aURL
      * @throws SQLException
      */
-    public void setUrl(String aURL)
+    public final void setUrl(String aURL)
             throws SQLException {
         this.url = HELPER.doNullCheck(SQLHelperSupplier.COLUMN_URL, aURL);
     }
@@ -76,7 +80,33 @@ public class ASupplier
     }
 
     // </editor-fold>
-    // <editor-fold defaultstate="expanded" desc="Public Static Methods">
+    // <editor-fold defaultstate="collapsed" desc="Protected Methods">
+    @Override
+    protected boolean isAlreadyInDatabase() {
+        boolean returnValue = false;
+
+        try {
+            if (this.primaryKey == null) {
+                returnValue = false;
+            } else {
+                returnValue = (ASupplier.load(this.getPrimaryKey()) != null);
+            }
+        } catch (SQLException exSQL) {
+        } catch (Exception ex) {
+        }
+
+        return returnValue;
+    }
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Public Methods">
+
+    @Override
+    public String toString() {
+        return this.getNickname();
+    }
+
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Public Static Methods">
     /**
      * Gets all the objects from the database.
      *

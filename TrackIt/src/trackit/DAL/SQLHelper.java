@@ -17,11 +17,6 @@ public abstract class SQLHelper<T>
      * This value can never be a primary key.
      */
     public final static Integer INVALID_PRIMARY_KEY = 0;
-    /**
-     * Should be final, but java doesn't allow this with the inheritance that we
-     * are using. Thus, it is only set in child constructors.
-     */
-    public static String COLUMN_PK;
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Protected Fields">
 

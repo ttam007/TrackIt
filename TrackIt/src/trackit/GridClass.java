@@ -17,9 +17,13 @@ public abstract class GridClass<T extends DatabaseObject> {
     protected ArrayList<T> rows = new ArrayList<>();
 
     /**
-     * The last error message generated.
+     * Gets the list of all T objects that are currently in memory.
+     *
+     * @return
      */
-    protected String errorMessage;
+    public ArrayList<T> getList() {
+        return this.rows;
+    }
 
     /**
      * Loads all rows from the database to the grid and updates the list of T
@@ -31,6 +35,15 @@ public abstract class GridClass<T extends DatabaseObject> {
     protected abstract boolean load();
 
     /**
+     * Loads an single object from the database into rows.
+     *
+     * @param primaryKey The primary key of the object to be loaded.
+     * @return True = The object was successfully retrieved; False = There was
+     * an error.
+     */
+    protected abstract boolean load(Integer primaryKey);
+
+    /**
      * Saves all rows to the database from the grid and updates the list of T
      * objects in memory.
      *
@@ -40,6 +53,29 @@ public abstract class GridClass<T extends DatabaseObject> {
     protected abstract boolean save();
 
     /**
+     * Saves specified object to the database.
+     *
+     * @param anObj The object to be saved.
+     * @return True = The object was successfully saved; False = There was an
+     * error.
+     */
+    protected abstract boolean save(T anObj);
+
+    /**
+     * Tests the specified object to see if it will have any issues being
+     * deleted from the database.
+     *
+     * @param anObj The object to test if it can be safely deleted from the
+     * database.
+     * @return True = An error will be thrown if attempting to delete the
+     * specified object from the database; False = No issues should occur if
+     * deleting the specified object from the database.
+     */
+    protected boolean hasForeignKeyIssue(T anObj) {
+        return false;
+    }
+
+    /**
      * Removes a row from the database and updates the list of T objects in
      * memory.
      *
@@ -47,23 +83,21 @@ public abstract class GridClass<T extends DatabaseObject> {
      * @return True = The row was successfully removed; False = There was an
      * error.
      */
-    protected abstract boolean remove(Integer primaryKey);
-
-    /**
-     * Gets the list of all T objects that are currently in memory.
-     *
-     * @return
-     */
-    public ArrayList<T> getList() {
-        return this.rows;
+    public boolean remove(Integer primaryKey) {
+        boolean returnValue = false;
+        if (this.load(primaryKey)) {
+            T anObj = this.getList().get(0);
+            returnValue = remove(anObj);
+        }
+        return returnValue;
     }
 
     /**
-     * Gets the last error message generated.
+     * Removes a row from the database.
      *
-     * @return
+     * @param anObj The object in the row to remove.
+     * @return True = The row was successfully removed; False = There was an
+     * error.
      */
-    public String getErrorMessage() {
-        return this.errorMessage;
-    }
+    protected abstract boolean remove(T anObj);
 }

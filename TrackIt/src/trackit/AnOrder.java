@@ -13,7 +13,7 @@ import trackit.DAL.SQLHelperOrder;
 public class AnOrder
         extends DatabaseObject {
 
-    // <editor-fold defaultstate="expanded" desc="Private Fields">
+    // <editor-fold defaultstate="collapsed" desc="Private Fields">
     private static final SQLHelperOrder HELPER = new SQLHelperOrder();
     private String description = "New Order";
     /**
@@ -25,7 +25,7 @@ public class AnOrder
     private java.sql.Date dateExpected = null;
 
     // </editor-fold>
-    // <editor-fold defaultstate="expanded" desc="Constructors">
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
     /**
      * An order
      */
@@ -34,7 +34,7 @@ public class AnOrder
     }
 
     // </editor-fold>
-    // <editor-fold defaultstate="expanded" desc="Setters & Getters">
+    // <editor-fold defaultstate="collapsed" desc="Setters & Getters">
     @Override
     public void setPrimaryKey(Integer aPrimaryKey)
             throws SQLException {
@@ -49,6 +49,10 @@ public class AnOrder
      */
     public void setDescription(String aDescription)
             throws SQLException {
+        if (HELPER.tryNullCheck(SQLHelperOrder.COLUMN_DESCRIPTION, aDescription)
+                && aDescription.trim().equals("")) {
+            throw new NonEmptyStringException("Description");
+        }
         this.description = HELPER.doNullCheck(SQLHelperOrder.COLUMN_DESCRIPTION, aDescription);
     }
 
@@ -128,10 +132,29 @@ public class AnOrder
     /**
      * This can not be null.
      *
+     * @param aDateOrdered
+     * @throws SQLException
+     */
+    public void setDateOrdered(java.util.Date aDateOrdered)
+            throws SQLException {
+        java.sql.Date sqlDate = null;
+        if (aDateOrdered != null) {
+            sqlDate = Utilities.convertToSQLDate(aDateOrdered);
+        }
+        setDateOrdered(sqlDate);
+    }
+
+    /**
+     * This can not be null.
+     *
      * @return
      */
     public java.sql.Date getDateOrdered() {
-        return (java.sql.Date) this.dateOrdered.clone();
+        if (this.dateOrdered == null) {
+            return null;
+        } else {
+            return (java.sql.Date) this.dateOrdered.clone();
+        }
     }
 
     /**
@@ -143,6 +166,21 @@ public class AnOrder
     public void setDateExpected(java.sql.Date aDateExpected)
             throws SQLException {
         this.dateExpected = HELPER.doNullCheck(SQLHelperOrder.COLUMN_DATEEXPECTED, aDateExpected);
+    }
+
+    /**
+     * This can not be null.
+     *
+     * @param aDateExpected
+     * @throws SQLException
+     */
+    public void setDateExpected(java.util.Date aDateExpected)
+            throws SQLException {
+        java.sql.Date sqlDate = null;
+        if (aDateExpected != null) {
+            sqlDate = Utilities.convertToSQLDate(aDateExpected);
+        }
+        setDateOrdered(sqlDate);
     }
 
     /**
@@ -159,7 +197,7 @@ public class AnOrder
     }
 
     // </editor-fold>
-    // <editor-fold defaultstate="expanded" desc="Protected Methods">
+    // <editor-fold defaultstate="collapsed" desc="Protected Methods">
     @Override
     protected boolean isAlreadyInDatabase() {
         boolean returnValue = false;
@@ -173,12 +211,12 @@ public class AnOrder
         } catch (SQLException exSQL) {
         } catch (Exception ex) {
         }
+
         return returnValue;
-        //return !(primaryKey.equals(SQLHelper.INVALID_PRIMARY_KEY));
     }
 
     // </editor-fold>
-    // <editor-fold defaultstate="expanded" desc="Public Static Methods">
+    // <editor-fold defaultstate="collapsed" desc="Public Static Methods">
     /**
      * Gets all the objects from the database.
      *

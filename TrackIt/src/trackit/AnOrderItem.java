@@ -14,7 +14,7 @@ import trackit.DAL.SQLHelperOrderItem;
 public class AnOrderItem
         extends AnItem {
 
-    // <editor-fold defaultstate="expanded" desc="Private Fields">
+    // <editor-fold defaultstate="collapsed" desc="Private Fields">
     private static final SQLHelperOrderItem HELPER = new SQLHelperOrderItem();
     private Integer orderId = SQLHelper.INVALID_PRIMARY_KEY;
     private Integer itemId = SQLHelper.INVALID_PRIMARY_KEY;
@@ -23,7 +23,7 @@ public class AnOrderItem
     private Double price = 0d;
 
     // </editor-fold>
-    // <editor-fold defaultstate="expanded" desc="Constructors">
+    // <editor-fold defaultstate="collapsed" desc="Constructors">
     /**
      * Default constructor.
      */
@@ -32,7 +32,7 @@ public class AnOrderItem
     }
 
     // </editor-fold>
-    // <editor-fold defaultstate="expanded" desc="Setters & Getters">
+    // <editor-fold defaultstate="collapsed" desc="Setters & Getters">
     @Override
     public void setPrimaryKey(Integer aPrimaryKey)
             throws SQLException {
@@ -149,7 +149,7 @@ public class AnOrderItem
     }
 
     // </editor-fold>
-    // <editor-fold defaultstate="expanded" desc="Private methods">
+    // <editor-fold defaultstate="collapsed" desc="Private methods">
     /**
      * Calculates the extended price. Should be used any time the
      * quantityOrdered or the price changes.
@@ -159,7 +159,26 @@ public class AnOrderItem
     }
 
     // </editor-fold>
-    // <editor-fold defaultstate="expanded" desc="Public Static Methods">
+    // <editor-fold defaultstate="collapsed" desc="Protected Methods">
+    @Override
+    protected boolean isAlreadyInDatabase() {
+        boolean returnValue = false;
+
+        try {
+            if (this.primaryKey == null) {
+                returnValue = false;
+            } else {
+                returnValue = (AnOrderItem.load(this.getPrimaryKey()) != null);
+            }
+        } catch (SQLException exSQL) {
+        } catch (Exception ex) {
+        }
+
+        return returnValue;
+    }
+
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Public Static Methods">
     /**
      * Gets all the objects from the database.
      *
