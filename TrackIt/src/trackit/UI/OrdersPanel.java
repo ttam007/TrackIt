@@ -176,7 +176,7 @@ public class OrdersPanel
                 //{"Description", "Supplier", "Status", "Order Date", "Expected Date"};
                 Object[] data = {anOrder.getDescription(),
                     this.suppliers.get(anOrder.getOrderedFrom()).getNickname(),
-                    anOrder.getDateOrdered(), anOrder.getOrderStatus(),
+                    anOrder.getOrderStatus(), anOrder.getDateOrdered(),
                     anOrder.getDateExpected()};
                 mainTableModel.addRow(data);
                 this.orders.put(counter, anOrder);
