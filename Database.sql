@@ -76,23 +76,24 @@ CREATE TABLE suppliers (
 
 CREATE TABLE orders (
     orderId INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    description VARCHAR (64) NOT NULL,
+    description VARCHAR(64) NOT NULL,
     orderedFrom INT UNSIGNED NOT NULL,
-    orderStatus VARCHAR (32) NOT NULL,
+    orderStatus VARCHAR(32) NOT NULL,
     dateOrdered DATE NOT NULL,
     dateExpected DATE NULL,
     PRIMARY KEY (orderId),
-    CONSTRAINT fk_orders_suppliers_orderedFrom FOREIGN KEY (orderedFrom) REFERENCES suppliers(supplierId)
-    );
+    CONSTRAINT fk_orders_suppliers_orderedFrom FOREIGN KEY (orderedFrom)
+        REFERENCES suppliers (supplierId)
+);
 
 CREATE TABLE items (
     itemId INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    description VARCHAR (64) NOT NULL,
+    description VARCHAR(64) NOT NULL,
     sku VARCHAR(32) NULL,
     sizeUnit VARCHAR(32) NULL,
     itemStatus VARCHAR(32) NOT NULL,
     PRIMARY KEY (itemId)
-    );
+);
     
 CREATE TABLE orderItems (
     orderItemId INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -103,8 +104,11 @@ CREATE TABLE orderItems (
     price DOUBLE UNSIGNED NOT NULL DEFAULT 0,
     extendedPrice DOUBLE UNSIGNED NOT NULL DEFAULT 0,
     PRIMARY KEY (orderItemId),
-    CONSTRAINT fk_orderItems_orders_orderId FOREIGN KEY (orderId) REFERENCES orders (orderId),
-    CONSTRAINT fk_orderItems_items_itemId FOREIGN KEY (itemId) REFERENCES items (itemId)
+    CONSTRAINT fk_orderItems_orders_orderId FOREIGN KEY (orderId)
+        REFERENCES orders (orderId)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_orderItems_items_itemId FOREIGN KEY (itemId)
+        REFERENCES items (itemId)
 );
 
 CREATE TABLE inventoryItems (
@@ -113,7 +117,9 @@ CREATE TABLE inventoryItems (
     quantity INT UNSIGNED NOT NULL DEFAULT 0,
     expirationDate DATE NULL,
     PRIMARY KEY (inventoryItemId),
-    CONSTRAINT fk_inventoryItems_items_itemId FOREIGN KEY (itemId) REFERENCES items (itemId)
+    CONSTRAINT fk_inventoryItems_items_itemId FOREIGN KEY (itemId)
+        REFERENCES items (itemId)
+        ON DELETE CASCADE
 );
 
 /***********************************************************************
@@ -451,10 +457,7 @@ BEGIN
 	WHERE inventoryItems.inventoryItemId = inventoryItemId;
 
 	DELETE FROM items
-	WHERE items.itemId = itemId
-		AND items.ItemId NOT IN (
-			SELECT orderitems.itemId
-			FROM orderitems);
+	WHERE items.itemId = itemId;
 
 	COMMIT WORK;
 END;;

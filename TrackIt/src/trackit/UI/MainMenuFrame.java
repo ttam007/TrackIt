@@ -2,10 +2,8 @@ package trackit.UI;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
+import javax.swing.event.*;
 import trackit.*;
 
 /**
@@ -22,7 +20,8 @@ public class MainMenuFrame
      */
     private static final String WINDOW_NAME = "Main Menu";
     private final MainMenu bll;
-
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Components">
     SuppliersPanel suppliersTab = new SuppliersPanel();
     DashboardPanel dashboardTab = new DashboardPanel();
     OrdersPanel ordersTab = new OrdersPanel();
@@ -40,7 +39,8 @@ public class MainMenuFrame
         this.bll = new MainMenu();
         initializeComponents();
 
-        refreshDashBoards();
+        tabpane.setSelectedIndex(0);//dashboard index
+        //TODO:  Test if the above line works.  If not, then use dashboardTab.refresh();
     }
 
     // </editor-fold>
@@ -87,9 +87,10 @@ public class MainMenuFrame
         tabpane.add(InventoryItemsPanel.TAB_NAME, inventoryTab);
         tabpane.add(OrdersPanel.TAB_NAME, ordersTab);
         tabpane.add(SuppliersPanel.TAB_NAME, suppliersTab);
-        
         tabpane.addChangeListener((ChangeEvent ce) -> {
-            refreshTabs();
+            JTabbedPane TabbedPane = (JTabbedPane) ce.getSource();
+            int tabIndex = TabbedPane.getSelectedIndex();
+            refreshTab(tabIndex);
         });
 
         add(tabpane, BorderLayout.CENTER);
@@ -113,13 +114,6 @@ public class MainMenuFrame
         //Finalizations
         //pack();
     }
-
-    /**
-     * Refreshes the dashboards with current data.
-     */
-    private void refreshDashBoards() {
-        ArrayList<Dashboard> dashboards = bll.getDashboards();
-    }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
 
@@ -129,12 +123,29 @@ public class MainMenuFrame
     public void display() {
         setVisible(true);
     }
-    
-    private void refreshTabs() {
-        ordersTab.refreshGrid();
-        suppliersTab.refreshGrid();
-        inventoryTab.refreshGrid();
-        refreshDashBoards();
+
+    /**
+     * Refreshes the data on the selected tab.
+     *
+     * @param tabIndex The index of the selected tab.
+     */
+    private void refreshTab(int tabIndex) {
+        switch (tabIndex) {
+            case 0:
+                dashboardTab.refresh();
+                break;
+            case 1:
+                inventoryTab.refreshGrid();
+                break;
+            case 2:
+                ordersTab.refreshGrid();
+                break;
+            case 3:
+                suppliersTab.refreshGrid();
+                break;
+            default:
+                break;
+        }
     }
 
     // </editor-fold>

@@ -160,14 +160,14 @@ public class Utilities {
      * Used to convert a SQLException into a single string for displaying to the
      * User.
      *
-     * @param ex The SQLException to be converted.
+     * @param exSQL The SQLException to be converted.
      * @return The complete error message for displaying to the User.
      */
-    public static String buildErrorMessage(SQLException ex) {
+    public static String buildErrorMessage(SQLException exSQL) {
         StringBuilder sb = new StringBuilder();
-        sb.append(String.format("Error = %s\r", ex.getLocalizedMessage()));
-        sb.append(String.format("SQL State = %s\r", ex.getSQLState()));
-        sb.append(String.format("Error Code = %s\r", ex.getErrorCode()));
+        sb.append(String.format("Error = %s\r", exSQL.getLocalizedMessage()));
+        sb.append(String.format("SQL State = %s\r", exSQL.getSQLState()));
+        sb.append(String.format("Error Code = %s\r", exSQL.getErrorCode()));
         return sb.toString();
     }
     // </editor-fold>

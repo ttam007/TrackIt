@@ -47,6 +47,7 @@ public class OrderItemsFrame
     private JTextField tfDescription, tfSupplier, tfStatus;
     private JDatePickerImpl orderDatePicker, expectedDatePicker;
     private JScrollPane scrollPane;
+    private JComboBox<ASupplier> cboSuppliers;
     private JTable mainTable;
     private DefaultTableModel mainTableModel;
 
@@ -147,11 +148,21 @@ public class OrderItemsFrame
         gbc.gridy = 0;
         pnlTopBpx.add(lblSupplier, gbc);
         //topInnerBx.add(lblSupplier);
+        cboSuppliers = new JComboBox<>(getSupplierList());
         tfSupplier = new JTextField(20);
         gbc.gridx = 3;
         gbc.gridy = 0;
-        pnlTopBpx.add(tfSupplier, gbc);
-        //topInnerBx.add(tfSupplier);
+        //pnlTopBpx.add(cboSuppliers, gbc);
+        pnlTopBpx.add(tfSupplier);
+        cboSuppliers.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                super.focusGained(e);
+
+                getSupplierList();
+                validate();
+            }
+        });
 
         lblOrderDate = new JLabel("Order Date:");
         gbc.gridx = 4;
@@ -201,34 +212,25 @@ public class OrderItemsFrame
         btnCheckIn = new JButton(Utilities.BUTTON_CHECKIN);
         gbc.gridx = 0;
         gbc.gridy = 2;
-
         pnlTopBpx.add(btnCheckIn, gbc);
         //middleBox.add(btnCheckIn);
-
-        btnCheckIn.addActionListener(
-                (ActionEvent e) -> {
-                    //TODO:  Call into BLL for check-in.
-                    JOptionPane.showMessageDialog(this, "Item Checked In");
-                }
-        );
+        btnCheckIn.addActionListener((ActionEvent e) -> {
+            //TODO:  Call into BLL for check-in.
+            JOptionPane.showMessageDialog(this, "Item Checked In");
+        });
 
         btnCheckInAll = new JButton(Utilities.BUTTON_CHECKINALL);
         gbc.gridx = 1;
         gbc.gridy = GridBagConstraints.RELATIVE;
-
         pnlTopBpx.add(btnCheckInAll, gbc);
         //middleBox.add(btnCheckInAll);
-
-        btnCheckInAll.addActionListener(
-                (ActionEvent e) -> {
-                    //TODO:  Call into BLL for check-in.
-                    JOptionPane.showMessageDialog(this, "All Items Checked In");
-                }
-        );
+        btnCheckInAll.addActionListener((ActionEvent e) -> {
+            //TODO:  Call into BLL for check-in.
+            JOptionPane.showMessageDialog(this, "All Items Checked In");
+        });
 
         //btnCheckInAll.setPreferredSize(btnCheckIn.getPreferredSize());
         topBox.add(pnlTopBpx);
-
         add(topBox, BorderLayout.NORTH);
 
         /*middleBox = Box.createHorizontalBox();
@@ -255,30 +257,23 @@ public class OrderItemsFrame
         mainTableModel = new DefaultTableModel(TABLE_LABELS, 0);
         mainTable = new JTable(mainTableModel);
         scrollPane = new JScrollPane(mainTable);
-
-        mainTable.setFillsViewportHeight(
-                true);
-        mainTable.setDefaultEditor(Object.class,
-                null);
-        mainTable.getSelectionModel()
-                .addListSelectionListener((e) -> {
-                    //if the row is bigger than -1 than we need to enable the buttons
-                    if (mainTable.getSelectedRow() > -1) {
-                        makeButtonsEnabled = true;
-                        toggleDisableButton();
-                    }
-                }
-                );
-        mainTable.addMouseListener(
-                new MouseAdapter() {
+        mainTable.setFillsViewportHeight(true);
+        mainTable.setDefaultEditor(Object.class, null);
+        mainTable.getSelectionModel().addListSelectionListener((e) -> {
+            //if the row is bigger than -1 than we need to enable the buttons
+            if (mainTable.getSelectedRow() > -1) {
+                makeButtonsEnabled = true;
+                toggleDisableButton();
+            }
+        });
+        mainTable.addMouseListener(new MouseAdapter() {
             /**
              * https://stackoverflow.com/questions/14852719/double-click-listener-on-jtable-in-java
              *
              * @param mouseEvent
              */
             @Override
-            public void mousePressed(MouseEvent mouseEvent
-            ) {
+            public void mousePressed(MouseEvent mouseEvent) {
                 JTable table = (JTable) mouseEvent.getSource();
                 Point point = mouseEvent.getPoint();
                 int row = table.rowAtPoint(point);
@@ -286,102 +281,72 @@ public class OrderItemsFrame
                     editAction();
                 }
             }
-        }
-        );
+        });
 
         add(scrollPane, BorderLayout.CENTER);
-
         bottomBox.add(scrollPane);
 
         combine = Box.createVerticalBox();
-        //combine.add(middleBox);
-
         combine.add(bottomBox);
-
         add(combine, BorderLayout.CENTER);
 
         pnlBtm = new JPanel(new GridLayout(0, 8, 2, 0));
-
         btnAddItem = new JButton(Utilities.BUTTON_ADD);
-
         pnlBtm.add(btnAddItem);
-
-        btnAddItem.addActionListener(
-                (ActionEvent e) -> {
-                    OrderItemDetailsDialog dlgAdd = new OrderItemDetailsDialog(true, null);
-                    dlgAdd.setLocationRelativeTo(this);
-                    if (dlgAdd.display() == DialogResultType.OK) {
-                        this.refreshGrid();
-                    }
-                }
-        );
+        btnAddItem.addActionListener((ActionEvent e) -> {
+            OrderItemDetailsDialog dlgAdd = new OrderItemDetailsDialog(true, null);
+            dlgAdd.setLocationRelativeTo(this);
+            if (dlgAdd.display() == DialogResultType.OK) {
+                this.refreshGrid();
+            }
+        });
 
         btnCreate = new JButton(Utilities.BUTTON_CREATE);
-
         pnlBtm.add(btnCreate);
-
-        btnCreate.addActionListener(
-                (ActionEvent e) -> {
-                    InventoryItemDetailsDialog dlgCreate = new InventoryItemDetailsDialog(true, null);
-                    dlgCreate.setLocationRelativeTo(this);
-                    if (dlgCreate.display() == DialogResultType.OK) {
-                        this.refreshGrid();
-                    }
-                }
-        );
+        btnCreate.addActionListener((ActionEvent e) -> {
+            InventoryItemDetailsDialog dlgCreate = new InventoryItemDetailsDialog(true, null);
+            dlgCreate.setLocationRelativeTo(this);
+            if (dlgCreate.display() == DialogResultType.OK) {
+                this.refreshGrid();
+            }
+        });
 
         btnEdit = new JButton(Utilities.BUTTON_EDIT);
-
         pnlBtm.add(btnEdit);
-
-        btnEdit.addActionListener(
-                (ActionEvent e) -> {
-                    editAction();
-                }
-        );
+        btnEdit.addActionListener((ActionEvent e) -> {
+            editAction();
+        });
 
         btnRemove = new JButton(Utilities.BUTTON_REMOVE);
-
         pnlBtm.add(btnRemove);
-
-        btnRemove.addActionListener(
-                (ActionEvent e) -> {
-                    int selectedRow = this.mainTable.getSelectedRow();
-                    if (selectedRow < 0) {
-                        JOptionPane.showMessageDialog(null, "Select item to remove");
-                    } else {
-                        AnOrderItem anOrderItem = this.orderItems.get(selectedRow);
-                        if (this.bllOrderItems.remove(anOrderItem.getPrimaryKey())) {
-                            this.refreshGrid();
-                            JOptionPane.showMessageDialog(null,
-                                    String.format("%s has been removed.", anOrderItem.getDescription()));
-                        } else {
-                            JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
-                                    Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
-                        }
-                    }
+        btnRemove.addActionListener((ActionEvent e) -> {
+            int selectedRow = this.mainTable.getSelectedRow();
+            if (selectedRow < 0) {
+                JOptionPane.showMessageDialog(null, "Select item to remove");
+            } else {
+                AnOrderItem anOrderItem = this.orderItems.get(selectedRow);
+                if (this.bllOrderItems.remove(anOrderItem.getPrimaryKey())) {
+                    this.refreshGrid();
+                    JOptionPane.showMessageDialog(null,
+                            String.format("%s has been removed.", anOrderItem.getDescription()));
+                } else {
+                    JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
+                            Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
                 }
-        );
+            }
+        });
 
         btnOK = new JButton(Utilities.BUTTON_OK);
-
         pnlBtm.add(btnOK);
-
-        btnOK.addActionListener(
-                (ActionEvent e) -> {
-                    saveAction();
-                }
-        );
+        btnOK.addActionListener((ActionEvent e) -> {
+            saveAction();
+        });
 
         btnCancel = new JButton(Utilities.BUTTON_CANCEL);
-
         pnlBtm.add(btnCancel);
-
-        btnCancel.addActionListener(
-                (ActionEvent e) -> {
-                    cancelAction();
-                }
-        );
+        btnCancel.addActionListener((ActionEvent e) -> {
+            cancelAction();
+        });
 
         add(pnlBtm, BorderLayout.SOUTH);
 
@@ -525,6 +490,20 @@ public class OrderItemsFrame
                     "Date Issue", JOptionPane.INFORMATION_MESSAGE);
             Utilities.setDatePickersDate(expectedDatePicker, originalExpectedDate);
         }
+    }
+
+    private ASupplier[] getSupplierList() {
+        ASupplier[] arraySuppliers = new ASupplier[]{};
+        Suppliers bllSuppliers = new Suppliers();
+        ArrayList<ASupplier> listSuppliers = new ArrayList<>();
+
+        if (bllSuppliers.load()) {
+            listSuppliers = bllSuppliers.getList();
+        } else {
+            JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
+                    Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+        }
+        return listSuppliers.toArray(arraySuppliers);
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">

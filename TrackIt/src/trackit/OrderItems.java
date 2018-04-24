@@ -97,16 +97,18 @@ public class OrderItems
     /**
      * Removes a row from the database.
      *
-     * @param primaryKey The primary key of the row to remove.
+     * @param anObj The object in the row to remove.
      * @return True = The row was successfully removed; False = There was an
      * error.
      */
     @Override
-    public boolean remove(Integer primaryKey) {
+    public boolean remove(AnOrderItem anObj) {
         boolean returnValue = false;
         try {
-            AnOrderItem.remove(primaryKey);
-            returnValue = true;
+            if (!this.hasForeignKeyIssue(anObj)) {
+                AnOrderItem.remove(anObj.getPrimaryKey());
+                returnValue = true;
+            }
         } catch (SQLException exSQL) {
             Utilities.setErrorMessage(exSQL);
         } catch (Exception ex) {
