@@ -128,7 +128,7 @@ public class OrdersPanel
         btnCreate = new JButton(Utilities.BUTTON_CREATE);
         btnCreate.addActionListener((ActionEvent e) -> {
             OrderItemsFrame dlgCreate = new OrderItemsFrame(true, null);
-            dlgCreate.setLocationRelativeTo(sp);
+            dlgCreate.setLocationRelativeTo(this);
             if (dlgCreate.display() == DialogResultType.OK) {
                 this.refreshGrid();
             }
@@ -225,7 +225,7 @@ public class OrdersPanel
         } else {
             AnOrder anOrder = this.orders.get(selectedRow);
             OrderItemsFrame dlgEdit = new OrderItemsFrame(false, anOrder);
-            dlgEdit.setLocationRelativeTo(sp);
+            dlgEdit.setLocationRelativeTo(this);
             if (dlgEdit.display() == DialogResultType.OK) {
                 this.refreshGrid();
             }

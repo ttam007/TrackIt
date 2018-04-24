@@ -128,20 +128,7 @@ public class SuppliersPanel
 
         btnRemove = new JButton(Utilities.BUTTON_REMOVE);
         btnRemove.addActionListener((ActionEvent e) -> {
-            int selectedRow = this.mainTable.getSelectedRow();
-            if (selectedRow < 0) {
-                JOptionPane.showMessageDialog(null, "Select item to remove");
-            } else {
-                ASupplier aSupplier = this.suppliers.get(selectedRow);
-                if (this.bll.remove(aSupplier.getPrimaryKey())) {
-                    this.refreshGrid();
-                    JOptionPane.showMessageDialog(null,
-                            String.format("%s has been removed.", aSupplier.getNickname()));
-                } else {
-                    JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
-                            Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
-                }
-            }
+            removeAction();
         });
 
         btmSup.add(btnCreate);
@@ -204,6 +191,26 @@ public class SuppliersPanel
             dlgEdit.setLocationRelativeTo(this);
             if (dlgEdit.display() == DialogResultType.OK) {
                 this.refreshGrid();
+            }
+        }
+    }
+
+    /**
+     * Handles removing a Supplier from the database.
+     */
+    private void removeAction() {
+        int selectedRow = this.mainTable.getSelectedRow();
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(null, "Select item to remove");
+        } else {
+            ASupplier aSupplier = this.suppliers.get(selectedRow);
+            if (this.bll.remove(aSupplier.getPrimaryKey())) {
+                this.refreshGrid();
+                JOptionPane.showMessageDialog(null,
+                        String.format("%s has been removed.", aSupplier.getNickname()));
+            } else {
+                JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
+                        Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
             }
         }
     }

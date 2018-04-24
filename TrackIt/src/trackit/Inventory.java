@@ -1,6 +1,7 @@
 package trackit;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 /**
  * BAL Layer: Works with the Inventory tab.
@@ -95,18 +96,52 @@ public class Inventory
     }
 
     /**
+     * Tests the specified object to see if it will have any issues being
+     * deleted from the database.
+     *
+     * @param anObj The object to test if it can be safely deleted from the
+     * database.
+     * @return True = An error will be thrown if attempting to delete the
+     * specified object from the database; False = No issues should occur if
+     * deleting the specified object from the database.
+     */
+    @Override
+    protected boolean hasForeignKeyIssue(AnInventoryItem anObj) {
+        boolean returnValue = false;
+
+        ArrayList<AnOrderItem> orderItems = new ArrayList<>();
+        OrderItems bllOrderItems = new OrderItems();
+        if (bllOrderItems.load()) {
+            orderItems = bllOrderItems.getList();
+        }
+
+        for (AnOrderItem anOrderItem : orderItems) {
+            if (anOrderItem.getItemId().equals(anObj.getPrimaryKey())) {
+                Utilities.setErrorMessage(new ForeignKeyException(
+                        anObj.getDescription(), "Order Item",
+                        anOrderItem.getDescription(), true));
+                returnValue = true;
+            }
+        }
+
+        return returnValue;
+    }
+
+    /**
      * Removes a row from the database.
      *
-     * @param primaryKey The primary key of the row to remove.
+     * @param anObj The object in the row to remove.
      * @return True = The row was successfully removed; False = There was an
      * error.
      */
     @Override
-    public boolean remove(Integer primaryKey) {
+    public boolean remove(AnInventoryItem anObj) {
         boolean returnValue = false;
         try {
-            AnInventoryItem.remove(primaryKey);
-            returnValue = true;
+            if (!this.hasForeignKeyIssue(anObj)) {
+                AnInventoryItem.remove(anObj.getPrimaryKey());
+                returnValue = true;
+            }
         } catch (SQLException exSQL) {
             Utilities.setErrorMessage(exSQL);
         } catch (Exception ex) {

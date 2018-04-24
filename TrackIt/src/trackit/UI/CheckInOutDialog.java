@@ -57,12 +57,12 @@ public class CheckInOutDialog
         this.setTitle(Utilities.getWindowCaption(WINDOW_NAME));
         this.setSize(dimFrame);
         this.setPreferredSize(dimFrame);
-        //this.setModal(true);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new CloseQuery());
         this.getRootPane().setDefaultButton(btnOK);
+        this.setModal(true);
 
         gbc = new GridBagConstraints();
         setLayout(new GridBagLayout());

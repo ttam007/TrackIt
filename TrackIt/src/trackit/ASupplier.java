@@ -97,6 +97,13 @@ public class ASupplier
 
         return returnValue;
     }
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Public Methods">
+
+    @Override
+    public String toString() {
+        return this.getNickname();
+    }
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Static Methods">
