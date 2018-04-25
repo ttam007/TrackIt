@@ -121,6 +121,7 @@ public class Inventory
                         anObj.getDescription(), "Order Item",
                         anOrderItem.getDescription(), true));
                 returnValue = true;
+                break;
             }
         }
 
