@@ -3,9 +3,7 @@ package trackit;
 import java.sql.*;
 import java.text.*;
 import java.util.*;
-import org.jdatepicker.impl.JDatePanelImpl;
-import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.UtilDateModel;
+import org.jdatepicker.impl.*;
 
 /**
  * This is a static class that only has global constants and "fire and forget"
@@ -127,6 +125,20 @@ public class Utilities {
      */
     public static String getWindowCaption(String windowName) {
         return String.format("%s %s - %s", TEAM_NAME, PROGRAM_NAME_SHORT, windowName);
+    }
+
+    /**
+     * Formats a specified amount into a currency format.
+     *
+     * @param anAmount The amount to be formatted.
+     * @return A well-formatted string representation of the specified amount.
+     */
+    public static String formatAsCurrency(Double anAmount) {
+        NumberFormat formatter = DecimalFormat.getNumberInstance(Locale.ENGLISH);
+        formatter.setMinimumFractionDigits(2);
+        formatter.setMaximumFractionDigits(2);
+        formatter.setMinimumIntegerDigits(1);
+        return formatter.format(anAmount);
     }
 
     /**

@@ -217,8 +217,8 @@ public class OrderItemDetailsDialog
         this.cboName.getEditor().setItem(this.anOrderItem.getDescription());
         this.cboStatus.getEditor().setItem(this.anOrderItem.getItemStatus());
         this.tfQuantityOrdered.setText(this.anOrderItem.getQuantityOrdered().toString());
-        this.tfPrice.setText(this.anOrderItem.getPrice().toString());
-        this.tfExtPrice.setText(this.anOrderItem.getExtendedPrice().toString());
+        this.tfPrice.setText(Utilities.formatAsCurrency(this.anOrderItem.getPrice()));
+        this.tfExtPrice.setText(Utilities.formatAsCurrency(this.anOrderItem.getExtendedPrice()));
     }
 
     /**
@@ -331,9 +331,8 @@ public class OrderItemDetailsDialog
             Integer quantity = Integer.parseInt(tfQuantityOrdered.getText());
             Double price = Double.parseDouble(tfPrice.getText());
             Double extendedPrice = quantity * price;
-            tfExtPrice.setText(extendedPrice.toString());
+            tfExtPrice.setText(Utilities.formatAsCurrency(extendedPrice));
         }
-
     }
     // </editor-fold>
 }
