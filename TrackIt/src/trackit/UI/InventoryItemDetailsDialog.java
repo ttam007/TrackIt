@@ -31,7 +31,8 @@ public class InventoryItemDetailsDialog
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     private JComboBox<ItemStatusType> statusField;
-    private JTextField tfSku, tfQuantity, tfSizeUnit, tfDescription;
+    private JTextField tfSku, tfSizeUnit, tfDescription;
+    private JFormattedTextField tfQuantity;
     private JLabel sku, statusLabel, unit, expDateLbl, quantity, itemNameLabel;
     private JButton btnOK, btnCancel;
     private GridBagConstraints gbc;
@@ -144,7 +145,7 @@ public class InventoryItemDetailsDialog
         gbc.gridwidth = 1;
         add(quantity, gbc);
         // Field
-        tfQuantity = new JTextField(7);
+        tfQuantity = new JFormattedTextField(Utilities.getIntegerFormatter());
         tfQuantity.setEditable(this.isCreateMode);
         gbc.gridx = 1;
         gbc.gridy = 2;
@@ -236,7 +237,7 @@ public class InventoryItemDetailsDialog
             this.anInventoryItem.setDescription(this.tfDescription.getText());
             this.anInventoryItem.setSku(this.tfSku.getText());
             this.anInventoryItem.setSizeUnit(this.tfSizeUnit.getText());
-            this.anInventoryItem.setQuantity(Integer.parseInt(this.tfQuantity.getText()));
+            this.anInventoryItem.setQuantity(Utilities.parseFormattedInteger(this.tfQuantity.getText()));
             this.anInventoryItem.setItemStatus(this.statusField.getSelectedItem().toString());
             java.util.Date expDate = (Date) expDatePicker.getModel().getValue();
             this.anInventoryItem.setExpirationDate(expDate);

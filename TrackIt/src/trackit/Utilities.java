@@ -3,6 +3,7 @@ package trackit;
 import java.sql.*;
 import java.text.*;
 import java.util.*;
+import javax.swing.text.*;
 import org.jdatepicker.impl.*;
 
 /**
@@ -134,11 +135,46 @@ public class Utilities {
      * @return A well-formatted string representation of the specified amount.
      */
     public static String formatAsCurrency(Double anAmount) {
-        NumberFormat formatter = DecimalFormat.getNumberInstance(Locale.ENGLISH);
+        NumberFormat formatter = DecimalFormat.getNumberInstance(Locale.US);
         formatter.setMinimumFractionDigits(2);
         formatter.setMaximumFractionDigits(2);
         formatter.setMinimumIntegerDigits(1);
         return formatter.format(anAmount);
+    }
+
+    /**
+     * Gets a formatter for integer values to be used with JFormattedTextField
+     * components.
+     *
+     * @return A NumberFormatter that only works with integers.
+     */
+    public static NumberFormatter getIntegerFormatter() {
+        NumberFormat format = NumberFormat.getInstance(Locale.US);
+        NumberFormatter formatter = new NumberFormatter(format);
+        formatter.setValueClass(Integer.class);
+        formatter.setMinimum(0);
+        formatter.setMaximum(Integer.MAX_VALUE);
+        formatter.setAllowsInvalid(false);
+        formatter.setCommitsOnValidEdit(true);
+        return formatter;
+    }
+
+    /**
+     * Parses a well formatted string of an integer into an Integer object.
+     *
+     * @param aValue The string to be parsed.
+     * @return The integer value of the specified string. If any parsing errors,
+     * then returns zero.
+     */
+    public static Integer parseFormattedInteger(String aValue) {
+        Integer returnValue;
+        try {
+            NumberFormat format = NumberFormat.getNumberInstance(Locale.US);
+            returnValue = format.parse(aValue).intValue();
+        } catch (ParseException exP) {
+            returnValue = 0;
+        }
+        return returnValue;
     }
 
     /**
