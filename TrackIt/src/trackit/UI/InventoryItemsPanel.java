@@ -161,8 +161,7 @@ public class InventoryItemsPanel
 
         btnCheckInOut = new JButton(Utilities.BUTTON_CHECKINOUT);
         btnCheckInOut.addActionListener((ActionEvent e) -> {
-            CheckInOutDialog checkIn = new CheckInOutDialog();
-            checkIn.display();
+            checkInOutAction();
         });
     }
 
@@ -211,6 +210,20 @@ public class InventoryItemsPanel
             InventoryItemDetailsDialog dlgEdit = new InventoryItemDetailsDialog(false, anInventoryItem);
             dlgEdit.setLocationRelativeTo(this);
             if (dlgEdit.display() == DialogResultType.OK) {
+                this.refreshGrid();
+            }
+        }
+    }
+
+    private void checkInOutAction() {
+        int selectedRow = this.mainTable.getSelectedRow();
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(this, "Select item to edit");
+        } else {
+            AnInventoryItem anInventoryItem = this.inventoryItems.get(selectedRow);
+            CheckInOutDialog checkIn = new CheckInOutDialog(anInventoryItem);
+            checkIn.setLocationRelativeTo(this);
+            if (checkIn.display() == DialogResultType.OK) {
                 this.refreshGrid();
             }
         }

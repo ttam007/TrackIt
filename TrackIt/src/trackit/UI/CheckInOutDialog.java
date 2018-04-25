@@ -2,7 +2,10 @@ package trackit.UI;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import trackit.*;
 
@@ -22,7 +25,9 @@ public class CheckInOutDialog
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
 
-    private final AnInventoryItem anItem = null;
+    private final AnInventoryItem anInventoryItem;
+    private Inventory bllInventory = new Inventory();
+    private DialogResultType dialogResult = DialogResultType.NONE;
 
     //private final InventoryItem testItem = new InventoryItem();
     // </editor-fold>
@@ -41,7 +46,8 @@ public class CheckInOutDialog
     /**
      * Check In/Out UI
      */
-    public CheckInOutDialog() {
+    public CheckInOutDialog(AnInventoryItem anInventoryItem) {
+        this.anInventoryItem = anInventoryItem;
         initializeComponents();
     }
     // </editor-fold>
@@ -152,14 +158,17 @@ public class CheckInOutDialog
      *
      */
     private void saveAction() {
-        JOptionPane.showMessageDialog(null, "Successfully Updated");
-        //TODO:  implement save.
-        /*if (successfullySaved) {
+        if (checkInObject()) {
+            if (this.bllInventory.save(this.anInventoryItem)) {
+                this.dialogResult = DialogResultType.OK;
+                this.setVisible(false);
                 this.dispose();
             } else {
-               //TODO:  catch errors and display them.  Do not exit dialog if an error occurs.
-            }*/
-        this.dispose();
+                this.dialogResult = DialogResultType.CANCEL;
+                JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
+                        Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 
     /**
@@ -173,9 +182,35 @@ public class CheckInOutDialog
         this.dispose();
     }
     
+    private boolean checkInObject() {
+        boolean returnValue = false;
+        if (inButton.isSelected()){
+            try {
+                int oldQuant = this.anInventoryItem.getQuantity();
+                int checkQuant = Utilities.parseFormattedInteger(this.qtyTextField.getText());
+                this.anInventoryItem.setQuantity(oldQuant + checkQuant);
+                returnValue = true;
+            } catch (SQLException ex) {
+                Logger.getLogger(CheckInOutDialog.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else if (outButton.isSelected()) {
+            try {
+                int oldQuant = this.anInventoryItem.getQuantity();
+                int checkQuant = Utilities.parseFormattedInteger(this.qtyTextField.getText());
+                this.anInventoryItem.setQuantity(oldQuant - checkQuant);
+                returnValue = true;
+            } catch (SQLException ex) {
+                Logger.getLogger(CheckInOutDialog.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+            
+        return returnValue;
+    }
+    
     private AnInventoryItem[] getItemList() {
         AnInventoryItem[] arrayItems = new AnInventoryItem[]{};
-        Inventory bllInventory = new Inventory();
+        
         ArrayList<AnInventoryItem> listInventoryItems = new ArrayList<>();
 
         if (bllInventory.load()) {
@@ -192,9 +227,9 @@ public class CheckInOutDialog
     /**
      * Displays the frame.
      */
-    public void display() {
-        System.out.println(String.format("Displaying %s...", WINDOW_NAME));
+    public DialogResultType display() {
         setVisible(true);
+        return this.dialogResult;
     }
 
     // </editor-fold>
