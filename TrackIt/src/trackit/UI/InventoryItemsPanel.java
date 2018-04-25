@@ -96,10 +96,7 @@ public class InventoryItemsPanel
              */
             @Override
             public void mousePressed(MouseEvent mouseEvent) {
-                JTable table = (JTable) mouseEvent.getSource();
-                Point point = mouseEvent.getPoint();
-                int row = table.rowAtPoint(point);
-                if (mouseEvent.getClickCount() == 2) {// && table.getSelectedRow() != -1) {
+                if (mouseEvent.getClickCount() == 2) {
                     editAction();
                 }
             }
@@ -151,7 +148,7 @@ public class InventoryItemsPanel
                 JOptionPane.showMessageDialog(null, "Select item to remove");
             } else {
                 AnInventoryItem anInventoryItem = this.inventoryItems.get(selectedRow);
-                if (this.bll.remove(anInventoryItem.getPrimaryKey())) {
+                if (this.bll.remove(anInventoryItem)) {
                     this.refreshGrid();
                     JOptionPane.showMessageDialog(null,
                             String.format("%s has been removed.", anInventoryItem.getDescription()));
@@ -187,7 +184,7 @@ public class InventoryItemsPanel
     /**
      * Refreshes the list of items that are displayed in the grid.
      */
-    public void refreshGrid() {
+    public final void refreshGrid() {
         this.inventoryItems.clear();
         for (int i = mainTableModel.getRowCount() - 1; i >= 0; i--) {
             mainTableModel.removeRow(i);

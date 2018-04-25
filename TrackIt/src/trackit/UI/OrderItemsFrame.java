@@ -253,7 +253,6 @@ public class OrderItemsFrame
         bottomBox = Box.createHorizontalBox();
 
         //add data to suppliers arraylist 
-        Object[][] testData = {{"paper", "pk", "12-34563487-0", "7", "$12.95", "$276.23"}, {"paper", "pk", "12-34563487-0", "7", "$12.95", "$276.23"}, {"paper", "pk", "12-34563487-0", "7", "$12.95", "$276.23"}};
         mainTableModel = new DefaultTableModel(TABLE_LABELS, 0);
         mainTable = new JTable(mainTableModel);
         scrollPane = new JScrollPane(mainTable);
@@ -274,10 +273,7 @@ public class OrderItemsFrame
              */
             @Override
             public void mousePressed(MouseEvent mouseEvent) {
-                JTable table = (JTable) mouseEvent.getSource();
-                Point point = mouseEvent.getPoint();
-                int row = table.rowAtPoint(point);
-                if (mouseEvent.getClickCount() == 2) {// && table.getSelectedRow() != -1) {
+                if (mouseEvent.getClickCount() == 2) {
                     editAction();
                 }
             }
@@ -325,7 +321,7 @@ public class OrderItemsFrame
                 JOptionPane.showMessageDialog(null, "Select item to remove");
             } else {
                 AnOrderItem anOrderItem = this.orderItems.get(selectedRow);
-                if (this.bllOrderItems.remove(anOrderItem.getPrimaryKey())) {
+                if (this.bllOrderItems.remove(anOrderItem)) {
                     this.refreshGrid();
                     JOptionPane.showMessageDialog(null,
                             String.format("%s has been removed.", anOrderItem.getDescription()));

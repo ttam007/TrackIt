@@ -216,11 +216,11 @@ public class AnInventoryItem
             java.util.Date aUtilDate = Calendar.getInstance().getTime();
             java.sql.Date aSQLDate = Utilities.convertToSQLDate(aUtilDate);
             ArrayList<AnInventoryItem> aList = loadAll();
-            for (AnInventoryItem anItem : aList) {
+            aList.forEach((anItem) -> {
                 if (anItem.getExpirationDate().before(aSQLDate)) {
                     returnList.add(anItem);
                 }
-            }
+            });
         } catch (SQLException exSQL) {
             //TODO: handle this
         } catch (Exception ex) {

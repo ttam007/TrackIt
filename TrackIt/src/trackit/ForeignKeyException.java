@@ -1,6 +1,7 @@
 package trackit;
 
 import java.sql.*;
+import java.util.Locale;
 
 /**
  * Handles foreign key exceptions that are found prior to database calls.
@@ -39,8 +40,8 @@ public class ForeignKeyException
      */
     public ForeignKeyException(String rowObj, String parentObjType, String parentObj, boolean isItem) {
         this.errorMessage = String.format(MSG_TEMPLATE_SPECIFIC,
-                rowObj, parentObjType.toLowerCase(),
-                parentObj, parentObjType.toLowerCase())
+                rowObj, parentObjType.toLowerCase(Locale.ENGLISH),
+                parentObj, parentObjType.toLowerCase(Locale.ENGLISH))
                 + (isItem ? MSG_TEMPLATE_ITEM : "");
     }
 

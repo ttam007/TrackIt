@@ -106,10 +106,7 @@ public class OrdersPanel
              */
             @Override
             public void mousePressed(MouseEvent mouseEvent) {
-                JTable table = (JTable) mouseEvent.getSource();
-                Point point = mouseEvent.getPoint();
-                int row = table.rowAtPoint(point);
-                if (mouseEvent.getClickCount() == 2) {// && table.getSelectedRow() != -1) {
+                if (mouseEvent.getClickCount() == 2) {
                     editAction();
                 }
             }
@@ -146,7 +143,7 @@ public class OrdersPanel
                 JOptionPane.showMessageDialog(null, "Select item to remove");
             } else {
                 AnOrder anOrder = this.orders.get(selectedRow);
-                if (this.bllOrders.remove(anOrder.getPrimaryKey())) {
+                if (this.bllOrders.remove(anOrder)) {
                     this.refreshGrid();
                     //JOptionPane.showMessageDialog(null, String.format("%s has been removed.", anOrder.getDescription()));
                 } else {
@@ -188,7 +185,7 @@ public class OrdersPanel
     /**
      * Refreshes the grid with current data from the database.
      */
-    public void refreshGrid() {
+    public final void refreshGrid() {
         //Clear the ArrayList and JTable, which should be done backwards.
         this.orders.clear();
         for (int i = mainTableModel.getRowCount() - 1; i >= 0; i--) {
@@ -198,9 +195,9 @@ public class OrdersPanel
         //Now load fresh data from database.
         if (this.bllSuppliers.load()) {
             ArrayList<ASupplier> listSuppliers = this.bllSuppliers.getList();
-            for (ASupplier aSupplier : listSuppliers) {
+            listSuppliers.forEach((aSupplier) -> {
                 this.suppliers.put(aSupplier.getPrimaryKey(), aSupplier);
-            }
+            });
         } else {
             JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
                     Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
