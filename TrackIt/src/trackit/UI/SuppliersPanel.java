@@ -96,10 +96,7 @@ public class SuppliersPanel
              */
             @Override
             public void mousePressed(MouseEvent mouseEvent) {
-                JTable table = (JTable) mouseEvent.getSource();
-                Point point = mouseEvent.getPoint();
-                int row = table.rowAtPoint(point);
-                if (mouseEvent.getClickCount() == 2) {// && table.getSelectedRow() != -1) {
+                if (mouseEvent.getClickCount() == 2) {
                     editAction();
                 }
             }
@@ -161,7 +158,7 @@ public class SuppliersPanel
     /**
      * Refreshes the grid with current data from the database.
      */
-    public void refreshGrid() {
+    public final void refreshGrid() {
         //Clear the ArrayList and JTable, which should be done backwards.
         this.suppliers.clear();
         for (int i = mainTableModel.getRowCount() - 1; i >= 0; i--) {
@@ -204,7 +201,7 @@ public class SuppliersPanel
             JOptionPane.showMessageDialog(null, "Select item to remove");
         } else {
             ASupplier aSupplier = this.suppliers.get(selectedRow);
-            if (this.bll.remove(aSupplier.getPrimaryKey())) {
+            if (this.bll.remove(aSupplier)) {
                 this.refreshGrid();
                 JOptionPane.showMessageDialog(null,
                         String.format("%s has been removed.", aSupplier.getNickname()));

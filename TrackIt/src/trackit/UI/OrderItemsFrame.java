@@ -247,9 +247,6 @@ public class OrderItemsFrame
              */
             @Override
             public void mousePressed(MouseEvent mouseEvent) {
-                JTable table = (JTable) mouseEvent.getSource();
-                Point point = mouseEvent.getPoint();
-                int row = table.rowAtPoint(point);
                 if (mouseEvent.getClickCount() == 2) {
                     editAction();
                 }
@@ -298,7 +295,7 @@ public class OrderItemsFrame
                 JOptionPane.showMessageDialog(null, "Select item to remove");
             } else {
                 AnOrderItem anOrderItem = this.orderItems.get(selectedRow);
-                if (this.bllOrderItems.remove(anOrderItem.getPrimaryKey())) {
+                if (this.bllOrderItems.remove(anOrderItem)) {
                     this.refreshGrid();
                     JOptionPane.showMessageDialog(null,
                             String.format("%s has been removed.", anOrderItem.getDescription()));

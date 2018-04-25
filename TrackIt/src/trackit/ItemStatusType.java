@@ -21,14 +21,12 @@ public enum ItemStatusType {
      */
     DO_NOT_ORDER(2);
     // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Constants">
+    // <editor-fold defaultstate="expanded" desc="Private Fields">
+    private final int value;
     private static final String[] STATUS_TEXT = new String[]{
         "Available",
         "Discontinued",
         "Do Not Order"};
-    // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Private Fields">
-    private final int value;
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
