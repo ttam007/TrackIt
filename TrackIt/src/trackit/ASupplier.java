@@ -58,10 +58,6 @@ public class ASupplier
     public String getNickname() {
         return this.nickname;
     }
-    
-    public int getPK(){
-        return this.primaryKey;
-    }
 
     /**
      * This can be null.

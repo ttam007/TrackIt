@@ -385,7 +385,7 @@ public class OrderItemsFrame
         try {
             this.anOrder.setDescription(this.tfDescription.getText());
             aSupplier = (ASupplier) this.cboSuppliers.getSelectedItem();
-            this.anOrder.setOrderedFrom((aSupplier.getPK()));
+            this.anOrder.setOrderedFrom(aSupplier.getPrimaryKey());
             //this.anOrder.setOrderStatus(this.tfStatus.getText());
             this.anOrder.setDateOrdered((Date) this.orderDatePicker.getModel().getValue());
             this.anOrder.setDateExpected((Date) this.expectedDatePicker.getModel().getValue());

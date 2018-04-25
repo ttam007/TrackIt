@@ -238,5 +238,10 @@ public class AnInventoryItem
         }
         this.quantity += amountToChangeBy;
     }
+    
+    @Override
+    public String toString() {
+        return this.getDescription();
+    }
     // </editor-fold>
 }
