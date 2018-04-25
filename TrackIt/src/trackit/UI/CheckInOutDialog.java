@@ -158,7 +158,7 @@ public class CheckInOutDialog
      *
      */
     private void saveAction() {
-        if (checkInObject()) {
+        if (checkInItem()) {
             if (this.bllInventory.save(this.anInventoryItem)) {
                 this.dialogResult = DialogResultType.OK;
                 this.setVisible(false);
@@ -182,30 +182,21 @@ public class CheckInOutDialog
         this.dispose();
     }
     
-    private boolean checkInObject() {
+    private boolean checkInItem() {
         boolean returnValue = false;
-        if (inButton.isSelected()){
-            try {
-                int oldQuant = this.anInventoryItem.getQuantity();
-                int checkQuant = Utilities.parseFormattedInteger(this.qtyTextField.getText());
-                this.anInventoryItem.setQuantity(oldQuant + checkQuant);
-                returnValue = true;
-            } catch (SQLException ex) {
-                Logger.getLogger(CheckInOutDialog.class.getName()).log(Level.SEVERE, null, ex);
+        int oldQuant = this.anInventoryItem.getQuantity();
+        int checkQuant = Utilities.parseFormattedInteger(this.qtyTextField.getText());
+        try { 
+            if (inButton.isSelected()){              
+                this.anInventoryItem.setQuantity(oldQuant + checkQuant);            
+            } else if (outButton.isSelected()) {            
+                this.anInventoryItem.setQuantity(oldQuant - checkQuant);        
             }
-        } else if (outButton.isSelected()) {
-            try {
-                int oldQuant = this.anInventoryItem.getQuantity();
-                int checkQuant = Utilities.parseFormattedInteger(this.qtyTextField.getText());
-                this.anInventoryItem.setQuantity(oldQuant - checkQuant);
-                returnValue = true;
-            } catch (SQLException ex) {
-                Logger.getLogger(CheckInOutDialog.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
+            returnValue = true;
+        } catch (SQLException ex) {
+            Logger.getLogger(CheckInOutDialog.class.getName()).log(Level.SEVERE, null, ex);
         }
-            
-        return returnValue;
+    return returnValue;
     }
     
     private AnInventoryItem[] getItemList() {
