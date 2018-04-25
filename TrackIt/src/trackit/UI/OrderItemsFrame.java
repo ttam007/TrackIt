@@ -132,7 +132,6 @@ public class OrderItemsFrame
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(1, 2, 5, 0);
         gbc.anchor = GridBagConstraints.LINE_START;
-        //gbc.fill = GridBagConstraints.HORIZONTAL;
 
         //topInnerBx = Box.createHorizontalBox();
         lblDescription = new JLabel("Order Description:");
@@ -171,33 +170,28 @@ public class OrderItemsFrame
         gbc.gridx = 4;
         gbc.gridy = 0;
         pnlTopBpx.add(lblOrderDate, gbc);
-        //topInnerBx.add(lblOrderDate);
-        orderDatePicker = Utilities.getDatePicker(); //new JDatePickerImpl(orderDatePanel, new DateLabelFormatter());
+        
+        orderDatePicker = Utilities.getDatePicker(); 
         gbc.gridx = 5;
         gbc.gridy = 0;
         pnlTopBpx.add(orderDatePicker, gbc);
-        //topInnerBx.add(orderDatePicker);
 
-        //btmInnerBx = Box.createHorizontalBox();
         lblStatus = new JLabel("Status:");
         gbc.gridx = 0;
         gbc.gridy = 1;
         pnlTopBpx.add(lblStatus, gbc);
-        //btmInnerBx.add(lblStatus);
+        
         tfStatus = new JTextField(20);
         gbc.gridx = 1;
         gbc.gridy = 1;
         pnlTopBpx.add(tfStatus, gbc);
-        //btmInnerBx.add(tfStatus);
 
-        //lblStatus = new JLabel("                          ");
-        //btmInnerBx.add(lblStatus);
         lblExpectedDate = new JLabel("Expected Date:");
         gbc.gridx = 4;
         gbc.gridy = 1;
         pnlTopBpx.add(lblExpectedDate, gbc);
-        //btmInnerBx.add(lblExpectedDate);
-        expectedDatePicker = Utilities.getDatePicker(); //new JDatePickerImpl(expectedDatePanel, new DateLabelFormatter());
+        
+        expectedDatePicker = Utilities.getDatePicker(); 
         gbc.gridx = 5;
         gbc.gridy = 1;
         pnlTopBpx.add(expectedDatePicker, gbc);
@@ -206,17 +200,12 @@ public class OrderItemsFrame
                 expectedDateLeaveAction((java.util.Date) e.getOldValue());
             }
         });
-        //btmInnerBx.add(expectedDatePicker);
-
-        //topBox.add(topInnerBx);
-        //topBox.add(btmInnerBx);
-        //middleBox = Box.createHorizontalBox();
-        //JPanel pnlMiddleBox = new JPanel(new GridLayout(0, 8, 2, 0));
+        
         btnCheckIn = new JButton(Utilities.BUTTON_CHECKIN);
         gbc.gridx = 0;
         gbc.gridy = 2;
         pnlTopBpx.add(btnCheckIn, gbc);
-        //middleBox.add(btnCheckIn);
+        
         btnCheckIn.addActionListener((ActionEvent e) -> {
             //TODO:  Call into BLL for check-in.
             JOptionPane.showMessageDialog(this, "Item Checked In");
@@ -226,37 +215,18 @@ public class OrderItemsFrame
         gbc.gridx = 1;
         gbc.gridy = GridBagConstraints.RELATIVE;
         pnlTopBpx.add(btnCheckInAll, gbc);
-        //middleBox.add(btnCheckInAll);
+        
         btnCheckInAll.addActionListener((ActionEvent e) -> {
             //TODO:  Call into BLL for check-in.
             JOptionPane.showMessageDialog(this, "All Items Checked In");
         });
 
-        //btnCheckInAll.setPreferredSize(btnCheckIn.getPreferredSize());
         topBox.add(pnlTopBpx);
         add(topBox, BorderLayout.NORTH);
 
-        /*middleBox = Box.createHorizontalBox();
-        JPanel pnlMiddleBox = new JPanel(new GridLayout(0, 8, 2, 0));
-        btnCheckIn = new JButton("Check In");
-        middleBox.add(btnCheckIn);
-        btnCheckIn.addActionListener((ActionEvent e) -> {
-            //TODO:  Call into BLL for check-in.
-            JOptionPane.showMessageDialog(this, "Item Checked In");
-        });
-
-        btnCheckInAll = new JButton("Check In All");
-        middleBox.add(btnCheckInAll);
-        btnCheckInAll.addActionListener((ActionEvent e) -> {
-            //TODO:  Call into BLL for check-in.
-            JOptionPane.showMessageDialog(this, "All Items Checked In");
-        });
-
-        btnCheckInAll.setPreferredSize(btnCheckIn.getPreferredSize());*/
         bottomBox = Box.createHorizontalBox();
 
         //add data to suppliers arraylist 
-        Object[][] testData = {{"paper", "pk", "12-34563487-0", "7", "$12.95", "$276.23"}, {"paper", "pk", "12-34563487-0", "7", "$12.95", "$276.23"}, {"paper", "pk", "12-34563487-0", "7", "$12.95", "$276.23"}};
         mainTableModel = new DefaultTableModel(TABLE_LABELS, 0);
         mainTable = new JTable(mainTableModel);
         scrollPane = new JScrollPane(mainTable);
@@ -280,7 +250,7 @@ public class OrderItemsFrame
                 JTable table = (JTable) mouseEvent.getSource();
                 Point point = mouseEvent.getPoint();
                 int row = table.rowAtPoint(point);
-                if (mouseEvent.getClickCount() == 2) {// && table.getSelectedRow() != -1) {
+                if (mouseEvent.getClickCount() == 2) {
                     editAction();
                 }
             }
@@ -363,6 +333,7 @@ public class OrderItemsFrame
     private void populateComponents(){
         this.tfDescription.setText(this.anOrder.getDescription());
         //TODO:  Convert Supplier component to a drop-down list.
+
         //this.tfSupplier.getEditor().setItem(this.anOrder.getOrderedFrom().getText());
         try {
             int key = this.anOrder.getOrderedFrom();
@@ -384,9 +355,11 @@ public class OrderItemsFrame
         //TODO:  sort this out so boolean return is used instead of try/catch block.
         try {
             this.anOrder.setDescription(this.tfDescription.getText());
+
             aSupplier = (ASupplier) this.cboSuppliers.getSelectedItem();
             this.anOrder.setOrderedFrom(aSupplier.getPrimaryKey());
             //this.anOrder.setOrderStatus(this.tfStatus.getText());
+
             this.anOrder.setDateOrdered((Date) this.orderDatePicker.getModel().getValue());
             this.anOrder.setDateExpected((Date) this.expectedDatePicker.getModel().getValue());
             returnValue = true;
@@ -423,7 +396,6 @@ public class OrderItemsFrame
      *
      */
     private void cancelAction() {
-        //JOptionPane.showMessageDialog(null, "Change Cancelled");
         this.dialogResult = DialogResultType.CANCEL;
         this.setVisible(false);
         this.dispose();
@@ -438,7 +410,6 @@ public class OrderItemsFrame
         if (this.orderItems != null) {
             int counter = 0;
             for (AnOrderItem anOrderItem : aList) {
-                //{"Item Name", "Unit", "SKU", "Quantity", "Price", "Ext Price"};
                 Object[] data = {anOrderItem.getDescription(), anOrderItem.getSizeUnit(),
                     anOrderItem.getSku(), anOrderItem.getQuantityOrdered(),
                     anOrderItem.getPrice(), anOrderItem.getExtendedPrice()};
