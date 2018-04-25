@@ -50,7 +50,8 @@ public enum ItemStatusType {
      *
      * @return The String equivalent of the enumerated value.
      */
-    public String getText() {
+    @Override
+    public String toString() {
         return STATUS_TEXT[this.value];
     }
 
@@ -71,7 +72,7 @@ public enum ItemStatusType {
      */
     public static ItemStatusType getType(String aValue) {
         for (ItemStatusType aType : ItemStatusType.values()) {
-            if (aType.getText().equalsIgnoreCase(aValue)) {
+            if (aType.toString().equalsIgnoreCase(aValue)) {
                 return aType;
             }
         }

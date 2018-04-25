@@ -170,8 +170,8 @@ public class OrderItemsFrame
         gbc.gridx = 4;
         gbc.gridy = 0;
         pnlTopBpx.add(lblOrderDate, gbc);
-        
-        orderDatePicker = Utilities.getDatePicker(); 
+
+        orderDatePicker = Utilities.getDatePicker();
         gbc.gridx = 5;
         gbc.gridy = 0;
         pnlTopBpx.add(orderDatePicker, gbc);
@@ -180,7 +180,7 @@ public class OrderItemsFrame
         gbc.gridx = 0;
         gbc.gridy = 1;
         pnlTopBpx.add(lblStatus, gbc);
-        
+
         tfStatus = new JTextField(20);
         gbc.gridx = 1;
         gbc.gridy = 1;
@@ -190,8 +190,8 @@ public class OrderItemsFrame
         gbc.gridx = 4;
         gbc.gridy = 1;
         pnlTopBpx.add(lblExpectedDate, gbc);
-        
-        expectedDatePicker = Utilities.getDatePicker(); 
+
+        expectedDatePicker = Utilities.getDatePicker();
         gbc.gridx = 5;
         gbc.gridy = 1;
         pnlTopBpx.add(expectedDatePicker, gbc);
@@ -200,12 +200,12 @@ public class OrderItemsFrame
                 expectedDateLeaveAction((java.util.Date) e.getOldValue());
             }
         });
-        
+
         btnCheckIn = new JButton(Utilities.BUTTON_CHECKIN);
         gbc.gridx = 0;
         gbc.gridy = 2;
         pnlTopBpx.add(btnCheckIn, gbc);
-        
+
         btnCheckIn.addActionListener((ActionEvent e) -> {
             //TODO:  Call into BLL for check-in.
             JOptionPane.showMessageDialog(this, "Item Checked In");
@@ -215,7 +215,7 @@ public class OrderItemsFrame
         gbc.gridx = 1;
         gbc.gridy = GridBagConstraints.RELATIVE;
         pnlTopBpx.add(btnCheckInAll, gbc);
-        
+
         btnCheckInAll.addActionListener((ActionEvent e) -> {
             //TODO:  Call into BLL for check-in.
             JOptionPane.showMessageDialog(this, "All Items Checked In");
@@ -327,11 +327,11 @@ public class OrderItemsFrame
     /**
      * Populates all the UI components from the object in memory.
      */
-    private void populateComponents(){
+    private void populateComponents() {
         this.tfDescription.setText(this.anOrder.getDescription());
         //TODO:  Convert Supplier component to a drop-down list.
 
-        //this.tfSupplier.getEditor().setItem(this.anOrder.getOrderedFrom().getText());
+        //this.tfSupplier.getEditor().setItem(this.anOrder.getOrderedFrom().toString());
         try {
             int key = this.anOrder.getOrderedFrom();
             this.cboSuppliers.setSelectedItem(aSupplier.load(key));
@@ -339,7 +339,7 @@ public class OrderItemsFrame
             Logger.getLogger(OrderItemsFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
         //TODO:  Convert OrderStatus component to a drop-down list.
-        this.tfStatus.setText(OrderStatusType.ORDERED.getText());
+        this.tfStatus.setText(OrderStatusType.ORDERED.toString());
         Utilities.setDatePickersDate(this.orderDatePicker, this.anOrder.getDateOrdered());
         Utilities.setDatePickersDate(this.expectedDatePicker, this.anOrder.getDateExpected());
     }
@@ -355,7 +355,7 @@ public class OrderItemsFrame
 
             aSupplier = (ASupplier) this.cboSuppliers.getSelectedItem();
             this.anOrder.setOrderedFrom(aSupplier.getPrimaryKey());
-            //this.anOrder.setOrderStatus(this.tfStatus.getText());
+            //this.anOrder.setOrderStatus(this.tfStatus.toString());
 
             this.anOrder.setDateOrdered((Date) this.orderDatePicker.getModel().getValue());
             this.anOrder.setDateExpected((Date) this.expectedDatePicker.getModel().getValue());
@@ -407,9 +407,11 @@ public class OrderItemsFrame
         if (this.orderItems != null) {
             int counter = 0;
             for (AnOrderItem anOrderItem : aList) {
+                //{"Item Name", "Unit", "SKU", "Quantity", "Price", "Ext Price"};
                 Object[] data = {anOrderItem.getDescription(), anOrderItem.getSizeUnit(),
                     anOrderItem.getSku(), anOrderItem.getQuantityOrdered(),
-                    anOrderItem.getPrice(), anOrderItem.getExtendedPrice()};
+                    Utilities.formatAsCurrency(anOrderItem.getPrice()),
+                    Utilities.formatAsCurrency(anOrderItem.getExtendedPrice())};
                 mainTableModel.addRow(data);
                 this.orderItems.put(counter, anOrderItem);
                 counter++;

@@ -121,6 +121,7 @@ public class Suppliers
                         anObj.getNickname(), "Order",
                         anOrder.getDescription(), false));
                 returnValue = true;
+                break;
             }
         }
 

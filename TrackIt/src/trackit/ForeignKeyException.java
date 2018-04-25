@@ -40,8 +40,8 @@ public class ForeignKeyException
      */
     public ForeignKeyException(String rowObj, String parentObjType, String parentObj, boolean isItem) {
         this.errorMessage = String.format(MSG_TEMPLATE_SPECIFIC,
-                rowObj, parentObjType.toLowerCase(Locale.ENGLISH),
-                parentObj, parentObjType.toLowerCase(Locale.ENGLISH))
+                rowObj, parentObjType.toLowerCase(Locale.US),
+                parentObj, parentObjType.toLowerCase(Locale.US))
                 + (isItem ? MSG_TEMPLATE_ITEM : "");
     }
 
