@@ -222,7 +222,7 @@ public class InventoryItemDetailsDialog
         this.tfSku.setText(this.anInventoryItem.getSku());
         this.tfSizeUnit.setText(this.anInventoryItem.getSizeUnit());
         this.tfQuantity.setText(this.anInventoryItem.getQuantity().toString());
-        this.statusField.getEditor().setItem(this.anInventoryItem.getItemStatus().getText());
+        this.statusField.getEditor().setItem(this.anInventoryItem.getItemStatus().toString());
         Utilities.setDatePickersDate(this.expDatePicker, this.anInventoryItem.getExpirationDate());
     }
 

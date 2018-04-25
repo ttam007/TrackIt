@@ -205,35 +205,7 @@ public abstract class SQLHelper<T>
      * @throws Exception
      */
     protected abstract ArrayList<T> execSproc(String sprocName, HashMap<Integer, SprocParameter> parameters)
-            throws SQLException, Exception;/* {
-        ArrayList<T> results = new ArrayList<>();
-
-        String sql = buildSprocSyntax(sprocName, parameters.size());
-        System.out.println("execSproc's sql = " + sql);
-        try (Connection myConn = sqlConn.getConnection();
-                CallableStatement stmt = myConn.prepareCall(sql)) {
-
-            final ArrayList<Integer> outParams = setParameters(stmt, parameters);
-
-            //Get the result set, if any.
-            if (stmt.execute()) {
-                ResultSet rs = stmt.getResultSet();
-                while (rs.next()) {
-                    T aBiler = new T();
-
-                    results.add(aBiler);
-                }
-            }
-
-            //Retrieve OUT parameters.
-            for (int aParamIndex : outParams) {
-                SprocParameter aParam = parameters.get(aParamIndex);
-                aParam.setValue(String.valueOf(stmt.getInt(aParamIndex)));
-            }
-        }
-
-        return results;
-    }*/
+            throws SQLException, Exception;
 
     @Override
     public ArrayList<Integer> insertAll(List<T> aList)

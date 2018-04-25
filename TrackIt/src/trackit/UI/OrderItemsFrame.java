@@ -331,7 +331,7 @@ public class OrderItemsFrame
         this.tfDescription.setText(this.anOrder.getDescription());
         //TODO:  Convert Supplier component to a drop-down list.
 
-        //this.tfSupplier.getEditor().setItem(this.anOrder.getOrderedFrom().getText());
+        //this.tfSupplier.getEditor().setItem(this.anOrder.getOrderedFrom().toString());
         try {
             int key = this.anOrder.getOrderedFrom();
             this.cboSuppliers.setSelectedItem(aSupplier.load(key));
@@ -339,7 +339,7 @@ public class OrderItemsFrame
             Logger.getLogger(OrderItemsFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
         //TODO:  Convert OrderStatus component to a drop-down list.
-        this.tfStatus.setText(OrderStatusType.ORDERED.getText());
+        this.tfStatus.setText(OrderStatusType.ORDERED.toString());
         Utilities.setDatePickersDate(this.orderDatePicker, this.anOrder.getDateOrdered());
         Utilities.setDatePickersDate(this.expectedDatePicker, this.anOrder.getDateExpected());
     }
@@ -355,7 +355,7 @@ public class OrderItemsFrame
 
             aSupplier = (ASupplier) this.cboSuppliers.getSelectedItem();
             this.anOrder.setOrderedFrom(aSupplier.getPrimaryKey());
-            //this.anOrder.setOrderStatus(this.tfStatus.getText());
+            //this.anOrder.setOrderStatus(this.tfStatus.toString());
 
             this.anOrder.setDateOrdered((Date) this.orderDatePicker.getModel().getValue());
             this.anOrder.setDateExpected((Date) this.expectedDatePicker.getModel().getValue());

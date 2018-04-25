@@ -416,8 +416,8 @@ BEGIN
 	UPDATE items
     SET items.description = description,
 		items.sku = sku,
-	   items.sizeUnit = sizeUnit,
-	   items.itemStatus = itemStatus
+		items.sizeUnit = sizeUnit,
+		items.itemStatus = itemStatus
 	WHERE items.itemId = (
 		SELECT inventoryitems.itemId
 		FROM inventoryitems

@@ -106,7 +106,7 @@ public class AnOrder
     public void setOrderStatus(OrderStatusType anOrderStatus)
             throws SQLException {
         //Calls the overloaded method instead of directly setting so the null check can occur.
-        setOrderStatus(anOrderStatus.getText());
+        setOrderStatus(anOrderStatus.toString());
     }
 
     /**

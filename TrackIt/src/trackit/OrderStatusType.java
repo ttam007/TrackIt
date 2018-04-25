@@ -55,7 +55,8 @@ public enum OrderStatusType {
      *
      * @return The String equivalent of the enumerated value.
      */
-    public String getText() {
+    @Override
+    public String toString() {
         return STATUS_TEXT[this.value];
     }
 
@@ -76,7 +77,7 @@ public enum OrderStatusType {
      */
     public static OrderStatusType getType(String aValue) {
         for (OrderStatusType aType : OrderStatusType.values()) {
-            if (aType.getText().equalsIgnoreCase(aValue)) {
+            if (aType.toString().equalsIgnoreCase(aValue)) {
                 return aType;
             }
         }

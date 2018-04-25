@@ -26,12 +26,12 @@ public class OrderItemDetailsDialog
     private final OrderItems bll = new OrderItems();
     private DialogResultType dialogResult = DialogResultType.NONE;
     private final Inventory bllInventory = new Inventory();
-    private final HashMap<String, AnInventoryItem> inventory = new HashMap<>();
+    //private final HashMap<String, AnInventoryItem> inventory = new HashMap<>();
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
-    private JComboBox<String> cboStatus;
-    private JComboBox<String> cboName;
+    private JComboBox<ItemStatusType> cboStatus;
+    private JComboBox<AnInventoryItem> cboName;
     JPanel pnlCenter;
     JLabel lblName, lblQuantity, lblPrice, lblStatus, lblExtPrice;
     JTextField tfQuantityOrdered, tfPrice, tfExtPrice;
@@ -164,7 +164,7 @@ public class OrderItemDetailsDialog
         add(lblStatus, gbc);
 
         //Status
-        cboStatus = new JComboBox<>(ItemStatusType.getTextForAll());
+        cboStatus = new JComboBox<>(ItemStatusType.values());
         cboStatus.setEnabled(false);
         gbc.gridx = 5;
         gbc.gridy = 2;
@@ -228,8 +228,9 @@ public class OrderItemDetailsDialog
         boolean returnValue = false;
         //TODO:  sort this out so boolean return is used instead of try/catch block.
         try {
-            this.anOrderItem.setDescription(this.cboName.getEditor().getItem().toString());
-            this.anOrderItem.setItemId(0);
+            AnInventoryItem anInventoryItem = (AnInventoryItem) this.cboName.getModel().getSelectedItem();
+            this.anOrderItem.setDescription(anInventoryItem.getDescription());
+            this.anOrderItem.setItemId(anInventoryItem.getItemId());
             this.anOrderItem.setQuantityOrdered(Integer.parseInt(this.tfQuantityOrdered.getText()));
             this.anOrderItem.setPrice(Double.parseDouble(this.tfPrice.getText()));
             returnValue = true;
@@ -274,21 +275,16 @@ public class OrderItemDetailsDialog
      *
      * @return The names of all items in inventory.
      */
-    private String[] getItemList() {
-        String[] arrayItems = new String[]{};
+    private AnInventoryItem[] getItemList() {
+        AnInventoryItem[] arrayItems = new AnInventoryItem[]{};
         if (this.bllInventory.load()) {
             ArrayList<AnInventoryItem> listInventory = this.bllInventory.getList();
-            ArrayList<String> aList = new ArrayList<>();
-            listInventory.forEach((anItem) -> {
-                inventory.put(anItem.getDescription(), anItem);
-                aList.add(anItem.getDescription());
-            });
-            return aList.toArray(arrayItems);
+            arrayItems = listInventory.toArray(arrayItems);
         } else {
             JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
                     Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
-            return arrayItems;
         }
+        return arrayItems;
     }
 
     // </editor-fold>

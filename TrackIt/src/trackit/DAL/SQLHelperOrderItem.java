@@ -82,7 +82,7 @@ public class SQLHelperOrderItem
         ArrayList<AnOrderItem> results = new ArrayList<>();
 
         String sql = buildSprocSyntax(sprocName, parameters.size());
-        System.out.println("execSproc's sql = " + sql);
+        //System.out.println("execSproc's sql = " + sql);
 
         try (Connection myConn = sqlConn.getConnection();
                 CallableStatement stmt = myConn.prepareCall(sql)) {
