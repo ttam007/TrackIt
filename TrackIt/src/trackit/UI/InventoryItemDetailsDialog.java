@@ -30,7 +30,7 @@ public class InventoryItemDetailsDialog
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
-    private JComboBox<String> statusField;
+    private JComboBox<ItemStatusType> statusField;
     private JTextField tfSku, tfQuantity, tfSizeUnit, tfDescription;
     private JLabel sku, statusLabel, unit, expDateLbl, quantity, itemNameLabel;
     private JButton btnOK, btnCancel;
@@ -185,7 +185,7 @@ public class InventoryItemDetailsDialog
         add(statusLabel, gbc);
 
         //Text Field
-        statusField = new JComboBox<>(ItemStatusType.getTextForAll());
+        statusField = new JComboBox<>(ItemStatusType.values());
         gbc.gridx = 5;
         gbc.gridy = 3;
         gbc.gridwidth = 1;
@@ -222,7 +222,7 @@ public class InventoryItemDetailsDialog
         this.tfSku.setText(this.anInventoryItem.getSku());
         this.tfSizeUnit.setText(this.anInventoryItem.getSizeUnit());
         this.tfQuantity.setText(this.anInventoryItem.getQuantity().toString());
-        this.statusField.getEditor().setItem(this.anInventoryItem.getItemStatus().toString());
+        this.statusField.getModel().setSelectedItem(this.anInventoryItem.getItemStatus());
         Utilities.setDatePickersDate(this.expDatePicker, this.anInventoryItem.getExpirationDate());
     }
 
