@@ -3,6 +3,8 @@ package trackit.UI;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import org.jdatepicker.impl.*;
@@ -30,6 +32,7 @@ public class OrderItemsFrame
     private final AnOrder anOrder;
     private DialogResultType dialogResult = DialogResultType.NONE;
     private final Orders bllOrders = new Orders();
+    private ASupplier aSupplier = new ASupplier();
 
     //For the grid.
     private final HashMap<Integer, AnOrderItem> orderItems = new HashMap<>();
@@ -151,8 +154,8 @@ public class OrderItemsFrame
         tfSupplier = new JTextField(20);
         gbc.gridx = 3;
         gbc.gridy = 0;
-        //pnlTopBpx.add(cboSuppliers, gbc);
-        pnlTopBpx.add(tfSupplier);
+        pnlTopBpx.add(cboSuppliers, gbc);
+        //pnlTopBpx.add(tfSupplier);
         cboSuppliers.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -327,10 +330,17 @@ public class OrderItemsFrame
     /**
      * Populates all the UI components from the object in memory.
      */
-    private void populateComponents() {
+    private void populateComponents(){
         this.tfDescription.setText(this.anOrder.getDescription());
         //TODO:  Convert Supplier component to a drop-down list.
-        this.tfSupplier.setText("1");
+
+        //this.tfSupplier.getEditor().setItem(this.anOrder.getOrderedFrom().getText());
+        try {
+            int key = this.anOrder.getOrderedFrom();
+            this.cboSuppliers.setSelectedItem(aSupplier.load(key));
+        } catch (Exception ex) {
+            Logger.getLogger(OrderItemsFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
         //TODO:  Convert OrderStatus component to a drop-down list.
         this.tfStatus.setText(OrderStatusType.ORDERED.getText());
         Utilities.setDatePickersDate(this.orderDatePicker, this.anOrder.getDateOrdered());
@@ -345,6 +355,11 @@ public class OrderItemsFrame
         //TODO:  sort this out so boolean return is used instead of try/catch block.
         try {
             this.anOrder.setDescription(this.tfDescription.getText());
+
+            aSupplier = (ASupplier) this.cboSuppliers.getSelectedItem();
+            this.anOrder.setOrderedFrom(aSupplier.getPrimaryKey());
+            //this.anOrder.setOrderStatus(this.tfStatus.getText());
+
             this.anOrder.setDateOrdered((Date) this.orderDatePicker.getModel().getValue());
             this.anOrder.setDateExpected((Date) this.expectedDatePicker.getModel().getValue());
             returnValue = true;

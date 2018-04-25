@@ -8,7 +8,7 @@ import trackit.DAL.SQLHelperSupplier;
 /**
  * DAL Layer: Handles all aspects of a single Supplier.
  *
- * @author Bond
+ * @author Bond, Steven
  */
 public class ASupplier
         extends DatabaseObject {

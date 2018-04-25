@@ -2,6 +2,7 @@ package trackit.UI;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import javax.swing.*;
 import trackit.*;
 
@@ -29,7 +30,7 @@ public class CheckInOutDialog
     JPanel pnlMain;
     JButton btnOK, btnCancel;
     JRadioButton inButton, outButton;
-    JComboBox<String> itemComboBox;
+    private JComboBox<AnInventoryItem> cboItems;
     JLabel itemNameLabel, qtyLabel;
     JTextField qtyTextField;
     String[] itemStrings = {"soap", "shampoo", "conditioner", "paper towels", "mouthwash"};
@@ -90,11 +91,21 @@ public class CheckInOutDialog
         add(itemNameLabel, gbc);
 
         // Supplier Name Text Field
-        itemComboBox = new JComboBox<>(itemStrings);
+        cboItems = new JComboBox<>(getItemList());
         gbc.gridx = 1;
         gbc.gridy = 1;
         gbc.gridwidth = 5;
-        add(itemComboBox, gbc);
+        add(cboItems, gbc);
+        cboItems.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                super.focusGained(e);
+
+                getItemList();
+                validate();
+            }
+        });
+
 
         // Website Address label
         qtyLabel = new JLabel("Quantity: ");
@@ -160,6 +171,20 @@ public class CheckInOutDialog
         JOptionPane.showMessageDialog(null, "Change Cancelled");
         //TODO:  close window and return to prior window.
         this.dispose();
+    }
+    
+    private AnInventoryItem[] getItemList() {
+        AnInventoryItem[] arrayItems = new AnInventoryItem[]{};
+        Inventory bllInventory = new Inventory();
+        ArrayList<AnInventoryItem> listInventoryItems = new ArrayList<>();
+
+        if (bllInventory.load()) {
+            listInventoryItems = bllInventory.getList();
+        } else {
+            JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
+                    Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+        }
+        return listInventoryItems.toArray(arrayItems);
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">

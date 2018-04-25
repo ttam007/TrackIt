@@ -256,5 +256,10 @@ public class AnOrderItem
         this.quantityOrdered += amountToChangeBy;
         calcExtendedPrice();
     }
+    
+    @Override
+    public String toString() {
+        return this.getDescription();
+    }
     // </editor-fold>
 }
