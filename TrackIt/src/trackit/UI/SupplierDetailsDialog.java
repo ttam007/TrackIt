@@ -103,7 +103,6 @@ public class SupplierDetailsDialog
         setLayout(new GridBagLayout());
         gbc.insets = new Insets(2, 2, 5, 0);
         gbc.anchor = GridBagConstraints.LINE_START;
-        //gbc.fill = GridBagConstraints.HORIZONTAL;
 
         // Supplier Name Label 
         lblName = new JLabel("Supplier Name: ");

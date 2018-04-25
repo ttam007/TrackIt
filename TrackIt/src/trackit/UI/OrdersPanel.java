@@ -121,6 +121,7 @@ public class OrdersPanel
 
         JPanel btmSup = new JPanel(new GridLayout(0, 8, 2, 0));
         btnCreate = new JButton(Utilities.BUTTON_CREATE);
+        btnCreate.setEnabled(false);
         btnCreate.addActionListener((ActionEvent e) -> {
             OrderItemsFrame dlgCreate = new OrderItemsFrame(true, null);
             dlgCreate.setLocationRelativeTo(this);
@@ -128,6 +129,7 @@ public class OrdersPanel
                 this.refreshGrid();
             }
         });
+        
 
         btnEdit = new JButton(Utilities.BUTTON_EDIT);
         btnEdit.addActionListener((ActionEvent e) -> {
@@ -157,10 +159,11 @@ public class OrdersPanel
         add(btmSup, BorderLayout.SOUTH);
 
     }
-
+    
     private void toggleDisableButton() {
         btnEdit.setEnabled(makeButtonsEnabled);
         btnRemove.setEnabled(makeButtonsEnabled);
+        
     }
 
     private void initTableData(ArrayList<AnOrder> listOrders) {
@@ -187,12 +190,17 @@ public class OrdersPanel
         for (int i = mainTableModel.getRowCount() - 1; i >= 0; i--) {
             mainTableModel.removeRow(i);
         }
-
+        
         //Now load fresh data from database.
         if (this.bllSuppliers.load()) {
             ArrayList<ASupplier> listSuppliers = this.bllSuppliers.getList();
             for (ASupplier aSupplier : listSuppliers) {
                 this.suppliers.put(aSupplier.getPrimaryKey(), aSupplier);
+            }
+            if(listSuppliers.isEmpty()){
+                btnCreate.setEnabled(false);
+            }else{
+                btnCreate.setEnabled(true);
             }
         } else {
             JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
