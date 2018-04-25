@@ -264,7 +264,6 @@ public class OrderItemDetailsDialog
      * Handles the cancel action.
      */
     private void cancelAction() {
-        //JOptionPane.showMessageDialog(null, "Change Cancelled");
         this.dialogResult = DialogResultType.CANCEL;
         this.setVisible(false);
         this.dispose();

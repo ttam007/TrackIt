@@ -282,5 +282,10 @@ public class AnOrder
             throws SQLException, Exception {
         HELPER.delete(primaryKey);
     }
+    
+    @Override
+    public String toString() {
+        return this.getDescription();
+    }
     // </editor-fold>
 }

@@ -191,7 +191,6 @@ public class SupplierDetailsDialog
         if (populateObject()) {
             if (this.bll.save(this.aSupplier)) {
                 this.dialogResult = DialogResultType.OK;
-                //JOptionPane.showMessageDialog(null, "Successfully Saved.");
                 this.setVisible(false);
                 this.dispose();
             } else {
@@ -206,7 +205,6 @@ public class SupplierDetailsDialog
      * Handles the cancel action.
      */
     private void cancelAction() {
-        //JOptionPane.showMessageDialog(null, "Change Cancelled");
         this.dialogResult = DialogResultType.CANCEL;
         this.setVisible(false);
         this.dispose();
