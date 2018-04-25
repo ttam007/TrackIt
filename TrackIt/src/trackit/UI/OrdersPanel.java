@@ -116,15 +116,10 @@ public class OrdersPanel
         });
 
         mainTable.setBounds(30, 40, 200, 200);
-
         sp = new JScrollPane(mainTable);
-
-        add(sp, BorderLayout.CENTER);
-
         add(sp, BorderLayout.CENTER);
 
         JPanel btmSup = new JPanel(new GridLayout(0, 8, 2, 0));
-
         btnCreate = new JButton(Utilities.BUTTON_CREATE);
         btnCreate.addActionListener((ActionEvent e) -> {
             OrderItemsFrame dlgCreate = new OrderItemsFrame(true, null);
@@ -148,7 +143,6 @@ public class OrdersPanel
                 AnOrder anOrder = this.orders.get(selectedRow);
                 if (this.bllOrders.remove(anOrder.getPrimaryKey())) {
                     this.refreshGrid();
-                    //JOptionPane.showMessageDialog(null, String.format("%s has been removed.", anOrder.getDescription()));
                 } else {
                     JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
                             Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
@@ -173,7 +167,6 @@ public class OrdersPanel
         if (this.orders != null) {
             int counter = 0;
             for (AnOrder anOrder : listOrders) {
-                //{"Description", "Supplier", "Status", "Order Date", "Expected Date"};
                 Object[] data = {anOrder.getDescription(),
                     this.suppliers.get(anOrder.getOrderedFrom()).getNickname(),
                     anOrder.getDateOrdered(), anOrder.getOrderStatus(),
@@ -249,8 +242,5 @@ public class OrdersPanel
     public static String[] getColumnHeaders() {
         return TABLE_LABELS.clone();
     }
-    // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="SubClasses">
-
     // </editor-fold>
 }
