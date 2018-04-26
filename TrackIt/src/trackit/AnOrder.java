@@ -31,10 +31,26 @@ public class AnOrder
      */
     public AnOrder() {
         this.primaryKey = SQLHelper.INVALID_PRIMARY_KEY;
+
+        setDefaultOrderedDate();
     }
 
     // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Private Methods">
+    /**
+     * Sets the default Ordered Date when creating a new instance.
+     */
+    private void setDefaultOrderedDate() {
+        Calendar cal = Calendar.getInstance();
+        try {
+            this.setDateOrdered(cal.getTime());
+        } catch (SQLException exSQL) {
+            //leave DateOrdered as null;
+        }
+    }
+    // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Setters & Getters">
+
     @Override
     public void setPrimaryKey(Integer aPrimaryKey)
             throws SQLException {
