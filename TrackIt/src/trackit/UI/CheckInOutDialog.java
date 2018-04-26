@@ -28,6 +28,7 @@ public class CheckInOutDialog
     private final AnInventoryItem anInventoryItem;
     private Inventory bllInventory = new Inventory();
     private DialogResultType dialogResult = DialogResultType.NONE;
+    private final String CHECKOUT_MSG = new String("Check out quantity must be less than total quantity.");
 
     //private final InventoryItem testItem = new InventoryItem();
     // </editor-fold>
@@ -35,9 +36,8 @@ public class CheckInOutDialog
     JPanel pnlMain;
     JButton btnOK, btnCancel;
     JRadioButton inButton, outButton;
-    private JComboBox<AnInventoryItem> cboItems;
     JLabel itemNameLabel, qtyLabel;
-    JTextField qtyTextField;
+    JTextField qtyTextField, itemTextField;
     String[] itemStrings = {"soap", "shampoo", "conditioner", "paper towels", "mouthwash"};
     GridBagConstraints gbc;
 
@@ -49,6 +49,7 @@ public class CheckInOutDialog
     public CheckInOutDialog(AnInventoryItem anInventoryItem) {
         this.anInventoryItem = anInventoryItem;
         initializeComponents();
+        populateComponents();
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
@@ -97,20 +98,13 @@ public class CheckInOutDialog
         add(itemNameLabel, gbc);
 
         // Supplier Name Text Field
-        cboItems = new JComboBox<>(getItemList());
+        itemTextField = new JTextField();
+        itemTextField.setEditable(false);
         gbc.gridx = 1;
         gbc.gridy = 1;
         gbc.gridwidth = 5;
-        add(cboItems, gbc);
-        cboItems.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                super.focusGained(e);
-
-                getItemList();
-                validate();
-            }
-        });
+        add(itemTextField, gbc);
+        
 
 
         // Website Address label
@@ -182,6 +176,11 @@ public class CheckInOutDialog
         this.dispose();
     }
     
+    private void populateComponents() {
+        this.itemTextField.setText(this.anInventoryItem.getDescription());
+    }
+    
+    
     private boolean checkInItem() {
         boolean returnValue = false;
         int oldQuant = this.anInventoryItem.getQuantity();
@@ -189,8 +188,13 @@ public class CheckInOutDialog
         try { 
             if (inButton.isSelected()){              
                 this.anInventoryItem.setQuantity(oldQuant + checkQuant);            
-            } else if (outButton.isSelected()) {            
-                this.anInventoryItem.setQuantity(oldQuant - checkQuant);        
+            } else if (outButton.isSelected()) {
+                if (checkQuant > oldQuant) {
+                    JOptionPane.showMessageDialog(this, CHECKOUT_MSG,
+                    Utilities.ERROR_MSG_CAPTION, JOptionPane.INFORMATION_MESSAGE);
+                }else {
+                    this.anInventoryItem.setQuantity(oldQuant - checkQuant);
+                }
             }
             returnValue = true;
         } catch (SQLException ex) {
@@ -199,19 +203,7 @@ public class CheckInOutDialog
     return returnValue;
     }
     
-    private AnInventoryItem[] getItemList() {
-        AnInventoryItem[] arrayItems = new AnInventoryItem[]{};
-        
-        ArrayList<AnInventoryItem> listInventoryItems = new ArrayList<>();
-
-        if (bllInventory.load()) {
-            listInventoryItems = bllInventory.getList();
-        } else {
-            JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
-                    Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
-        }
-        return listInventoryItems.toArray(arrayItems);
-    }
+    
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
 
