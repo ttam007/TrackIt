@@ -206,6 +206,20 @@ public class AnOrderItem
     }
 
     /**
+     * Gets all order items from the database for the specified order.
+     *
+     * @param primaryKey The primary key of the Order in the table to retrieve.
+     * @return A list of order items objects with values loaded from the
+     * database.
+     * @throws SQLException
+     * @throws Exception
+     */
+    public static ArrayList<AnOrderItem> loadByOrder(int primaryKey)
+            throws SQLException, Exception {
+        return HELPER.selectByOrder(primaryKey);
+    }
+
+    /**
      * Saves the specified object to the database.
      *
      * @param anObj The object to be saved.
@@ -230,7 +244,9 @@ public class AnOrderItem
      */
     public static void remove(AnOrderItem anObj)
             throws SQLException, Exception {
-        remove(anObj.getPrimaryKey());
+        if (anObj.isAlreadyInDatabase()) {
+            remove(anObj.getPrimaryKey());
+        }
     }
 
     /**
@@ -240,7 +256,7 @@ public class AnOrderItem
      * @throws SQLException
      * @throws Exception
      */
-    public static void remove(Integer primaryKey)
+    private static void remove(Integer primaryKey)
             throws SQLException, Exception {
         HELPER.delete(primaryKey);
     }
@@ -256,7 +272,7 @@ public class AnOrderItem
         this.quantityOrdered += amountToChangeBy;
         calcExtendedPrice();
     }
-    
+
     @Override
     public String toString() {
         return this.getDescription();

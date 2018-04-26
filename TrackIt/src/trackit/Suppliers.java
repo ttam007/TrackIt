@@ -140,7 +140,7 @@ public class Suppliers
         boolean returnValue = false;
         try {
             if (!this.hasForeignKeyIssue(anObj)) {
-                ASupplier.remove(anObj.getPrimaryKey());
+                ASupplier.remove(anObj);
                 returnValue = true;
             }
         } catch (SQLException exSQL) {

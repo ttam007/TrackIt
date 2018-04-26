@@ -95,6 +95,34 @@ public class Orders
     }
 
     /**
+     * Saves an order and all associated order item data.
+     *
+     * @param anOrder The order to be saved.
+     * @param bllOrderItems Contains all the order items associated with the
+     * order that also must be saved.
+     * @return True = The object was successfully saved; False = There was an
+     * error.
+     */
+    public boolean save(AnOrder anOrder, OrderItems bllOrderItems) {
+        boolean returnValue = false;
+        if (save(anOrder)) {
+            try {
+                for (AnOrderItem anItem : bllOrderItems.getList()) {
+                    anItem.setOrderId(anOrder.getPrimaryKey());
+                }
+                if (bllOrderItems.save()) {
+                    returnValue = true;
+                }
+            } catch (java.sql.SQLException exSQL) {
+                Utilities.setErrorMessage(exSQL);
+            } catch (Exception ex) {
+                Utilities.setErrorMessage(ex);
+            }
+        }
+        return returnValue;
+    }
+
+    /**
      * Removes a row from the database.
      *
      * @param anObj The object in the row to remove.
@@ -106,7 +134,7 @@ public class Orders
         boolean returnValue = false;
         try {
             if (!this.hasForeignKeyIssue(anObj)) {
-                AnOrder.remove(anObj.getPrimaryKey());
+                AnOrder.remove(anObj);
                 returnValue = true;
             }
         } catch (SQLException exSQL) {

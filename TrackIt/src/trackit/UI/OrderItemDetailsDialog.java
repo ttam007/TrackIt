@@ -26,6 +26,7 @@ public class OrderItemDetailsDialog
     private final OrderItems bll = new OrderItems();
     private DialogResultType dialogResult = DialogResultType.NONE;
     private final Inventory bllInventory = new Inventory();
+    private final OrderItems bllOrderItems;
     //private final HashMap<String, AnInventoryItem> inventory = new HashMap<>();
 
     // </editor-fold>
@@ -47,8 +48,10 @@ public class OrderItemDetailsDialog
      * the specified Order Item.
      * @param anOrderItem The Order Item to be edited. This value is ignored if
      * useCreateMode is true.
+     * @param orderItems Must contain the list of order items for the order this
+     * order item goes with.
      */
-    public OrderItemDetailsDialog(boolean useCreateMode, AnOrderItem anOrderItem) {
+    public OrderItemDetailsDialog(boolean useCreateMode, AnOrderItem anOrderItem, OrderItems orderItems) {
         this.isCreateMode = useCreateMode;
         if (this.isCreateMode) {
             this.anOrderItem = new AnOrderItem();
@@ -57,6 +60,7 @@ public class OrderItemDetailsDialog
         } else {
             this.anOrderItem = anOrderItem;
         }
+        this.bllOrderItems = orderItems;
 
         initializeComponents();
         populateComponents();
@@ -248,16 +252,26 @@ public class OrderItemDetailsDialog
      */
     private void saveAction() {
         if (populateObject()) {
-            if (this.bll.save(this.anOrderItem)) {
+            /* Only save if isCreateOrder = false; otherwise order might not be saved yet.
+             * Instead put into Order's list of OrderItems.
+             */
+            if (this.isCreateMode) {
+                this.bllOrderItems.getList().add(this.anOrderItem);
                 this.dialogResult = DialogResultType.OK;
-                //JOptionPane.showMessageDialog(null, "Successfully Saved.");
-                this.setVisible(false);
-                this.dispose();
             } else {
-                this.dialogResult = DialogResultType.CANCEL;
-                JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
-                        Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+                this.dialogResult = (this.bll.save(this.anOrderItem) ? DialogResultType.OK : DialogResultType.CANCEL);
             }
+        } else {
+            this.dialogResult = DialogResultType.CANCEL;
+        }
+
+        if (this.dialogResult == DialogResultType.OK) {
+            //JOptionPane.showMessageDialog(null, "Successfully Saved.");
+            this.setVisible(false);
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
+                    Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -297,6 +311,7 @@ public class OrderItemDetailsDialog
     public DialogResultType display() {
         setVisible(true);
         return this.dialogResult;
+
     }
 
     // </editor-fold>
@@ -320,10 +335,12 @@ public class OrderItemDetailsDialog
         }
     }
 
-    private class ExtendedPriceUpdater implements FocusListener {
+    private class ExtendedPriceUpdater extends FocusAdapter {
 
         @Override
         public void focusGained(FocusEvent e) {
+            JTextField txtBox = (JTextField) e.getSource();
+            txtBox.selectAll();
         }
 
         @Override
@@ -334,5 +351,5 @@ public class OrderItemDetailsDialog
             tfExtPrice.setText(Utilities.formatAsCurrency(extendedPrice));
         }
     }
-    // </editor-fold>
+// </editor-fold>
 }

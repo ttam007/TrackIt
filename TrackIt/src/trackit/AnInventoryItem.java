@@ -187,7 +187,9 @@ public class AnInventoryItem
      */
     public static void remove(AnInventoryItem anObj)
             throws SQLException, Exception {
-        remove(anObj.getPrimaryKey());
+        if (anObj.isAlreadyInDatabase()) {
+            remove(anObj.getPrimaryKey());
+        }
     }
 
     /**
@@ -197,7 +199,7 @@ public class AnInventoryItem
      * @throws SQLException
      * @throws Exception
      */
-    public static void remove(Integer primaryKey)
+    private static void remove(Integer primaryKey)
             throws SQLException, Exception {
         HELPER.delete(primaryKey);
     }
@@ -238,7 +240,7 @@ public class AnInventoryItem
         }
         this.quantity += amountToChangeBy;
     }
-    
+
     @Override
     public String toString() {
         return this.getDescription();
