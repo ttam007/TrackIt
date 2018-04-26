@@ -205,8 +205,7 @@ public class OrderItemsFrame
         pnlTopBpx.add(btnCheckIn, gbc);
 
         btnCheckIn.addActionListener((ActionEvent e) -> {
-            //TODO:  Call into BLL for check-in.
-            JOptionPane.showMessageDialog(this, "Item Checked In");
+            checkInAction();
         });
 
         btnCheckInAll = new JButton(Utilities.BUTTON_CHECKINALL);
@@ -319,6 +318,27 @@ public class OrderItemsFrame
         //Utilities.setDatePickersDate(this.expectedDatePicker, this.anOrder.getDateExpected());
     }
 
+    private void checkInAction() {
+        int selectedRow = this.mainTable.getSelectedRow();
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(this, "Select item to check in");
+        } else {
+            AnOrderItem anOrderItem = this.orderItems.get(selectedRow);
+            try {
+                AnInventoryItem anInventoryItem = AnInventoryItem.load(anOrderItem.getPrimaryKey());
+                int checkQuant = anOrderItem.getQuantityOrdered();
+                int oldQuant = anInventoryItem.getQuantity();
+                anInventoryItem.setQuantity(checkQuant + oldQuant);
+                removeItem(selectedRow);
+                JOptionPane.showMessageDialog(this, "Item Checked In");
+            } catch (Exception ex) {
+                Utilities.setErrorMessage(ex);
+                JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
+                        Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
     /**
      * Populates the object in memory from all the UI components.
      */
@@ -356,6 +376,16 @@ public class OrderItemsFrame
                 JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
                         Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
             }
+        }
+    }
+
+    private void removeItem(int row) {
+        AnOrderItem anOrderItem = this.orderItems.get(row);
+        if (this.bllOrderItems.remove(anOrderItem)) {
+            this.refreshGrid(true);
+        } else {
+            JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
+                    Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
         }
     }
 

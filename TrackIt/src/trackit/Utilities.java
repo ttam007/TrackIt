@@ -158,6 +158,21 @@ public class Utilities {
         formatter.setCommitsOnValidEdit(true);
         return formatter;
     }
+    
+    /**
+     * Gets a formatter for double values to be used with JFormattedTextField
+     * components relating to currency.
+     *
+     * @return A NumberFormatter that only works with integers.
+     */
+    public static NumberFormatter getCurrencyFormatter() {
+        NumberFormat format = DecimalFormat.getNumberInstance(Locale.US);
+        format.setMinimumFractionDigits(2);
+        format.setMaximumFractionDigits(2);
+        format.setMinimumIntegerDigits(1);
+        NumberFormatter formatter = new NumberFormatter(format);
+        return formatter;
+    }
 
     /**
      * Parses a well formatted string of an integer into an Integer object.
