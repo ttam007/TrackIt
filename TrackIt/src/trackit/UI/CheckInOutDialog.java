@@ -36,7 +36,8 @@ public class CheckInOutDialog
     JButton btnOK, btnCancel;
     JRadioButton inButton, outButton;
     JLabel itemNameLabel, qtyLabel;
-    JTextField qtyTextField, itemTextField;
+    JTextField itemTextField;
+    JFormattedTextField  qtyTextField;
     GridBagConstraints gbc;
 
     // </editor-fold>
@@ -113,7 +114,7 @@ public class CheckInOutDialog
         add(qtyLabel, gbc);
 
         //Website Address Text Field
-        qtyTextField = new JTextField(7);
+        qtyTextField = new JFormattedTextField(Utilities.getIntegerFormatter());
         gbc.gridx = 1;
         gbc.gridy = 2;
         gbc.gridwidth = 5;

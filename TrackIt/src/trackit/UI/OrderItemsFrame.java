@@ -50,7 +50,7 @@ public class OrderItemsFrame
     private JButton btnCheckIn, btnCheckInAll, btnCreate, btnEdit, btnRemove, btnOK, btnAddItem, btnCancel;
     private JPanel pnlTop, pnlCenter, pnlBtm, pnlBtmLeft, pnlBtmRight;
     private JLabel lblDescription, lblSupplier, lblStatus, lblOrderDate, lblExpectedDate;
-    private JTextField tfDescription, tfSupplier, tfStatus;
+    private JTextField tfDescription, tfStatus;
     private JDatePickerImpl orderDatePicker, expectedDatePicker;
     private JScrollPane scrollPane;
     private JComboBox<ASupplier> cboSuppliers;
@@ -154,7 +154,6 @@ public class OrderItemsFrame
         pnlTopBpx.add(lblSupplier, gbc);
         //topInnerBx.add(lblSupplier);
         cboSuppliers = new JComboBox<>(getSupplierList());
-        tfSupplier = new JTextField(20);
         gbc.gridx = 3;
         gbc.gridy = 0;
         pnlTopBpx.add(cboSuppliers, gbc);
