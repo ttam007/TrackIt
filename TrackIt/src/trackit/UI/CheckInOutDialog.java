@@ -37,13 +37,15 @@ public class CheckInOutDialog
     JRadioButton inButton, outButton;
     JLabel itemNameLabel, qtyLabel;
     JTextField itemTextField;
-    JFormattedTextField  qtyTextField;
+    JFormattedTextField qtyTextField;
     GridBagConstraints gbc;
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     /**
      * Check In/Out UI
+     *
+     * @param anInventoryItem The item to be checked in/out.
      */
     public CheckInOutDialog(AnInventoryItem anInventoryItem) {
         this.anInventoryItem = anInventoryItem;
@@ -103,8 +105,6 @@ public class CheckInOutDialog
         gbc.gridy = 1;
         gbc.gridwidth = 5;
         add(itemTextField, gbc);
-        
-
 
         // Website Address label
         qtyLabel = new JLabel("Quantity: ");
@@ -174,24 +174,23 @@ public class CheckInOutDialog
         //TODO:  close window and return to prior window.
         this.dispose();
     }
-    
+
     private void populateComponents() {
         this.itemTextField.setText(this.anInventoryItem.getDescription());
     }
-    
-    
+
     private boolean checkInItem() {
         boolean returnValue = false;
         int oldQuant = this.anInventoryItem.getQuantity();
         int checkQuant = Utilities.parseFormattedInteger(this.qtyTextField.getText());
-        try { 
-            if (inButton.isSelected()){              
-                this.anInventoryItem.setQuantity(oldQuant + checkQuant);            
+        try {
+            if (inButton.isSelected()) {
+                this.anInventoryItem.setQuantity(oldQuant + checkQuant);
             } else if (outButton.isSelected()) {
                 if (checkQuant > oldQuant) {
                     JOptionPane.showMessageDialog(this, CHECKOUT_MSG,
-                    Utilities.ERROR_MSG_CAPTION, JOptionPane.INFORMATION_MESSAGE);
-                }else {
+                            Utilities.ERROR_MSG_CAPTION, JOptionPane.INFORMATION_MESSAGE);
+                } else {
                     this.anInventoryItem.setQuantity(oldQuant - checkQuant);
                 }
             }
@@ -199,15 +198,14 @@ public class CheckInOutDialog
         } catch (SQLException ex) {
             Logger.getLogger(CheckInOutDialog.class.getName()).log(Level.SEVERE, null, ex);
         }
-    return returnValue;
+        return returnValue;
     }
-    
-    
+
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
-
     /**
      * Displays the frame.
+     *
      * @return dialogResult
      */
     public DialogResultType display() {
