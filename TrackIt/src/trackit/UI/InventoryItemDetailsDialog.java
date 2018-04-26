@@ -30,7 +30,7 @@ public class InventoryItemDetailsDialog
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
-    private JComboBox<ItemStatusType> statusField;
+    private JComboBox<ItemStatusType> cboItemStatus;
     private JTextField tfSku, tfSizeUnit, tfDescription;
     private JFormattedTextField tfQuantity;
     private JLabel sku, statusLabel, unit, expDateLbl, quantity, itemNameLabel;
@@ -186,11 +186,11 @@ public class InventoryItemDetailsDialog
         add(statusLabel, gbc);
 
         //Text Field
-        statusField = new JComboBox<>(ItemStatusType.values());
+        cboItemStatus = new JComboBox<>(ItemStatusType.values());
         gbc.gridx = 5;
         gbc.gridy = 3;
         gbc.gridwidth = 1;
-        add(statusField, gbc);
+        add(cboItemStatus, gbc);
 
         // Init Ok Button
         btnOK = new JButton(Utilities.BUTTON_OK);
@@ -223,7 +223,7 @@ public class InventoryItemDetailsDialog
         this.tfSku.setText(this.anInventoryItem.getSku());
         this.tfSizeUnit.setText(this.anInventoryItem.getSizeUnit());
         this.tfQuantity.setText(this.anInventoryItem.getQuantity().toString());
-        this.statusField.getModel().setSelectedItem(this.anInventoryItem.getItemStatus());
+        this.cboItemStatus.getModel().setSelectedItem(this.anInventoryItem.getItemStatus());
         Utilities.setDatePickersDate(this.expDatePicker, this.anInventoryItem.getExpirationDate());
     }
 
@@ -238,7 +238,7 @@ public class InventoryItemDetailsDialog
             this.anInventoryItem.setSku(this.tfSku.getText());
             this.anInventoryItem.setSizeUnit(this.tfSizeUnit.getText());
             this.anInventoryItem.setQuantity(Utilities.parseFormattedInteger(this.tfQuantity.getText()));
-            this.anInventoryItem.setItemStatus(this.statusField.getSelectedItem().toString());
+            this.anInventoryItem.setItemStatus((ItemStatusType) this.cboItemStatus.getModel().getSelectedItem());
             java.util.Date expDate = (Date) expDatePicker.getModel().getValue();
             this.anInventoryItem.setExpirationDate(expDate);
             returnValue = true;

@@ -120,11 +120,7 @@ public class OrdersPanel
         btnCreate = new JButton(Utilities.BUTTON_CREATE);
         btnCreate.setEnabled(false);
         btnCreate.addActionListener((ActionEvent e) -> {
-            OrderItemsFrame dlgCreate = new OrderItemsFrame(true, null);
-            dlgCreate.setLocationRelativeTo(this);
-            if (dlgCreate.display() == DialogResultType.OK) {
-                this.refreshGrid();
-            }
+            createAction();
         });
 
         btnEdit = new JButton(Utilities.BUTTON_EDIT);
@@ -134,18 +130,7 @@ public class OrdersPanel
 
         btnRemove = new JButton(Utilities.BUTTON_REMOVE);
         btnRemove.addActionListener((ActionEvent e) -> {
-            int selectedRow = this.mainTable.getSelectedRow();
-            if (selectedRow < 0) {
-                JOptionPane.showMessageDialog(null, "Select item to remove");
-            } else {
-                AnOrder anOrder = this.orders.get(selectedRow);
-                if (this.bllOrders.remove(anOrder)) {
-                    this.refreshGrid();
-                } else {
-                    JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
-                            Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
-                }
-            }
+            removeAction();
         });
 
         btmSup.add(btnCreate);
@@ -215,6 +200,16 @@ public class OrdersPanel
     }
 
     /**
+     * Pops the Order Details frame in create mode.
+     */
+    private void createAction() {
+        OrderItemsFrame dlgCreate = new OrderItemsFrame(true, null);
+        if (dlgCreate.display() == DialogResultType.OK) {
+            refreshGrid();
+        }
+    }
+
+    /**
      * Pops the detail item dialog if an item is selected.
      */
     private void editAction() {
@@ -224,9 +219,26 @@ public class OrdersPanel
         } else {
             AnOrder anOrder = this.orders.get(selectedRow);
             OrderItemsFrame dlgEdit = new OrderItemsFrame(false, anOrder);
-            dlgEdit.setLocationRelativeTo(this);
             if (dlgEdit.display() == DialogResultType.OK) {
+                refreshGrid();
+            }
+        }
+    }
+
+    /**
+     * Removes the selected item.
+     */
+    private void removeAction() {
+        int selectedRow = this.mainTable.getSelectedRow();
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(null, "Select item to remove");
+        } else {
+            AnOrder anOrder = this.orders.get(selectedRow);
+            if (this.bllOrders.remove(anOrder)) {
                 this.refreshGrid();
+            } else {
+                JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
+                        Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
             }
         }
     }
