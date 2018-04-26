@@ -140,7 +140,7 @@ public class OrderItemDetailsDialog
 
         //Quantity Ordered
         tfQuantityOrdered = new JFormattedTextField(Utilities.getIntegerFormatter());
-        tfQuantityOrdered.addFocusListener(new ExtendedPriceUpdater());
+        tfQuantityOrdered.addFocusListener(new NumericFieldsFocusAdapter());
         gbc.gridx = 1;
         gbc.gridy = 1;
         gbc.gridwidth = 5;
@@ -155,7 +155,7 @@ public class OrderItemDetailsDialog
 
         //Price
         tfPrice = new JFormattedTextField(Utilities.getCurrencyFormatter());
-        tfPrice.addFocusListener(new ExtendedPriceUpdater());
+        tfPrice.addFocusListener(new NumericFieldsFocusAdapter());
         gbc.gridx = 1;
         gbc.gridy = 2;
         gbc.gridwidth = 3;
@@ -336,14 +336,27 @@ public class OrderItemDetailsDialog
         }
     }
 
-    private class ExtendedPriceUpdater extends FocusAdapter {
+    /**
+     * Handles all aspects of focus changes on numeric fields.
+     */
+    private class NumericFieldsFocusAdapter extends FocusAdapter {
 
+        /**
+         * Selects the full text when focus goes to the text box.
+         *
+         * @param e
+         */
         @Override
         public void focusGained(FocusEvent e) {
-            JTextField txtBox = (JTextField) e.getSource();
+            JFormattedTextField txtBox = (JFormattedTextField) e.getSource();
             txtBox.selectAll();
         }
 
+        /**
+         * Updates the extended price.
+         *
+         * @param e
+         */
         @Override
         public void focusLost(FocusEvent e) {
             Integer quantity = Integer.parseInt(tfQuantityOrdered.getText());
