@@ -309,13 +309,36 @@ public class OrderItemsFrame
             int key = this.anOrder.getOrderedFrom();
             if (this.bllSuppliers.load(key)) {
                 ASupplier aSupplier = this.bllSuppliers.getList().get(0);
-                this.cboSuppliers.setSelectedItem(aSupplier);
+                this.cboSuppliers.getModel().setSelectedItem(aSupplier);
+                //this.cboSuppliers.
             }
         }
         this.cboOrderStatus.getModel().setSelectedItem(this.anOrder.getOrderStatus());
         Utilities.setDatePickersDate(this.orderDatePicker, this.anOrder.getDateOrdered());
         //TODO:  fix this:  
         //Utilities.setDatePickersDate(this.expectedDatePicker, this.anOrder.getDateExpected());
+    }
+
+    /**
+     * Populates the object in memory from all the UI components.
+     */
+    private boolean populateObject() {
+        boolean returnValue = false;
+        //TODO:  sort this out so boolean return is used instead of try/catch block.
+        try {
+            this.anOrder.setDescription(this.tfDescription.getText());
+            ASupplier aSupplier = (ASupplier) this.cboSuppliers.getModel().getSelectedItem();
+            this.anOrder.setOrderedFrom(aSupplier.getPrimaryKey());
+            this.anOrder.setOrderStatus((OrderStatusType) this.cboOrderStatus.getModel().getSelectedItem());
+            this.anOrder.setDateOrdered((Date) this.orderDatePicker.getModel().getValue());
+            this.anOrder.setDateExpected((Date) this.expectedDatePicker.getModel().getValue());
+            returnValue = true;
+        } catch (java.sql.SQLException | RuntimeException ex) {
+            Utilities.setErrorMessage(ex);
+            JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
+                    Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+        }
+        return returnValue;
     }
 
     private void checkInAction() {
@@ -337,28 +360,6 @@ public class OrderItemsFrame
                         Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
             }
         }
-    }
-
-    /**
-     * Populates the object in memory from all the UI components.
-     */
-    private boolean populateObject() {
-        boolean returnValue = false;
-        //TODO:  sort this out so boolean return is used instead of try/catch block.
-        try {
-            this.anOrder.setDescription(this.tfDescription.getText());
-            ASupplier aSupplier = (ASupplier) this.cboSuppliers.getSelectedItem();
-            this.anOrder.setOrderedFrom(aSupplier.getPrimaryKey());
-            this.anOrder.setOrderStatus((OrderStatusType) this.cboOrderStatus.getModel().getSelectedItem());
-            this.anOrder.setDateOrdered((Date) this.orderDatePicker.getModel().getValue());
-            this.anOrder.setDateExpected((Date) this.expectedDatePicker.getModel().getValue());
-            returnValue = true;
-        } catch (java.sql.SQLException | RuntimeException ex) {
-            Utilities.setErrorMessage(ex);
-            JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
-                    Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
-        }
-        return returnValue;
     }
 
     /**
