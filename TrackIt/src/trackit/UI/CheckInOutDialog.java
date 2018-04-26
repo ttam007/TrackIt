@@ -3,7 +3,6 @@ package trackit.UI;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
@@ -38,7 +37,6 @@ public class CheckInOutDialog
     JRadioButton inButton, outButton;
     JLabel itemNameLabel, qtyLabel;
     JTextField qtyTextField, itemTextField;
-    String[] itemStrings = {"soap", "shampoo", "conditioner", "paper towels", "mouthwash"};
     GridBagConstraints gbc;
 
     // </editor-fold>
@@ -209,6 +207,7 @@ public class CheckInOutDialog
 
     /**
      * Displays the frame.
+     * @return dialogResult
      */
     public DialogResultType display() {
         setVisible(true);

@@ -2,6 +2,7 @@ package trackit.UI;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,6 +31,8 @@ public class OrderItemsFrame
     //For editing the Order.
     private final boolean isCreateMode;
     private final AnOrder anOrder;
+    private AnOrderItem anOrderItem;
+    private AnInventoryItem anInventoryItem;
     private DialogResultType dialogResult = DialogResultType.NONE;
     private final Orders bllOrders = new Orders();
     private ASupplier aSupplier = new ASupplier();
@@ -207,8 +210,7 @@ public class OrderItemsFrame
         pnlTopBpx.add(btnCheckIn, gbc);
 
         btnCheckIn.addActionListener((ActionEvent e) -> {
-            //TODO:  Call into BLL for check-in.
-            JOptionPane.showMessageDialog(this, "Item Checked In");
+            checkInAction();
         });
 
         btnCheckInAll = new JButton(Utilities.BUTTON_CHECKINALL);
@@ -294,15 +296,9 @@ public class OrderItemsFrame
             if (selectedRow < 0) {
                 JOptionPane.showMessageDialog(null, "Select item to remove");
             } else {
-                AnOrderItem anOrderItem = this.orderItems.get(selectedRow);
-                if (this.bllOrderItems.remove(anOrderItem)) {
-                    this.refreshGrid();
-                    JOptionPane.showMessageDialog(null,
-                            String.format("%s has been removed.", anOrderItem.getDescription()));
-                } else {
-                    JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
-                            Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
-                }
+                removeItem(selectedRow);
+                JOptionPane.showMessageDialog(null,
+                String.format("%s has been removed.", anOrderItem.getDescription()));
             }
         });
 
@@ -334,7 +330,7 @@ public class OrderItemsFrame
         //this.tfSupplier.getEditor().setItem(this.anOrder.getOrderedFrom().toString());
         try {
             int key = this.anOrder.getOrderedFrom();
-            this.cboSuppliers.setSelectedItem(aSupplier.load(key));
+            this.cboSuppliers.setSelectedItem(ASupplier.load(key));
         } catch (Exception ex) {
             Logger.getLogger(OrderItemsFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -343,7 +339,26 @@ public class OrderItemsFrame
         Utilities.setDatePickersDate(this.orderDatePicker, this.anOrder.getDateOrdered());
         Utilities.setDatePickersDate(this.expectedDatePicker, this.anOrder.getDateExpected());
     }
-
+    
+    private void checkInAction(){
+    int selectedRow = this.mainTable.getSelectedRow();
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(this, "Select item to check in");
+        } else {
+            AnOrderItem anOrderItem = this.orderItems.get(selectedRow);
+            try {
+                AnInventoryItem anInventoryItem = AnInventoryItem.load(anOrderItem.getPrimaryKey());
+                int checkQuant = anOrderItem.getQuantityOrdered();
+                int oldQuant = anInventoryItem.getQuantity();
+                anInventoryItem.setQuantity(checkQuant + oldQuant);
+                removeItem(selectedRow);
+                JOptionPane.showMessageDialog(this, "Item Checked In");
+            } catch (Exception ex) {
+                Logger.getLogger(OrderItemsFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
     /**
      * Populates the object in memory from all the UI components.
      */
@@ -386,7 +401,16 @@ public class OrderItemsFrame
             }
         }
     }
-
+    
+    private void removeItem(int row){
+                AnOrderItem anOrderItem = this.orderItems.get(row);
+                if (this.bllOrderItems.remove(anOrderItem)) {
+                    this.refreshGrid();
+                } else {
+                    JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
+                            Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+                }
+            }
     /**
      * Handles the cancel action. If any errors, then display error message
      * instead.
