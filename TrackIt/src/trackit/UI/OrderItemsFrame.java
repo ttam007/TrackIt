@@ -2,7 +2,6 @@ package trackit.UI;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.SQLException;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -16,7 +15,7 @@ import trackit.*;
  * @author Douglas, Bond, Steven
  */
 public class OrderItemsFrame
-        extends JFrame {
+        extends JDialog {
     // <editor-fold defaultstate="collapsed" desc="Constants">
 
     /**
@@ -29,8 +28,6 @@ public class OrderItemsFrame
     //For editing the Order.
     private final boolean isCreateMode;
     private final AnOrder anOrder;
-    private AnOrderItem anOrderItem;
-    private AnInventoryItem anInventoryItem;
     private DialogResultType dialogResult = DialogResultType.NONE;
     private final Orders bllOrders = new Orders();
     private final Suppliers bllSuppliers = new Suppliers();
@@ -48,9 +45,10 @@ public class OrderItemsFrame
     private JButton btnCheckIn, btnCheckInAll, btnCreate, btnEdit, btnRemove, btnOK, btnAddItem, btnCancel;
     private JPanel pnlTop, pnlCenter, pnlBtm, pnlBtmLeft, pnlBtmRight;
     private JLabel lblDescription, lblSupplier, lblStatus, lblOrderDate, lblExpectedDate;
-    private JTextField tfDescription, tfStatus;
+    private JTextField tfDescription;
     private JDatePickerImpl orderDatePicker, expectedDatePicker;
     private JScrollPane scrollPane;
+    private JComboBox<OrderStatusType> cboOrderStatus;
     private JComboBox<ASupplier> cboSuppliers;
     private JTable mainTable;
     private DefaultTableModel mainTableModel;
@@ -119,8 +117,8 @@ public class OrderItemsFrame
         setResizable(false);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         addWindowListener(new CloseQuery());
-        setVisible(true);
         this.getRootPane().setDefaultButton(btnOK);
+        this.setModal(true);
 
         //Add all components here and set properties.
         setLayout(new BorderLayout());
@@ -181,10 +179,10 @@ public class OrderItemsFrame
         gbc.gridy = 1;
         pnlTopBpx.add(lblStatus, gbc);
 
-        tfStatus = new JTextField(20);
+        cboOrderStatus = new JComboBox<>(OrderStatusType.values());
         gbc.gridx = 1;
         gbc.gridy = 1;
-        pnlTopBpx.add(tfStatus, gbc);
+        pnlTopBpx.add(cboOrderStatus, gbc);
 
         lblExpectedDate = new JLabel("Expected Date:");
         gbc.gridx = 4;
@@ -307,20 +305,21 @@ public class OrderItemsFrame
      */
     private void populateComponents() {
         this.tfDescription.setText(this.anOrder.getDescription());
-        int key = this.anOrder.getOrderedFrom();
-        if (this.bllSuppliers.load(key)) {
-            ASupplier aSupplier = this.bllSuppliers.getList().get(0);
-            this.cboSuppliers.setSelectedItem(aSupplier);
+        if (!this.isCreateMode) {
+            int key = this.anOrder.getOrderedFrom();
+            if (this.bllSuppliers.load(key)) {
+                ASupplier aSupplier = this.bllSuppliers.getList().get(0);
+                this.cboSuppliers.setSelectedItem(aSupplier);
+            }
         }
-
-        //TODO:  Convert OrderStatus component to a drop-down list.
-        this.tfStatus.setText(OrderStatusType.ORDERED.toString());
-        //Utilities.setDatePickersDate(this.orderDatePicker, this.anOrder.getDateOrdered());
+        this.cboOrderStatus.getModel().setSelectedItem(this.anOrder.getOrderStatus());
+        Utilities.setDatePickersDate(this.orderDatePicker, this.anOrder.getDateOrdered());
+        //TODO:  fix this:  
         //Utilities.setDatePickersDate(this.expectedDatePicker, this.anOrder.getDateExpected());
     }
-    
-    private void checkInAction(){
-    int selectedRow = this.mainTable.getSelectedRow();
+
+    private void checkInAction() {
+        int selectedRow = this.mainTable.getSelectedRow();
         if (selectedRow < 0) {
             JOptionPane.showMessageDialog(this, "Select item to check in");
         } else {
@@ -333,11 +332,13 @@ public class OrderItemsFrame
                 removeItem(selectedRow);
                 JOptionPane.showMessageDialog(this, "Item Checked In");
             } catch (Exception ex) {
-                Logger.getLogger(OrderItemsFrame.class.getName()).log(Level.SEVERE, null, ex);
+                Utilities.setErrorMessage(ex);
+                JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
+                        Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
             }
         }
     }
-    
+
     /**
      * Populates the object in memory from all the UI components.
      */
@@ -346,11 +347,9 @@ public class OrderItemsFrame
         //TODO:  sort this out so boolean return is used instead of try/catch block.
         try {
             this.anOrder.setDescription(this.tfDescription.getText());
-
             ASupplier aSupplier = (ASupplier) this.cboSuppliers.getSelectedItem();
             this.anOrder.setOrderedFrom(aSupplier.getPrimaryKey());
-            //this.anOrder.setOrderStatus(this.tfStatus.toString());
-
+            this.anOrder.setOrderStatus((OrderStatusType) this.cboOrderStatus.getModel().getSelectedItem());
             this.anOrder.setDateOrdered((Date) this.orderDatePicker.getModel().getValue());
             this.anOrder.setDateExpected((Date) this.expectedDatePicker.getModel().getValue());
             returnValue = true;
@@ -368,10 +367,8 @@ public class OrderItemsFrame
      */
     private void saveAction() {
         if (populateObject()) {
-            //ArrayList<AnOrderItem> listOrderItems = new ArrayList<>(this.orderItems.values());
             if (this.bllOrders.save(this.anOrder, bllOrderItems)) {
                 this.dialogResult = DialogResultType.OK;
-                //JOptionPane.showMessageDialog(null, "Successfully Saved.");
                 this.setVisible(false);
                 this.dispose();
             } else {
@@ -381,16 +378,17 @@ public class OrderItemsFrame
             }
         }
     }
-    
-    private void removeItem(int row){
-                AnOrderItem anOrderItem = this.orderItems.get(row);
-                if (this.bllOrderItems.remove(anOrderItem)) {
-                    this.refreshGrid();
-                } else {
-                    JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
-                            Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
-                }
-            }
+
+    private void removeItem(int row) {
+        AnOrderItem anOrderItem = this.orderItems.get(row);
+        if (this.bllOrderItems.remove(anOrderItem)) {
+            this.refreshGrid(true);
+        } else {
+            JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
+                    Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     /**
      * Handles the cancel action. If any errors, then display error message
      * instead.
@@ -563,7 +561,7 @@ public class OrderItemsFrame
 
         @Override
         public void windowClosing(WindowEvent e) {
-            JFrame frame = OrderItemsFrame.this;
+            JDialog frame = OrderItemsFrame.this;
             int result = JOptionPane.showConfirmDialog(frame,
                     "Do you want to save?", "Close Query",
                     JOptionPane.YES_NO_OPTION);

@@ -31,8 +31,8 @@ public class OrderItemDetailsDialog
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
-    private JComboBox<ItemStatusType> cboStatus;
-    private JComboBox<AnInventoryItem> cboName;
+    private JComboBox<ItemStatusType> cboItemStatus;
+    private JComboBox<AnInventoryItem> cboItemName;
     JPanel pnlCenter;
     JLabel lblName, lblQuantity, lblPrice, lblStatus, lblExtPrice;
     JTextField tfExtPrice;
@@ -124,12 +124,12 @@ public class OrderItemDetailsDialog
 
         //Description
         //TODO:  Implement this or something like it:  http://www.algosome.com/articles/java-jcombobox-autocomplete.html
-        cboName = new JComboBox<>(getItemList());
-        cboName.setEnabled(isCreateMode);
+        cboItemName = new JComboBox<>(getItemList());
+        cboItemName.setEnabled(isCreateMode);
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.gridwidth = 5;
-        add(cboName, gbc);
+        add(cboItemName, gbc);
 
         //Quantity Ordered Label
         lblQuantity = new JLabel("Quantity: ");
@@ -169,12 +169,12 @@ public class OrderItemDetailsDialog
         add(lblStatus, gbc);
 
         //Status
-        cboStatus = new JComboBox<>(ItemStatusType.values());
-        cboStatus.setEnabled(false);
+        cboItemStatus = new JComboBox<>(ItemStatusType.values());
+        cboItemStatus.setEnabled(false);
         gbc.gridx = 5;
         gbc.gridy = 2;
         gbc.gridwidth = 1;
-        add(cboStatus, gbc);
+        add(cboItemStatus, gbc);
 
         //Extended Price Label
         lblExtPrice = new JLabel("Ext Price: ");
@@ -219,8 +219,8 @@ public class OrderItemDetailsDialog
      * Populates all the UI components from the object in memory.
      */
     private void populateComponents() {
-        this.cboName.getEditor().setItem(this.anOrderItem.getDescription());
-        this.cboStatus.getEditor().setItem(this.anOrderItem.getItemStatus());
+        this.cboItemName.getEditor().setItem(this.anOrderItem.getDescription());
+        this.cboItemStatus.getEditor().setItem(this.anOrderItem.getItemStatus());
         this.tfQuantityOrdered.setText(this.anOrderItem.getQuantityOrdered().toString());
         this.tfPrice.setText(Utilities.formatAsCurrency(this.anOrderItem.getPrice()));
         this.tfExtPrice.setText(Utilities.formatAsCurrency(this.anOrderItem.getExtendedPrice()));
@@ -233,7 +233,7 @@ public class OrderItemDetailsDialog
         boolean returnValue = false;
         //TODO:  sort this out so boolean return is used instead of try/catch block.
         try {
-            AnInventoryItem anInventoryItem = (AnInventoryItem) this.cboName.getModel().getSelectedItem();
+            AnInventoryItem anInventoryItem = (AnInventoryItem) this.cboItemName.getModel().getSelectedItem();
             this.anOrderItem.setDescription(anInventoryItem.getDescription());
             this.anOrderItem.setItemId(anInventoryItem.getItemId());
             this.anOrderItem.setQuantityOrdered(Integer.parseInt(this.tfQuantityOrdered.getText()));
