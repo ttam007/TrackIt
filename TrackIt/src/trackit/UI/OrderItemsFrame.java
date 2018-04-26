@@ -2,6 +2,7 @@ package trackit.UI;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.SQLException;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -28,6 +29,8 @@ public class OrderItemsFrame
     //For editing the Order.
     private final boolean isCreateMode;
     private final AnOrder anOrder;
+    private AnOrderItem anOrderItem;
+    private AnInventoryItem anInventoryItem;
     private DialogResultType dialogResult = DialogResultType.NONE;
     private final Orders bllOrders = new Orders();
     private final Suppliers bllSuppliers = new Suppliers();
@@ -45,7 +48,7 @@ public class OrderItemsFrame
     private JButton btnCheckIn, btnCheckInAll, btnCreate, btnEdit, btnRemove, btnOK, btnAddItem, btnCancel;
     private JPanel pnlTop, pnlCenter, pnlBtm, pnlBtmLeft, pnlBtmRight;
     private JLabel lblDescription, lblSupplier, lblStatus, lblOrderDate, lblExpectedDate;
-    private JTextField tfDescription, tfSupplier, tfStatus;
+    private JTextField tfDescription, tfStatus;
     private JDatePickerImpl orderDatePicker, expectedDatePicker;
     private JScrollPane scrollPane;
     private JComboBox<ASupplier> cboSuppliers;
@@ -149,7 +152,6 @@ public class OrderItemsFrame
         pnlTopBpx.add(lblSupplier, gbc);
         //topInnerBx.add(lblSupplier);
         cboSuppliers = new JComboBox<>(getSupplierList());
-        tfSupplier = new JTextField(20);
         gbc.gridx = 3;
         gbc.gridy = 0;
         pnlTopBpx.add(cboSuppliers, gbc);
@@ -205,8 +207,7 @@ public class OrderItemsFrame
         pnlTopBpx.add(btnCheckIn, gbc);
 
         btnCheckIn.addActionListener((ActionEvent e) -> {
-            //TODO:  Call into BLL for check-in.
-            JOptionPane.showMessageDialog(this, "Item Checked In");
+            checkInAction();
         });
 
         btnCheckInAll = new JButton(Utilities.BUTTON_CHECKINALL);
@@ -317,7 +318,26 @@ public class OrderItemsFrame
         //Utilities.setDatePickersDate(this.orderDatePicker, this.anOrder.getDateOrdered());
         //Utilities.setDatePickersDate(this.expectedDatePicker, this.anOrder.getDateExpected());
     }
-
+    
+    private void checkInAction(){
+    int selectedRow = this.mainTable.getSelectedRow();
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(this, "Select item to check in");
+        } else {
+            AnOrderItem anOrderItem = this.orderItems.get(selectedRow);
+            try {
+                AnInventoryItem anInventoryItem = AnInventoryItem.load(anOrderItem.getPrimaryKey());
+                int checkQuant = anOrderItem.getQuantityOrdered();
+                int oldQuant = anInventoryItem.getQuantity();
+                anInventoryItem.setQuantity(checkQuant + oldQuant);
+                removeItem(selectedRow);
+                JOptionPane.showMessageDialog(this, "Item Checked In");
+            } catch (Exception ex) {
+                Logger.getLogger(OrderItemsFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
     /**
      * Populates the object in memory from all the UI components.
      */
@@ -361,7 +381,16 @@ public class OrderItemsFrame
             }
         }
     }
-
+    
+    private void removeItem(int row){
+                AnOrderItem anOrderItem = this.orderItems.get(row);
+                if (this.bllOrderItems.remove(anOrderItem)) {
+                    this.refreshGrid();
+                } else {
+                    JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
+                            Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+                }
+            }
     /**
      * Handles the cancel action. If any errors, then display error message
      * instead.

@@ -35,7 +35,8 @@ public class OrderItemDetailsDialog
     private JComboBox<AnInventoryItem> cboName;
     JPanel pnlCenter;
     JLabel lblName, lblQuantity, lblPrice, lblStatus, lblExtPrice;
-    JTextField tfQuantityOrdered, tfPrice, tfExtPrice;
+    JTextField tfExtPrice;
+    JFormattedTextField tfQuantityOrdered, tfPrice;
     JButton btnOK, btnCancel;
     GridBagConstraints gbc;
 
@@ -138,7 +139,7 @@ public class OrderItemDetailsDialog
         add(lblQuantity, gbc);
 
         //Quantity Ordered
-        tfQuantityOrdered = new JTextField(2);
+        tfQuantityOrdered = new JFormattedTextField(Utilities.getIntegerFormatter());
         tfQuantityOrdered.addFocusListener(new ExtendedPriceUpdater());
         gbc.gridx = 1;
         gbc.gridy = 1;
@@ -153,7 +154,7 @@ public class OrderItemDetailsDialog
         add(lblPrice, gbc);
 
         //Price
-        tfPrice = new JTextField(7);
+        tfPrice = new JFormattedTextField(Utilities.getCurrencyFormatter());
         tfPrice.addFocusListener(new ExtendedPriceUpdater());
         gbc.gridx = 1;
         gbc.gridy = 2;
