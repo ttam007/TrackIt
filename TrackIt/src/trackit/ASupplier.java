@@ -158,7 +158,9 @@ public class ASupplier
      */
     public static void remove(ASupplier anObj)
             throws SQLException, Exception {
-        remove(anObj.getPrimaryKey());
+        if (anObj.isAlreadyInDatabase()) {
+            remove(anObj.getPrimaryKey());
+        }
     }
 
     /**
@@ -168,7 +170,7 @@ public class ASupplier
      * @throws SQLException
      * @throws Exception
      */
-    public static void remove(Integer primaryKey)
+    private static void remove(Integer primaryKey)
             throws SQLException, Exception {
         HELPER.delete(primaryKey);
     }

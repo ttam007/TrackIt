@@ -4,8 +4,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import org.jdatepicker.impl.*;
@@ -35,7 +33,7 @@ public class OrderItemsFrame
     private AnInventoryItem anInventoryItem;
     private DialogResultType dialogResult = DialogResultType.NONE;
     private final Orders bllOrders = new Orders();
-    private ASupplier aSupplier = new ASupplier();
+    private final Suppliers bllSuppliers = new Suppliers();
 
     //For the grid.
     private final HashMap<Integer, AnOrderItem> orderItems = new HashMap<>();
@@ -78,7 +76,7 @@ public class OrderItemsFrame
 
         initializeComponents();
         populateComponents();
-        refreshGrid();
+        refreshGrid(true);
         toggleDisableButton();
     }
 
@@ -265,21 +263,13 @@ public class OrderItemsFrame
         btnAddItem = new JButton(Utilities.BUTTON_ADD);
         pnlBtm.add(btnAddItem);
         btnAddItem.addActionListener((ActionEvent e) -> {
-            OrderItemDetailsDialog dlgAdd = new OrderItemDetailsDialog(true, null);
-            dlgAdd.setLocationRelativeTo(this);
-            if (dlgAdd.display() == DialogResultType.OK) {
-                this.refreshGrid();
-            }
+            addAction();
         });
 
         btnCreate = new JButton(Utilities.BUTTON_CREATE);
         pnlBtm.add(btnCreate);
         btnCreate.addActionListener((ActionEvent e) -> {
-            InventoryItemDetailsDialog dlgCreate = new InventoryItemDetailsDialog(true, null);
-            dlgCreate.setLocationRelativeTo(this);
-            if (dlgCreate.display() == DialogResultType.OK) {
-                this.refreshGrid();
-            }
+            createAction();
         });
 
         btnEdit = new JButton(Utilities.BUTTON_EDIT);
@@ -291,14 +281,7 @@ public class OrderItemsFrame
         btnRemove = new JButton(Utilities.BUTTON_REMOVE);
         pnlBtm.add(btnRemove);
         btnRemove.addActionListener((ActionEvent e) -> {
-            int selectedRow = this.mainTable.getSelectedRow();
-            if (selectedRow < 0) {
-                JOptionPane.showMessageDialog(null, "Select item to remove");
-            } else {
-                removeItem(selectedRow);
-                JOptionPane.showMessageDialog(null,
-                String.format("%s has been removed.", anOrderItem.getDescription()));
-            }
+            removeAction();
         });
 
         btnOK = new JButton(Utilities.BUTTON_OK);
@@ -324,19 +307,16 @@ public class OrderItemsFrame
      */
     private void populateComponents() {
         this.tfDescription.setText(this.anOrder.getDescription());
-        //TODO:  Convert Supplier component to a drop-down list.
-
-        //this.tfSupplier.getEditor().setItem(this.anOrder.getOrderedFrom().toString());
-        try {
-            int key = this.anOrder.getOrderedFrom();
-            this.cboSuppliers.setSelectedItem(ASupplier.load(key));
-        } catch (Exception ex) {
-            Logger.getLogger(OrderItemsFrame.class.getName()).log(Level.SEVERE, null, ex);
+        int key = this.anOrder.getOrderedFrom();
+        if (this.bllSuppliers.load(key)) {
+            ASupplier aSupplier = this.bllSuppliers.getList().get(0);
+            this.cboSuppliers.setSelectedItem(aSupplier);
         }
+
         //TODO:  Convert OrderStatus component to a drop-down list.
         this.tfStatus.setText(OrderStatusType.ORDERED.toString());
-        Utilities.setDatePickersDate(this.orderDatePicker, this.anOrder.getDateOrdered());
-        Utilities.setDatePickersDate(this.expectedDatePicker, this.anOrder.getDateExpected());
+        //Utilities.setDatePickersDate(this.orderDatePicker, this.anOrder.getDateOrdered());
+        //Utilities.setDatePickersDate(this.expectedDatePicker, this.anOrder.getDateExpected());
     }
     
     private void checkInAction(){
@@ -367,7 +347,7 @@ public class OrderItemsFrame
         try {
             this.anOrder.setDescription(this.tfDescription.getText());
 
-            aSupplier = (ASupplier) this.cboSuppliers.getSelectedItem();
+            ASupplier aSupplier = (ASupplier) this.cboSuppliers.getSelectedItem();
             this.anOrder.setOrderedFrom(aSupplier.getPrimaryKey());
             //this.anOrder.setOrderStatus(this.tfStatus.toString());
 
@@ -388,7 +368,8 @@ public class OrderItemsFrame
      */
     private void saveAction() {
         if (populateObject()) {
-            if (this.bllOrders.save(this.anOrder)) {
+            //ArrayList<AnOrderItem> listOrderItems = new ArrayList<>(this.orderItems.values());
+            if (this.bllOrders.save(this.anOrder, bllOrderItems)) {
                 this.dialogResult = DialogResultType.OK;
                 //JOptionPane.showMessageDialog(null, "Successfully Saved.");
                 this.setVisible(false);
@@ -444,21 +425,48 @@ public class OrderItemsFrame
 
     /**
      * Refreshes the grid with current data from the database.
+     *
+     * @param willPullFromDatabase True = all data is pulled from the database;
+     * False = taken is only pulled from memory.
      */
-    private void refreshGrid() {
+    private void refreshGrid(boolean willPullFromDatabase) {
         //Clear the ArrayList and JTable, which should be done backwards.
         this.orderItems.clear();
         for (int i = mainTableModel.getRowCount() - 1; i >= 0; i--) {
             mainTableModel.removeRow(i);
         }
 
-        //Now load fresh data from database.
-        if (this.bllOrderItems.load()) {
-            ArrayList<AnOrderItem> aList = this.bllOrderItems.getList();
-            initTableData(aList);
-        } else {
-            JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
-                    Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+        //Now load fresh data
+        if (willPullFromDatabase) {
+            if (!this.bllOrderItems.loadByOrder(this.anOrder.getPrimaryKey())) {
+                JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
+                        Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        ArrayList<AnOrderItem> aList = this.bllOrderItems.getList();
+        initTableData(aList);
+    }
+
+    /**
+     * Pops the detail item dialog for adding an item to this order.
+     */
+    private void addAction() {
+        AnOrderItem anOrderItem = new AnOrderItem();
+        OrderItemDetailsDialog dlgAdd = new OrderItemDetailsDialog(true, anOrderItem, this.bllOrderItems);
+        dlgAdd.setLocationRelativeTo(this);
+        if (dlgAdd.display() == DialogResultType.OK) {
+            this.refreshGrid(false);
+        }
+    }
+
+    /**
+     * Pops the Inventory Item dialog in create mode.
+     */
+    private void createAction() {
+        InventoryItemDetailsDialog dlgCreate = new InventoryItemDetailsDialog(true, null);
+        dlgCreate.setLocationRelativeTo(this);
+        if (dlgCreate.display() == DialogResultType.OK) {
+            this.refreshGrid(true);
         }
     }
 
@@ -471,10 +479,30 @@ public class OrderItemsFrame
             JOptionPane.showMessageDialog(this, "Select item to remove");
         } else {
             AnOrderItem anOrderItem = this.orderItems.get(selectedRow);
-            OrderItemDetailsDialog dlgEdit = new OrderItemDetailsDialog(false, anOrderItem);
+            OrderItemDetailsDialog dlgEdit = new OrderItemDetailsDialog(false, anOrderItem, this.bllOrderItems);
             dlgEdit.setLocationRelativeTo(this);
             if (dlgEdit.display() == DialogResultType.OK) {
-                this.refreshGrid();
+                this.refreshGrid(true);
+            }
+        }
+    }
+
+    /**
+     * Removes the selected item.
+     */
+    private void removeAction() {
+        int selectedRow = this.mainTable.getSelectedRow();
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(null, "Select item to remove");
+        } else {
+            AnOrderItem anOrderItem = this.orderItems.get(selectedRow);
+            if (this.bllOrderItems.remove(anOrderItem)) {
+                this.refreshGrid(true);
+                JOptionPane.showMessageDialog(null,
+                        String.format("%s has been removed.", anOrderItem.getDescription()));
+            } else {
+                JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
+                        Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -496,7 +524,6 @@ public class OrderItemsFrame
 
     private ASupplier[] getSupplierList() {
         ASupplier[] arraySuppliers = new ASupplier[]{};
-        Suppliers bllSuppliers = new Suppliers();
         ArrayList<ASupplier> listSuppliers = new ArrayList<>();
 
         if (bllSuppliers.load()) {
@@ -507,9 +534,15 @@ public class OrderItemsFrame
         }
         return listSuppliers.toArray(arraySuppliers);
     }
+
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Package Methods">
+    void addOrderItem(AnOrderItem anOrderItem) {
+        //TODO:  finish this
+    }
+
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
-
     /**
      * Displays the frame.
      *
@@ -518,7 +551,6 @@ public class OrderItemsFrame
     public DialogResultType display() {
         setVisible(true);
         return this.dialogResult;
-
     }
 
     // </editor-fold>
@@ -542,5 +574,5 @@ public class OrderItemsFrame
             }
         }
     }
-// </editor-fold>
+    // </editor-fold>
 }

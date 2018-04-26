@@ -132,6 +132,23 @@ public class SQLHelperOrderItem
         }
     }
 
+    /**
+     * Gets all order items from the database for the specified order.
+     *
+     * @param primaryKey The primary key of the order.
+     * @return A list of order items in the specified order.
+     * @throws SQLException
+     * @throws Exception
+     */
+    public ArrayList<AnOrderItem> selectByOrder(Integer primaryKey)
+            throws SQLException, Exception {
+        HashMap<Integer, SprocParameter> params = new HashMap<>();
+        params.put(0, new SprocParameterInteger(SQLHelperOrder.COLUMN_PK, primaryKey.toString(), ParameterDirection.IN));
+
+        ArrayList<AnOrderItem> results = execSproc("sp_OrderItems_SelectByOrder", params);
+        return results;
+    }
+
     @Override
     public Integer insert(AnOrderItem anObject)
             throws SQLException, Exception {

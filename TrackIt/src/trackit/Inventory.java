@@ -140,7 +140,7 @@ public class Inventory
         boolean returnValue = false;
         try {
             if (!this.hasForeignKeyIssue(anObj)) {
-                AnInventoryItem.remove(anObj.getPrimaryKey());
+                AnInventoryItem.remove(anObj);
                 returnValue = true;
             }
         } catch (SQLException exSQL) {

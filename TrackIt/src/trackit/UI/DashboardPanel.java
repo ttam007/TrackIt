@@ -1,11 +1,9 @@
 package trackit.UI;
 
-import trackit.*;
-
 import java.awt.Dimension;
-import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.*;
+import trackit.*;
 
 /**
  * UI Layer: Handles all aspects of the Dashboard panel.
@@ -20,18 +18,19 @@ public class DashboardPanel
      * The name of the panel.
      */
     public static final String TAB_NAME = "Dashboard";
-    private final HashMap<Integer, Dashboard> dashboardHash = new HashMap<Integer,Dashboard>();
-    private final Dashboard[] dashboards = {new Dashboard(DashboardType.COUNT_ITEMS_OUT_OF_STOCK),new Dashboard(DashboardType.DATE_NEXT_ITEM_EXPIRES), new Dashboard(DashboardType.DATE_NEXT_ORDER_ARRIVES) , new Dashboard(DashboardType.MONEY_SPENT_LAST_30_DAYS)  };
-
+    private final HashMap<Integer, Dashboard> dashboardHash = new HashMap<Integer, Dashboard>();
+    private final Dashboard[] dashboards = {
+        new Dashboard(DashboardType.COUNT_ITEMS_OUT_OF_STOCK),
+        new Dashboard(DashboardType.DATE_NEXT_ITEM_EXPIRES),
+        new Dashboard(DashboardType.DATE_NEXT_ORDER_ARRIVES),
+        new Dashboard(DashboardType.MONEY_SPENT_LAST_30_DAYS)};
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Fields">
-
     private JTextArea dashboardInfo;
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
-
     /**
      * Creates new form DashboardUI
      */
@@ -42,7 +41,6 @@ public class DashboardPanel
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
-
     /**
      * Added solely to prevent serialization and Inspector items related to
      * such.
@@ -66,11 +64,9 @@ public class DashboardPanel
         throw new java.io.NotSerializableException(getClass().getName());
     }
 
-
     private void initializeComponents() {
 
-       // String sb = "- 5 items are out of stock\n- Milk will expire in 3 days\n- Order arriving today\n";
-
+        // String sb = "- 5 items are out of stock\n- Milk will expire in 3 days\n- Order arriving today\n";
         dashboardInfo = new JTextArea(35, 90);
         //dashboardInfo.setText(sb);
         dashboardInfo.setEditable(false);
@@ -79,43 +75,41 @@ public class DashboardPanel
         sp.setSize(new Dimension(1000, 400));
         add(sp);
     }
+
     /**
      * populates the Text Area.
      *
      */
-    private void initTextAreaData(Dashboard[] dashboards ){
+    private void initTextAreaData(Dashboard[] dashboards) {
         StringBuilder sb = new StringBuilder();
-        for(Dashboard db : dashboards){
+        for (Dashboard db : dashboards) {
 
-            sb.append((db.toString().equals("")?db.toString():db.toString()+"\n"));
+            sb.append((db.toString().equals("") ? db.toString() : db.toString() + "\n"));
         }
         dashboardInfo.setText(sb.toString());
     }
+
     /**
      * populates the dashboard information from the DB
      *
      */
 
-    private void populatesComponents(){
+    private void populatesComponents() {
         boolean displayError = false;
-        for(Dashboard db : dashboards){
-            if(!db.getData()){
-                displayError =true;
+        for (Dashboard db : dashboards) {
+            if (!db.getData()) {
+                displayError = true;
             }
 
         }
 
-        if(displayError){
+        if (displayError) {
             JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
                     Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
-        }
-        else{
+        } else {
             System.out.println("Are we displaying");
             initTextAreaData(dashboards);
         }
-
-
-
 
     }
 
@@ -126,9 +120,8 @@ public class DashboardPanel
      */
     public void refresh() {
         populatesComponents();
-        
-    }
 
+    }
 
     // </editor-fold>
 }

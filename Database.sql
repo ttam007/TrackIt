@@ -281,6 +281,21 @@ BEGIN
 	WHERE orderitems.orderItemId = orderItemId;
 END;;
 
+DROP PROCEDURE IF EXISTS sp_OrderItems_SelectByOrder;;
+CREATE DEFINER = CURRENT_USER 
+PROCEDURE sp_OrderItems_SelectByOrder (
+	IN orderId INT UNSIGNED
+)
+BEGIN
+	SELECT orderItems.orderItemId, orderItems.orderId, orderItems.itemId,
+		orderItems.quantityOrdered, orderItems.quantityCheckedIn,
+        orderItems.price, orderItems.extendedPrice,
+		items.description, items.sku, items.sizeUnit, items.itemStatus 
+	FROM orderItems
+		INNER JOIN items ON orderItems.itemId = items.itemId
+	WHERE orderitems.orderId = orderId;
+END;;
+
 DROP PROCEDURE IF EXISTS sp_OrderItems_Insert;;
 CREATE DEFINER = CURRENT_USER 
 PROCEDURE sp_OrderItems_Insert (

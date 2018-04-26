@@ -53,6 +53,26 @@ public class OrderItems
     }
 
     /**
+     * Loads all order items for the specified order.
+     *
+     * @param primaryKey The primary key of the order.
+     * @return True = The objects were successfully retrieved; False = There was
+     * an error.
+     */
+    public boolean loadByOrder(Integer primaryKey) {
+        boolean returnValue = false;
+        try {
+            rows = AnOrderItem.loadByOrder(primaryKey);
+            returnValue = true;
+        } catch (SQLException exSQL) {
+            Utilities.setErrorMessage(exSQL);
+        } catch (Exception ex) {
+            Utilities.setErrorMessage(ex);
+        }
+        return returnValue;
+    }
+
+    /**
      * Saves all rows to the database from the grid.
      *
      * @return True = The rows were successfully saved; False = There was an
@@ -106,7 +126,7 @@ public class OrderItems
         boolean returnValue = false;
         try {
             if (!this.hasForeignKeyIssue(anObj)) {
-                AnOrderItem.remove(anObj.getPrimaryKey());
+                AnOrderItem.remove(anObj);
                 returnValue = true;
             }
         } catch (SQLException exSQL) {
