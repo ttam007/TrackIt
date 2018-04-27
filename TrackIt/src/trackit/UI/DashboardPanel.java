@@ -18,7 +18,7 @@ public class DashboardPanel
      * The name of the panel.
      */
     public static final String TAB_NAME = "Dashboard";
-    private final HashMap<Integer, Dashboard> dashboardHash = new HashMap<Integer, Dashboard>();
+    private final HashMap<Integer, Dashboard> dashboardHash = new HashMap<>();
     private final Dashboard[] dashboards = {
         new Dashboard(DashboardType.COUNT_ITEMS_OUT_OF_STOCK),
         new Dashboard(DashboardType.DATE_NEXT_ITEM_EXPIRES),
@@ -93,7 +93,6 @@ public class DashboardPanel
      * populates the dashboard information from the DB
      *
      */
-
     private void populatesComponents() {
         boolean displayError = false;
         for (Dashboard db : dashboards) {

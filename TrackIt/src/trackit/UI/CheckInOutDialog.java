@@ -2,9 +2,6 @@ package trackit.UI;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 import trackit.*;
 
@@ -25,9 +22,9 @@ public class CheckInOutDialog
     // <editor-fold defaultstate="expanded" desc="Private Fields">
 
     private final AnInventoryItem anInventoryItem;
-    private Inventory bllInventory = new Inventory();
+    private final Inventory bllInventory = new Inventory();
     private DialogResultType dialogResult = DialogResultType.NONE;
-    private final String CHECKOUT_MSG = new String("Check out quantity must be less than total quantity.");
+    private final static String CHECKOUT_MSG = "Check out quantity must be less than total quantity.";
 
     //private final InventoryItem testItem = new InventoryItem();
     // </editor-fold>
@@ -52,8 +49,31 @@ public class CheckInOutDialog
         initializeComponents();
         populateComponents();
     }
+
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
+    /**
+     * Added solely to prevent serialization and Inspector items related to
+     * such.
+     *
+     * @param stream
+     * @throws java.io.IOException
+     */
+    private void writeObject(java.io.ObjectOutputStream stream) throws java.io.IOException {
+        throw new java.io.NotSerializableException(getClass().getName());
+    }
+
+    /**
+     * Added solely to prevent serialization and Inspector items related to
+     * such.
+     *
+     * @param stream
+     * @throws java.io.IOException
+     * @throws ClassNotFoundException
+     */
+    private void readObject(java.io.ObjectInputStream stream) throws java.io.IOException, ClassNotFoundException {
+        throw new java.io.NotSerializableException(getClass().getName());
+    }
 
     /**
      * Sets up all components used in this frame.
@@ -184,17 +204,17 @@ public class CheckInOutDialog
         int oldQuant = this.anInventoryItem.getQuantity();
         int checkQuant = Utilities.parseFormattedInteger(this.qtyTextField.getText());
 
-            if (inButton.isSelected()) {
-                this.anInventoryItem.changeQuantity(Utilities.parseFormattedInteger(this.qtyTextField.getText()));
-            } else if (outButton.isSelected()) {
-                if (checkQuant > oldQuant) {
-                    JOptionPane.showMessageDialog(this, CHECKOUT_MSG,
-                            Utilities.ERROR_MSG_CAPTION, JOptionPane.INFORMATION_MESSAGE);
-                } else {
-                    this.anInventoryItem.changeQuantity(-(Utilities.parseFormattedInteger(this.qtyTextField.getText())));
-                }
+        if (inButton.isSelected()) {
+            this.anInventoryItem.changeQuantity(Utilities.parseFormattedInteger(this.qtyTextField.getText()));
+        } else if (outButton.isSelected()) {
+            if (checkQuant > oldQuant) {
+                JOptionPane.showMessageDialog(this, CHECKOUT_MSG,
+                        Utilities.ERROR_MSG_CAPTION, JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                this.anInventoryItem.changeQuantity(-(Utilities.parseFormattedInteger(this.qtyTextField.getText())));
             }
-            returnValue = true;
+        }
+        returnValue = true;
         return returnValue;
     }
 
