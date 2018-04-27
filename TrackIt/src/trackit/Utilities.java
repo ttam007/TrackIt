@@ -3,6 +3,7 @@ package trackit;
 import java.sql.*;
 import java.text.*;
 import java.util.*;
+import javax.swing.*;
 import javax.swing.text.*;
 import org.jdatepicker.impl.*;
 
@@ -117,7 +118,7 @@ public class Utilities {
     // <editor-fold defaultstate="collapsed" desc="Public Instance Methods">
     //There shouldn't be any public instance methods in this class.
     // </editor-fold>
-    // <editor-fold defaultstate="expanded" desc="Public Static Methods">
+    // <editor-fold defaultstate="expanded" desc="Public Static Methods - Formatting">
     /**
      * Gets the caption of the window (frame/dialog) in a consistent formatting.
      *
@@ -129,17 +130,25 @@ public class Utilities {
     }
 
     /**
+     * Formats a specified amount into an integer format.
+     *
+     * @param anAmount The amount to be formatted.
+     * @return A well-formatted string representation of the specified amount.
+     */
+    public static String formatAsInteger(Integer anAmount) {
+        NumberFormat format = NumberFormat.getIntegerInstance(Locale.US);
+        return format.format(anAmount);
+    }
+
+    /**
      * Formats a specified amount into a currency format.
      *
      * @param anAmount The amount to be formatted.
      * @return A well-formatted string representation of the specified amount.
      */
     public static String formatAsCurrency(Double anAmount) {
-        NumberFormat formatter = DecimalFormat.getNumberInstance(Locale.US);
-        formatter.setMinimumFractionDigits(2);
-        formatter.setMaximumFractionDigits(2);
-        formatter.setMinimumIntegerDigits(1);
-        return formatter.format(anAmount);
+        NumberFormat format = DecimalFormat.getCurrencyInstance(Locale.US);
+        return format.format(anAmount);
     }
 
     /**
@@ -148,30 +157,56 @@ public class Utilities {
      *
      * @return A NumberFormatter that only works with integers.
      */
-    public static NumberFormatter getIntegerFormatter() {
-        NumberFormat format = NumberFormat.getInstance(Locale.US);
-        NumberFormatter formatter = new NumberFormatter(format);
-        formatter.setValueClass(Integer.class);
-        formatter.setMinimum(0);
-        formatter.setMaximum(Integer.MAX_VALUE);
-        formatter.setAllowsInvalid(false);
-        formatter.setCommitsOnValidEdit(true);
-        return formatter;
+    public static DefaultFormatterFactory getIntegerFormatter() {
+        //Default
+        NumberFormat defaultFormat = NumberFormat.getInstance(Locale.US);
+        NumberFormatter defaultFormatter = new NumberFormatter(defaultFormat);
+
+        //Display
+        NumberFormat displayFormat = NumberFormat.getIntegerInstance(Locale.US);
+        NumberFormatter displayFormatter = new NumberFormatter(displayFormat);
+
+        //Edit
+        NumberFormat editFormat = NumberFormat.getIntegerInstance(Locale.US);
+        NumberFormatter editFormatter = new NumberFormatter(editFormat);
+        editFormatter.setValueClass(Integer.class);
+        editFormatter.setMinimum(0);
+        editFormatter.setMaximum(Integer.MAX_VALUE);
+        editFormatter.setAllowsInvalid(false);
+        editFormatter.setCommitsOnValidEdit(true);
+
+        return new DefaultFormatterFactory(defaultFormatter, displayFormatter, editFormatter);
     }
-    
+
     /**
      * Gets a formatter for double values to be used with JFormattedTextField
      * components relating to currency.
      *
      * @return A NumberFormatter that only works with integers.
      */
-    public static NumberFormatter getCurrencyFormatter() {
-        NumberFormat format = DecimalFormat.getNumberInstance(Locale.US);
-        format.setMinimumFractionDigits(2);
-        format.setMaximumFractionDigits(2);
-        format.setMinimumIntegerDigits(1);
-        NumberFormatter formatter = new NumberFormatter(format);
-        return formatter;
+    public static DefaultFormatterFactory getCurrencyFormatter() {
+        //Default
+        NumberFormat defaultFormat = NumberFormat.getInstance(Locale.US);
+        NumberFormatter defaultFormatter = new NumberFormatter(defaultFormat);
+
+        //Display
+        NumberFormat displayFormat = NumberFormat.getCurrencyInstance(Locale.US);
+        NumberFormatter displayFormatter = new NumberFormatter(displayFormat);
+
+        //Edit
+        NumberFormat editFormat = NumberFormat.getNumberInstance(Locale.US);
+        editFormat.setMinimumFractionDigits(2);
+        editFormat.setMaximumFractionDigits(2);
+        editFormat.setMinimumIntegerDigits(1);
+
+        NumberFormatter editFormatter = new NumberFormatter(editFormat);
+        editFormatter.setValueClass(Double.class);
+        editFormatter.setMinimum(0.00);
+        editFormatter.setMaximum(Double.MAX_VALUE);
+        editFormatter.setAllowsInvalid(false);
+        editFormatter.setCommitsOnValidEdit(true);
+
+        return new DefaultFormatterFactory(defaultFormatter, displayFormatter, editFormatter);
     }
 
     /**
@@ -192,6 +227,8 @@ public class Utilities {
         return returnValue;
     }
 
+    // </editor-fold>
+    // <editor-fold defaultstate="expanded" desc="Public Static Methods - Errors">
     /**
      * Stores the generated error message for retrieval by another class.
      *
@@ -379,5 +416,40 @@ public class Utilities {
         return aModel.getValue();
     }
 
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="SubClasses">
+    /**
+     * Handles all aspects of focus changes on numeric fields.
+     */
+    public static class DoubleVerifier
+            extends InputVerifier {
+
+        /**
+         * Verifies that the entered value is a double.
+         *
+         * @param aComponent The component whose text must be verified.
+         * @return True = text is valid; False = text is not valid.
+         */
+        @Override
+        public boolean verify(JComponent aComponent) {
+            boolean returnValue = false;
+
+            try {
+                String text = ((JTextComponent) aComponent).getText();
+                if (text == null || text.trim().equals("")) {
+                    returnValue = true;
+                } else {
+                    double aValue = Double.parseDouble(text);
+                    if (aValue >= 0.00 && aValue <= Double.MAX_VALUE) {
+                        returnValue = true;
+                    }
+                }
+            } catch (NumberFormatException pEx) {
+            } catch (Exception e) {
+            }
+
+            return returnValue;
+        }
+    }
     // </editor-fold>
 }
