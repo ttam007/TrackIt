@@ -37,6 +37,7 @@ public class OrderItemsFrame
     private boolean isLoading;
 
 
+
     //For the grid.
     private final HashMap<Integer, AnOrderItem> orderItems = new HashMap<>();
     private final OrderItems bllOrderItems = new OrderItems();
