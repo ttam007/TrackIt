@@ -195,6 +195,19 @@ public class CheckInOutDialog
             }
         }
         returnValue = true;
+
+            if (inButton.isSelected()) {
+                this.anInventoryItem.changeQuantity(Utilities.parseFormattedInteger(this.qtyTextField.getText()));
+            } else if (outButton.isSelected()) {
+                if (checkQuant > oldQuant) {
+                    JOptionPane.showMessageDialog(this, CHECKOUT_MSG,
+                            Utilities.ERROR_MSG_CAPTION, JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    this.anInventoryItem.changeQuantity(-(Utilities.parseFormattedInteger(this.qtyTextField.getText())));
+                }
+            }
+            returnValue = true;
+
         return returnValue;
     }
 

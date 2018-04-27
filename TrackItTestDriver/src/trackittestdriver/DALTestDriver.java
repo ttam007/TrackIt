@@ -1,10 +1,5 @@
 package trackittestdriver;
 
-import trackit.AnOrderItem;
-import trackit.AnOrder;
-import trackit.AnItem;
-import trackit.AnInventoryItem;
-import trackit.ASupplier;
 import java.sql.*;
 import java.util.*;
 import trackit.*;
@@ -102,12 +97,12 @@ public class DALTestDriver {
                 System.out.println("Connection = " + conn.getConnection());
             } else {
                 System.out.println("Invalid Connection");
-                System.out.println("SQLConnector's errorMessage = " + conn.getErrorMessage());
+                System.out.println("SQLConnector's errorMessage = " + Utilities.getErrorMessage());
             }
 
         } catch (SQLException exSQL) {
             System.out.println("SQL error = " + exSQL.getLocalizedMessage());
-            System.out.println("SQLConnector's errorMessage = " + conn.getErrorMessage());
+            System.out.println("SQLConnector's errorMessage = " + Utilities.getErrorMessage());
         } catch (Exception ex) {
             System.out.println("Generic error = " + ex.getLocalizedMessage());
         }
@@ -191,10 +186,10 @@ public class DALTestDriver {
             }
 
             System.out.println("\nSelectOne");
-            aSupplier = helper.selectOne(2);
+            aSupplier = helper.selectOne(3);
             printSupplier(aSupplier);
 
-            System.out.println("\nInsert");
+            /*System.out.println("\nInsert");
             //Must delete "Etsy" from the database before testing this.
             ASupplier aSupplierInsert = new ASupplier();
             aSupplierInsert.setNickname("Etsy");
@@ -216,7 +211,7 @@ public class DALTestDriver {
             pk = 2;
             helper.delete(pk);
             aSupplier = helper.selectOne(pk);
-            printSupplier(aSupplier);
+            printSupplier(aSupplier);*/
         } catch (SQLException exSQL) {
             System.out.println("SQL error = " + exSQL.getLocalizedMessage());
         } catch (Exception ex) {
@@ -254,7 +249,7 @@ public class DALTestDriver {
             anOrderItem = helper.selectOne(pk);
             printOrderItem(anOrderItem);
 
-            System.out.println("\nUpdate");
+            /*System.out.println("\nUpdate");
             AnOrderItem anOrderItemUpdate = new AnOrderItem();
             anOrderItemUpdate.setPrimaryKey(pk);
             anOrderItemUpdate.setQuantityOrdered(20);
@@ -268,7 +263,7 @@ public class DALTestDriver {
             pk = 2;
             helper.delete(pk);
             anOrderItem = helper.selectOne(pk);
-            printOrderItem(anOrderItem);
+            printOrderItem(anOrderItem);*/
         } catch (SQLException exSQL) {
             System.out.println("SQL error = " + exSQL.getLocalizedMessage());
         } catch (Exception ex) {
@@ -286,27 +281,27 @@ public class DALTestDriver {
         AnOrder anOrder;
         Integer pk;
         try {
-            System.out.println("\nSelectAll");
+            /*System.out.println("\nSelectAll");
             ArrayList<AnOrder> order = helper.selectAll();
             for (AnOrder anItem : order) {
                 printOrder(anItem);
-            }
+            }*/
 
             System.out.println("\nSelectOne");
-            anOrder = helper.selectOne(2);
+            anOrder = helper.selectOne(3);
             printOrder(anOrder);
 
-            System.out.println("\nInsert");
+            /*System.out.println("\nInsert");
             AnOrder anOrderInsert = new AnOrder();
-            anOrderInsert.setDescription("Cleaning Supplies");
-            anOrderInsert.setOrderedFrom(2);
+            anOrderInsert.setDescription("Toiletries");
+            anOrderInsert.setOrderedFrom(3);
             anOrderInsert.setOrderStatus("Created");
             anOrderInsert.setDateOrdered(Utilities.convertToSQLDate("2018-04-15"));
             pk = helper.insert(anOrderInsert);
             anOrder = helper.selectOne(pk);
             printOrder(anOrder);
 
-            /*System.out.println("\nUpdate");
+            System.out.println("\nUpdate");
             AnOrder anOrderUpdate = new AnOrder();
             anOrderUpdate.setPrimaryKey(pk);
             anOrderUpdate.setDescription("Cleaning Supplies");

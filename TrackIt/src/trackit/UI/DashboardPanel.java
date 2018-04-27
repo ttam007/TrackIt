@@ -93,6 +93,7 @@ public class DashboardPanel
      * populates the dashboard information from the DB
      *
      */
+
     private void populatesComponents() {
         boolean displayError = false;
         for (Dashboard db : dashboards) {

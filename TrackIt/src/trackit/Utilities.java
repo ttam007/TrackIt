@@ -85,6 +85,7 @@ public class Utilities {
      */
     public static final String BUTTON_LOGIN = "Login";
 
+
     /**
      * Default text for Logout buttons.
      */
@@ -95,6 +96,23 @@ public class Utilities {
      */
     public static final String BUTTON_EXIT = "Exit";
 
+
+    /**
+     * Default text for Logout buttons.
+     */
+    public static final String BUTTON_LOGOUT = "Logout";
+
+    /**
+     * Default text for Exit buttons.
+     */
+    public static final String BUTTON_EXIT = "Exit";
+
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Constants-Other">
+    /**
+     * The correct format of all SQL dates.
+     */
+    public static final String SQL_DATE_FORMAT = "yyyy-MM-dd";
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constants-Other">
     /**

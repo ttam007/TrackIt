@@ -341,8 +341,13 @@ public class OrderItemsFrame
         return returnValue;
     }
 
+
     private void checkInAction() {
         int selectedRow = this.mainTable.getSelectedRow();
+
+private void checkInAction(){
+    int selectedRow = this.mainTable.getSelectedRow();
+
         if (selectedRow < 0) {
             JOptionPane.showMessageDialog(this, "Select item to check in");
         } else {

@@ -132,6 +132,7 @@ public class LoginFrame
         gbc.gridwidth = 5;
         add(pfPassword, gbc);
 
+
         // Init Ok Button
         btnLogin = new JButton(Utilities.BUTTON_LOGIN);
         this.getRootPane().setDefaultButton(btnLogin);
