@@ -31,6 +31,7 @@ public class OrderItemsFrame
     private DialogResultType dialogResult = DialogResultType.NONE;
     private final Orders bllOrders = new Orders();
     private final Suppliers bllSuppliers = new Suppliers();
+    private boolean isLoading;
 
     //For the grid.
     private final HashMap<Integer, AnOrderItem> orderItems = new HashMap<>();
@@ -43,10 +44,10 @@ public class OrderItemsFrame
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     private JButton btnCheckIn, btnCheckInAll, btnCreate, btnEdit, btnRemove, btnOK, btnAddItem, btnCancel;
-    private JPanel pnlTop, pnlCenter, pnlBtm, pnlBtmLeft, pnlBtmRight;
+    private JPanel pnlBtm;
     private JLabel lblDescription, lblSupplier, lblStatus, lblOrderDate, lblExpectedDate;
     private JTextField tfDescription;
-    private JDatePickerImpl orderDatePicker, expectedDatePicker;
+    private JDatePickerImpl orderedDatePicker, expectedDatePicker;
     private JScrollPane scrollPane;
     private JComboBox<OrderStatusType> cboOrderStatus;
     private JComboBox<ASupplier> cboSuppliers;
@@ -72,10 +73,12 @@ public class OrderItemsFrame
             this.anOrder = anOrder;
         }
 
+        isLoading = true;
         initializeComponents();
         populateComponents();
         refreshGrid(true);
         toggleDisableButton();
+        isLoading = false;
     }
 
     // </editor-fold>
@@ -123,7 +126,7 @@ public class OrderItemsFrame
         //Add all components here and set properties.
         setLayout(new BorderLayout());
 
-        Box topBox, topInnerBx, btmInnerBx, middleBox, bottomBox, combine;
+        Box topBox, bottomBox, combine;
 
         topBox = Box.createVerticalBox();
         JPanel pnlTopBpx = new JPanel();
@@ -169,10 +172,15 @@ public class OrderItemsFrame
         gbc.gridy = 0;
         pnlTopBpx.add(lblOrderDate, gbc);
 
-        orderDatePicker = Utilities.getDatePicker();
+        orderedDatePicker = Utilities.getDatePicker();
         gbc.gridx = 5;
         gbc.gridy = 0;
-        pnlTopBpx.add(orderDatePicker, gbc);
+        pnlTopBpx.add(orderedDatePicker, gbc);
+        orderedDatePicker.getModel().addPropertyChangeListener((e) -> {
+            if (e.getPropertyName().equals("value")) {
+                dateLeaveAction();
+            }
+        });
 
         lblStatus = new JLabel("Status:");
         gbc.gridx = 0;
@@ -195,7 +203,7 @@ public class OrderItemsFrame
         pnlTopBpx.add(expectedDatePicker, gbc);
         expectedDatePicker.getModel().addPropertyChangeListener((e) -> {
             if (e.getPropertyName().equals("value")) {
-                expectedDateLeaveAction((java.util.Date) e.getOldValue());
+                dateLeaveAction();
             }
         });
 
@@ -310,13 +318,11 @@ public class OrderItemsFrame
             if (this.bllSuppliers.load(key)) {
                 ASupplier aSupplier = this.bllSuppliers.getList().get(0);
                 this.cboSuppliers.getModel().setSelectedItem(aSupplier);
-                //this.cboSuppliers.
             }
         }
         this.cboOrderStatus.getModel().setSelectedItem(this.anOrder.getOrderStatus());
-        Utilities.setDatePickersDate(this.orderDatePicker, this.anOrder.getDateOrdered());
-        //TODO:  fix this:  
-        //Utilities.setDatePickersDate(this.expectedDatePicker, this.anOrder.getDateExpected());
+        Utilities.setDatePickersDate(this.orderedDatePicker, this.anOrder.getDateOrdered());
+        Utilities.setDatePickersDate(this.expectedDatePicker, this.anOrder.getDateExpected());
     }
 
     /**
@@ -330,8 +336,8 @@ public class OrderItemsFrame
             ASupplier aSupplier = (ASupplier) this.cboSuppliers.getModel().getSelectedItem();
             this.anOrder.setOrderedFrom(aSupplier.getPrimaryKey());
             this.anOrder.setOrderStatus((OrderStatusType) this.cboOrderStatus.getModel().getSelectedItem());
-            this.anOrder.setDateOrdered((Date) this.orderDatePicker.getModel().getValue());
-            this.anOrder.setDateExpected((Date) this.expectedDatePicker.getModel().getValue());
+            this.anOrder.setDateOrdered(Utilities.getDatePickersDate(this.orderedDatePicker));
+            this.anOrder.setDateExpected(Utilities.getDatePickersDate(this.expectedDatePicker));
             returnValue = true;
         } catch (java.sql.SQLException | RuntimeException ex) {
             Utilities.setErrorMessage(ex);
@@ -497,17 +503,21 @@ public class OrderItemsFrame
     }
 
     /**
-     * When focus is left, compare to the ordered date.
+     * When ordered or expected date changes, then compare to the other date.
      */
-    private void expectedDateLeaveAction(java.util.Date originalExpectedDate) {
-        java.util.Date orderedDate = Utilities.getDatePickersDate(orderDatePicker);
-        java.util.Date expectedDate = Utilities.getDatePickersDate(expectedDatePicker);
-        if (orderedDate != null && expectedDate != null
-                && expectedDate.before(orderedDate)) {
-            JOptionPane.showMessageDialog(OrderItemsFrame.this,
-                    "The expected date can't be prior to the ordered date.",
-                    "Date Issue", JOptionPane.INFORMATION_MESSAGE);
-            Utilities.setDatePickersDate(expectedDatePicker, originalExpectedDate);
+    private void dateLeaveAction() {
+        if (!isLoading) {
+            java.util.Date orderedDate = Utilities.getDatePickersDate(orderedDatePicker);
+            java.util.Date expectedDate = Utilities.getDatePickersDate(expectedDatePicker);
+            if (orderedDate != null && expectedDate != null
+                    && !expectedDate.equals(orderedDate)
+                    && expectedDate.before(orderedDate)) {
+                JOptionPane.showMessageDialog(OrderItemsFrame.this,
+                        "The expected date can't be prior to the ordered date.\n"
+                        + "Updating expected date to be same as ordered date.",
+                        "Date Issue", JOptionPane.INFORMATION_MESSAGE);
+                Utilities.setDatePickersDate(this.expectedDatePicker, orderedDate);
+            }
         }
     }
 
