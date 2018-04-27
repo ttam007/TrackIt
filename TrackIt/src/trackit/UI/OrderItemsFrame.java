@@ -22,7 +22,7 @@ public class OrderItemsFrame
      * The name of the window.
      */
     public static final String WINDOW_NAME = "Order Details";
-    private static final String[] TABLE_LABELS = {"Item Name", "Unit", "SKU", "Quantity", "Checked In", "Price", "Ext Price"};
+    private static final String[] TABLE_LABELS = {"Item Name", "Unit", "SKU", "Quantity", "Checked In", "Price", "Extended Price"};
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Fields">
     //For editing the Order.
@@ -241,7 +241,7 @@ public class OrderItemsFrame
 
         bottomBox = Box.createHorizontalBox();
 
-        //add data to suppliers arraylist 
+        //add data to suppliers arraylist
         mainTableModel = new DefaultTableModel(TABLE_LABELS, 0);
         mainTable = new JTable(mainTableModel);
         scrollPane = new JScrollPane(mainTable);
@@ -267,6 +267,10 @@ public class OrderItemsFrame
                 }
             }
         });
+        Utilities.setRightAlignment(this.mainTable, 3); //Quantity column
+        Utilities.setRightAlignment(this.mainTable, 4); //Checked In column
+        Utilities.setRightAlignment(this.mainTable, 5); //Price column
+        Utilities.setRightAlignment(this.mainTable, 6); //Extended Price column
 
         add(scrollPane, BorderLayout.CENTER);
         bottomBox.add(scrollPane);
@@ -426,12 +430,15 @@ public class OrderItemsFrame
             int counter = 0;
             for (AnOrderItem anOrderItem : aList) {
                 //{"Item Name", "Unit", "SKU", "Quantity", "Price", "Ext Price"};
-                Object[] data = {anOrderItem.getDescription(),
-                    anOrderItem.getSizeUnit(), anOrderItem.getSku(),
+                Object[] data = {
+                    anOrderItem.getDescription(),
+                    anOrderItem.getSizeUnit(),
+                    anOrderItem.getSku(),
                     Utilities.formatAsInteger(anOrderItem.getQuantityOrdered()),
                     Utilities.formatAsInteger(anOrderItem.getQuantityCheckedIn()),
                     Utilities.formatAsCurrency(anOrderItem.getPrice()),
-                    Utilities.formatAsCurrency(anOrderItem.getExtendedPrice())};
+                    Utilities.formatAsCurrency(anOrderItem.getExtendedPrice())
+                };
                 mainTableModel.addRow(data);
                 this.orderItems.put(counter, anOrderItem);
                 counter++;
@@ -553,12 +560,6 @@ public class OrderItemsFrame
                     Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
         }
         return listSuppliers.toArray(arraySuppliers);
-    }
-
-    // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Package Methods">
-    void addOrderItem(AnOrderItem anOrderItem) {
-        //TODO:  finish this
     }
 
     // </editor-fold>

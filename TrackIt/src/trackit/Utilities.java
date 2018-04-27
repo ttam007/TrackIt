@@ -4,6 +4,7 @@ import java.sql.*;
 import java.text.*;
 import java.util.*;
 import javax.swing.*;
+import javax.swing.table.*;
 import javax.swing.text.*;
 import org.jdatepicker.impl.*;
 
@@ -225,6 +226,13 @@ public class Utilities {
             returnValue = 0;
         }
         return returnValue;
+    }
+
+    public static void setRightAlignment(JTable aTable, int columnIndex) {
+        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+        rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
+        TableColumn aTableColumn = aTable.getColumnModel().getColumn(columnIndex);
+        aTableColumn.setCellRenderer(rightRenderer);
     }
 
     // </editor-fold>
