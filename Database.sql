@@ -375,6 +375,21 @@ BEGIN
 	WHERE InventoryItems.InventoryItemId = inventoryItemId;
 END;;
 
+DROP PROCEDURE IF EXISTS sp_InventoryItems_SelectByOrderItem;;
+CREATE DEFINER = CURRENT_USER 
+PROCEDURE sp_InventoryItems_SelectByOrderItem (
+	IN orderItemId INT UNSIGNED
+)
+BEGIN
+	SELECT inventoryitems.inventoryItemId, inventoryitems.itemId,
+		inventoryitems.quantity, inventoryitems.expirationDate,
+		items.description, items.sku, items.sizeUnit, items.itemStatus 
+	FROM inventoryItems
+		INNER JOIN items ON inventoryItems.itemId = items.itemId
+        INNER JOIN orderitems ON orderItems.itemId = items.itemId
+	WHERE OrderItems.OrderItemId = orderItemId;
+END;;
+
 DROP PROCEDURE IF EXISTS sp_InventoryItems_Insert;;
 CREATE DEFINER = CURRENT_USER 
 PROCEDURE sp_InventoryItems_Insert (
