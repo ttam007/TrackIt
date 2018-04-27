@@ -222,7 +222,7 @@ public class InventoryItemsPanel
     private void checkInOutAction() {
         int selectedRow = this.mainTable.getSelectedRow();
         if (selectedRow < 0) {
-            JOptionPane.showMessageDialog(this, "Select item to edit");
+            JOptionPane.showMessageDialog(this, "Select item to check in/out");
         } else {
             AnInventoryItem anInventoryItem = this.inventoryItems.get(selectedRow);
             CheckInOutDialog checkIn = new CheckInOutDialog(anInventoryItem);

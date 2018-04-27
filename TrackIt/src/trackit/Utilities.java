@@ -118,7 +118,7 @@ public class Utilities {
     // <editor-fold defaultstate="collapsed" desc="Public Instance Methods">
     //There shouldn't be any public instance methods in this class.
     // </editor-fold>
-    // <editor-fold defaultstate="expanded" desc="Public Static Methods - Formatting">
+    // <editor-fold defaultstate="collapsed" desc="Public Static Methods - Formatting">
     /**
      * Gets the caption of the window (frame/dialog) in a consistent formatting.
      *
@@ -228,7 +228,7 @@ public class Utilities {
     }
 
     // </editor-fold>
-    // <editor-fold defaultstate="expanded" desc="Public Static Methods - Errors">
+    // <editor-fold defaultstate="collapsed" desc="Public Static Methods - Errors">
     /**
      * Stores the generated error message for retrieval by another class.
      *
@@ -271,7 +271,7 @@ public class Utilities {
         return sb.toString();
     }
     // </editor-fold>
-    // <editor-fold defaultstate="expanded" desc="Public Static Methods - Dates">
+    // <editor-fold defaultstate="collapsed" desc="Public Static Methods - Dates">
 
     /**
      * Converts from a standard java Date to a SQL Date class.

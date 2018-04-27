@@ -2,7 +2,6 @@ package trackit.UI;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
 import javax.swing.*;
 import org.jdatepicker.impl.*;
 import trackit.*;
@@ -239,8 +238,7 @@ public class InventoryItemDetailsDialog
             this.anInventoryItem.setSizeUnit(this.tfSizeUnit.getText());
             this.anInventoryItem.setQuantity((Integer) this.tfQuantity.getValue());
             this.anInventoryItem.setItemStatus((ItemStatusType) this.cboItemStatus.getModel().getSelectedItem());
-            java.util.Date expDate = (Date) expDatePicker.getModel().getValue();
-            this.anInventoryItem.setExpirationDate(expDate);
+            this.anInventoryItem.setExpirationDate(Utilities.getDatePickersDate(this.expDatePicker));
             returnValue = true;
         } catch (java.sql.SQLException | RuntimeException ex) {
             Utilities.setErrorMessage(ex);
