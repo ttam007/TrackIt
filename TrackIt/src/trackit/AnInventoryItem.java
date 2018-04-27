@@ -235,7 +235,7 @@ public class AnInventoryItem
     @Override
     public void changeQuantity(int amountToChangeBy)
             throws NegativeAmountException {
-        if (this.quantity + amountToChangeBy < 0) {
+        if (this.quantity < (-amountToChangeBy)) {
             throw new NegativeAmountException();
         }
         this.quantity += amountToChangeBy;

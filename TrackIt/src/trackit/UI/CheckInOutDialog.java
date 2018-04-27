@@ -183,21 +183,18 @@ public class CheckInOutDialog
         boolean returnValue = false;
         int oldQuant = this.anInventoryItem.getQuantity();
         int checkQuant = Utilities.parseFormattedInteger(this.qtyTextField.getText());
-        try {
+
             if (inButton.isSelected()) {
-                this.anInventoryItem.setQuantity(oldQuant + checkQuant);
+                this.anInventoryItem.changeQuantity(Utilities.parseFormattedInteger(this.qtyTextField.getText()));
             } else if (outButton.isSelected()) {
                 if (checkQuant > oldQuant) {
                     JOptionPane.showMessageDialog(this, CHECKOUT_MSG,
                             Utilities.ERROR_MSG_CAPTION, JOptionPane.INFORMATION_MESSAGE);
                 } else {
-                    this.anInventoryItem.setQuantity(oldQuant - checkQuant);
+                    this.anInventoryItem.changeQuantity(-(Utilities.parseFormattedInteger(this.qtyTextField.getText())));
                 }
             }
             returnValue = true;
-        } catch (SQLException ex) {
-            Logger.getLogger(CheckInOutDialog.class.getName()).log(Level.SEVERE, null, ex);
-        }
         return returnValue;
     }
 

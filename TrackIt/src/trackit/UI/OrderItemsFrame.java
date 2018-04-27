@@ -22,7 +22,7 @@ public class OrderItemsFrame
      * The name of the window.
      */
     public static final String WINDOW_NAME = "Order Details";
-    private static final String[] TABLE_LABELS = {"Item Name", "Unit", "SKU", "Quantity", "Price", "Ext Price"};
+    private static final String[] TABLE_LABELS = {"Item Name", "Unit", "SKU", "Quantity", "Checked In", "Price", "Ext Price"};
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Fields">
     //For editing the Order.
@@ -341,18 +341,16 @@ public class OrderItemsFrame
         return returnValue;
     }
 
-    private void checkInAction() {
-        int selectedRow = this.mainTable.getSelectedRow();
+private void checkInAction(){
+    int selectedRow = this.mainTable.getSelectedRow();
         if (selectedRow < 0) {
             JOptionPane.showMessageDialog(this, "Select item to check in");
         } else {
             AnOrderItem anOrderItem = this.orderItems.get(selectedRow);
             try {
                 AnInventoryItem anInventoryItem = AnInventoryItem.load(anOrderItem.getPrimaryKey());
-                int checkQuant = anOrderItem.getQuantityOrdered();
-                int oldQuant = anInventoryItem.getQuantity();
-                anInventoryItem.setQuantity(checkQuant + oldQuant);
-                removeItem(selectedRow);
+                anInventoryItem.changeQuantity(anOrderItem.getQuantityOrdered());
+                
                 JOptionPane.showMessageDialog(this, "Item Checked In");
             } catch (Exception ex) {
                 Utilities.setErrorMessage(ex);
@@ -412,7 +410,7 @@ public class OrderItemsFrame
             for (AnOrderItem anOrderItem : aList) {
                 //{"Item Name", "Unit", "SKU", "Quantity", "Price", "Ext Price"};
                 Object[] data = {anOrderItem.getDescription(), anOrderItem.getSizeUnit(),
-                    anOrderItem.getSku(), anOrderItem.getQuantityOrdered(),
+                    anOrderItem.getSku(), anOrderItem.getQuantityOrdered(), anOrderItem.getQuantityCheckedIn(),
                     Utilities.formatAsCurrency(anOrderItem.getPrice()),
                     Utilities.formatAsCurrency(anOrderItem.getExtendedPrice())};
                 mainTableModel.addRow(data);
