@@ -211,6 +211,7 @@ public class OrdersPanel
      */
     private void createAction() {
         OrderItemsFrame dlgCreate = new OrderItemsFrame(true, null);
+        dlgCreate.setLocationRelativeTo(this);
         if (dlgCreate.display() == DialogResultType.OK) {
             refreshGrid();
         }
@@ -226,6 +227,7 @@ public class OrdersPanel
         } else {
             AnOrder anOrder = this.orders.get(selectedRow);
             OrderItemsFrame dlgEdit = new OrderItemsFrame(false, anOrder);
+            dlgEdit.setLocationRelativeTo(this);
             if (dlgEdit.display() == DialogResultType.OK) {
                 refreshGrid();
             }
