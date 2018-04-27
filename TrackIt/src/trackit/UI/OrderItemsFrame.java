@@ -31,7 +31,10 @@ public class OrderItemsFrame
     private DialogResultType dialogResult = DialogResultType.NONE;
     private final Orders bllOrders = new Orders();
     private final Suppliers bllSuppliers = new Suppliers();
+    private final static String CHECKOUT_MSG = "Item has already been checked in.";
     private boolean isLoading;
+
+
 
     //For the grid.
     private final HashMap<Integer, AnOrderItem> orderItems = new HashMap<>();
@@ -213,7 +216,9 @@ public class OrderItemsFrame
         pnlTopBpx.add(btnCheckIn, gbc);
 
         btnCheckIn.addActionListener((ActionEvent e) -> {
-            checkInAction();
+            int selectedRow = this.mainTable.getSelectedRow();
+            checkInAction(selectedRow);
+            mainTable.clearSelection();
         });
 
         btnCheckInAll = new JButton(Utilities.BUTTON_CHECKINALL);
@@ -222,7 +227,12 @@ public class OrderItemsFrame
         pnlTopBpx.add(btnCheckInAll, gbc);
 
         btnCheckInAll.addActionListener((ActionEvent e) -> {
-            //TODO:  Call into BLL for check-in.
+            int tableRows = mainTable.getRowCount();
+            int counter = 0;
+            while (counter < tableRows){
+                checkInAction(counter);
+                counter++;   
+        } 
             JOptionPane.showMessageDialog(this, "All Items Checked In");
         });
 
@@ -351,23 +361,33 @@ public class OrderItemsFrame
         return returnValue;
     }
 
-    private void checkInAction() {
-        int selectedRow = this.mainTable.getSelectedRow();
-        if (selectedRow < 0) {
+    private boolean checkInAction(int row) {
+        boolean returnValue = false;
+        if (row < 0) {
             JOptionPane.showMessageDialog(this, "Select item to check in");
         } else {
-            AnOrderItem anOrderItem = this.orderItems.get(selectedRow);
+            AnOrderItem anOrderItem = this.orderItems.get(row);
             try {
-                AnInventoryItem anInventoryItem = AnInventoryItem.load(anOrderItem.getPrimaryKey());
-                anInventoryItem.changeQuantity(anOrderItem.getQuantityOrdered());
-
-                JOptionPane.showMessageDialog(this, "Item Checked In");
+                AnInventoryItem anInventoryItem = AnInventoryItem.loadByOrderItem(anOrderItem.getPrimaryKey());
+                if (anOrderItem.getQuantityOrdered() > anOrderItem.getQuantityCheckedIn()) {                
+                    anInventoryItem.changeQuantity(anOrderItem.getQuantityOrdered());
+                    anOrderItem.setQuantityCheckedIn(anOrderItem.getQuantityOrdered());
+                    anInventoryItem.save(anInventoryItem);
+                    anOrderItem.save(anOrderItem);
+                    returnValue = true;
+                    this.refreshGrid(true);
+                    JOptionPane.showMessageDialog(this, "Item Checked In");
+                } else {
+                    JOptionPane.showMessageDialog(this, CHECKOUT_MSG,
+                        Utilities.ERROR_MSG_CAPTION, JOptionPane.INFORMATION_MESSAGE);
+                }
             } catch (Exception ex) {
                 Utilities.setErrorMessage(ex);
                 JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
                         Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
             }
         }
+        return returnValue;
     }
 
     /**
@@ -387,6 +407,7 @@ public class OrderItemsFrame
             }
         }
     }
+
 
     /**
      * Handles the cancel action. If any errors, then display error message
