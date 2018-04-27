@@ -163,6 +163,21 @@ public class AnInventoryItem
     }
 
     /**
+     * Gets the inventory item from the database that matches the specified
+     * order item.
+     *
+     * @param primaryKey The primary key of the order item.
+     * @return The object with values loaded from the database, or a null object
+     * if not found.
+     * @throws SQLException
+     * @throws Exception
+     */
+    public static AnInventoryItem loadByOrderItem(int primaryKey)
+            throws SQLException, Exception {
+        return HELPER.selectByOrderItem(primaryKey);
+    }
+
+    /**
      * Saves the specified object to the database.
      *
      * @param anObj The object to be saved.
