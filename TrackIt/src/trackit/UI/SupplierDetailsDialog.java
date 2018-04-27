@@ -178,7 +178,7 @@ public class SupplierDetailsDialog
             JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
                     Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
         }
-        
+
         return returnValue;
     }
 

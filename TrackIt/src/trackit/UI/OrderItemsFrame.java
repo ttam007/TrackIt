@@ -341,8 +341,13 @@ public class OrderItemsFrame
         return returnValue;
     }
 
+
+    private void checkInAction() {
+        int selectedRow = this.mainTable.getSelectedRow();
+
 private void checkInAction(){
     int selectedRow = this.mainTable.getSelectedRow();
+
         if (selectedRow < 0) {
             JOptionPane.showMessageDialog(this, "Select item to check in");
         } else {
@@ -350,7 +355,7 @@ private void checkInAction(){
             try {
                 AnInventoryItem anInventoryItem = AnInventoryItem.load(anOrderItem.getPrimaryKey());
                 anInventoryItem.changeQuantity(anOrderItem.getQuantityOrdered());
-                
+
                 JOptionPane.showMessageDialog(this, "Item Checked In");
             } catch (Exception ex) {
                 Utilities.setErrorMessage(ex);
