@@ -10,7 +10,7 @@ import trackit.*;
 /**
  * UI Layer: Handles all aspects of the Order panel.
  *
- * @author Douglas, Steven, Diaz
+ * @author Douglas, Steven, Diaz, Bond
  */
 public class OrdersPanel
         extends JPanel {
@@ -20,7 +20,8 @@ public class OrdersPanel
      * The name of the panel.
      */
     public static final String TAB_NAME = "Orders";
-    private static final String[] TABLE_LABELS = {"Description", "Supplier", "Status", "Order Date", "Expected Date"};
+    private static final String[] TABLE_LABELS
+            = {"Description", "Supplier", "Status", "Order Date", "Expected Date", "Total Price"};
 
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
@@ -150,12 +151,18 @@ public class OrdersPanel
     private void initTableData(ArrayList<AnOrder> listOrders) {
         if (this.orders != null) {
             int counter = 0;
+            OrderItems bllOrderItems = new OrderItems();
             for (AnOrder anOrder : listOrders) {
-                //{"Description", "Supplier", "Status", "Order Date", "Expected Date"};
+                Double sum = 0.00;
+                if (bllOrderItems.loadByOrder(anOrder.getPrimaryKey())) {
+                    sum = bllOrderItems.getSumOfExtendedPrice();
+                }
+
+                //{"Description", "Supplier", "Status", "Order Date", "Expected Date", "Total Price"};
                 Object[] data = {anOrder.getDescription(),
                     this.suppliers.get(anOrder.getOrderedFrom()).getNickname(),
                     anOrder.getOrderStatus(), anOrder.getDateOrdered(),
-                    anOrder.getDateExpected()};
+                    anOrder.getDateExpected(), Utilities.formatAsCurrency(sum)};
                 mainTableModel.addRow(data);
                 this.orders.put(counter, anOrder);
                 counter++;
