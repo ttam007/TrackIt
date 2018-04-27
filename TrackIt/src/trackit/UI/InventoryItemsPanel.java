@@ -1,9 +1,7 @@
 package trackit.UI;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -22,7 +20,7 @@ public class InventoryItemsPanel
      * The name of the panel.
      */
     public static final String TAB_NAME = "Inventory";
-    private static final String[] TABLE_LABELS = new String[]{"Item Name", "Qty", "Unit", "SKU", "Expiration", "Status"};
+    private static final String[] TABLE_LABELS = new String[]{"Item Name", "Quantity", "Unit", "SKU", "Expiration Date", "Status"};
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
     private final HashMap<Integer, AnInventoryItem> inventoryItems = new HashMap<>();
@@ -102,6 +100,7 @@ public class InventoryItemsPanel
             }
         });
         mainTable.setBounds(30, 40, 200, 200);
+        Utilities.setRightAlignment(this.mainTable, 1); //Quantity column
 
         setButtons();
         sp = new JScrollPane(mainTable);

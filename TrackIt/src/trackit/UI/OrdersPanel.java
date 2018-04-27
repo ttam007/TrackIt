@@ -91,7 +91,6 @@ public class OrdersPanel
         mainTable = new JTable(mainTableModel);
         mainTable.setDefaultEditor(Object.class, null);
         mainTable.getTableHeader().setReorderingAllowed(false);
-        // Add action listener to JTable
         mainTable.getSelectionModel().addListSelectionListener((e) -> {
             //if the row is bigger than -1 than we need to enable the buttons
             if (mainTable.getSelectedRow() > -1) {
@@ -112,8 +111,10 @@ public class OrdersPanel
                 }
             }
         });
-
         mainTable.setBounds(30, 40, 200, 200);
+        Utilities.setRightAlignment(this.mainTable, 5); //Total Price column
+
+        //Other components
         sp = new JScrollPane(mainTable);
         add(sp, BorderLayout.CENTER);
 
