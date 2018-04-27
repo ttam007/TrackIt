@@ -187,7 +187,9 @@ public class AnInventoryItem
      */
     public static void remove(AnInventoryItem anObj)
             throws SQLException, Exception {
-        remove(anObj.getPrimaryKey());
+        if (anObj.isAlreadyInDatabase()) {
+            remove(anObj.getPrimaryKey());
+        }
     }
 
     /**
@@ -197,7 +199,7 @@ public class AnInventoryItem
      * @throws SQLException
      * @throws Exception
      */
-    public static void remove(Integer primaryKey)
+    private static void remove(Integer primaryKey)
             throws SQLException, Exception {
         HELPER.delete(primaryKey);
     }
@@ -216,11 +218,11 @@ public class AnInventoryItem
             java.util.Date aUtilDate = Calendar.getInstance().getTime();
             java.sql.Date aSQLDate = Utilities.convertToSQLDate(aUtilDate);
             ArrayList<AnInventoryItem> aList = loadAll();
-            for (AnInventoryItem anItem : aList) {
+            aList.forEach((anItem) -> {
                 if (anItem.getExpirationDate().before(aSQLDate)) {
                     returnList.add(anItem);
                 }
-            }
+            });
         } catch (SQLException exSQL) {
             //TODO: handle this
         } catch (Exception ex) {
@@ -233,10 +235,15 @@ public class AnInventoryItem
     @Override
     public void changeQuantity(int amountToChangeBy)
             throws NegativeAmountException {
-        if (this.quantity + amountToChangeBy < 0) {
+        if (this.quantity < (-amountToChangeBy)) {
             throw new NegativeAmountException();
         }
         this.quantity += amountToChangeBy;
+    }
+
+    @Override
+    public String toString() {
+        return this.getDescription();
     }
     // </editor-fold>
 }

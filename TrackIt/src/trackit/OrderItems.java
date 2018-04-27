@@ -23,9 +23,51 @@ public class OrderItems
             rows = AnOrderItem.loadAll();
             returnValue = true;
         } catch (SQLException exSQL) {
-            this.errorMessage = exSQL.getLocalizedMessage();
+            Utilities.setErrorMessage(exSQL);
         } catch (Exception ex) {
-            this.errorMessage = ex.getLocalizedMessage();
+            Utilities.setErrorMessage(ex);
+        }
+        return returnValue;
+    }
+
+    /**
+     * Loads an single object from the database into rows.
+     *
+     * @param primaryKey The primary key of the object to be loaded.
+     * @return True = The object was successfully retrieved; False = There was
+     * an error.
+     */
+    @Override
+    public boolean load(Integer primaryKey) {
+        boolean returnValue = false;
+        try {
+            rows.clear();
+            rows.add(AnOrderItem.load(primaryKey));
+            returnValue = true;
+        } catch (SQLException exSQL) {
+            Utilities.setErrorMessage(exSQL);
+        } catch (Exception ex) {
+            Utilities.setErrorMessage(ex);
+        }
+        return returnValue;
+    }
+
+    /**
+     * Loads all order items for the specified order.
+     *
+     * @param primaryKey The primary key of the order.
+     * @return True = The objects were successfully retrieved; False = There was
+     * an error.
+     */
+    public boolean loadByOrder(Integer primaryKey) {
+        boolean returnValue = false;
+        try {
+            rows = AnOrderItem.loadByOrder(primaryKey);
+            returnValue = true;
+        } catch (SQLException exSQL) {
+            Utilities.setErrorMessage(exSQL);
+        } catch (Exception ex) {
+            Utilities.setErrorMessage(ex);
         }
         return returnValue;
     }
@@ -45,9 +87,9 @@ public class OrderItems
             }
             returnValue = true;
         } catch (SQLException exSQL) {
-            this.errorMessage = exSQL.getLocalizedMessage();
+            Utilities.setErrorMessage(exSQL);
         } catch (Exception ex) {
-            this.errorMessage = ex.getLocalizedMessage();
+            Utilities.setErrorMessage(ex);
         }
         return returnValue;
     }
@@ -65,9 +107,9 @@ public class OrderItems
             AnOrderItem.save(anObj);
             returnValue = true;
         } catch (java.sql.SQLException exSQL) {
-            anObj.setErrorMessage(exSQL.getLocalizedMessage());
+            Utilities.setErrorMessage(exSQL);
         } catch (Exception ex) {
-            anObj.setErrorMessage(ex.getLocalizedMessage());
+            Utilities.setErrorMessage(ex);
         }
         return returnValue;
     }
@@ -75,20 +117,22 @@ public class OrderItems
     /**
      * Removes a row from the database.
      *
-     * @param primaryKey The primary key of the row to remove.
+     * @param anObj The object in the row to remove.
      * @return True = The row was successfully removed; False = There was an
      * error.
      */
     @Override
-    public boolean remove(Integer primaryKey) {
+    public boolean remove(AnOrderItem anObj) {
         boolean returnValue = false;
         try {
-            AnOrderItem.remove(primaryKey);
-            returnValue = true;
+            if (!this.hasForeignKeyIssue(anObj)) {
+                AnOrderItem.remove(anObj);
+                returnValue = true;
+            }
         } catch (SQLException exSQL) {
-            this.errorMessage = exSQL.getLocalizedMessage();
+            Utilities.setErrorMessage(exSQL);
         } catch (Exception ex) {
-            this.errorMessage = ex.getLocalizedMessage();
+            Utilities.setErrorMessage(ex);
         }
         return returnValue;
     }

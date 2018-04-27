@@ -2,7 +2,6 @@ package trackit;
 
 import java.sql.*;
 import java.util.ArrayList;
-import trackit.DAL.SQLHelperInventoryItem;
 
 /**
  * BAL Layer: Works with the Inventory tab.
@@ -11,24 +10,6 @@ import trackit.DAL.SQLHelperInventoryItem;
  */
 public class Inventory
         extends GridClass<AnInventoryItem> {
-
-    /**
-     * Pulls SQL info from database to load into JTable
-     *
-     * @return SQLHelperInventoryItem
-     */
-    public ArrayList<AnInventoryItem> getSQL() {
-        try {
-            System.out.println("\nSelectAll");
-            SQLHelperInventoryItem helper = new SQLHelperInventoryItem();
-            rows = helper.selectAll();
-        } catch (SQLException exSQL) {
-            System.out.println("SQL error = " + exSQL.getLocalizedMessage());
-        } catch (Exception ex) {
-            System.out.println("Generic error = " + ex.getLocalizedMessage());
-        }
-        return rows;
-    }
 
     /**
      * Loads all rows from the database to the grid.
@@ -43,9 +24,31 @@ public class Inventory
             rows = AnInventoryItem.loadAll();
             returnValue = true;
         } catch (SQLException exSQL) {
-            this.errorMessage = exSQL.getLocalizedMessage();
+            Utilities.setErrorMessage(exSQL);
         } catch (Exception ex) {
-            this.errorMessage = ex.getLocalizedMessage();
+            Utilities.setErrorMessage(ex);
+        }
+        return returnValue;
+    }
+
+    /**
+     * Loads an single object from the database into rows.
+     *
+     * @param primaryKey The primary key of the object to be loaded.
+     * @return True = The object was successfully retrieved; False = There was
+     * an error.
+     */
+    @Override
+    public boolean load(Integer primaryKey) {
+        boolean returnValue = false;
+        try {
+            rows.clear();
+            rows.add(AnInventoryItem.load(primaryKey));
+            returnValue = true;
+        } catch (SQLException exSQL) {
+            Utilities.setErrorMessage(exSQL);
+        } catch (Exception ex) {
+            Utilities.setErrorMessage(ex);
         }
         return returnValue;
     }
@@ -65,9 +68,9 @@ public class Inventory
             }
             returnValue = true;
         } catch (SQLException exSQL) {
-            this.errorMessage = exSQL.getLocalizedMessage();
+            Utilities.setErrorMessage(exSQL);
         } catch (Exception ex) {
-            this.errorMessage = ex.getLocalizedMessage();
+            Utilities.setErrorMessage(ex);
         }
         return returnValue;
     }
@@ -85,30 +88,65 @@ public class Inventory
             AnInventoryItem.save(anObj);
             returnValue = true;
         } catch (java.sql.SQLException exSQL) {
-            anObj.setErrorMessage(exSQL.getLocalizedMessage());
+            Utilities.setErrorMessage(exSQL);
         } catch (Exception ex) {
-            anObj.setErrorMessage(ex.getLocalizedMessage());
+            Utilities.setErrorMessage(ex);
         }
+        return returnValue;
+    }
+
+    /**
+     * Tests the specified object to see if it will have any issues being
+     * deleted from the database.
+     *
+     * @param anObj The object to test if it can be safely deleted from the
+     * database.
+     * @return True = An error will be thrown if attempting to delete the
+     * specified object from the database; False = No issues should occur if
+     * deleting the specified object from the database.
+     */
+    @Override
+    protected boolean hasForeignKeyIssue(AnInventoryItem anObj) {
+        boolean returnValue = false;
+
+        ArrayList<AnOrderItem> orderItems = new ArrayList<>();
+        OrderItems bllOrderItems = new OrderItems();
+        if (bllOrderItems.load()) {
+            orderItems = bllOrderItems.getList();
+        }
+
+        for (AnOrderItem anOrderItem : orderItems) {
+            if (anOrderItem.getItemId().equals(anObj.getPrimaryKey())) {
+                Utilities.setErrorMessage(new ForeignKeyException(
+                        anObj.getDescription(), "Order Item",
+                        anOrderItem.getDescription(), true));
+                returnValue = true;
+                break;
+            }
+        }
+
         return returnValue;
     }
 
     /**
      * Removes a row from the database.
      *
-     * @param primaryKey The primary key of the row to remove.
+     * @param anObj The object in the row to remove.
      * @return True = The row was successfully removed; False = There was an
      * error.
      */
     @Override
-    public boolean remove(Integer primaryKey) {
+    public boolean remove(AnInventoryItem anObj) {
         boolean returnValue = false;
         try {
-            AnInventoryItem.remove(primaryKey);
-            returnValue = true;
+            if (!this.hasForeignKeyIssue(anObj)) {
+                AnInventoryItem.remove(anObj);
+                returnValue = true;
+            }
         } catch (SQLException exSQL) {
-            this.errorMessage = exSQL.getLocalizedMessage();
+            Utilities.setErrorMessage(exSQL);
         } catch (Exception ex) {
-            this.errorMessage = ex.getLocalizedMessage();
+            Utilities.setErrorMessage(ex);
         }
         return returnValue;
     }

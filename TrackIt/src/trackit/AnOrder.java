@@ -31,10 +31,26 @@ public class AnOrder
      */
     public AnOrder() {
         this.primaryKey = SQLHelper.INVALID_PRIMARY_KEY;
+
+        setDefaultOrderedDate();
     }
 
     // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Private Methods">
+    /**
+     * Sets the default Ordered Date when creating a new instance.
+     */
+    private void setDefaultOrderedDate() {
+        Calendar cal = Calendar.getInstance();
+        try {
+            this.setDateOrdered(cal.getTime());
+        } catch (SQLException exSQL) {
+            //leave DateOrdered as null;
+        }
+    }
+    // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Setters & Getters">
+
     @Override
     public void setPrimaryKey(Integer aPrimaryKey)
             throws SQLException {
@@ -49,6 +65,10 @@ public class AnOrder
      */
     public void setDescription(String aDescription)
             throws SQLException {
+        if (HELPER.tryNullCheck(SQLHelperOrder.COLUMN_DESCRIPTION, aDescription)
+                && aDescription.trim().equals("")) {
+            throw new NonEmptyStringException("Description");
+        }
         this.description = HELPER.doNullCheck(SQLHelperOrder.COLUMN_DESCRIPTION, aDescription);
     }
 
@@ -102,7 +122,7 @@ public class AnOrder
     public void setOrderStatus(OrderStatusType anOrderStatus)
             throws SQLException {
         //Calls the overloaded method instead of directly setting so the null check can occur.
-        setOrderStatus(anOrderStatus.getText());
+        setOrderStatus(anOrderStatus.toString());
     }
 
     /**
@@ -264,7 +284,9 @@ public class AnOrder
      */
     public static void remove(AnOrder anObj)
             throws SQLException, Exception {
-        remove(anObj.getPrimaryKey());
+        if (anObj.isAlreadyInDatabase()) {
+            remove(anObj.getPrimaryKey());
+        }
     }
 
     /**
@@ -274,9 +296,14 @@ public class AnOrder
      * @throws SQLException
      * @throws Exception
      */
-    public static void remove(Integer primaryKey)
+    private static void remove(Integer primaryKey)
             throws SQLException, Exception {
         HELPER.delete(primaryKey);
+    }
+
+    @Override
+    public String toString() {
+        return this.getDescription();
     }
     // </editor-fold>
 }

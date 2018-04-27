@@ -18,7 +18,7 @@ public abstract class AnItem
     /**
      *
      */
-    protected String description = "New Item";
+    protected String description = "";
 
     /**
      *
@@ -56,12 +56,16 @@ public abstract class AnItem
     /**
      * This can not be null.
      *
-     * @param description
+     * @param aDescription
      * @throws SQLException
      */
-    public void setDescription(String description)
+    public void setDescription(String aDescription)
             throws SQLException {
-        this.description = HELPER.doNullCheck(SQLHelperItem.COLUMN_DESCRIPTION, description);
+        if (HELPER.tryNullCheck(SQLHelperItem.COLUMN_DESCRIPTION, aDescription)
+                && aDescription.trim().equals("")) {
+            throw new NonEmptyStringException("Description");
+        }
+        this.description = HELPER.doNullCheck(SQLHelperItem.COLUMN_DESCRIPTION, aDescription);
     }
 
     /**
@@ -134,7 +138,7 @@ public abstract class AnItem
     public void setItemStatus(ItemStatusType itemStatus)
             throws SQLException {
         //Calls the overloaded method instead of directly setting so the null check can occur.
-        setItemStatus(itemStatus.getText());
+        setItemStatus(itemStatus.toString());
     }
 
     /**
