@@ -118,6 +118,28 @@ public class SQLHelperInventoryItem
         }
     }
 
+    /**
+     * Gets the inventory item from the database that matches the specified
+     * order item.
+     *
+     * @param primaryKey The primary key of the order item.
+     * @return An inventory items that matches the specified order item.
+     * @throws SQLException
+     * @throws Exception
+     */
+    public AnInventoryItem selectByOrderItem(Integer primaryKey)
+            throws SQLException, Exception {
+        HashMap<Integer, SprocParameter> params = new HashMap<>();
+        params.put(0, new SprocParameterInteger(SQLHelperOrderItem.COLUMN_PK, primaryKey.toString(), ParameterDirection.IN));
+
+        ArrayList<AnInventoryItem> results = execSproc("sp_InventoryItems_SelectByOrderItem", params);
+        if (results.isEmpty()) {
+            return null;
+        } else {
+            return results.get(0);
+        }
+    }
+
     @Override
     public Integer insert(AnInventoryItem anObject)
             throws SQLException, Exception {

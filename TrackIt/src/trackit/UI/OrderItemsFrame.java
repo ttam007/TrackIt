@@ -341,8 +341,8 @@ public class OrderItemsFrame
         return returnValue;
     }
 
-private void checkInAction(){
-    int selectedRow = this.mainTable.getSelectedRow();
+    private void checkInAction() {
+        int selectedRow = this.mainTable.getSelectedRow();
         if (selectedRow < 0) {
             JOptionPane.showMessageDialog(this, "Select item to check in");
         } else {
@@ -350,7 +350,7 @@ private void checkInAction(){
             try {
                 AnInventoryItem anInventoryItem = AnInventoryItem.load(anOrderItem.getPrimaryKey());
                 anInventoryItem.changeQuantity(anOrderItem.getQuantityOrdered());
-                
+
                 JOptionPane.showMessageDialog(this, "Item Checked In");
             } catch (Exception ex) {
                 Utilities.setErrorMessage(ex);
@@ -375,16 +375,6 @@ private void checkInAction(){
                 JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
                         Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
             }
-        }
-    }
-
-    private void removeItem(int row) {
-        AnOrderItem anOrderItem = this.orderItems.get(row);
-        if (this.bllOrderItems.remove(anOrderItem)) {
-            this.refreshGrid(true);
-        } else {
-            JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
-                    Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
         }
     }
 

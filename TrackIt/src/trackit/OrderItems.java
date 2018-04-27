@@ -136,4 +136,18 @@ public class OrderItems
         }
         return returnValue;
     }
+
+    /**
+     * Gets the sum of the extended price field for all items in the current
+     * list.
+     *
+     * @return The sum of the extended price.
+     */
+    public Double getSumOfExtendedPrice() {
+        Double sum = 0.00;
+        for (AnOrderItem anItem : this.getList()) {
+            sum += anItem.getExtendedPrice();
+        }
+        return sum;
+    }
 }

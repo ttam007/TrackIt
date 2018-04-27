@@ -105,3 +105,7 @@ CALL sp_OrderItems_SelectAll();
 
 CALL sp_OrderItems_Delete (null);
 CALL sp_OrderItems_SelectAll();
+
+CALL sp_OrderItems_SelectByOrder(2);
+
+CALL sp_InventoryItems_SelectByOrderItem(2);
