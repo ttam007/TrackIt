@@ -172,7 +172,11 @@ public class InventoryItemsPanel
         if (this.inventoryItems != null) {
             int counter = 0;
             for (AnInventoryItem anInventoryItem : aList) {
-                Object[] data = {anInventoryItem.getDescription(), anInventoryItem.getQuantity(), anInventoryItem.getSizeUnit(), anInventoryItem.getSku(), anInventoryItem.getExpirationDate(), anInventoryItem.getItemStatus()};
+                //{"Item Name", "Qty", "Unit", "SKU", "Expiration", "Status"};
+                Object[] data = {anInventoryItem.getDescription(),
+                    Utilities.formatAsInteger(anInventoryItem.getQuantity()),
+                    anInventoryItem.getSizeUnit(), anInventoryItem.getSku(),
+                    anInventoryItem.getExpirationDate(), anInventoryItem.getItemStatus()};
                 mainTableModel.addRow(data);
                 this.inventoryItems.put(counter, anInventoryItem);
                 counter++;

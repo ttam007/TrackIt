@@ -399,8 +399,10 @@ public class OrderItemsFrame
             int counter = 0;
             for (AnOrderItem anOrderItem : aList) {
                 //{"Item Name", "Unit", "SKU", "Quantity", "Price", "Ext Price"};
-                Object[] data = {anOrderItem.getDescription(), anOrderItem.getSizeUnit(),
-                    anOrderItem.getSku(), anOrderItem.getQuantityOrdered(), anOrderItem.getQuantityCheckedIn(),
+                Object[] data = {anOrderItem.getDescription(),
+                    anOrderItem.getSizeUnit(), anOrderItem.getSku(),
+                    Utilities.formatAsInteger(anOrderItem.getQuantityOrdered()),
+                    Utilities.formatAsInteger(anOrderItem.getQuantityCheckedIn()),
                     Utilities.formatAsCurrency(anOrderItem.getPrice()),
                     Utilities.formatAsCurrency(anOrderItem.getExtendedPrice())};
                 mainTableModel.addRow(data);

@@ -35,8 +35,7 @@ public class OrderItemDetailsDialog
     private JComboBox<AnInventoryItem> cboItemName;
     JPanel pnlCenter;
     JLabel lblName, lblQuantity, lblPrice, lblStatus, lblExtPrice;
-    JTextField tfExtPrice;
-    JFormattedTextField tfQuantityOrdered, tfPrice;
+    JFormattedTextField tfQuantityOrdered, tfPrice, tfExtPrice;
     JButton btnOK, btnCancel;
     GridBagConstraints gbc;
 
@@ -155,7 +154,9 @@ public class OrderItemDetailsDialog
 
         //Price
         tfPrice = new JFormattedTextField(Utilities.getCurrencyFormatter());
+        tfPrice.setInputVerifier(new Utilities.DoubleVerifier());
         tfPrice.addFocusListener(new NumericFieldsFocusAdapter());
+        tfPrice.setColumns(7);
         gbc.gridx = 1;
         gbc.gridy = 2;
         gbc.gridwidth = 3;
@@ -184,7 +185,9 @@ public class OrderItemDetailsDialog
         add(lblExtPrice, gbc);
 
         //Extended Price
-        tfExtPrice = new JTextField(7);
+        tfExtPrice = new JFormattedTextField(Utilities.getCurrencyFormatter());
+        tfExtPrice.setInputVerifier(new Utilities.DoubleVerifier());
+        tfExtPrice.setColumns(7);
         tfExtPrice.setEnabled(false);
         gbc.gridx = 1;
         gbc.gridy = 3;
@@ -221,9 +224,9 @@ public class OrderItemDetailsDialog
     private void populateComponents() {
         this.cboItemName.getEditor().setItem(this.anOrderItem.getDescription());
         this.cboItemStatus.getEditor().setItem(this.anOrderItem.getItemStatus());
-        this.tfQuantityOrdered.setText(this.anOrderItem.getQuantityOrdered().toString());
-        this.tfPrice.setText(Utilities.formatAsCurrency(this.anOrderItem.getPrice()));
-        this.tfExtPrice.setText(Utilities.formatAsCurrency(this.anOrderItem.getExtendedPrice()));
+        this.tfQuantityOrdered.setValue(this.anOrderItem.getQuantityOrdered());
+        this.tfPrice.setValue(this.anOrderItem.getPrice());
+        this.tfExtPrice.setValue(this.anOrderItem.getExtendedPrice());
     }
 
     /**
@@ -236,8 +239,8 @@ public class OrderItemDetailsDialog
             AnInventoryItem anInventoryItem = (AnInventoryItem) this.cboItemName.getModel().getSelectedItem();
             this.anOrderItem.setDescription(anInventoryItem.getDescription());
             this.anOrderItem.setItemId(anInventoryItem.getItemId());
-            this.anOrderItem.setQuantityOrdered(Integer.parseInt(this.tfQuantityOrdered.getText()));
-            this.anOrderItem.setPrice(Double.parseDouble(this.tfPrice.getText()));
+            this.anOrderItem.setQuantityOrdered((Integer) this.tfQuantityOrdered.getValue());
+            this.anOrderItem.setPrice((Double) this.tfPrice.getValue());
             returnValue = true;
         } catch (java.sql.SQLException | RuntimeException ex) {
             Utilities.setErrorMessage(ex);
@@ -342,28 +345,19 @@ public class OrderItemDetailsDialog
     private class NumericFieldsFocusAdapter extends FocusAdapter {
 
         /**
-         * Selects the full text when focus goes to the text box.
-         *
-         * @param e
-         */
-        @Override
-        public void focusGained(FocusEvent e) {
-            JFormattedTextField txtBox = (JFormattedTextField) e.getSource();
-            txtBox.selectAll();
-        }
-
-        /**
          * Updates the extended price.
          *
          * @param e
          */
         @Override
         public void focusLost(FocusEvent e) {
-            Integer quantity = Integer.parseInt(tfQuantityOrdered.getText());
-            Double price = Double.parseDouble(tfPrice.getText());
+            super.focusLost(e);
+
+            Integer quantity = (Integer) tfQuantityOrdered.getValue();
+            Double price = (Double) tfPrice.getValue();
             Double extendedPrice = quantity * price;
-            tfExtPrice.setText(Utilities.formatAsCurrency(extendedPrice));
+            tfExtPrice.setValue(extendedPrice);
         }
     }
-// </editor-fold>
+    // </editor-fold>
 }
