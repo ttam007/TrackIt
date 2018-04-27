@@ -68,7 +68,7 @@ public class SQLHelperInventoryItem
         ArrayList<AnInventoryItem> results = new ArrayList<>();
 
         String sql = buildSprocSyntax(sprocName, parameters.size());
-        System.out.println("execSproc's sql = " + sql);
+        //System.out.println("execSproc's sql = " + sql);
 
         try (Connection myConn = sqlConn.getConnection();
                 CallableStatement stmt = myConn.prepareCall(sql)) {
@@ -130,7 +130,7 @@ public class SQLHelperInventoryItem
         params.put(3, new SprocParameterVarchar(SQLHelperItem.COLUMN_DESCRIPTION, anObject.getDescription(), ParameterDirection.IN));
         params.put(4, new SprocParameterVarchar(SQLHelperItem.COLUMN_SKU, anObject.getSku(), ParameterDirection.IN));
         params.put(5, new SprocParameterVarchar(SQLHelperItem.COLUMN_SIZEUNIT, anObject.getSizeUnit(), ParameterDirection.IN));
-        params.put(6, new SprocParameterVarchar(SQLHelperItem.COLUMN_ITEMSTATUS, anObject.getItemStatus().getText(), ParameterDirection.IN));
+        params.put(6, new SprocParameterVarchar(SQLHelperItem.COLUMN_ITEMSTATUS, anObject.getItemStatus().toString(), ParameterDirection.IN));
 
         execSproc("sp_InventoryItems_Insert", params);
         Integer primaryKey = Integer.parseInt(outParam.getValue());
@@ -149,7 +149,7 @@ public class SQLHelperInventoryItem
         params.put(3, new SprocParameterVarchar(SQLHelperItem.COLUMN_DESCRIPTION, anObject.getDescription(), ParameterDirection.IN));
         params.put(4, new SprocParameterVarchar(SQLHelperItem.COLUMN_SKU, anObject.getSku(), ParameterDirection.IN));
         params.put(5, new SprocParameterVarchar(SQLHelperItem.COLUMN_SIZEUNIT, anObject.getSizeUnit(), ParameterDirection.IN));
-        params.put(6, new SprocParameterVarchar(SQLHelperItem.COLUMN_ITEMSTATUS, anObject.getItemStatus().getText(), ParameterDirection.IN));
+        params.put(6, new SprocParameterVarchar(SQLHelperItem.COLUMN_ITEMSTATUS, anObject.getItemStatus().toString(), ParameterDirection.IN));
 
         execSproc("sp_InventoryItems_Update", params);
     }

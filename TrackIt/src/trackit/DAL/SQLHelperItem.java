@@ -48,6 +48,23 @@ public class SQLHelperItem {
      *
      * @param columnName The column to check.
      * @param aValue The value to check.
+     * @return True = either column allows nulls or value is not null; False =
+     * column doesn't allow nulls and value is null.
+     */
+    public boolean tryNullCheck(String columnName, String aValue) {
+        try {
+            doNullCheck(columnName, aValue);
+            return true;
+        } catch (SQLException exSQL) {
+            return false;
+        }
+    }
+
+    /**
+     * Checks to see if any column that is not nullable has a null value.
+     *
+     * @param columnName The column to check.
+     * @param aValue The value to check.
      * @return Either the parameter aValue or throws NonNullableValueException.
      * @throws SQLException When aValue is NULL and NULL is not allowed.
      */
