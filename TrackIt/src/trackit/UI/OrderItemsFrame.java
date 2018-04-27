@@ -28,8 +28,6 @@ public class OrderItemsFrame
     //For editing the Order.
     private final boolean isCreateMode;
     private final AnOrder anOrder;
-    private AnOrderItem anOrderItem;
-    private AnInventoryItem anInventoryItem;
     private DialogResultType dialogResult = DialogResultType.NONE;
     private final Orders bllOrders = new Orders();
     private final Suppliers bllSuppliers = new Suppliers();
@@ -220,7 +218,6 @@ public class OrderItemsFrame
         btnCheckIn.addActionListener((ActionEvent e) -> {
             int selectedRow = this.mainTable.getSelectedRow();
             checkInAction(selectedRow);
-            JOptionPane.showMessageDialog(this, "Item Checked In");
             mainTable.clearSelection();
         });
 
@@ -232,13 +229,10 @@ public class OrderItemsFrame
         btnCheckInAll.addActionListener((ActionEvent e) -> {
             int tableRows = mainTable.getRowCount();
             int counter = 0;
-            while (counter <= tableRows){
+            while (counter < tableRows){
                 checkInAction(counter);
                 counter++;   
-        }
-            
-            
-            
+        } 
             JOptionPane.showMessageDialog(this, "All Items Checked In");
         });
 
@@ -371,15 +365,14 @@ public class OrderItemsFrame
             AnOrderItem anOrderItem = this.orderItems.get(row);
             try {
                 AnInventoryItem anInventoryItem = AnInventoryItem.loadByOrderItem(anOrderItem.getPrimaryKey());
-                int i = anOrderItem.getQuantityOrdered();
-                int j = anOrderItem.getQuantityCheckedIn();
-                if (i > j) {                
+                if (anOrderItem.getQuantityOrdered() > anOrderItem.getQuantityCheckedIn()) {                
                     anInventoryItem.changeQuantity(anOrderItem.getQuantityOrdered());
                     anOrderItem.setQuantityCheckedIn(anOrderItem.getQuantityOrdered());
                     anInventoryItem.save(anInventoryItem);
                     anOrderItem.save(anOrderItem);
                     returnValue = true;
                     this.refreshGrid(true);
+                    JOptionPane.showMessageDialog(this, "Item Checked In");
                 } else {
                     JOptionPane.showMessageDialog(this, CHECKOUT_MSG,
                         Utilities.ERROR_MSG_CAPTION, JOptionPane.INFORMATION_MESSAGE);
