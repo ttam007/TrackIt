@@ -105,7 +105,7 @@ public class LoginFrame
         gbc.gridx = 2;
         gbc.gridy = 0;
         add(lblTitle, gbc);
-
+        
         // Item Name Label Initialized
         lblUsername = new JLabel("Username:");
         gbc.gridx = 0;
@@ -125,13 +125,14 @@ public class LoginFrame
         gbc.gridy = 2;
         gbc.gridwidth = 1;
         add(lblPassword, gbc);
-
+        
         pfPassword = new JPasswordField(25);
         gbc.gridx = 1;
         gbc.gridy = 2;
         gbc.gridwidth = 5;
         add(pfPassword, gbc);
-
+        
+        
 
         // Init Ok Button
         btnLogin = new JButton(Utilities.BUTTON_LOGIN);
