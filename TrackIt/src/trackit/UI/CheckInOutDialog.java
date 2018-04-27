@@ -2,6 +2,9 @@ package trackit.UI;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import trackit.*;
 
@@ -21,7 +24,10 @@ public class CheckInOutDialog
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
 
-    private final AnInventoryItem anItem = null;
+    private final AnInventoryItem anInventoryItem;
+    private Inventory bllInventory = new Inventory();
+    private DialogResultType dialogResult = DialogResultType.NONE;
+    private final String CHECKOUT_MSG = new String("Check out quantity must be less than total quantity.");
 
     //private final InventoryItem testItem = new InventoryItem();
     // </editor-fold>
@@ -29,19 +35,22 @@ public class CheckInOutDialog
     JPanel pnlMain;
     JButton btnOK, btnCancel;
     JRadioButton inButton, outButton;
-    JComboBox<String> itemComboBox;
     JLabel itemNameLabel, qtyLabel;
-    JTextField qtyTextField;
-    String[] itemStrings = {"soap", "shampoo", "conditioner", "paper towels", "mouthwash"};
+    JTextField itemTextField;
+    JFormattedTextField qtyTextField;
     GridBagConstraints gbc;
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     /**
      * Check In/Out UI
+     *
+     * @param anInventoryItem The item to be checked in/out.
      */
-    public CheckInOutDialog() {
+    public CheckInOutDialog(AnInventoryItem anInventoryItem) {
+        this.anInventoryItem = anInventoryItem;
         initializeComponents();
+        populateComponents();
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
@@ -57,12 +66,12 @@ public class CheckInOutDialog
         this.setTitle(Utilities.getWindowCaption(WINDOW_NAME));
         this.setSize(dimFrame);
         this.setPreferredSize(dimFrame);
-        //this.setModal(true);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new CloseQuery());
         this.getRootPane().setDefaultButton(btnOK);
+        this.setModal(true);
 
         gbc = new GridBagConstraints();
         setLayout(new GridBagLayout());
@@ -90,11 +99,12 @@ public class CheckInOutDialog
         add(itemNameLabel, gbc);
 
         // Supplier Name Text Field
-        itemComboBox = new JComboBox<>(itemStrings);
+        itemTextField = new JTextField();
+        itemTextField.setEditable(false);
         gbc.gridx = 1;
         gbc.gridy = 1;
         gbc.gridwidth = 5;
-        add(itemComboBox, gbc);
+        add(itemTextField, gbc);
 
         // Website Address label
         qtyLabel = new JLabel("Quantity: ");
@@ -104,14 +114,14 @@ public class CheckInOutDialog
         add(qtyLabel, gbc);
 
         //Website Address Text Field
-        qtyTextField = new JTextField(7);
+        qtyTextField = new JFormattedTextField(Utilities.getIntegerFormatter());
         gbc.gridx = 1;
         gbc.gridy = 2;
         gbc.gridwidth = 5;
         add(qtyTextField, gbc);
 
         // Init Ok Button
-        btnOK = new JButton("Ok");
+        btnOK = new JButton(Utilities.BUTTON_OK);
         gbc.gridx = 3;
         gbc.gridy = 4;
         gbc.gridwidth = 1;
@@ -121,7 +131,7 @@ public class CheckInOutDialog
         });
 
         //Cancel
-        btnCancel = new JButton("Cancel");
+        btnCancel = new JButton(Utilities.BUTTON_CANCEL);
         gbc.gridx = 4;
         gbc.gridy = 4;
         gbc.gridwidth = 1;
@@ -141,14 +151,17 @@ public class CheckInOutDialog
      *
      */
     private void saveAction() {
-        JOptionPane.showMessageDialog(null, "Successfully Updated");
-        //TODO:  implement save.
-        /*if (successfullySaved) {
+        if (checkInItem()) {
+            if (this.bllInventory.save(this.anInventoryItem)) {
+                this.dialogResult = DialogResultType.OK;
+                this.setVisible(false);
                 this.dispose();
             } else {
-               //TODO:  catch errors and display them.  Do not exit dialog if an error occurs.
-            }*/
-        this.dispose();
+                this.dialogResult = DialogResultType.CANCEL;
+                JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
+                        Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 
     /**
@@ -161,15 +174,40 @@ public class CheckInOutDialog
         //TODO:  close window and return to prior window.
         this.dispose();
     }
+
+    private void populateComponents() {
+        this.itemTextField.setText(this.anInventoryItem.getDescription());
+    }
+
+    private boolean checkInItem() {
+        boolean returnValue = false;
+        int oldQuant = this.anInventoryItem.getQuantity();
+        int checkQuant = Utilities.parseFormattedInteger(this.qtyTextField.getText());
+
+        if (inButton.isSelected()) {
+            this.anInventoryItem.changeQuantity(Utilities.parseFormattedInteger(this.qtyTextField.getText()));
+        } else if (outButton.isSelected()) {
+            if (checkQuant > oldQuant) {
+                JOptionPane.showMessageDialog(this, CHECKOUT_MSG,
+                        Utilities.ERROR_MSG_CAPTION, JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                this.anInventoryItem.changeQuantity(-(Utilities.parseFormattedInteger(this.qtyTextField.getText())));
+            }
+        }
+        returnValue = true;
+        return returnValue;
+    }
+
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
-
     /**
      * Displays the frame.
+     *
+     * @return dialogResult
      */
-    public void display() {
-        System.out.println(String.format("Displaying %s...", WINDOW_NAME));
+    public DialogResultType display() {
         setVisible(true);
+        return this.dialogResult;
     }
 
     // </editor-fold>

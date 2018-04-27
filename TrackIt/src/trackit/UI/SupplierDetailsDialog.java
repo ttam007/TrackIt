@@ -103,7 +103,6 @@ public class SupplierDetailsDialog
         setLayout(new GridBagLayout());
         gbc.insets = new Insets(2, 2, 5, 0);
         gbc.anchor = GridBagConstraints.LINE_START;
-        //gbc.fill = GridBagConstraints.HORIZONTAL;
 
         // Supplier Name Label 
         lblName = new JLabel("Supplier Name: ");
@@ -133,7 +132,7 @@ public class SupplierDetailsDialog
         add(tfAddress, gbc);
 
         // Init Ok Button
-        btnOK = new JButton("OK");
+        btnOK = new JButton(Utilities.BUTTON_OK);
         gbc.gridx = 3;
         gbc.gridy = 4;
         gbc.gridwidth = 1;
@@ -143,7 +142,7 @@ public class SupplierDetailsDialog
         });
 
         //Cancel
-        btnCancel = new JButton("Cancel");
+        btnCancel = new JButton(Utilities.BUTTON_CANCEL);
         gbc.gridx = 4;
         gbc.gridy = 4;
         gbc.gridwidth = 1;
@@ -174,10 +173,12 @@ public class SupplierDetailsDialog
             this.aSupplier.setNickname(this.tfName.getText());
             this.aSupplier.setUrl(this.tfAddress.getText());
             returnValue = true;
-        } catch (java.sql.SQLException exSQL) {
-            JOptionPane.showMessageDialog(this, this.aSupplier.getErrorMessage(),
+        } catch (java.sql.SQLException | RuntimeException ex) {
+            Utilities.setErrorMessage(ex);
+            JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
                     Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
         }
+
         return returnValue;
     }
 
@@ -189,12 +190,11 @@ public class SupplierDetailsDialog
         if (populateObject()) {
             if (this.bll.save(this.aSupplier)) {
                 this.dialogResult = DialogResultType.OK;
-                JOptionPane.showMessageDialog(null, "Successfully Saved.");
                 this.setVisible(false);
                 this.dispose();
             } else {
                 this.dialogResult = DialogResultType.CANCEL;
-                JOptionPane.showMessageDialog(this, this.bll.getErrorMessage(),
+                JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
                         Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -204,7 +204,6 @@ public class SupplierDetailsDialog
      * Handles the cancel action.
      */
     private void cancelAction() {
-        JOptionPane.showMessageDialog(null, "Change Cancelled");
         this.dialogResult = DialogResultType.CANCEL;
         this.setVisible(false);
         this.dispose();

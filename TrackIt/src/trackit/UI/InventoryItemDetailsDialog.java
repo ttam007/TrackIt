@@ -30,8 +30,9 @@ public class InventoryItemDetailsDialog
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
-    private JComboBox<String> statusField;
-    private JTextField tfSku, tfQuantity, tfSizeUnit, tfDescription;
+    private JComboBox<ItemStatusType> cboItemStatus;
+    private JTextField tfSku, tfSizeUnit, tfDescription;
+    private JFormattedTextField tfQuantity;
     private JLabel sku, statusLabel, unit, expDateLbl, quantity, itemNameLabel;
     private JButton btnOK, btnCancel;
     private GridBagConstraints gbc;
@@ -91,8 +92,8 @@ public class InventoryItemDetailsDialog
      */
     private void initializeComponents() {
         //Setup main frame
-        int frameWidth = 500;// Originally 640
-        int frameHeight = 250;//Originally 400.
+        int frameWidth = 500;
+        int frameHeight = 250;
         Dimension dimFrame = new Dimension(frameWidth, frameHeight);
         this.setTitle(Utilities.getWindowCaption(WINDOW_NAME));
         this.setPreferredSize(dimFrame);
@@ -144,7 +145,7 @@ public class InventoryItemDetailsDialog
         gbc.gridwidth = 1;
         add(quantity, gbc);
         // Field
-        tfQuantity = new JTextField(7);
+        tfQuantity = new JFormattedTextField(Utilities.getIntegerFormatter());
         tfQuantity.setEditable(this.isCreateMode);
         gbc.gridx = 1;
         gbc.gridy = 2;
@@ -183,16 +184,16 @@ public class InventoryItemDetailsDialog
         gbc.gridy = 3;
         gbc.gridwidth = 1;
         add(statusLabel, gbc);
-        //Text Field
-        statusField = new JComboBox<>(ItemStatusType.getTextForAll());
 
+        //Text Field
+        cboItemStatus = new JComboBox<>(ItemStatusType.values());
         gbc.gridx = 5;
         gbc.gridy = 3;
         gbc.gridwidth = 1;
-        add(statusField, gbc);
+        add(cboItemStatus, gbc);
 
         // Init Ok Button
-        btnOK = new JButton("Ok");
+        btnOK = new JButton(Utilities.BUTTON_OK);
         gbc.gridx = 3;
         gbc.gridy = 4;
         gbc.gridwidth = 1;
@@ -202,7 +203,7 @@ public class InventoryItemDetailsDialog
         });
 
         //Cancel
-        btnCancel = new JButton("Cancel");
+        btnCancel = new JButton(Utilities.BUTTON_CANCEL);
         gbc.gridx = 4;
         gbc.gridy = 4;
         gbc.gridwidth = 1;
@@ -222,7 +223,7 @@ public class InventoryItemDetailsDialog
         this.tfSku.setText(this.anInventoryItem.getSku());
         this.tfSizeUnit.setText(this.anInventoryItem.getSizeUnit());
         this.tfQuantity.setText(this.anInventoryItem.getQuantity().toString());
-        this.statusField.getEditor().setItem(this.anInventoryItem.getItemStatus().getText());
+        this.cboItemStatus.getModel().setSelectedItem(this.anInventoryItem.getItemStatus());
         Utilities.setDatePickersDate(this.expDatePicker, this.anInventoryItem.getExpirationDate());
     }
 
@@ -235,14 +236,15 @@ public class InventoryItemDetailsDialog
         try {
             this.anInventoryItem.setDescription(this.tfDescription.getText());
             this.anInventoryItem.setSku(this.tfSku.getText());
-            this.anInventoryItem.setQuantity(Integer.parseInt(this.tfQuantity.getText()));
             this.anInventoryItem.setSizeUnit(this.tfSizeUnit.getText());
-            this.anInventoryItem.setItemStatus(this.statusField.getSelectedItem().toString());
+            this.anInventoryItem.setQuantity(Utilities.parseFormattedInteger(this.tfQuantity.getText()));
+            this.anInventoryItem.setItemStatus((ItemStatusType) this.cboItemStatus.getModel().getSelectedItem());
             java.util.Date expDate = (Date) expDatePicker.getModel().getValue();
             this.anInventoryItem.setExpirationDate(expDate);
             returnValue = true;
-        } catch (java.sql.SQLException exSQL) {
-            JOptionPane.showMessageDialog(this, this.anInventoryItem.getErrorMessage(),
+        } catch (java.sql.SQLException | RuntimeException ex) {
+            Utilities.setErrorMessage(ex);
+            JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
                     Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
         }
         return returnValue;
@@ -256,12 +258,11 @@ public class InventoryItemDetailsDialog
         if (populateObject()) {
             if (this.bll.save(this.anInventoryItem)) {
                 this.dialogResult = DialogResultType.OK;
-                //JOptionPane.showMessageDialog(null, "Successfully Saved.");
                 this.setVisible(false);
                 this.dispose();
             } else {
                 this.dialogResult = DialogResultType.CANCEL;
-                JOptionPane.showMessageDialog(this, this.bll.getErrorMessage(),
+                JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
                         Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -271,7 +272,6 @@ public class InventoryItemDetailsDialog
      * Handles the cancel action.
      */
     private void cancelAction() {
-        //JOptionPane.showMessageDialog(null, "Change Cancelled");
         this.dialogResult = DialogResultType.CANCEL;
         this.setVisible(false);
         this.dispose();
