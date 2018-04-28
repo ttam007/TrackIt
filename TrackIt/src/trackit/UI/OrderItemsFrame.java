@@ -238,6 +238,8 @@ public class OrderItemsFrame
             JOptionPane.showMessageDialog(this, "All Items Checked In");
         });
 
+        btnCheckIn.setPreferredSize(btnCheckInAll.getPreferredSize());
+        
         topBox.add(pnlTopBpx);
         add(topBox, BorderLayout.NORTH);
 
