@@ -210,7 +210,12 @@ public class Utilities {
         return new DefaultFormatterFactory(defaultFormatter, displayFormatter, editFormatter);
     }
 
-    
+
+    /**
+     *
+     * @param aTable
+     * @param columnIndex
+     */
 
     public static void setRightAlignment(JTable aTable, int columnIndex) {
         DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
@@ -219,6 +224,13 @@ public class Utilities {
         aTableColumn.setCellRenderer(rightRenderer);
     }
     
+
+    /**
+     *
+     * @param aTable
+     * @param columnIndex
+     */
+
     public static void setCenterAlignment(JTable aTable, int columnIndex){
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
@@ -448,7 +460,10 @@ public class Utilities {
             boolean returnValue = false;
 
             try {
-                String text = ((JTextComponent) aComponent).getText();
+
+                String text;
+                text = ((JTextComponent) aComponent).getText();
+
                 if (text == null || text.trim().equals("")) {
                     returnValue = true;
                 } else {

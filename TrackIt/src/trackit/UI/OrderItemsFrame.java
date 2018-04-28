@@ -497,7 +497,9 @@ public class OrderItemsFrame
     private void createAction() {
         InventoryItemDetailsDialog dlgCreate = new InventoryItemDetailsDialog(true, null);
         dlgCreate.setLocationRelativeTo(this);
-        if (dlgCreate.display() == DialogResultType.OK) {
+
+        if (dlgCreate.display() != DialogResultType.OK) {
+        } else {
             //this.refreshGrid(true);
         }
     }
