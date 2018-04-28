@@ -282,6 +282,20 @@ public class Utilities {
     // <editor-fold defaultstate="collapsed" desc="Public Static Methods - Dates">
 
     /**
+     * Gets today's date without any time. Useful for comparing Date objects.
+     *
+     * @return Today's date
+     */
+    public static java.util.Date getToday() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTime();
+    }
+
+    /**
      * Converts from a standard java Date to a SQL Date class.
      *
      * @param aDate The date to be converted.
