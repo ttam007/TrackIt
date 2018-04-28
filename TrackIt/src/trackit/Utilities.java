@@ -234,6 +234,13 @@ public class Utilities {
         TableColumn aTableColumn = aTable.getColumnModel().getColumn(columnIndex);
         aTableColumn.setCellRenderer(rightRenderer);
     }
+    
+    public static void setCenterAlignment(JTable aTable, int columnIndex){
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        TableColumn aTableColumn = aTable.getColumnModel().getColumn(columnIndex);
+        aTableColumn.setCellRenderer(centerRenderer);
+    }
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Static Methods - Errors">
