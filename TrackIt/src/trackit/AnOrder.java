@@ -196,7 +196,7 @@ public class AnOrder
         if (aDateExpected != null) {
             sqlDate = Utilities.convertToSQLDate(aDateExpected);
         }
-        setDateOrdered(sqlDate);
+        setDateExpected(sqlDate);
     }
 
     /**
