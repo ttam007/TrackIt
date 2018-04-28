@@ -33,6 +33,7 @@ public class OrderItemsFrame
     private final Suppliers bllSuppliers = new Suppliers();
     private final static String CHECKOUT_MSG = "Item has already been checked in.";
     private boolean isLoading;
+    private boolean clearGrid;
 
 
 
@@ -50,6 +51,7 @@ public class OrderItemsFrame
     private JPanel pnlBtm;
     private JLabel lblDescription, lblSupplier, lblStatus, lblOrderDate, lblExpectedDate;
     private JTextField tfDescription;
+    
     private JDatePickerImpl orderedDatePicker, expectedDatePicker;
     private JScrollPane scrollPane;
     private JComboBox<OrderStatusType> cboOrderStatus;
@@ -307,6 +309,7 @@ public class OrderItemsFrame
         btnOK = new JButton(Utilities.BUTTON_OK);
         pnlBtm.add(btnOK);
         btnOK.addActionListener((ActionEvent e) -> {
+            clearGrid = true;
             saveAction();
         });
 
@@ -368,15 +371,17 @@ public class OrderItemsFrame
         } else {
             AnOrderItem anOrderItem = this.orderItems.get(row);
             try {
+                clearGrid = false;
+                saveAction();
                 AnInventoryItem anInventoryItem = AnInventoryItem.loadByOrderItem(anOrderItem.getPrimaryKey());
                 if (anOrderItem.getQuantityOrdered() > anOrderItem.getQuantityCheckedIn()) {                
                     anInventoryItem.changeQuantity(anOrderItem.getQuantityOrdered());
                     anOrderItem.setQuantityCheckedIn(anOrderItem.getQuantityOrdered());
                     anInventoryItem.save(anInventoryItem);
-                    anOrderItem.save(anOrderItem);
-                    returnValue = true;
+                    anOrderItem.save(anOrderItem);                    
                     this.refreshGrid(true);
                     JOptionPane.showMessageDialog(this, "Item Checked In");
+                    returnValue = true;
                 } else {
                     JOptionPane.showMessageDialog(this, CHECKOUT_MSG,
                         Utilities.ERROR_MSG_CAPTION, JOptionPane.INFORMATION_MESSAGE);
@@ -398,8 +403,10 @@ public class OrderItemsFrame
         if (populateObject()) {
             if (this.bllOrders.save(this.anOrder, bllOrderItems)) {
                 this.dialogResult = DialogResultType.OK;
-                this.setVisible(false);
-                this.dispose();
+                if(clearGrid) {
+                    this.setVisible(false);
+                    this.dispose();
+                }
             } else {
                 this.dialogResult = DialogResultType.CANCEL;
                 JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
@@ -479,6 +486,8 @@ public class OrderItemsFrame
         dlgAdd.setLocationRelativeTo(this);
         if (dlgAdd.display() == DialogResultType.OK) {
             this.refreshGrid(false);
+            clearGrid = false;
+            saveAction();
         }
     }
 
@@ -489,7 +498,7 @@ public class OrderItemsFrame
         InventoryItemDetailsDialog dlgCreate = new InventoryItemDetailsDialog(true, null);
         dlgCreate.setLocationRelativeTo(this);
         if (dlgCreate.display() == DialogResultType.OK) {
-            this.refreshGrid(true);
+            //this.refreshGrid(true);
         }
     }
 
@@ -589,6 +598,7 @@ public class OrderItemsFrame
                     "Do you want to save?", "Close Query",
                     JOptionPane.YES_NO_OPTION);
             if (result == JOptionPane.YES_OPTION) {
+                clearGrid = true;
                 saveAction();
             } else {
                 cancelAction();
