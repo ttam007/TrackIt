@@ -2,6 +2,7 @@ package trackit.UI;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
 import javax.swing.*;
 import trackit.*;
 
@@ -24,12 +25,17 @@ public class OrderItemDetailsDialog
     private final AnOrderItem anOrderItem;
     private final OrderItems bll = new OrderItems();
     private DialogResultType dialogResult = DialogResultType.NONE;
+    private final Inventory bllInventory = new Inventory();
+    private final OrderItems bllOrderItems;
+    //private final HashMap<String, AnInventoryItem> inventory = new HashMap<>();
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
+    private JComboBox<ItemStatusType> cboItemStatus;
+    private JComboBox<AnInventoryItem> cboItemName;
     JPanel pnlCenter;
     JLabel lblName, lblQuantity, lblPrice, lblStatus, lblExtPrice;
-    JTextField tfName, tfQuantity, tfPrice, tfStatus, tfExtPrice;
+    JFormattedTextField tfQuantityOrdered, tfPrice, tfExtPrice;
     JButton btnOK, btnCancel;
     GridBagConstraints gbc;
 
@@ -42,8 +48,10 @@ public class OrderItemDetailsDialog
      * the specified Order Item.
      * @param anOrderItem The Order Item to be edited. This value is ignored if
      * useCreateMode is true.
+     * @param orderItems Must contain the list of order items for the order this
+     * order item goes with.
      */
-    public OrderItemDetailsDialog(boolean useCreateMode, AnOrderItem anOrderItem) {
+    public OrderItemDetailsDialog(boolean useCreateMode, AnOrderItem anOrderItem, OrderItems orderItems) {
         this.isCreateMode = useCreateMode;
         if (this.isCreateMode) {
             this.anOrderItem = new AnOrderItem();
@@ -52,6 +60,7 @@ public class OrderItemDetailsDialog
         } else {
             this.anOrderItem = anOrderItem;
         }
+        this.bllOrderItems = orderItems;
 
         initializeComponents();
         populateComponents();
@@ -86,10 +95,9 @@ public class OrderItemDetailsDialog
      * initialize the items
      */
     private void initializeComponents() {
-
-        //TODO:  add additional components here.
-        int frameWidth = 500; //originally 660
-        int frameHeight = 250; //originally 150
+        //Setup main frame
+        int frameWidth = 500;
+        int frameHeight = 250;
         Dimension dimFrame = new Dimension(frameWidth, frameHeight);
         this.setTitle(Utilities.getWindowCaption(WINDOW_NAME));
         this.setPreferredSize(dimFrame);
@@ -100,82 +108,94 @@ public class OrderItemDetailsDialog
         this.getRootPane().setDefaultButton(btnOK);
         this.setModal(true);
 
+        //GridBag Setup
         gbc = new GridBagConstraints();
         setLayout(new GridBagLayout());
         gbc.insets = new Insets(2, 2, 5, 0);
         gbc.anchor = GridBagConstraints.LINE_START;
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Item Name Label Initialized
+        //Description Label
         lblName = new JLabel("Item Name: ");
         gbc.gridx = 0;
         gbc.gridy = 0;
         add(lblName, gbc);
 
-        // Item Name Text Field
-        tfName = new JTextField(25);
+        //Description
+        //TODO:  Implement this or something like it:  http://www.algosome.com/articles/java-jcombobox-autocomplete.html
+        cboItemName = new JComboBox<>(getItemList());
+        cboItemName.setEnabled(isCreateMode);
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.gridwidth = 5;
-        add(tfName, gbc);
+        add(cboItemName, gbc);
 
-        // Initialize Sku label and text field
+        //Quantity Ordered Label
         lblQuantity = new JLabel("Quantity: ");
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 1;
         add(lblQuantity, gbc);
 
-        tfQuantity = new JTextField(7);
-        tfQuantity.setEditable(this.isCreateMode);
+        //Quantity Ordered
+        tfQuantityOrdered = new JFormattedTextField(Utilities.getIntegerFormatter());
+        tfQuantityOrdered.addFocusListener(new NumericFieldsFocusAdapter());
         gbc.gridx = 1;
         gbc.gridy = 1;
         gbc.gridwidth = 5;
-        add(tfQuantity, gbc);
-        // Init Quantity
-        //Label
+        add(tfQuantityOrdered, gbc);
+
+        //Price Label
         lblPrice = new JLabel("Price: ");
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.gridwidth = 1;
         add(lblPrice, gbc);
 
-        // Field
-        tfPrice = new JTextField(7);
+        //Price
+        tfPrice = new JFormattedTextField(Utilities.getCurrencyFormatter());
+        tfPrice.setInputVerifier(new Utilities.DoubleVerifier());
+        tfPrice.addFocusListener(new NumericFieldsFocusAdapter());
+        tfPrice.setColumns(7);
         gbc.gridx = 1;
         gbc.gridy = 2;
         gbc.gridwidth = 3;
         add(tfPrice, gbc);
 
-        // Init Exp Date Label and Field
+        //Status Label
         lblStatus = new JLabel("Status: ");
         gbc.gridx = 4;
         gbc.gridy = 2;
         gbc.gridwidth = 1;
         add(lblStatus, gbc);
 
-        tfStatus = new JTextField(10);
+        //Status
+        cboItemStatus = new JComboBox<>(ItemStatusType.values());
+        cboItemStatus.setEnabled(false);
         gbc.gridx = 5;
         gbc.gridy = 2;
         gbc.gridwidth = 1;
-        add(tfStatus, gbc);
-        // Unit
-        //Label
+        add(cboItemStatus, gbc);
+
+        //Extended Price Label
         lblExtPrice = new JLabel("Ext Price: ");
         gbc.gridx = 0;
         gbc.gridy = 3;
         gbc.gridwidth = 1;
         add(lblExtPrice, gbc);
-        // Field
-        tfExtPrice = new JTextField(7);
 
+        //Extended Price
+        tfExtPrice = new JFormattedTextField(Utilities.getCurrencyFormatter());
+        tfExtPrice.setInputVerifier(new Utilities.DoubleVerifier());
+        tfExtPrice.setColumns(7);
+        tfExtPrice.setEnabled(false);
         gbc.gridx = 1;
         gbc.gridy = 3;
         gbc.gridwidth = 3;
         add(tfExtPrice, gbc);
 
-        // Init Ok Button
-        btnOK = new JButton("Ok");
+        //Ok Button
+        btnOK = new JButton(Utilities.BUTTON_OK);
         gbc.gridx = 3;
         gbc.gridy = 4;
         gbc.gridwidth = 1;
@@ -184,8 +204,8 @@ public class OrderItemDetailsDialog
             saveAction();
         });
 
-        //Cancel
-        btnCancel = new JButton("Cancel");
+        //Cancel Button
+        btnCancel = new JButton(Utilities.BUTTON_CANCEL);
         gbc.gridx = 4;
         gbc.gridy = 4;
         gbc.gridwidth = 1;
@@ -194,6 +214,7 @@ public class OrderItemDetailsDialog
             cancelAction();
         });
 
+        btnOK.setPreferredSize(btnCancel.getPreferredSize());
         //Finalizations
         pack();
     }
@@ -202,10 +223,11 @@ public class OrderItemDetailsDialog
      * Populates all the UI components from the object in memory.
      */
     private void populateComponents() {
-        this.tfName.setText(this.anOrderItem.getDescription());
-        this.tfStatus.setText(this.anOrderItem.getItemStatus().getText());
-        this.tfQuantity.setText(this.anOrderItem.getQuantityOrdered().toString());
-        this.tfPrice.setText(this.anOrderItem.getPrice().toString());
+        this.cboItemName.getEditor().setItem(this.anOrderItem.getDescription());
+        this.cboItemStatus.getEditor().setItem(this.anOrderItem.getItemStatus());
+        this.tfQuantityOrdered.setValue(this.anOrderItem.getQuantityOrdered());
+        this.tfPrice.setValue(this.anOrderItem.getPrice());
+        this.tfExtPrice.setValue(this.anOrderItem.getExtendedPrice());
     }
 
     /**
@@ -215,12 +237,15 @@ public class OrderItemDetailsDialog
         boolean returnValue = false;
         //TODO:  sort this out so boolean return is used instead of try/catch block.
         try {
-            this.anOrderItem.setDescription(this.tfName.getText());
-            this.anOrderItem.setQuantityOrdered(Integer.parseInt(this.tfQuantity.getText()));
-            this.anOrderItem.setPrice(Double.parseDouble(this.tfPrice.getText()));
+            AnInventoryItem anInventoryItem = (AnInventoryItem) this.cboItemName.getModel().getSelectedItem();
+            this.anOrderItem.setDescription(anInventoryItem.getDescription());
+            this.anOrderItem.setItemId(anInventoryItem.getItemId());
+            this.anOrderItem.setQuantityOrdered((Integer) this.tfQuantityOrdered.getValue());
+            this.anOrderItem.setPrice((Double) this.tfPrice.getValue());
             returnValue = true;
-        } catch (java.sql.SQLException exSQL) {
-            JOptionPane.showMessageDialog(this, this.anOrderItem.getErrorMessage(),
+        } catch (java.sql.SQLException | RuntimeException ex) {
+            Utilities.setErrorMessage(ex);
+            JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
                     Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
         }
         return returnValue;
@@ -232,16 +257,26 @@ public class OrderItemDetailsDialog
      */
     private void saveAction() {
         if (populateObject()) {
-            if (this.bll.save(this.anOrderItem)) {
+            /* Only save if isCreateOrder = false; otherwise order might not be saved yet.
+             * Instead put into Order's list of OrderItems.
+             */
+            if (this.isCreateMode) {
+                this.bllOrderItems.getList().add(this.anOrderItem);
                 this.dialogResult = DialogResultType.OK;
-                //JOptionPane.showMessageDialog(null, "Successfully Saved.");
-                this.setVisible(false);
-                this.dispose();
             } else {
-                this.dialogResult = DialogResultType.CANCEL;
-                JOptionPane.showMessageDialog(this, this.bll.getErrorMessage(),
-                        Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+                this.dialogResult = (this.bll.save(this.anOrderItem) ? DialogResultType.OK : DialogResultType.CANCEL);
             }
+        } else {
+            this.dialogResult = DialogResultType.CANCEL;
+        }
+
+        if (this.dialogResult == DialogResultType.OK) {
+            //JOptionPane.showMessageDialog(null, "Successfully Saved.");
+            this.setVisible(false);
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
+                    Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -249,10 +284,26 @@ public class OrderItemDetailsDialog
      * Handles the cancel action.
      */
     private void cancelAction() {
-        //JOptionPane.showMessageDialog(null, "Change Cancelled");
         this.dialogResult = DialogResultType.CANCEL;
         this.setVisible(false);
         this.dispose();
+    }
+
+    /**
+     * Gets the list of all items in inventory.
+     *
+     * @return The names of all items in inventory.
+     */
+    private AnInventoryItem[] getItemList() {
+        AnInventoryItem[] arrayItems = new AnInventoryItem[]{};
+        if (this.bllInventory.load()) {
+            ArrayList<AnInventoryItem> listInventory = this.bllInventory.getList();
+            arrayItems = listInventory.toArray(arrayItems);
+        } else {
+            JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
+                    Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+        }
+        return arrayItems;
     }
 
     // </editor-fold>
@@ -265,6 +316,7 @@ public class OrderItemDetailsDialog
     public DialogResultType display() {
         setVisible(true);
         return this.dialogResult;
+
     }
 
     // </editor-fold>
@@ -285,6 +337,27 @@ public class OrderItemDetailsDialog
             } else {
                 cancelAction();
             }
+        }
+    }
+
+    /**
+     * Handles all aspects of focus changes on numeric fields.
+     */
+    private class NumericFieldsFocusAdapter extends FocusAdapter {
+
+        /**
+         * Updates the extended price.
+         *
+         * @param e
+         */
+        @Override
+        public void focusLost(FocusEvent e) {
+            super.focusLost(e);
+
+            Integer quantity = (Integer) tfQuantityOrdered.getValue();
+            Double price = (Double) tfPrice.getValue();
+            Double extendedPrice = quantity * price;
+            tfExtPrice.setValue(extendedPrice);
         }
     }
     // </editor-fold>

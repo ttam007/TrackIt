@@ -29,6 +29,7 @@ public class LoginFrame
     JPasswordField pfPassword;
     JButton btnLogin;
     String username, password;
+    GridBagConstraints gbc = new GridBagConstraints();
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -94,51 +95,59 @@ public class LoginFrame
         this.addWindowListener(new CloseQuery());
         this.setLayout(new BorderLayout());
 
-        //Add all components here and set properties.
-        Box usernameBx, passwordBx, submitBx, combine;
+        gbc = new GridBagConstraints();
+        setLayout(new GridBagLayout());
+        gbc.insets = new Insets(2, 2, 5, 0);
+        gbc.anchor = GridBagConstraints.LINE_START;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        pnlNorth = new JPanel();
         lblTitle = new JLabel(Utilities.PROGRAM_NAME_LONG);
-        pnlNorth.add(lblTitle);
-        add(pnlNorth, BorderLayout.NORTH);
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        add(lblTitle, gbc);
+        
+        // Item Name Label Initialized
+        lblUsername = new JLabel("Username:");
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        add(lblUsername, gbc);
 
-        pnlCenter = new JPanel();
-        add(pnlCenter, BorderLayout.CENTER);
+        // Item Name Text Field
+        tfUsername = new JTextField(25);
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.gridwidth = 5;
+        add(tfUsername, gbc);
 
-        usernameBx = Box.createHorizontalBox();
-        lblUsername = new JLabel("Username: ");
-        usernameBx.add(lblUsername);
-        tfUsername = new JTextField(20);
-        usernameBx.add(tfUsername);
-        passwordBx = Box.createHorizontalBox();
-        lblPassword = new JLabel("Password: ");
-        passwordBx.add(lblPassword);
-        pfPassword = new JPasswordField(20);
-        passwordBx.add(pfPassword);
-        submitBx = Box.createHorizontalBox();
-        btnLogin = new JButton("Log In");
-        submitBx.add(btnLogin);
+        // Initialize password label and text field
+        lblPassword = new JLabel("Password:");
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 1;
+        add(lblPassword, gbc);
+        
+        pfPassword = new JPasswordField(25);
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        gbc.gridwidth = 5;
+        add(pfPassword, gbc);
+        
+        
+
+        // Init Ok Button
+        btnLogin = new JButton(Utilities.BUTTON_LOGIN);
         this.getRootPane().setDefaultButton(btnLogin);
-
-        combine = Box.createVerticalBox();
-        combine.add(usernameBx);
-        combine.add(passwordBx);
-        combine.add(submitBx);
-
-        pnlCenter.add(combine);
-
-        pnlSouth = new JPanel();
-        lblAccess = new JLabel("");
-        pnlSouth.add(lblAccess);
-        add(lblAccess, BorderLayout.SOUTH);
-
+        gbc.gridx = 4;
+        gbc.gridy = 4;
+        gbc.gridwidth = 1;
+        add(btnLogin, gbc);
         btnLogin.addActionListener((ActionEvent e) -> {
             if (this.bll.startLogin(this.tfUsername.getText().trim(), new String(this.pfPassword.getPassword()))) {
                 this.dispose();
             } else {
                 JOptionPane.showMessageDialog(this,
-                        "Error Logging in.  Error = " + bll.getErrorMessage(), "Error",
-                        JOptionPane.OK_OPTION);
+                        "Error Logging in.  Error = " + Utilities.getErrorMessage(),
+                        Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
                 if (this.bll.isTooManyLoginAttempts()) {
                     this.dispose();
                 }

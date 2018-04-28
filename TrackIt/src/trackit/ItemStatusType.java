@@ -19,16 +19,19 @@ public enum ItemStatusType {
     /**
      *
      */
-    DO_NOT_ORDER(2);
+    DO_NOT_ORDER(2),
+    /**
+     *
+     */
+    OUT_OF_STOCK(3);
     // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Constants">
+    // <editor-fold defaultstate="expanded" desc="Private Fields">
+    private final int value;
     private static final String[] STATUS_TEXT = new String[]{
         "Available",
         "Discontinued",
-        "Do Not Order"};
-    // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Private Fields">
-    private final int value;
+        "Do Not Order",
+        "Out of Stock"};
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -52,7 +55,8 @@ public enum ItemStatusType {
      *
      * @return The String equivalent of the enumerated value.
      */
-    public String getText() {
+    @Override
+    public String toString() {
         return STATUS_TEXT[this.value];
     }
 
@@ -73,7 +77,7 @@ public enum ItemStatusType {
      */
     public static ItemStatusType getType(String aValue) {
         for (ItemStatusType aType : ItemStatusType.values()) {
-            if (aType.getText().equalsIgnoreCase(aValue)) {
+            if (aType.toString().equalsIgnoreCase(aValue)) {
                 return aType;
             }
         }
