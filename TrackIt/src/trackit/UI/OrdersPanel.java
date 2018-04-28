@@ -10,7 +10,7 @@ import trackit.*;
 /**
  * UI Layer: Handles all aspects of the Order panel.
  *
- * @author Douglas, Steven, Diaz
+ * @author Douglas, Steven, Diaz, Bond
  */
 public class OrdersPanel
         extends JPanel {
@@ -20,7 +20,8 @@ public class OrdersPanel
      * The name of the panel.
      */
     public static final String TAB_NAME = "Orders";
-    private static final String[] TABLE_LABELS = {"Description", "Supplier", "Status", "Order Date", "Expected Date"};
+    private static final String[] TABLE_LABELS
+            = {"Description", "Supplier", "Status", "Order Date", "Expected Date", "Total Price"};
 
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
@@ -90,7 +91,6 @@ public class OrdersPanel
         mainTable = new JTable(mainTableModel);
         mainTable.setDefaultEditor(Object.class, null);
         mainTable.getTableHeader().setReorderingAllowed(false);
-        // Add action listener to JTable
         mainTable.getSelectionModel().addListSelectionListener((e) -> {
             //if the row is bigger than -1 than we need to enable the buttons
             if (mainTable.getSelectedRow() > -1) {
@@ -111,8 +111,12 @@ public class OrdersPanel
                 }
             }
         });
-
         mainTable.setBounds(30, 40, 200, 200);
+        Utilities.setRightAlignment(this.mainTable, 5); //Total Price column
+        Utilities.setCenterAlignment(this.mainTable, 3); //Order Date
+        Utilities.setCenterAlignment(this.mainTable, 4); //Expected Date
+        
+        //Other components
         sp = new JScrollPane(mainTable);
         add(sp, BorderLayout.CENTER);
 
@@ -150,12 +154,18 @@ public class OrdersPanel
     private void initTableData(ArrayList<AnOrder> listOrders) {
         if (this.orders != null) {
             int counter = 0;
+            OrderItems bllOrderItems = new OrderItems();
             for (AnOrder anOrder : listOrders) {
-                //{"Description", "Supplier", "Status", "Order Date", "Expected Date"};
+                Double sum = 0.00;
+                if (bllOrderItems.loadByOrder(anOrder.getPrimaryKey())) {
+                    sum = bllOrderItems.getSumOfExtendedPrice();
+                }
+
+                //{"Description", "Supplier", "Status", "Order Date", "Expected Date", "Total Price"};
                 Object[] data = {anOrder.getDescription(),
                     this.suppliers.get(anOrder.getOrderedFrom()).getNickname(),
                     anOrder.getOrderStatus(), anOrder.getDateOrdered(),
-                    anOrder.getDateExpected()};
+                    anOrder.getDateExpected(), Utilities.formatAsCurrency(sum)};
                 mainTableModel.addRow(data);
                 this.orders.put(counter, anOrder);
                 counter++;
@@ -204,6 +214,7 @@ public class OrdersPanel
      */
     private void createAction() {
         OrderItemsFrame dlgCreate = new OrderItemsFrame(true, null);
+        dlgCreate.setLocationRelativeTo(this);
         if (dlgCreate.display() == DialogResultType.OK) {
             refreshGrid();
         }
@@ -219,6 +230,7 @@ public class OrdersPanel
         } else {
             AnOrder anOrder = this.orders.get(selectedRow);
             OrderItemsFrame dlgEdit = new OrderItemsFrame(false, anOrder);
+            dlgEdit.setLocationRelativeTo(this);
             if (dlgEdit.display() == DialogResultType.OK) {
                 refreshGrid();
             }

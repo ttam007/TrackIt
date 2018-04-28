@@ -1,9 +1,7 @@
 package trackit.UI;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -22,7 +20,7 @@ public class InventoryItemsPanel
      * The name of the panel.
      */
     public static final String TAB_NAME = "Inventory";
-    private static final String[] TABLE_LABELS = new String[]{"Item Name", "Qty", "Unit", "SKU", "Expiration", "Status"};
+    private static final String[] TABLE_LABELS = new String[]{"Item Name", "Quantity", "Unit", "SKU", "Expiration Date", "Status"};
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
     private final HashMap<Integer, AnInventoryItem> inventoryItems = new HashMap<>();
@@ -102,6 +100,8 @@ public class InventoryItemsPanel
             }
         });
         mainTable.setBounds(30, 40, 200, 200);
+        Utilities.setRightAlignment(this.mainTable, 1); //Quantity column
+        Utilities.setCenterAlignment(this.mainTable, 4); //Expiration Date
 
         setButtons();
         sp = new JScrollPane(mainTable);
@@ -172,7 +172,11 @@ public class InventoryItemsPanel
         if (this.inventoryItems != null) {
             int counter = 0;
             for (AnInventoryItem anInventoryItem : aList) {
-                Object[] data = {anInventoryItem.getDescription(), anInventoryItem.getQuantity(), anInventoryItem.getSizeUnit(), anInventoryItem.getSku(), anInventoryItem.getExpirationDate(), anInventoryItem.getItemStatus()};
+                //{"Item Name", "Qty", "Unit", "SKU", "Expiration", "Status"};
+                Object[] data = {anInventoryItem.getDescription(),
+                    Utilities.formatAsInteger(anInventoryItem.getQuantity()),
+                    anInventoryItem.getSizeUnit(), anInventoryItem.getSku(),
+                    anInventoryItem.getExpirationDate(), anInventoryItem.getItemStatus()};
                 mainTableModel.addRow(data);
                 this.inventoryItems.put(counter, anInventoryItem);
                 counter++;
@@ -218,7 +222,7 @@ public class InventoryItemsPanel
     private void checkInOutAction() {
         int selectedRow = this.mainTable.getSelectedRow();
         if (selectedRow < 0) {
-            JOptionPane.showMessageDialog(this, "Select item to edit");
+            JOptionPane.showMessageDialog(this, "Select item to check in/out");
         } else {
             AnInventoryItem anInventoryItem = this.inventoryItems.get(selectedRow);
             CheckInOutDialog checkIn = new CheckInOutDialog(anInventoryItem);

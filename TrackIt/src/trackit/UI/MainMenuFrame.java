@@ -107,6 +107,7 @@ public class MainMenuFrame
             CloseQuery qry = new CloseQuery();
             qry.windowClosing(null);
         });
+        btnExit.setPreferredSize(btnLogout.getPreferredSize());
         pnlBottom.add(btnLogout);
         pnlBottom.add(btnExit);
         add(pnlBottom, BorderLayout.SOUTH);
