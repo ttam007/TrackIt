@@ -12,7 +12,7 @@ public class Dashboard {
 
     private final DashboardType type;
 
-    private String title;
+    //private String title;
     private Integer count;
     private Date date;
     private Double money;
@@ -85,7 +85,7 @@ public class Dashboard {
     private void getNumOfItemsOutOfStock(ArrayList<AnInventoryItem> aList) {
         int counter = 0;
         for (AnInventoryItem item : aList) {
-            if (item.getQuantity() == 0) {
+            if (item.getQuantity().equals(0)) {
                 counter += 1;
             }
         }
@@ -93,31 +93,37 @@ public class Dashboard {
     }
 
     private void getDateNextExpires(ArrayList<AnInventoryItem> aList) {
-        Date min = new Date(0);
+        Date min = new Date(Long.MAX_VALUE);
+        Date today = Utilities.getToday();
+
         if (aList != null) {
             for (AnInventoryItem item : aList) {
                 Date dateToCompare = item.getExpirationDate();
                 if (dateToCompare != null
-                        && min.before(dateToCompare)) {
+                        && dateToCompare.before(min)
+                        && (dateToCompare.compareTo(today) >= 0)) {
                     min = dateToCompare;
                 }
             }
         }
-        this.date = (min.getTime() == 0 ? null : min);
+        this.date = (min.getTime() == Long.MAX_VALUE ? null : min);
     }
 
     private void getDateNextArrives(ArrayList<AnOrder> aList) {
-        Date min = new Date(0);
+        Date min = new Date(Long.MAX_VALUE);
+        Date today = Utilities.getToday();
+
         if (aList != null) {
             for (AnOrder item : aList) {
-                Date dateToCompare = item.getDateExpected();
+                Date dateToCompare = item.getDateOrdered();
                 if (dateToCompare != null
-                        && min.before(dateToCompare)) {
+                        && dateToCompare.before(min)
+                        && (dateToCompare.compareTo(today) >= 0)) {
                     min = dateToCompare;
                 }
             }
         }
-        this.date = (min.getTime() == 0 ? null : min);
+        this.date = (min.getTime() == Long.MAX_VALUE ? null : min);
     }
 
     /**

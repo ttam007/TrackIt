@@ -218,35 +218,9 @@ public class AnInventoryItem
             throws SQLException, Exception {
         HELPER.delete(primaryKey);
     }
+
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
-
-    /**
-     * Gets a list of all expired items.
-     *
-     * @return
-     */
-    public ArrayList<AnInventoryItem> getExpiredItems() {
-        ArrayList<AnInventoryItem> returnList = new ArrayList<>();
-
-        try {
-            java.util.Date aUtilDate = Calendar.getInstance().getTime();
-            java.sql.Date aSQLDate = Utilities.convertToSQLDate(aUtilDate);
-            ArrayList<AnInventoryItem> aList = loadAll();
-            aList.forEach((anItem) -> {
-                if (anItem.getExpirationDate().before(aSQLDate)) {
-                    returnList.add(anItem);
-                }
-            });
-        } catch (SQLException exSQL) {
-            //TODO: handle this
-        } catch (Exception ex) {
-            //TODO: handle this
-        }
-
-        return returnList;
-    }
-
     @Override
     public void changeQuantity(int amountToChangeBy)
             throws NegativeAmountException {

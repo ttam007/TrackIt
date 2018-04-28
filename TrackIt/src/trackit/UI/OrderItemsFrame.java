@@ -35,8 +35,6 @@ public class OrderItemsFrame
     private boolean isLoading;
     private boolean clearGrid;
 
-
-
     //For the grid.
     private final HashMap<Integer, AnOrderItem> orderItems = new HashMap<>();
     private final OrderItems bllOrderItems = new OrderItems();
@@ -107,7 +105,8 @@ public class OrderItemsFrame
      * @throws java.io.IOException
      * @throws ClassNotFoundException
      */
-    private void readObject(java.io.ObjectInputStream stream) throws java.io.IOException, ClassNotFoundException {
+    private void readObject(java.io.ObjectInputStream stream) throws java.io.IOException,
+            ClassNotFoundException {
         throw new java.io.NotSerializableException(getClass().getName());
     }
 
@@ -231,10 +230,10 @@ public class OrderItemsFrame
         btnCheckInAll.addActionListener((ActionEvent e) -> {
             int tableRows = mainTable.getRowCount();
             int counter = 0;
-            while (counter < tableRows){
+            while (counter < tableRows) {
                 checkInAction(counter);
-                counter++;   
-        } 
+                counter++;
+            }
             JOptionPane.showMessageDialog(this, "All Items Checked In");
         });
 
@@ -376,7 +375,7 @@ public class OrderItemsFrame
                 clearGrid = false;
                 saveAction();
                 AnInventoryItem anInventoryItem = AnInventoryItem.loadByOrderItem(anOrderItem.getPrimaryKey());
-                if (anOrderItem.getQuantityOrdered() > anOrderItem.getQuantityCheckedIn()) {                
+                if (anOrderItem.getQuantityOrdered() > anOrderItem.getQuantityCheckedIn()) {
                     anInventoryItem.changeQuantity(anOrderItem.getQuantityOrdered());
                     anOrderItem.setQuantityCheckedIn(anOrderItem.getQuantityOrdered());
                     anInventoryItem.save(anInventoryItem);
@@ -386,7 +385,7 @@ public class OrderItemsFrame
                     returnValue = true;
                 } else {
                     JOptionPane.showMessageDialog(this, CHECKOUT_MSG,
-                        Utilities.ERROR_MSG_CAPTION, JOptionPane.INFORMATION_MESSAGE);
+                            Utilities.ERROR_MSG_CAPTION, JOptionPane.INFORMATION_MESSAGE);
                 }
             } catch (Exception ex) {
                 Utilities.setErrorMessage(ex);
@@ -416,7 +415,6 @@ public class OrderItemsFrame
             }
         }
     }
-
 
     /**
      * Handles the cancel action. If any errors, then display error message
@@ -492,7 +490,7 @@ public class OrderItemsFrame
             saveAction();
         }
     }
-
+	
     /**
      * Pops the Inventory Item dialog in create mode.
      */
