@@ -151,6 +151,7 @@ public class SupplierDetailsDialog
             cancelAction();
         });
 
+        btnOK.setPreferredSize(btnCancel.getPreferredSize());
         //Finalizations
         pack();
     }

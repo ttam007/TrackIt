@@ -202,17 +202,14 @@ public class CheckInOutDialog
     private boolean checkInItem() {
         boolean returnValue = false;
 
-        int checkQuant = (Integer) this.qtyTextField.getValue();
-        if (outButton.isSelected()) {
-            checkQuant = -1 * checkQuant;
-        }/*else {inButton.isSelected()){
-            checkQuant = 1 * checkQuant;
-        }*/
-
         try {
-            this.anInventoryItem.changeQuantity(checkQuant);
+            if (inButton.isSelected()) {
+                this.anInventoryItem.changeQuantity((Integer) this.qtyTextField.getValue());
+            } else if (outButton.isSelected()) {
+                this.anInventoryItem.changeQuantity(-((Integer) this.qtyTextField.getValue()));
+            }
             returnValue = true;
-        } catch (NegativeAmountException naEx) {
+        } catch (NegativeAmountException ex) {
             JOptionPane.showMessageDialog(this, CHECKOUT_MSG,
                     Utilities.ERROR_MSG_CAPTION, JOptionPane.INFORMATION_MESSAGE);
         }

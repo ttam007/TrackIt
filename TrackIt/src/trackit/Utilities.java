@@ -211,24 +211,6 @@ public class Utilities {
     }
 
     /**
-     * Parses a well formatted string of an integer into an Integer object.
-     *
-     * @param aValue The string to be parsed.
-     * @return The integer value of the specified string. If any parsing errors,
-     * then returns zero.
-     */
-    public static Integer parseFormattedInteger(String aValue) {
-        Integer returnValue;
-        try {
-            NumberFormat format = NumberFormat.getNumberInstance(Locale.US);
-            returnValue = format.parse(aValue).intValue();
-        } catch (ParseException exP) {
-            returnValue = 0;
-        }
-        return returnValue;
-    }
-
-    /**
      * Sets the specified column in the specified table to be right aligned.
      *
      * @param aTable The table that has the column that needs alignment.

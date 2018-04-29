@@ -9,7 +9,7 @@ import java.util.Date;
  * @author Bryan
  */
 public class Dashboard {
-    
+
     private final DashboardType type;
 
     //private String title;
@@ -43,7 +43,7 @@ public class Dashboard {
      */
     public boolean getData() {
         boolean isSuccessful = false;
-        
+
         try {
             if (this.type == DashboardType.COUNT_ITEMS_OUT_OF_STOCK
                     || this.type == DashboardType.DATE_NEXT_ITEM_EXPIRES) {
@@ -89,7 +89,7 @@ public class Dashboard {
         }
         return isSuccessful;
     }
-    
+
     private void getNumOfItemsOutOfStock(ArrayList<AnInventoryItem> aList) {
         int counter = 0;
         for (AnInventoryItem item : aList) {
@@ -99,11 +99,11 @@ public class Dashboard {
         }
         this.count = counter;
     }
-    
+
     private void getDateNextExpires(ArrayList<AnInventoryItem> aList) {
         Date min = new Date(Long.MAX_VALUE);
         Date today = Utilities.getToday();
-        
+
         if (aList != null) {
             for (AnInventoryItem item : aList) {
                 Date dateToCompare = item.getExpirationDate();
@@ -116,11 +116,11 @@ public class Dashboard {
         }
         this.date = (min.getTime() == Long.MAX_VALUE ? null : min);
     }
-    
+
     private void getDateNextArrives(ArrayList<AnOrder> aList) {
         Date min = new Date(Long.MAX_VALUE);
         Date today = Utilities.getToday();
-        
+
         if (aList != null) {
             for (AnOrder item : aList) {
                 Date dateToCompare = item.getDateOrdered();
@@ -149,16 +149,16 @@ public class Dashboard {
             }
         }
         return moneyCount;
-        
+
     }
-    
+
     private void countMoney(ArrayList<AnOrder> aList, ArrayList<AnOrderItem> orderItemList) {
         Double moneyCount = 0.00;
-        
+
         if (aList.size() > 0) {
             Calendar minus30Cal = Calendar.getInstance();
             minus30Cal.add(Calendar.DAY_OF_MONTH, -30);
-            
+
             for (AnOrder order : aList) {
                 Date orderDate = order.getDateOrdered();
                 if (orderDate != null && orderDate.after(minus30Cal.getTime())) {
@@ -168,7 +168,7 @@ public class Dashboard {
         }
         this.money = moneyCount;
     }
-    
+
     @Override
     public String toString() {
         if (count != null) {
