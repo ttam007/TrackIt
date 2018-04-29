@@ -10,7 +10,7 @@ import trackit.*;
 /**
  * UI Layer: Handles all aspects of the Order panel.
  *
- * @author Douglas, Steven, Diaz
+ * @author Douglas, Steven, Diaz, Bond
  */
 public class OrdersPanel
         extends JPanel {
@@ -20,19 +20,32 @@ public class OrdersPanel
      * The name of the panel.
      */
     public static final String TAB_NAME = "Orders";
-    private static final String[] TABLE_LABELS = {"Description", "Supplier", "Status", "Order Date", "Expected Date"};
+    private static final String[] TABLE_LABELS
+            = {"Description", "Supplier", "Status", "Order Date", "Expected Date", "Total Price"};
 
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
+    /**
+     * Integer key = The row in the grid of the AnOrder object.
+     */
     private final HashMap<Integer, AnOrder> orders = new HashMap<>();
-    private final Orders bll = new Orders();
+    private final Orders bllOrders = new Orders();
+    /**
+     * Integer key = The ASupplier's primary key.
+     */
+    private final HashMap<Integer, ASupplier> suppliers = new HashMap<>();
+    private final Suppliers bllSuppliers = new Suppliers();
+
+    /**
+     * Used to toggle edit and remove buttons on and off.
+     */
+    private boolean makeButtonsEnabled = false;
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     private JButton btnCreate, btnRemove, btnEdit;
     private JTable mainTable;
     private DefaultTableModel mainTableModel;
     private JScrollPane sp;
-    private boolean disableButtons = false;//use this variable to toggle edit and remove buttons on and off
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -42,6 +55,7 @@ public class OrdersPanel
     public OrdersPanel() {
         initializeComponents();
         refreshGrid();
+        toggleDisableButton();
     }
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
@@ -77,67 +91,50 @@ public class OrdersPanel
         mainTable = new JTable(mainTableModel);
         mainTable.setDefaultEditor(Object.class, null);
         mainTable.getTableHeader().setReorderingAllowed(false);
-        // Add action listener to JTable
         mainTable.getSelectionModel().addListSelectionListener((e) -> {
             //if the row is bigger than -1 than we need to enable the buttons
             if (mainTable.getSelectedRow() > -1) {
-                disableButtons = true;
+                makeButtonsEnabled = true;
                 toggleDisableButton();
             }
         });
+        mainTable.addMouseListener(new MouseAdapter() {
+            /**
+             * https://stackoverflow.com/questions/14852719/double-click-listener-on-jtable-in-java
+             *
+             * @param mouseEvent
+             */
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+                if (mouseEvent.getClickCount() == 2) {
+                    editAction();
+                }
+            }
+        });
         mainTable.setBounds(30, 40, 200, 200);
+        Utilities.setRightAlignment(this.mainTable, 5); //Total Price column
+        Utilities.setCenterAlignment(this.mainTable, 3); //Order Date
+        Utilities.setCenterAlignment(this.mainTable, 4); //Expected Date
 
+        //Other components
         sp = new JScrollPane(mainTable);
-
-        add(sp, BorderLayout.CENTER);
-
         add(sp, BorderLayout.CENTER);
 
         JPanel btmSup = new JPanel(new GridLayout(0, 8, 2, 0));
-
-        btnCreate = new JButton("Create");
+        btnCreate = new JButton(Utilities.BUTTON_CREATE);
+        btnCreate.setEnabled(false);
         btnCreate.addActionListener((ActionEvent e) -> {
-            OrderItemsFrame dlgCreate = new OrderItemsFrame(true, null);
-            dlgCreate.setLocationRelativeTo(sp);
-            if (dlgCreate.display() == DialogResultType.OK) {
-                this.refreshGrid();
-            }
+            createAction();
         });
 
-        btnEdit = new JButton("Edit");
-        btnEdit.setEnabled(disableButtons);
+        btnEdit = new JButton(Utilities.BUTTON_EDIT);
         btnEdit.addActionListener((ActionEvent e) -> {
-            System.out.print("Edit order");
-            //if list item selected edit item else select item
-            int selectedRow = mainTable.getSelectedRow();
-            if (selectedRow < 0) {
-                JOptionPane.showMessageDialog(null, "Select item to edit");
-            } else {
-                AnOrder anOrder = this.orders.get(selectedRow);
-                OrderItemsFrame dlgEdit = new OrderItemsFrame(false, anOrder);
-                dlgEdit.setLocationRelativeTo(sp);
-                if (dlgEdit.display() == DialogResultType.OK) {
-                    this.refreshGrid();
-                }
-            }
+            editAction();
         });
 
-        btnRemove = new JButton("Remove");
-        btnRemove.setEnabled(disableButtons);
+        btnRemove = new JButton(Utilities.BUTTON_REMOVE);
         btnRemove.addActionListener((ActionEvent e) -> {
-            int selectedRow = this.mainTable.getSelectedRow();
-            if (selectedRow < 0) {
-                JOptionPane.showMessageDialog(null, "Select item to remove");
-            } else {
-                AnOrder anOrder = this.orders.get(selectedRow);
-                if (this.bll.remove(anOrder.getPrimaryKey())) {
-                    this.refreshGrid();
-                    //JOptionPane.showMessageDialog(null, String.format("%s has been removed.", anOrder.getDescription()));
-                } else {
-                    JOptionPane.showMessageDialog(this, this.bll.getErrorMessage(),
-                            Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
-                }
-            }
+            removeAction();
         });
 
         btmSup.add(btnCreate);
@@ -149,15 +146,26 @@ public class OrdersPanel
     }
 
     private void toggleDisableButton() {
-        btnEdit.setEnabled(disableButtons);
-        btnRemove.setEnabled(disableButtons);
+        btnEdit.setEnabled(makeButtonsEnabled);
+        btnRemove.setEnabled(makeButtonsEnabled);
+
     }
 
-    private void initTableData(ArrayList<AnOrder> aList) {
+    private void initTableData(ArrayList<AnOrder> listOrders) {
         if (this.orders != null) {
             int counter = 0;
-            for (AnOrder anOrder : aList) {
-                Object[] data = {anOrder.getDescription(), anOrder.getOrderedFrom(), anOrder.getDateOrdered(), anOrder.getOrderStatus(), anOrder.getDateExpected()};
+            OrderItems bllOrderItems = new OrderItems();
+            for (AnOrder anOrder : listOrders) {
+                Double sum = 0.00;
+                if (bllOrderItems.loadByOrder(anOrder.getPrimaryKey())) {
+                    sum = bllOrderItems.getSumOfExtendedPrice();
+                }
+
+                //{"Description", "Supplier", "Status", "Order Date", "Expected Date", "Total Price"};
+                Object[] data = {anOrder.getDescription(),
+                    this.suppliers.get(anOrder.getOrderedFrom()).getNickname(),
+                    anOrder.getOrderStatus(), anOrder.getDateOrdered(),
+                    anOrder.getDateExpected(), Utilities.formatAsCurrency(sum)};
                 mainTableModel.addRow(data);
                 this.orders.put(counter, anOrder);
                 counter++;
@@ -168,7 +176,7 @@ public class OrdersPanel
     /**
      * Refreshes the grid with current data from the database.
      */
-    private void refreshGrid() {
+    public final void refreshGrid() {
         //Clear the ArrayList and JTable, which should be done backwards.
         this.orders.clear();
         for (int i = mainTableModel.getRowCount() - 1; i >= 0; i--) {
@@ -176,12 +184,74 @@ public class OrdersPanel
         }
 
         //Now load fresh data from database.
-        if (this.bll.load()) {
-            ArrayList<AnOrder> aList = this.bll.getList();
-            initTableData(aList);
+        if (this.bllSuppliers.load()) {
+            ArrayList<ASupplier> listSuppliers = this.bllSuppliers.getList();
+            listSuppliers.forEach((aSupplier) -> {
+                this.suppliers.put(aSupplier.getPrimaryKey(), aSupplier);
+            });
+
+            if (listSuppliers.isEmpty()) {
+                btnCreate.setEnabled(false);
+            } else {
+                btnCreate.setEnabled(true);
+            }
         } else {
-            JOptionPane.showMessageDialog(this, bll.getErrorMessage(),
+            JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
                     Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+        }
+
+        if (this.bllOrders.load()) {
+            ArrayList<AnOrder> listOrders = this.bllOrders.getList();
+            initTableData(listOrders);
+        } else {
+            JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
+                    Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    /**
+     * Pops the Order Details frame in create mode.
+     */
+    private void createAction() {
+        OrderItemsFrame dlgCreate = new OrderItemsFrame(true, null);
+        dlgCreate.setLocationRelativeTo(this);
+        if (dlgCreate.display() == DialogResultType.OK) {
+            refreshGrid();
+        }
+    }
+
+    /**
+     * Pops the detail item dialog if an item is selected.
+     */
+    private void editAction() {
+        int selectedRow = mainTable.getSelectedRow();
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(null, "Select item to edit");
+        } else {
+            AnOrder anOrder = this.orders.get(selectedRow);
+            OrderItemsFrame dlgEdit = new OrderItemsFrame(false, anOrder);
+            dlgEdit.setLocationRelativeTo(this);
+            if (dlgEdit.display() == DialogResultType.OK) {
+                refreshGrid();
+            }
+        }
+    }
+
+    /**
+     * Removes the selected item.
+     */
+    private void removeAction() {
+        int selectedRow = this.mainTable.getSelectedRow();
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(null, "Select item to remove");
+        } else {
+            AnOrder anOrder = this.orders.get(selectedRow);
+            if (this.bllOrders.remove(anOrder)) {
+                this.refreshGrid();
+            } else {
+                JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
+                        Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
     // </editor-fold>
@@ -202,8 +272,5 @@ public class OrdersPanel
     public static String[] getColumnHeaders() {
         return TABLE_LABELS.clone();
     }
-    // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="SubClasses">
-
     // </editor-fold>
 }

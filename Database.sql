@@ -76,23 +76,24 @@ CREATE TABLE suppliers (
 
 CREATE TABLE orders (
     orderId INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    description VARCHAR (64) NOT NULL,
+    description VARCHAR(64) NOT NULL,
     orderedFrom INT UNSIGNED NOT NULL,
-    orderStatus VARCHAR (32) NOT NULL,
+    orderStatus VARCHAR(32) NOT NULL,
     dateOrdered DATE NOT NULL,
     dateExpected DATE NULL,
     PRIMARY KEY (orderId),
-    CONSTRAINT fk_orders_suppliers_orderedFrom FOREIGN KEY (orderedFrom) REFERENCES suppliers(supplierId)
-    );
+    CONSTRAINT fk_orders_suppliers_orderedFrom FOREIGN KEY (orderedFrom)
+        REFERENCES suppliers (supplierId)
+);
 
 CREATE TABLE items (
     itemId INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    description VARCHAR (64) NOT NULL,
+    description VARCHAR(64) NOT NULL,
     sku VARCHAR(32) NULL,
     sizeUnit VARCHAR(32) NULL,
     itemStatus VARCHAR(32) NOT NULL,
     PRIMARY KEY (itemId)
-    );
+);
     
 CREATE TABLE orderItems (
     orderItemId INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -103,8 +104,11 @@ CREATE TABLE orderItems (
     price DOUBLE UNSIGNED NOT NULL DEFAULT 0,
     extendedPrice DOUBLE UNSIGNED NOT NULL DEFAULT 0,
     PRIMARY KEY (orderItemId),
-    CONSTRAINT fk_orderItems_orders_orderId FOREIGN KEY (orderId) REFERENCES orders (orderId),
-    CONSTRAINT fk_orderItems_items_itemId FOREIGN KEY (itemId) REFERENCES items (itemId)
+    CONSTRAINT fk_orderItems_orders_orderId FOREIGN KEY (orderId)
+        REFERENCES orders (orderId)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_orderItems_items_itemId FOREIGN KEY (itemId)
+        REFERENCES items (itemId)
 );
 
 CREATE TABLE inventoryItems (
@@ -113,7 +117,9 @@ CREATE TABLE inventoryItems (
     quantity INT UNSIGNED NOT NULL DEFAULT 0,
     expirationDate DATE NULL,
     PRIMARY KEY (inventoryItemId),
-    CONSTRAINT fk_inventoryItems_items_itemId FOREIGN KEY (itemId) REFERENCES items (itemId)
+    CONSTRAINT fk_inventoryItems_items_itemId FOREIGN KEY (itemId)
+        REFERENCES items (itemId)
+        ON DELETE CASCADE
 );
 
 /***********************************************************************
@@ -275,6 +281,21 @@ BEGIN
 	WHERE orderitems.orderItemId = orderItemId;
 END;;
 
+DROP PROCEDURE IF EXISTS sp_OrderItems_SelectByOrder;;
+CREATE DEFINER = CURRENT_USER 
+PROCEDURE sp_OrderItems_SelectByOrder (
+	IN orderId INT UNSIGNED
+)
+BEGIN
+	SELECT orderItems.orderItemId, orderItems.orderId, orderItems.itemId,
+		orderItems.quantityOrdered, orderItems.quantityCheckedIn,
+        orderItems.price, orderItems.extendedPrice,
+		items.description, items.sku, items.sizeUnit, items.itemStatus 
+	FROM orderItems
+		INNER JOIN items ON orderItems.itemId = items.itemId
+	WHERE orderitems.orderId = orderId;
+END;;
+
 DROP PROCEDURE IF EXISTS sp_OrderItems_Insert;;
 CREATE DEFINER = CURRENT_USER 
 PROCEDURE sp_OrderItems_Insert (
@@ -354,6 +375,21 @@ BEGIN
 	WHERE InventoryItems.InventoryItemId = inventoryItemId;
 END;;
 
+DROP PROCEDURE IF EXISTS sp_InventoryItems_SelectByOrderItem;;
+CREATE DEFINER = CURRENT_USER 
+PROCEDURE sp_InventoryItems_SelectByOrderItem (
+	IN orderItemId INT UNSIGNED
+)
+BEGIN
+	SELECT inventoryitems.inventoryItemId, inventoryitems.itemId,
+		inventoryitems.quantity, inventoryitems.expirationDate,
+		items.description, items.sku, items.sizeUnit, items.itemStatus 
+	FROM inventoryItems
+		INNER JOIN items ON inventoryItems.itemId = items.itemId
+        INNER JOIN orderitems ON orderItems.itemId = items.itemId
+	WHERE OrderItems.OrderItemId = orderItemId;
+END;;
+
 DROP PROCEDURE IF EXISTS sp_InventoryItems_Insert;;
 CREATE DEFINER = CURRENT_USER 
 PROCEDURE sp_InventoryItems_Insert (
@@ -410,8 +446,8 @@ BEGIN
 	UPDATE items
     SET items.description = description,
 		items.sku = sku,
-	   items.sizeUnit = sizeUnit,
-	   items.itemStatus = itemStatus
+		items.sizeUnit = sizeUnit,
+		items.itemStatus = itemStatus
 	WHERE items.itemId = (
 		SELECT inventoryitems.itemId
 		FROM inventoryitems
@@ -451,10 +487,7 @@ BEGIN
 	WHERE inventoryItems.inventoryItemId = inventoryItemId;
 
 	DELETE FROM items
-	WHERE items.itemId = itemId
-		AND items.ItemId NOT IN (
-			SELECT orderitems.itemId
-			FROM orderitems);
+	WHERE items.itemId = itemId;
 
 	COMMIT WORK;
 END;;
