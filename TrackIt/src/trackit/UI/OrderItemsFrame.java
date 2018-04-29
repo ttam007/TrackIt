@@ -346,7 +346,6 @@ public class OrderItemsFrame
      */
     private boolean populateObject() {
         boolean returnValue = false;
-        //TODO:  sort this out so boolean return is used instead of try/catch block.
         try {
             this.anOrder.setDescription(this.tfDescription.getText());
             ASupplier aSupplier = (ASupplier) this.cboSuppliers.getModel().getSelectedItem();

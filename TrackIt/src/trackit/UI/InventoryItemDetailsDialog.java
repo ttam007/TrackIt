@@ -210,7 +210,7 @@ public class InventoryItemDetailsDialog
         this.btnCancel.addActionListener((ActionEvent e) -> {
             cancelAction();
         });
-        
+
         btnOK.setPreferredSize(btnCancel.getPreferredSize());
         pack();
     }
@@ -232,7 +232,6 @@ public class InventoryItemDetailsDialog
      */
     private boolean populateObject() {
         boolean returnValue = false;
-        //TODO:  sort this out so boolean return is used instead of try/catch block.
         try {
             this.anInventoryItem.setDescription(this.tfDescription.getText());
             this.anInventoryItem.setSku(this.tfSku.getText());

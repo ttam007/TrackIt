@@ -17,8 +17,9 @@ public class Dashboard {
     private Date date;
     private Double money;
     private String description;
-    private Inventory bllInventory;
-    private Orders bllOrders;
+    private final Inventory bllInventory = new Inventory();
+    private final Orders bllOrders = new Orders();
+    private final OrderItems bllOrderItems = new OrderItems();
 
     /**
      *
@@ -47,13 +48,13 @@ public class Dashboard {
         try {
             if (this.type == DashboardType.COUNT_ITEMS_OUT_OF_STOCK
                     || this.type == DashboardType.DATE_NEXT_ITEM_EXPIRES) {
-                bllInventory = new Inventory();
+
                 if (bllInventory.load()) {
                     ArrayList<AnInventoryItem> aList = bllInventory.getList();
                     switch (this.type) {
                         case COUNT_ITEMS_OUT_OF_STOCK:
                             getNumOfItemsOutOfStock(aList);
-                            this.description = " item(s) out of stock";
+                            this.description = " item(s) are out of stock";
                             break;
                         case DATE_NEXT_ITEM_EXPIRES:
                             getDateNextExpires(aList);
@@ -65,7 +66,6 @@ public class Dashboard {
                 }
             } else if (this.type == DashboardType.DATE_NEXT_ORDER_ARRIVES
                     || this.type == DashboardType.MONEY_SPENT_LAST_30_DAYS) {
-                bllOrders = new Orders();
                 if (bllOrders.load()) {
                     ArrayList<AnOrder> aList = bllOrders.getList();
                     switch (this.type) {
@@ -75,7 +75,7 @@ public class Dashboard {
                             break;
                         case MONEY_SPENT_LAST_30_DAYS:
                             countMoney(aList);
-                            this.description = "In last 30 days, you have spent $";
+                            this.description = "In the last 30 days, you have spent ";
                             break;
                         default:
                             break;
@@ -144,7 +144,6 @@ public class Dashboard {
         Double moneyCount = 0.00;
 
         ArrayList<AnOrderItem> orderItemList = new ArrayList<>();
-        OrderItems bllOrderItems = new OrderItems();
         if (bllOrderItems.loadByOrder(orderPrimaryKey)) {
             orderItemList = bllOrderItems.getList();
         }
@@ -185,7 +184,7 @@ public class Dashboard {
         } else if (this.date != null) {
             return "- " + this.description + this.date.toString();
         } else if (this.money != null) {
-            return "- " + this.description + this.money;
+            return "- " + this.description + Utilities.formatAsCurrency(this.money);
         } else {
             return "";
         }

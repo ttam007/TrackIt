@@ -1,51 +1,22 @@
 package trackit;
 
-import java.util.*;
-
 /**
  *
- * @author Bryan
+ * @author Bond
  */
 public class MainMenu {
 
-    private final ArrayList<Dashboard> dashboards = new ArrayList<>();
-
     /**
-     * Create dashboard
+     * Default Constructor.
      */
     public MainMenu() {
-        this.createDashboards();
     }
 
     /**
-     * Creates all the dashboard objects and adds them to this.dashboards.
-     */
-    private void createDashboards() {
-        //TODO:  
-        this.refreshDashboards();
-    }
-
-    /**
-     * Refreshes the data on all dashboards with current information.
-     */
-    private void refreshDashboards() {
-    }
-
-    /**
-     *
-     * @return
-     */
-    public ArrayList<Dashboard> getDashboards() {
-        this.refreshDashboards();
-        return this.dashboards;
-    }
-
-    /**
-     * logout
+     * Logs out of the database and brings up the login window.
      */
     public void logout() {
         Login login = new Login();
         login.startLogout();
-        //TODO:  close the Main Menu UI; done in MainMenuFrame
     }
 }

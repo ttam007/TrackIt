@@ -19,7 +19,7 @@ public class MainMenuFrame
      * The name of the window.
      */
     private static final String WINDOW_NAME = "Main Menu";
-    private final MainMenu bll;
+    private final MainMenu bllMainMenu = new MainMenu();
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     SuppliersPanel suppliersTab = new SuppliersPanel();
@@ -36,11 +36,9 @@ public class MainMenuFrame
      * Main menu
      */
     public MainMenuFrame() {
-        this.bll = new MainMenu();
         initializeComponents();
 
-        tabpane.setSelectedIndex(0);//dashboard index
-        //TODO:  Test if the above line works.  If not, then use dashboardTab.refresh();
+        tabpane.setSelectedIndex(0); //dashboard tab's index
     }
 
     // </editor-fold>
@@ -98,9 +96,9 @@ public class MainMenuFrame
         JPanel pnlBottom = new JPanel();
         btnLogout = new JButton(Utilities.BUTTON_LOGOUT);
         btnLogout.addActionListener((ActionEvent e) -> {
-            setVisible(false);
-            LoginFrame login = new LoginFrame();
-            login.display();
+            this.bllMainMenu.logout();
+            this.setVisible(false);
+            this.dispose();
         });
         btnExit = new JButton(Utilities.BUTTON_EXIT);
         btnExit.addActionListener((ActionEvent e) -> {
