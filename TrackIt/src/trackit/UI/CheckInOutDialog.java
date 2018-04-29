@@ -162,13 +162,11 @@ public class CheckInOutDialog
 
         //Finalizations
         pack();
-
     }
 
     /**
      * Handles the save action. If any errors, then display error message
      * instead.
-     *
      */
     private void saveAction() {
         if (checkInItem()) {
@@ -185,13 +183,11 @@ public class CheckInOutDialog
     }
 
     /**
-     * Handles the cancel action. If any errors, then display error message
-     * instead.
-     *
+     * Handles the cancel action.
      */
     private void cancelAction() {
-        JOptionPane.showMessageDialog(null, "Change Cancelled");
-        //TODO:  close window and return to prior window.
+        this.dialogResult = DialogResultType.CANCEL;
+        this.setVisible(false);
         this.dispose();
     }
 

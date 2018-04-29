@@ -52,7 +52,7 @@ public class SupplierDetailsDialog
         } else {
             this.aSupplier = aSupplier;
         }
-        
+
         initializeComponents();
         populateComponents();
     }
@@ -98,7 +98,7 @@ public class SupplierDetailsDialog
         this.addWindowListener(new CloseQuery());
         this.getRootPane().setDefaultButton(btnOK);
         this.setModal(true);
-        
+
         gbc = new GridBagConstraints();
         setLayout(new GridBagLayout());
         gbc.insets = new Insets(2, 2, 5, 0);
@@ -169,7 +169,6 @@ public class SupplierDetailsDialog
      */
     private boolean populateObject() {
         boolean returnValue = false;
-        //TODO:  sort this out so boolean return is used instead of try/catch block.
         try {
             this.aSupplier.setNickname(this.tfName.getText());
             this.aSupplier.setUrl(this.tfAddress.getText());
@@ -179,7 +178,7 @@ public class SupplierDetailsDialog
             JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
                     Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
         }
-        
+
         return returnValue;
     }
 
@@ -229,7 +228,7 @@ public class SupplierDetailsDialog
      * Handles all aspects of closing the program.
      */
     private class CloseQuery extends WindowAdapter {
-        
+
         @Override
         public void windowClosing(WindowEvent e) {
             JDialog frame = SupplierDetailsDialog.this;

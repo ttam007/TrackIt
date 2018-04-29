@@ -122,7 +122,6 @@ public class OrderItemDetailsDialog
         add(lblName, gbc);
 
         //Description
-        //TODO:  Implement this or something like it:  http://www.algosome.com/articles/java-jcombobox-autocomplete.html
         cboItemName = new JComboBox<>(getItemList());
         cboItemName.setEnabled(isCreateMode);
         gbc.gridx = 1;
@@ -235,7 +234,6 @@ public class OrderItemDetailsDialog
      */
     private boolean populateObject() {
         boolean returnValue = false;
-        //TODO:  sort this out so boolean return is used instead of try/catch block.
         try {
             AnInventoryItem anInventoryItem = (AnInventoryItem) this.cboItemName.getModel().getSelectedItem();
             this.anOrderItem.setDescription(anInventoryItem.getDescription());
