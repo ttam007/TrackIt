@@ -33,7 +33,6 @@ public class OrderItemsFrame
     private final Suppliers bllSuppliers = new Suppliers();
     private final static String CHECKOUT_MSG = "Item has already been checked in.";
     private boolean isLoading;
-    private boolean clearGrid;
 
     //For the grid.
     private final HashMap<Integer, AnOrderItem> orderItems = new HashMap<>();
@@ -49,7 +48,7 @@ public class OrderItemsFrame
     private JPanel pnlBtm;
     private JLabel lblDescription, lblSupplier, lblStatus, lblOrderDate, lblExpectedDate;
     private JTextField tfDescription;
-    
+
     private JDatePickerImpl orderedDatePicker, expectedDatePicker;
     private JScrollPane scrollPane;
     private JComboBox<OrderStatusType> cboOrderStatus;
@@ -238,7 +237,7 @@ public class OrderItemsFrame
         });
 
         btnCheckIn.setPreferredSize(btnCheckInAll.getPreferredSize());
-        
+
         topBox.add(pnlTopBpx);
         add(topBox, BorderLayout.NORTH);
 
@@ -310,8 +309,7 @@ public class OrderItemsFrame
         btnOK = new JButton(Utilities.BUTTON_OK);
         pnlBtm.add(btnOK);
         btnOK.addActionListener((ActionEvent e) -> {
-            clearGrid = true;
-            saveAction();
+            saveAction(true);
         });
 
         btnCancel = new JButton(Utilities.BUTTON_CANCEL);
@@ -372,14 +370,13 @@ public class OrderItemsFrame
         } else {
             AnOrderItem anOrderItem = this.orderItems.get(row);
             try {
-                clearGrid = false;
-                saveAction();
+                saveAction(false);
                 AnInventoryItem anInventoryItem = AnInventoryItem.loadByOrderItem(anOrderItem.getPrimaryKey());
                 if (anOrderItem.getQuantityOrdered() > anOrderItem.getQuantityCheckedIn()) {
                     anInventoryItem.changeQuantity(anOrderItem.getQuantityOrdered());
                     anOrderItem.setQuantityCheckedIn(anOrderItem.getQuantityOrdered());
-                    anInventoryItem.save(anInventoryItem);
-                    anOrderItem.save(anOrderItem);                    
+                    AnInventoryItem.save(anInventoryItem);
+                    AnOrderItem.save(anOrderItem);
                     this.refreshGrid(true);
                     JOptionPane.showMessageDialog(this, "Item Checked In");
                     returnValue = true;
@@ -399,12 +396,15 @@ public class OrderItemsFrame
     /**
      * Handles the save action. If any errors, then display error message
      * instead.
+     *
+     * @param closeAfterSaving True = Close this window after saving; False =
+     * leave this window open after saving.
      */
-    private void saveAction() {
+    private void saveAction(boolean closeAfterSaving) {
         if (populateObject()) {
             if (this.bllOrders.save(this.anOrder, bllOrderItems)) {
                 this.dialogResult = DialogResultType.OK;
-                if(clearGrid) {
+                if (closeAfterSaving) {
                     this.setVisible(false);
                     this.dispose();
                 }
@@ -486,22 +486,17 @@ public class OrderItemsFrame
         dlgAdd.setLocationRelativeTo(this);
         if (dlgAdd.display() == DialogResultType.OK) {
             this.refreshGrid(false);
-            clearGrid = false;
-            saveAction();
+            saveAction(false);
         }
     }
-	
+
     /**
      * Pops the Inventory Item dialog in create mode.
      */
     private void createAction() {
         InventoryItemDetailsDialog dlgCreate = new InventoryItemDetailsDialog(true, null);
         dlgCreate.setLocationRelativeTo(this);
-
-        if (dlgCreate.display() != DialogResultType.OK) {
-        } else {
-            //this.refreshGrid(true);
-        }
+        dlgCreate.display();
     }
 
     /**
@@ -600,8 +595,7 @@ public class OrderItemsFrame
                     "Do you want to save?", "Close Query",
                     JOptionPane.YES_NO_OPTION);
             if (result == JOptionPane.YES_OPTION) {
-                clearGrid = true;
-                saveAction();
+                saveAction(true);
             } else {
                 cancelAction();
             }

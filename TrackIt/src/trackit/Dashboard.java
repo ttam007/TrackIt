@@ -37,52 +37,56 @@ public class Dashboard {
     }
 
     /**
+     * Refreshes the data for the dashboard.
      *
-     * @return dashboard items
+     * @return True = successfully refreshed; False = there was an error.
      */
     public boolean getData() {
         boolean isSuccessful = false;
-        if (this.type == DashboardType.COUNT_ITEMS_OUT_OF_STOCK
-                || this.type == DashboardType.DATE_NEXT_ITEM_EXPIRES) {
-            bllInventory = new Inventory();
-            if (bllInventory.load()) {
-                ArrayList<AnInventoryItem> aList = bllInventory.getList();
-                switch (this.type) {
-                    case COUNT_ITEMS_OUT_OF_STOCK:
-                        getNumOfItemsOutOfStock(aList);
-                        this.description = " item(s) out of stock";
-                        break;
-                    case DATE_NEXT_ITEM_EXPIRES:
-                        getDateNextExpires(aList);
-                        this.description = "The next item to expire will be on ";
-                        break;
-                    default:
-                        break;
-                }
-                isSuccessful = true;
-            }
-        } else if (this.type == DashboardType.DATE_NEXT_ORDER_ARRIVES
-                || this.type == DashboardType.MONEY_SPENT_LAST_30_DAYS) {
-            bllOrders = new Orders();
-            if (bllOrders.load()) {
-                ArrayList<AnOrder> aList = bllOrders.getList();
-                switch (this.type) {
-                    case DATE_NEXT_ORDER_ARRIVES:
-                        getDateNextArrives(aList);
-                        this.description = "The next order to arrive will be on ";
-                        break;
-                    case MONEY_SPENT_LAST_30_DAYS:
-                        OrderItems bllOrderItem = new OrderItems();
-                        countMoney(aList, bllOrderItem.getList());
-                        this.description = "In 30 days, you have spent $";
-                        break;
-                    default:
-                        break;
-                }
-                isSuccessful = true;
-            }
-        }
 
+        try {
+            if (this.type == DashboardType.COUNT_ITEMS_OUT_OF_STOCK
+                    || this.type == DashboardType.DATE_NEXT_ITEM_EXPIRES) {
+                bllInventory = new Inventory();
+                if (bllInventory.load()) {
+                    ArrayList<AnInventoryItem> aList = bllInventory.getList();
+                    switch (this.type) {
+                        case COUNT_ITEMS_OUT_OF_STOCK:
+                            getNumOfItemsOutOfStock(aList);
+                            this.description = " item(s) out of stock";
+                            break;
+                        case DATE_NEXT_ITEM_EXPIRES:
+                            getDateNextExpires(aList);
+                            this.description = "The next item to expire will be on ";
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            } else if (this.type == DashboardType.DATE_NEXT_ORDER_ARRIVES
+                    || this.type == DashboardType.MONEY_SPENT_LAST_30_DAYS) {
+                bllOrders = new Orders();
+                if (bllOrders.load()) {
+                    ArrayList<AnOrder> aList = bllOrders.getList();
+                    switch (this.type) {
+                        case DATE_NEXT_ORDER_ARRIVES:
+                            getDateNextArrives(aList);
+                            this.description = "The next order to arrive will be on ";
+                            break;
+                        case MONEY_SPENT_LAST_30_DAYS:
+                            OrderItems bllOrderItem = new OrderItems();
+                            countMoney(aList, bllOrderItem.getList());
+                            this.description = "In 30 days, you have spent $";
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            isSuccessful = true;
+        } catch (Exception ex) {
+            Utilities.setErrorMessage(ex);
+        }
         return isSuccessful;
     }
 

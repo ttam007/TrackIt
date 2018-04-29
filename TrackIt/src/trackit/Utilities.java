@@ -210,36 +210,34 @@ public class Utilities {
         return new DefaultFormatterFactory(defaultFormatter, displayFormatter, editFormatter);
     }
 
-
     /**
+     * Sets the specified column in the specified table to be right aligned.
      *
-     * @param aTable
-     * @param columnIndex
+     * @param aTable The table that has the column that needs alignment.
+     * @param columnIndex The index of the column to be aligned.
      */
-
     public static void setRightAlignment(JTable aTable, int columnIndex) {
         DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
         rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
         TableColumn aTableColumn = aTable.getColumnModel().getColumn(columnIndex);
         aTableColumn.setCellRenderer(rightRenderer);
     }
-    
 
     /**
+     * Sets the specified column in the specified table to be center aligned.
      *
-     * @param aTable
-     * @param columnIndex
+     * @param aTable The table that has the column that needs alignment.
+     * @param columnIndex The index of the column to be aligned.
      */
-
-    public static void setCenterAlignment(JTable aTable, int columnIndex){
+    public static void setCenterAlignment(JTable aTable, int columnIndex) {
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
         TableColumn aTableColumn = aTable.getColumnModel().getColumn(columnIndex);
         aTableColumn.setCellRenderer(centerRenderer);
     }
-
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Static Methods - Errors">
+
     /**
      * Stores the generated error message for retrieval by another class.
      *
@@ -460,9 +458,10 @@ public class Utilities {
             boolean returnValue = false;
 
             try {
-
-                String text;
-                text = ((JTextComponent) aComponent).getText();
+                String text = null;
+                if (aComponent instanceof JTextComponent) {
+                    text = ((JTextComponent) aComponent).getText();
+                }
 
                 if (text == null || text.trim().equals("")) {
                     returnValue = true;
