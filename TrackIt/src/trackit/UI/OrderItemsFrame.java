@@ -371,8 +371,8 @@ public class OrderItemsFrame
                 if (anOrderItem.getQuantityOrdered() > anOrderItem.getQuantityCheckedIn()) {
                     anInventoryItem.changeQuantity(anOrderItem.getQuantityOrdered());
                     anOrderItem.setQuantityCheckedIn(anOrderItem.getQuantityOrdered());
-                    anInventoryItem.save(anInventoryItem);
-                    anOrderItem.save(anOrderItem);
+                    AnInventoryItem.save(anInventoryItem);
+                    AnOrderItem.save(anOrderItem);
                     returnValue = true;
                     this.refreshGrid(true);
                     JOptionPane.showMessageDialog(this, "Item Checked In");
@@ -479,16 +479,14 @@ public class OrderItemsFrame
             this.refreshGrid(false);
         }
     }
-	
+
     /**
      * Pops the Inventory Item dialog in create mode.
      */
     private void createAction() {
         InventoryItemDetailsDialog dlgCreate = new InventoryItemDetailsDialog(true, null);
         dlgCreate.setLocationRelativeTo(this);
-        if (dlgCreate.display() == DialogResultType.OK) {
-            //this.refreshGrid(true);
-        }
+        dlgCreate.display();
     }
 
     /**

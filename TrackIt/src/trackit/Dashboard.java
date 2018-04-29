@@ -9,7 +9,7 @@ import java.util.Date;
  * @author Bryan
  */
 public class Dashboard {
-
+    
     private final DashboardType type;
 
     //private String title;
@@ -36,52 +36,60 @@ public class Dashboard {
         return type;
     }
 
+    /**
+     * Refreshes the data for the dashboard.
+     *
+     * @return True = successfully refreshed; False = there was an error.
+     */
     public boolean getData() {
         boolean isSuccessful = false;
-        if (this.type == DashboardType.COUNT_ITEMS_OUT_OF_STOCK
-                || this.type == DashboardType.DATE_NEXT_ITEM_EXPIRES) {
-            bllInventory = new Inventory();
-            if (bllInventory.load()) {
-                ArrayList<AnInventoryItem> aList = bllInventory.getList();
-                switch (this.type) {
-                    case COUNT_ITEMS_OUT_OF_STOCK:
-                        getNumOfItemsOutOfStock(aList);
-                        this.description = " item(s) out of stock";
-                        break;
-                    case DATE_NEXT_ITEM_EXPIRES:
-                        getDateNextExpires(aList);
-                        this.description = "The next item to expire will be on ";
-                        break;
-                    default:
-                        break;
+        
+        try {
+            if (this.type == DashboardType.COUNT_ITEMS_OUT_OF_STOCK
+                    || this.type == DashboardType.DATE_NEXT_ITEM_EXPIRES) {
+                bllInventory = new Inventory();
+                if (bllInventory.load()) {
+                    ArrayList<AnInventoryItem> aList = bllInventory.getList();
+                    switch (this.type) {
+                        case COUNT_ITEMS_OUT_OF_STOCK:
+                            getNumOfItemsOutOfStock(aList);
+                            this.description = " item(s) out of stock";
+                            break;
+                        case DATE_NEXT_ITEM_EXPIRES:
+                            getDateNextExpires(aList);
+                            this.description = "The next item to expire will be on ";
+                            break;
+                        default:
+                            break;
+                    }
                 }
-                isSuccessful = true;
-            }
-        } else if (this.type == DashboardType.DATE_NEXT_ORDER_ARRIVES
-                || this.type == DashboardType.MONEY_SPENT_LAST_30_DAYS) {
-            bllOrders = new Orders();
-            if (bllOrders.load()) {
-                ArrayList<AnOrder> aList = bllOrders.getList();
-                switch (this.type) {
-                    case DATE_NEXT_ORDER_ARRIVES:
-                        getDateNextArrives(aList);
-                        this.description = "The next order to arrive will be on ";
-                        break;
-                    case MONEY_SPENT_LAST_30_DAYS:
-                        OrderItems bllOrderItem = new OrderItems();
-                        countMoney(aList, bllOrderItem.getList());
-                        this.description = "In 30 days, you have spent $";
-                        break;
-                    default:
-                        break;
+            } else if (this.type == DashboardType.DATE_NEXT_ORDER_ARRIVES
+                    || this.type == DashboardType.MONEY_SPENT_LAST_30_DAYS) {
+                bllOrders = new Orders();
+                if (bllOrders.load()) {
+                    ArrayList<AnOrder> aList = bllOrders.getList();
+                    switch (this.type) {
+                        case DATE_NEXT_ORDER_ARRIVES:
+                            getDateNextArrives(aList);
+                            this.description = "The next order to arrive will be on ";
+                            break;
+                        case MONEY_SPENT_LAST_30_DAYS:
+                            OrderItems bllOrderItem = new OrderItems();
+                            countMoney(aList, bllOrderItem.getList());
+                            this.description = "In 30 days, you have spent $";
+                            break;
+                        default:
+                            break;
+                    }
                 }
-                isSuccessful = true;
             }
+            isSuccessful = true;
+        } catch (Exception ex) {
+            Utilities.setErrorMessage(ex);
         }
-
         return isSuccessful;
     }
-
+    
     private void getNumOfItemsOutOfStock(ArrayList<AnInventoryItem> aList) {
         int counter = 0;
         for (AnInventoryItem item : aList) {
@@ -91,11 +99,11 @@ public class Dashboard {
         }
         this.count = counter;
     }
-
+    
     private void getDateNextExpires(ArrayList<AnInventoryItem> aList) {
         Date min = new Date(Long.MAX_VALUE);
         Date today = Utilities.getToday();
-
+        
         if (aList != null) {
             for (AnInventoryItem item : aList) {
                 Date dateToCompare = item.getExpirationDate();
@@ -108,11 +116,11 @@ public class Dashboard {
         }
         this.date = (min.getTime() == Long.MAX_VALUE ? null : min);
     }
-
+    
     private void getDateNextArrives(ArrayList<AnOrder> aList) {
         Date min = new Date(Long.MAX_VALUE);
         Date today = Utilities.getToday();
-
+        
         if (aList != null) {
             for (AnOrder item : aList) {
                 Date dateToCompare = item.getDateOrdered();
@@ -141,16 +149,16 @@ public class Dashboard {
             }
         }
         return moneyCount;
-
+        
     }
-
+    
     private void countMoney(ArrayList<AnOrder> aList, ArrayList<AnOrderItem> orderItemList) {
         Double moneyCount = 0.00;
-
+        
         if (aList.size() > 0) {
             Calendar minus30Cal = Calendar.getInstance();
             minus30Cal.add(Calendar.DAY_OF_MONTH, -30);
-
+            
             for (AnOrder order : aList) {
                 Date orderDate = order.getDateOrdered();
                 if (orderDate != null && orderDate.after(minus30Cal.getTime())) {
@@ -160,7 +168,7 @@ public class Dashboard {
         }
         this.money = moneyCount;
     }
-
+    
     @Override
     public String toString() {
         if (count != null) {

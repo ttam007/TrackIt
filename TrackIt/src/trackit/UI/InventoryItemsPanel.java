@@ -101,6 +101,7 @@ public class InventoryItemsPanel
         });
         mainTable.setBounds(30, 40, 200, 200);
         Utilities.setRightAlignment(this.mainTable, 1); //Quantity column
+        Utilities.setCenterAlignment(this.mainTable, 4); //Expiration Date
 
         setButtons();
         sp = new JScrollPane(mainTable);
