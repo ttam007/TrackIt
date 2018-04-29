@@ -123,7 +123,7 @@ public class Dashboard {
 
         if (aList != null) {
             for (AnOrder item : aList) {
-                Date dateToCompare = item.getDateOrdered();
+                Date dateToCompare = item.getDateExpected();
                 if (dateToCompare != null
                         && dateToCompare.before(min)
                         && (dateToCompare.compareTo(today) >= 0)) {
