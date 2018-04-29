@@ -73,7 +73,7 @@ public class SQLHelperOrder
         ArrayList<AnOrder> results = new ArrayList<>();
 
         String sql = buildSprocSyntax(sprocName, parameters.size());
-        System.out.println("execSproc's sql = " + sql);
+        //System.out.println("execSproc's sql = " + sql);
 
         try (Connection myConn = sqlConn.getConnection();
                 CallableStatement stmt = myConn.prepareCall(sql)) {
@@ -131,7 +131,7 @@ public class SQLHelperOrder
         params.put(0, outParam);
         params.put(1, new SprocParameterVarchar(SQLHelperOrder.COLUMN_DESCRIPTION, anObject.getDescription(), ParameterDirection.IN));
         params.put(2, new SprocParameterInteger(SQLHelperOrder.COLUMN_ORDEREDFROM, anObject.getOrderedFrom().toString(), ParameterDirection.IN));
-        params.put(3, new SprocParameterVarchar(SQLHelperOrder.COLUMN_ORDERSTATUS, anObject.getOrderStatus().getText(), ParameterDirection.IN));
+        params.put(3, new SprocParameterVarchar(SQLHelperOrder.COLUMN_ORDERSTATUS, anObject.getOrderStatus().toString(), ParameterDirection.IN));
         params.put(4, new SprocParameterDate(SQLHelperOrder.COLUMN_DATEORDERED, anObject.getDateOrdered().toString(), ParameterDirection.IN));
         String dateExpected = (anObject.getDateExpected() == null ? null : anObject.getDateExpected().toString());
         params.put(5, new SprocParameterDate(SQLHelperOrder.COLUMN_DATEEXPECTED, dateExpected, ParameterDirection.IN));
@@ -149,7 +149,7 @@ public class SQLHelperOrder
         params.put(0, new SprocParameterInteger(SQLHelperOrder.COLUMN_PK, anObject.getPrimaryKey().toString(), ParameterDirection.IN));
         params.put(1, new SprocParameterVarchar(SQLHelperOrder.COLUMN_DESCRIPTION, anObject.getDescription(), ParameterDirection.IN));
         params.put(2, new SprocParameterInteger(SQLHelperOrder.COLUMN_ORDEREDFROM, anObject.getOrderedFrom().toString(), ParameterDirection.IN));
-        params.put(3, new SprocParameterVarchar(SQLHelperOrder.COLUMN_ORDERSTATUS, anObject.getOrderStatus().getText(), ParameterDirection.IN));
+        params.put(3, new SprocParameterVarchar(SQLHelperOrder.COLUMN_ORDERSTATUS, anObject.getOrderStatus().toString(), ParameterDirection.IN));
         params.put(4, new SprocParameterDate(SQLHelperOrder.COLUMN_DATEORDERED, anObject.getDateOrdered().toString(), ParameterDirection.IN));
         String dateExpected = (anObject.getDateExpected() == null ? null : anObject.getDateExpected().toString());
         params.put(5, new SprocParameterDate(SQLHelperOrder.COLUMN_DATEEXPECTED, dateExpected, ParameterDirection.IN));

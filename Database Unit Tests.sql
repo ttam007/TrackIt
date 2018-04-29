@@ -7,7 +7,7 @@ CALL sp_inventoryItems_SelectAll();
 
 CALL sp_inventoryItems_Update(4, 10, '2018-05-26', 'Widget', '12345-ABC', '16 ounce', 'Discontinued');
 CALL sp_inventoryItems_Select (4);
-CALL sp_inventoryItems_Delete (4);
+CALL sp_inventoryItems_Delete (2);
 CALL sp_inventoryItems_Select (4);
 CALL sp_inventoryItems_SelectAll();
 
@@ -105,3 +105,7 @@ CALL sp_OrderItems_SelectAll();
 
 CALL sp_OrderItems_Delete (null);
 CALL sp_OrderItems_SelectAll();
+
+CALL sp_OrderItems_SelectByOrder(2);
+
+CALL sp_InventoryItems_SelectByOrderItem(2);

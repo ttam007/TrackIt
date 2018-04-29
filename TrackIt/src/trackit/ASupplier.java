@@ -8,7 +8,7 @@ import trackit.DAL.SQLHelperSupplier;
 /**
  * DAL Layer: Handles all aspects of a single Supplier.
  *
- * @author Bond
+ * @author Bond, Steven
  */
 public class ASupplier
         extends DatabaseObject {
@@ -43,6 +43,10 @@ public class ASupplier
      */
     public final void setNickname(String aNickname)
             throws SQLException {
+        if (HELPER.tryNullCheck(SQLHelperSupplier.COLUMN_NICKNAME, aNickname)
+                && aNickname.trim().equals("")) {
+            throw new NonEmptyStringException("Name");
+        }
         this.nickname = HELPER.doNullCheck(SQLHelperSupplier.COLUMN_NICKNAME, aNickname);
     }
 
@@ -92,6 +96,13 @@ public class ASupplier
         }
 
         return returnValue;
+    }
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Public Methods">
+
+    @Override
+    public String toString() {
+        return this.getNickname();
     }
 
     // </editor-fold>
@@ -147,7 +158,9 @@ public class ASupplier
      */
     public static void remove(ASupplier anObj)
             throws SQLException, Exception {
-        remove(anObj.getPrimaryKey());
+        if (anObj.isAlreadyInDatabase()) {
+            remove(anObj.getPrimaryKey());
+        }
     }
 
     /**
@@ -157,7 +170,7 @@ public class ASupplier
      * @throws SQLException
      * @throws Exception
      */
-    public static void remove(Integer primaryKey)
+    private static void remove(Integer primaryKey)
             throws SQLException, Exception {
         HELPER.delete(primaryKey);
     }

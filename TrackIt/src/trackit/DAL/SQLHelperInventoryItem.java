@@ -68,7 +68,7 @@ public class SQLHelperInventoryItem
         ArrayList<AnInventoryItem> results = new ArrayList<>();
 
         String sql = buildSprocSyntax(sprocName, parameters.size());
-        System.out.println("execSproc's sql = " + sql);
+        //System.out.println("execSproc's sql = " + sql);
 
         try (Connection myConn = sqlConn.getConnection();
                 CallableStatement stmt = myConn.prepareCall(sql)) {
@@ -118,6 +118,28 @@ public class SQLHelperInventoryItem
         }
     }
 
+    /**
+     * Gets the inventory item from the database that matches the specified
+     * order item.
+     *
+     * @param primaryKey The primary key of the order item.
+     * @return An inventory items that matches the specified order item.
+     * @throws SQLException
+     * @throws Exception
+     */
+    public AnInventoryItem selectByOrderItem(Integer primaryKey)
+            throws SQLException, Exception {
+        HashMap<Integer, SprocParameter> params = new HashMap<>();
+        params.put(0, new SprocParameterInteger(SQLHelperOrderItem.COLUMN_PK, primaryKey.toString(), ParameterDirection.IN));
+
+        ArrayList<AnInventoryItem> results = execSproc("sp_InventoryItems_SelectByOrderItem", params);
+        if (results.isEmpty()) {
+            return null;
+        } else {
+            return results.get(0);
+        }
+    }
+
     @Override
     public Integer insert(AnInventoryItem anObject)
             throws SQLException, Exception {
@@ -130,7 +152,7 @@ public class SQLHelperInventoryItem
         params.put(3, new SprocParameterVarchar(SQLHelperItem.COLUMN_DESCRIPTION, anObject.getDescription(), ParameterDirection.IN));
         params.put(4, new SprocParameterVarchar(SQLHelperItem.COLUMN_SKU, anObject.getSku(), ParameterDirection.IN));
         params.put(5, new SprocParameterVarchar(SQLHelperItem.COLUMN_SIZEUNIT, anObject.getSizeUnit(), ParameterDirection.IN));
-        params.put(6, new SprocParameterVarchar(SQLHelperItem.COLUMN_ITEMSTATUS, anObject.getItemStatus().getText(), ParameterDirection.IN));
+        params.put(6, new SprocParameterVarchar(SQLHelperItem.COLUMN_ITEMSTATUS, anObject.getItemStatus().toString(), ParameterDirection.IN));
 
         execSproc("sp_InventoryItems_Insert", params);
         Integer primaryKey = Integer.parseInt(outParam.getValue());
@@ -149,7 +171,7 @@ public class SQLHelperInventoryItem
         params.put(3, new SprocParameterVarchar(SQLHelperItem.COLUMN_DESCRIPTION, anObject.getDescription(), ParameterDirection.IN));
         params.put(4, new SprocParameterVarchar(SQLHelperItem.COLUMN_SKU, anObject.getSku(), ParameterDirection.IN));
         params.put(5, new SprocParameterVarchar(SQLHelperItem.COLUMN_SIZEUNIT, anObject.getSizeUnit(), ParameterDirection.IN));
-        params.put(6, new SprocParameterVarchar(SQLHelperItem.COLUMN_ITEMSTATUS, anObject.getItemStatus().getText(), ParameterDirection.IN));
+        params.put(6, new SprocParameterVarchar(SQLHelperItem.COLUMN_ITEMSTATUS, anObject.getItemStatus().toString(), ParameterDirection.IN));
 
         execSproc("sp_InventoryItems_Update", params);
     }

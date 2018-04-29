@@ -163,6 +163,21 @@ public class AnInventoryItem
     }
 
     /**
+     * Gets the inventory item from the database that matches the specified
+     * order item.
+     *
+     * @param primaryKey The primary key of the order item.
+     * @return The object with values loaded from the database, or a null object
+     * if not found.
+     * @throws SQLException
+     * @throws Exception
+     */
+    public static AnInventoryItem loadByOrderItem(int primaryKey)
+            throws SQLException, Exception {
+        return HELPER.selectByOrderItem(primaryKey);
+    }
+
+    /**
      * Saves the specified object to the database.
      *
      * @param anObj The object to be saved.
@@ -187,7 +202,9 @@ public class AnInventoryItem
      */
     public static void remove(AnInventoryItem anObj)
             throws SQLException, Exception {
-        remove(anObj.getPrimaryKey());
+        if (anObj.isAlreadyInDatabase()) {
+            remove(anObj.getPrimaryKey());
+        }
     }
 
     /**
@@ -197,46 +214,25 @@ public class AnInventoryItem
      * @throws SQLException
      * @throws Exception
      */
-    public static void remove(Integer primaryKey)
+    private static void remove(Integer primaryKey)
             throws SQLException, Exception {
         HELPER.delete(primaryKey);
     }
+
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
-
-    /**
-     * Gets a list of all expired items.
-     *
-     * @return
-     */
-    public ArrayList<AnInventoryItem> getExpiredItems() {
-        ArrayList<AnInventoryItem> returnList = new ArrayList<>();
-
-        try {
-            java.util.Date aUtilDate = Calendar.getInstance().getTime();
-            java.sql.Date aSQLDate = Utilities.convertToSQLDate(aUtilDate);
-            ArrayList<AnInventoryItem> aList = loadAll();
-            for (AnInventoryItem anItem : aList) {
-                if (anItem.getExpirationDate().before(aSQLDate)) {
-                    returnList.add(anItem);
-                }
-            }
-        } catch (SQLException exSQL) {
-            //TODO: handle this
-        } catch (Exception ex) {
-            //TODO: handle this
-        }
-
-        return returnList;
-    }
-
     @Override
     public void changeQuantity(int amountToChangeBy)
             throws NegativeAmountException {
-        if (this.quantity + amountToChangeBy < 0) {
+        if (this.quantity < (-amountToChangeBy)) {
             throw new NegativeAmountException();
         }
         this.quantity += amountToChangeBy;
+    }
+
+    @Override
+    public String toString() {
+        return this.getDescription();
     }
     // </editor-fold>
 }

@@ -82,7 +82,7 @@ public class SQLHelperOrderItem
         ArrayList<AnOrderItem> results = new ArrayList<>();
 
         String sql = buildSprocSyntax(sprocName, parameters.size());
-        System.out.println("execSproc's sql = " + sql);
+        //System.out.println("execSproc's sql = " + sql);
 
         try (Connection myConn = sqlConn.getConnection();
                 CallableStatement stmt = myConn.prepareCall(sql)) {
@@ -130,6 +130,23 @@ public class SQLHelperOrderItem
         } else {
             return results.get(0);
         }
+    }
+
+    /**
+     * Gets all order items from the database for the specified order.
+     *
+     * @param primaryKey The primary key of the order.
+     * @return A list of order items in the specified order.
+     * @throws SQLException
+     * @throws Exception
+     */
+    public ArrayList<AnOrderItem> selectByOrder(Integer primaryKey)
+            throws SQLException, Exception {
+        HashMap<Integer, SprocParameter> params = new HashMap<>();
+        params.put(0, new SprocParameterInteger(SQLHelperOrder.COLUMN_PK, primaryKey.toString(), ParameterDirection.IN));
+
+        ArrayList<AnOrderItem> results = execSproc("sp_OrderItems_SelectByOrder", params);
+        return results;
     }
 
     @Override
