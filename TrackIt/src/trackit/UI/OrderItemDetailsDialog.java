@@ -214,6 +214,7 @@ public class OrderItemDetailsDialog
             cancelAction();
         });
 
+        btnOK.setPreferredSize(btnCancel.getPreferredSize());
         //Finalizations
         pack();
     }

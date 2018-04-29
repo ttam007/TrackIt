@@ -210,29 +210,32 @@ public class Utilities {
         return new DefaultFormatterFactory(defaultFormatter, displayFormatter, editFormatter);
     }
 
+
     /**
-     * Parses a well formatted string of an integer into an Integer object.
      *
-     * @param aValue The string to be parsed.
-     * @return The integer value of the specified string. If any parsing errors,
-     * then returns zero.
+     * @param aTable
+     * @param columnIndex
      */
-    public static Integer parseFormattedInteger(String aValue) {
-        Integer returnValue;
-        try {
-            NumberFormat format = NumberFormat.getNumberInstance(Locale.US);
-            returnValue = format.parse(aValue).intValue();
-        } catch (ParseException exP) {
-            returnValue = 0;
-        }
-        return returnValue;
-    }
 
     public static void setRightAlignment(JTable aTable, int columnIndex) {
         DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
         rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
         TableColumn aTableColumn = aTable.getColumnModel().getColumn(columnIndex);
         aTableColumn.setCellRenderer(rightRenderer);
+    }
+    
+
+    /**
+     *
+     * @param aTable
+     * @param columnIndex
+     */
+
+    public static void setCenterAlignment(JTable aTable, int columnIndex){
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        TableColumn aTableColumn = aTable.getColumnModel().getColumn(columnIndex);
+        aTableColumn.setCellRenderer(centerRenderer);
     }
 
     // </editor-fold>
@@ -457,7 +460,10 @@ public class Utilities {
             boolean returnValue = false;
 
             try {
-                String text = ((JTextComponent) aComponent).getText();
+
+                String text;
+                text = ((JTextComponent) aComponent).getText();
+
                 if (text == null || text.trim().equals("")) {
                     returnValue = true;
                 } else {

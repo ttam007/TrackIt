@@ -210,7 +210,8 @@ public class InventoryItemDetailsDialog
         this.btnCancel.addActionListener((ActionEvent e) -> {
             cancelAction();
         });
-
+        
+        btnOK.setPreferredSize(btnCancel.getPreferredSize());
         pack();
     }
 

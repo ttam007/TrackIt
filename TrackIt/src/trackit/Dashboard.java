@@ -36,6 +36,10 @@ public class Dashboard {
         return type;
     }
 
+    /**
+     *
+     * @return dashboard items
+     */
     public boolean getData() {
         boolean isSuccessful = false;
         if (this.type == DashboardType.COUNT_ITEMS_OUT_OF_STOCK
