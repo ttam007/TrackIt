@@ -201,20 +201,22 @@ public class CheckInOutDialog
 
     private boolean checkInItem() {
         boolean returnValue = false;
+
         try {
-        if (inButton.isSelected()) {
-            this.anInventoryItem.changeQuantity((Integer)this.qtyTextField.getValue());
-        } else if (outButton.isSelected()) {
-            this.anInventoryItem.changeQuantity(-((Integer)this.qtyTextField.getValue()));
+            if (inButton.isSelected()) {
+                this.anInventoryItem.changeQuantity((Integer) this.qtyTextField.getValue());
+            } else if (outButton.isSelected()) {
+                this.anInventoryItem.changeQuantity(-((Integer) this.qtyTextField.getValue()));
             }
+            returnValue = true;
         } catch (NegativeAmountException ex) {
             JOptionPane.showMessageDialog(this, CHECKOUT_MSG,
-            Utilities.ERROR_MSG_CAPTION, JOptionPane.INFORMATION_MESSAGE);
+                    Utilities.ERROR_MSG_CAPTION, JOptionPane.INFORMATION_MESSAGE);
         }
-        returnValue = true;
+
         return returnValue;
     }
-      
+
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
     /**

@@ -115,7 +115,7 @@ public class OrdersPanel
         Utilities.setRightAlignment(this.mainTable, 5); //Total Price column
         Utilities.setCenterAlignment(this.mainTable, 3); //Order Date
         Utilities.setCenterAlignment(this.mainTable, 4); //Expected Date
-        
+
         //Other components
         sp = new JScrollPane(mainTable);
         add(sp, BorderLayout.CENTER);

@@ -37,52 +37,55 @@ public class Dashboard {
     }
 
     /**
+     * Refreshes the data for the dashboard.
      *
-     * @return dashboard items
+     * @return True = successfully refreshed; False = there was an error.
      */
     public boolean getData() {
         boolean isSuccessful = false;
-        if (this.type == DashboardType.COUNT_ITEMS_OUT_OF_STOCK
-                || this.type == DashboardType.DATE_NEXT_ITEM_EXPIRES) {
-            bllInventory = new Inventory();
-            if (bllInventory.load()) {
-                ArrayList<AnInventoryItem> aList = bllInventory.getList();
-                switch (this.type) {
-                    case COUNT_ITEMS_OUT_OF_STOCK:
-                        getNumOfItemsOutOfStock(aList);
-                        this.description = " item(s) out of stock";
-                        break;
-                    case DATE_NEXT_ITEM_EXPIRES:
-                        getDateNextExpires(aList);
-                        this.description = "The next item to expire will be on ";
-                        break;
-                    default:
-                        break;
-                }
-                isSuccessful = true;
-            }
-        } else if (this.type == DashboardType.DATE_NEXT_ORDER_ARRIVES
-                || this.type == DashboardType.MONEY_SPENT_LAST_30_DAYS) {
-            bllOrders = new Orders();
-            if (bllOrders.load()) {
-                ArrayList<AnOrder> aList = bllOrders.getList();
-                switch (this.type) {
-                    case DATE_NEXT_ORDER_ARRIVES:
-                        getDateNextArrives(aList);
-                        this.description = "The next order to arrive will be on ";
-                        break;
-                    case MONEY_SPENT_LAST_30_DAYS:
-                        OrderItems bllOrderItem = new OrderItems();
-                        countMoney(aList, bllOrderItem.getList());
-                        this.description = "In 30 days, you have spent $";
-                        break;
-                    default:
-                        break;
-                }
-                isSuccessful = true;
-            }
-        }
 
+        try {
+            if (this.type == DashboardType.COUNT_ITEMS_OUT_OF_STOCK
+                    || this.type == DashboardType.DATE_NEXT_ITEM_EXPIRES) {
+                bllInventory = new Inventory();
+                if (bllInventory.load()) {
+                    ArrayList<AnInventoryItem> aList = bllInventory.getList();
+                    switch (this.type) {
+                        case COUNT_ITEMS_OUT_OF_STOCK:
+                            getNumOfItemsOutOfStock(aList);
+                            this.description = " item(s) out of stock";
+                            break;
+                        case DATE_NEXT_ITEM_EXPIRES:
+                            getDateNextExpires(aList);
+                            this.description = "The next item to expire will be on ";
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            } else if (this.type == DashboardType.DATE_NEXT_ORDER_ARRIVES
+                    || this.type == DashboardType.MONEY_SPENT_LAST_30_DAYS) {
+                bllOrders = new Orders();
+                if (bllOrders.load()) {
+                    ArrayList<AnOrder> aList = bllOrders.getList();
+                    switch (this.type) {
+                        case DATE_NEXT_ORDER_ARRIVES:
+                            getDateNextArrives(aList);
+                            this.description = "The next order to arrive will be on ";
+                            break;
+                        case MONEY_SPENT_LAST_30_DAYS:
+                            countMoney(aList);
+                            this.description = "In last 30 days, you have spent $";
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            isSuccessful = true;
+        } catch (Exception ex) {
+            Utilities.setErrorMessage(ex);
+        }
         return isSuccessful;
     }
 
@@ -119,7 +122,7 @@ public class Dashboard {
 
         if (aList != null) {
             for (AnOrder item : aList) {
-                Date dateToCompare = item.getDateOrdered();
+                Date dateToCompare = item.getDateExpected();
                 if (dateToCompare != null
                         && dateToCompare.before(min)
                         && (dateToCompare.compareTo(today) >= 0)) {
@@ -137,28 +140,38 @@ public class Dashboard {
      * @param orderItemList The complete list of order items in the database.
      * @return The sum of the extended price of all items in the order.
      */
-    private Double searchOrderItem(Integer orderPrimaryKey, ArrayList<AnOrderItem> orderItemList) {
+    private Double searchOrderItem(Integer orderPrimaryKey) {
         Double moneyCount = 0.00;
+
+        ArrayList<AnOrderItem> orderItemList = new ArrayList<>();
+        OrderItems bllOrderItems = new OrderItems();
+        if (bllOrderItems.loadByOrder(orderPrimaryKey)) {
+            orderItemList = bllOrderItems.getList();
+        }
+
         for (AnOrderItem orderItem : orderItemList) {
             if (orderItem.getOrderId().equals(orderPrimaryKey)) {
                 moneyCount += orderItem.getExtendedPrice();
             }
         }
         return moneyCount;
-
     }
 
-    private void countMoney(ArrayList<AnOrder> aList, ArrayList<AnOrderItem> orderItemList) {
+    private void countMoney(ArrayList<AnOrder> aList) {
         Double moneyCount = 0.00;
 
         if (aList.size() > 0) {
+            Date today = Utilities.getToday();
             Calendar minus30Cal = Calendar.getInstance();
             minus30Cal.add(Calendar.DAY_OF_MONTH, -30);
+            Date minus30 = Utilities.removeTimeFromDate(minus30Cal);
 
             for (AnOrder order : aList) {
-                Date orderDate = order.getDateOrdered();
-                if (orderDate != null && orderDate.after(minus30Cal.getTime())) {
-                    moneyCount += searchOrderItem(order.getPrimaryKey(), orderItemList);
+                Date dateToCompare = order.getDateOrdered();
+                if (dateToCompare != null
+                        && dateToCompare.after(minus30)
+                        && (dateToCompare.compareTo(today) <= 0)) {
+                    moneyCount += searchOrderItem(order.getPrimaryKey());
                 }
             }
         }

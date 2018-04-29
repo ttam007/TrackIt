@@ -211,9 +211,10 @@ public class Utilities {
     }
 
     /**
+     * Sets the specified column in the specified table to be right aligned.
      *
-     * @param aTable
-     * @param columnIndex
+     * @param aTable The table that has the column that needs alignment.
+     * @param columnIndex The index of the column to be aligned.
      */
     public static void setRightAlignment(JTable aTable, int columnIndex) {
         DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
@@ -221,21 +222,22 @@ public class Utilities {
         TableColumn aTableColumn = aTable.getColumnModel().getColumn(columnIndex);
         aTableColumn.setCellRenderer(rightRenderer);
     }
-    
+
     /**
+     * Sets the specified column in the specified table to be center aligned.
      *
-     * @param aTable
-     * @param columnIndex
+     * @param aTable The table that has the column that needs alignment.
+     * @param columnIndex The index of the column to be aligned.
      */
-    public static void setCenterAlignment(JTable aTable, int columnIndex){
+    public static void setCenterAlignment(JTable aTable, int columnIndex) {
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
         TableColumn aTableColumn = aTable.getColumnModel().getColumn(columnIndex);
         aTableColumn.setCellRenderer(centerRenderer);
     }
-
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Static Methods - Errors">
+
     /**
      * Stores the generated error message for retrieval by another class.
      *
@@ -287,11 +289,22 @@ public class Utilities {
      */
     public static java.util.Date getToday() {
         Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        return cal.getTime();
+        return removeTimeFromDate(cal);
+    }
+
+    /**
+     * Sets the time portion of the Calendar to all zeros.
+     *
+     * @param aCalendar The Calendar with a specific date that needs the time
+     * removed.
+     * @return A Date object with no time.
+     */
+    public static java.util.Date removeTimeFromDate(Calendar aCalendar) {
+        aCalendar.set(Calendar.HOUR, 0);
+        aCalendar.set(Calendar.MINUTE, 0);
+        aCalendar.set(Calendar.SECOND, 0);
+        aCalendar.set(Calendar.MILLISECOND, 0);
+        return aCalendar.getTime();
     }
 
     /**
@@ -456,8 +469,11 @@ public class Utilities {
             boolean returnValue = false;
 
             try {
-                String text;
-                text = ((JTextComponent) aComponent).getText();
+                String text = null;
+                if (aComponent instanceof JTextComponent) {
+                    text = ((JTextComponent) aComponent).getText();
+                }
+
                 if (text == null || text.trim().equals("")) {
                     returnValue = true;
                 } else {

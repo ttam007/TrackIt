@@ -91,7 +91,6 @@ public class DashboardPanel
 
     /**
      * populates the dashboard information from the DB
-     *
      */
     private void populatesComponents() {
         boolean displayError = false;
@@ -99,17 +98,15 @@ public class DashboardPanel
             if (!db.getData()) {
                 displayError = true;
             }
-
         }
 
         if (displayError) {
             JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
                     Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
         } else {
-            System.out.println("Are we displaying");
+            //System.out.println("Are we displaying");
             initTextAreaData(dashboards);
         }
-
     }
 
     // </editor-fold>

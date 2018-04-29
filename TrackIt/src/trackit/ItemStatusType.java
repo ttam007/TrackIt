@@ -19,19 +19,14 @@ public enum ItemStatusType {
     /**
      *
      */
-    DO_NOT_ORDER(2),
-    /**
-     *
-     */
-    OUT_OF_STOCK(3);
+    DO_NOT_ORDER(2);
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
     private final int value;
     private static final String[] STATUS_TEXT = new String[]{
         "Available",
         "Discontinued",
-        "Do Not Order",
-        "Out of Stock"};
+        "Do Not Order"};
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
