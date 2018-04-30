@@ -17,8 +17,13 @@ public class Dashboard_NextExpiredItem
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
+    /**
+     * Default Constructor.
+     */
     public Dashboard_NextExpiredItem() {
         super(DashboardType.DATE_NEXT_ITEM_EXPIRES);
+
+        this.description = PREFIX + "The next item will expire on %s.";
     }
 
     // </editor-fold>
@@ -43,27 +48,29 @@ public class Dashboard_NextExpiredItem
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
     @Override
-    public boolean refreshData() {
+    protected boolean refreshData() {
         boolean isSuccessful = false;
 
         try {
             if (bllInventory.load()) {
                 ArrayList<AnInventoryItem> aList = bllInventory.getList();
                 getDateNextExpires(aList);
-                this.description = "The next item to expire will be on ";
             }
             isSuccessful = true;
         } catch (Exception ex) {
             Utilities.setErrorMessage(ex);
         }
-      
+
         return isSuccessful;
     }
 
     @Override
-    public String toString() {
-        //TODO
-        return PREFIX + this.description + this.date.toString();
+    public String getData() {
+        if (refreshData()) {
+            return String.format(this.description, this.date);
+        } else {
+            return "";
+        }
     }
     // </editor-fold>
 }

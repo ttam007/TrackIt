@@ -13,11 +13,16 @@ public class Dashboard_CountOutOfStockItems
     // <editor-fold defaultstate="collapsed" desc="Private Fields">
     private Integer count;
     private final Inventory bllInventory = new Inventory();
+
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
-
+    /**
+     * Default Constructor.
+     */
     public Dashboard_CountOutOfStockItems() {
         super(DashboardType.COUNT_ITEMS_OUT_OF_STOCK);
+
+        this.description = PREFIX + "%d item(s) are out of stock.";
     }
 
     // </editor-fold>
@@ -35,14 +40,13 @@ public class Dashboard_CountOutOfStockItems
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
 
     @Override
-    public boolean refreshData() {
+    protected boolean refreshData() {
         boolean isSuccessful = false;
 
         try {
             if (bllInventory.load()) {
                 ArrayList<AnInventoryItem> aList = bllInventory.getList();
                 getNumOfItemsOutOfStock(aList);
-                this.description = " item(s) are out of stock";
             }
             isSuccessful = true;
         } catch (Exception ex) {
@@ -53,9 +57,12 @@ public class Dashboard_CountOutOfStockItems
     }
 
     @Override
-    public String toString() {
-        //TODO
-        return PREFIX + this.count + this.description;
+    public String getData() {
+        if (refreshData()) {
+            return String.format(this.description, this.count);
+        } else {
+            return "";
+        }
     }
-// </editor-fold>
+    // </editor-fold>
 }

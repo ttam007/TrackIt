@@ -19,10 +19,13 @@ public class Dashboard_Last30DaysSpent
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
+    /**
+     * Default Constructor.
+     */
     public Dashboard_Last30DaysSpent() {
         super(DashboardType.MONEY_SPENT_LAST_30_DAYS);
 
-        description = "In the last 30 days, you have spent %s.";
+        this.description = PREFIX + "In the last 30 days, you have spent %s.";
     }
 
     // </editor-fold>
@@ -74,7 +77,7 @@ public class Dashboard_Last30DaysSpent
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
     @Override
-    public boolean refreshData() {
+    protected boolean refreshData() {
         boolean isSuccessful = false;
 
         try {
@@ -86,14 +89,17 @@ public class Dashboard_Last30DaysSpent
         } catch (Exception ex) {
             Utilities.setErrorMessage(ex);
         }
-     
+
         return isSuccessful;
     }
 
     @Override
-    public String toString() {
-        //TODO
-        return PREFIX + this.description + Utilities.formatAsCurrency(this.money);
+    public String getData() {
+        if (refreshData()) {
+            return String.format(this.description, Utilities.formatAsCurrency(this.money));
+        } else {
+            return "";
+        }
     }
     // </editor-fold>
 }

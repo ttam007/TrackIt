@@ -43,5 +43,13 @@ public abstract class Dashboard {
      * @return True = successfully refreshed; False = there was an error.
      */
     protected abstract boolean refreshData();
+
+    /**
+     * Returns the string form of the widget's results.
+     *
+     * @return A string of the results. Will never be null.
+     */
+    public abstract String getData();
+
     // </editor-fold>
 }
