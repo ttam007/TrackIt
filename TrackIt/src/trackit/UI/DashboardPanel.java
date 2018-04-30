@@ -1,7 +1,6 @@
 package trackit.UI;
 
 import java.awt.Dimension;
-import java.util.HashMap;
 import javax.swing.*;
 import trackit.*;
 
@@ -18,12 +17,11 @@ public class DashboardPanel
      * The name of the panel.
      */
     public static final String TAB_NAME = "Dashboard";
-    private final HashMap<Integer, Dashboard> dashboardHash = new HashMap<>();
     private final Dashboard[] dashboards = {
-        new Dashboard(DashboardType.COUNT_ITEMS_OUT_OF_STOCK),
-        new Dashboard(DashboardType.DATE_NEXT_ITEM_EXPIRES),
-        new Dashboard(DashboardType.DATE_NEXT_ORDER_ARRIVES),
-        new Dashboard(DashboardType.MONEY_SPENT_LAST_30_DAYS)};
+        new Dashboard_CountOutOfStockItems(),
+        new Dashboard_NextExpiredItem(),
+        new Dashboard_NextOrderExpected(),
+        new Dashboard_Last30DaysSpent()};
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Fields">
@@ -65,10 +63,7 @@ public class DashboardPanel
     }
 
     private void initializeComponents() {
-
-        // String sb = "- 5 items are out of stock\n- Milk will expire in 3 days\n- Order arriving today\n";
         dashboardInfo = new JTextArea(35, 90);
-        //dashboardInfo.setText(sb);
         dashboardInfo.setEditable(false);
 
         JScrollPane sp = new JScrollPane(dashboardInfo);
@@ -80,32 +75,29 @@ public class DashboardPanel
      * populates the Text Area.
      *
      */
-    private void initTextAreaData(Dashboard[] dashboards) {
+    private void initTextAreaData() {
         StringBuilder sb = new StringBuilder();
         for (Dashboard db : dashboards) {
-
-            sb.append((db.toString().equals("") ? db.toString() : db.toString() + "\n"));
+            String newString = db.toString().trim();
+            if (!sb.toString().equals("")
+                    && !newString.equals("")) {
+                newString = "\n" + newString;
+            }
+            sb.append(newString);
         }
         dashboardInfo.setText(sb.toString());
     }
 
     /**
-     * populates the dashboard information from the DB
+     * Populates the dashboard information from the database.
      */
     private void populatesComponents() {
-        boolean displayError = false;
-        for (Dashboard db : dashboards) {
-            if (!db.getData()) {
-                displayError = true;
-            }
-        }
-
-        if (displayError) {
+        try {
+            initTextAreaData();
+        } catch (Exception ex) {
+            Utilities.setErrorMessage(ex);
             JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
                     Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
-        } else {
-            //System.out.println("Are we displaying");
-            initTextAreaData(dashboards);
         }
     }
 
@@ -116,8 +108,6 @@ public class DashboardPanel
      */
     public void refresh() {
         populatesComponents();
-
     }
-
     // </editor-fold>
 }
