@@ -74,8 +74,6 @@ public class Dashboard_Last30DaysSpent
         this.money = moneyCount;
     }
 
-    // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Public Methods">
     @Override
     protected boolean refreshData() {
         boolean isSuccessful = false;
@@ -92,6 +90,8 @@ public class Dashboard_Last30DaysSpent
 
         return isSuccessful;
     }
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Public Methods">
 
     @Override
     public String getData() {

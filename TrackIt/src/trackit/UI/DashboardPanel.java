@@ -72,8 +72,7 @@ public class DashboardPanel
     }
 
     /**
-     * populates the Text Area.
-     *
+     * Populates the Text Area.
      */
     private void initTextAreaData() {
         StringBuilder sb = new StringBuilder();

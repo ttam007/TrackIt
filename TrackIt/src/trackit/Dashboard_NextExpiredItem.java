@@ -45,8 +45,6 @@ public class Dashboard_NextExpiredItem
         this.date = (min.getTime() == Long.MAX_VALUE ? null : min);
     }
 
-    // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Public Methods">
     @Override
     protected boolean refreshData() {
         boolean isSuccessful = false;
@@ -64,6 +62,8 @@ public class Dashboard_NextExpiredItem
         return isSuccessful;
     }
 
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Public Methods">
     @Override
     public String getData() {
         if (refreshData()) {

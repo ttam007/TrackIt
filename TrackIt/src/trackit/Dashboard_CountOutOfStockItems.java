@@ -36,8 +36,6 @@ public class Dashboard_CountOutOfStockItems
         }
         this.count = counter;
     }
-    // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Public Methods">
 
     @Override
     protected boolean refreshData() {
@@ -56,6 +54,8 @@ public class Dashboard_CountOutOfStockItems
         return isSuccessful;
     }
 
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Public Methods">
     @Override
     public String getData() {
         if (refreshData()) {
