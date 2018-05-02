@@ -1,7 +1,6 @@
 package trackit;
 
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 
 /**
  * The dashboard widget for showing when the next order is expected to arrive.
@@ -28,6 +27,11 @@ public class Dashboard_NextOrderExpected
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
+    /**
+     * Calculates the next day an order will arrive from a list of orders.
+     *
+     * @param aList The list of Orders.
+     */
     private void getDateNextArrives(ArrayList<AnOrder> aList) {
         Date min = new Date(Long.MAX_VALUE);
         Date today = Utilities.getToday();

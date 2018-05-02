@@ -6,7 +6,7 @@ import trackit.DAL.SQLHelper;
 import trackit.DAL.SQLHelperSupplier;
 
 /**
- * DAL Layer: Handles all aspects of a single Supplier.
+ * BLL Layer: Handles all aspects of a single Supplier.
  *
  * @author Bond, Steven
  */
@@ -21,8 +21,8 @@ public class ASupplier
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     /**
-     * A supplier entry
-     */
+      * Default constructor.
+    */
     public ASupplier() {
         this.primaryKey = SQLHelper.INVALID_PRIMARY_KEY;
     }

@@ -20,23 +20,27 @@ public class InventoryItemsPanel
      * The name of the panel.
      */
     public static final String TAB_NAME = "Inventory";
-    private static final String[] TABLE_LABELS = new String[]{"Item Name", "Quantity", "Unit", "SKU", "Expiration Date", "Status"};
+    private static final String[] TABLE_LABELS
+            = {"Item Name", "Quantity", "Unit", "SKU", "Expiration Date", "Status"};
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
     private final HashMap<Integer, AnInventoryItem> inventoryItems = new HashMap<>();
     private final Inventory bll = new Inventory();
+    /**
+     * Used to toggle edit and remove buttons on and off.
+     */
+    private boolean makeButtonsEnabled = false;
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     private JTable mainTable;
     private JButton btnCreate, btnEdit, btnRemove, btnCheckInOut;
     private DefaultTableModel mainTableModel;
     private JScrollPane sp;
-    private boolean makeButtonsEnabled = false;//use this variable to toggle edit and remove buttons on and off
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     /**
-     * Inventory items ui
+     * Default Constructor.
      */
     public InventoryItemsPanel() {
         initializeComponents();
@@ -105,11 +109,9 @@ public class InventoryItemsPanel
 
         setButtons();
         sp = new JScrollPane(mainTable);
-
         add(sp, BorderLayout.CENTER);
 
         JPanel buttonHolder = new JPanel(new GridLayout(0, 8, 2, 0));
-
         buttonHolder.add(btnCreate);
         buttonHolder.add(btnEdit);
         buttonHolder.add(btnRemove);
@@ -185,24 +187,6 @@ public class InventoryItemsPanel
     }
 
     /**
-     * Refreshes the list of items that are displayed in the grid.
-     */
-    public final void refreshGrid() {
-        this.inventoryItems.clear();
-        for (int i = mainTableModel.getRowCount() - 1; i >= 0; i--) {
-            mainTableModel.removeRow(i);
-        }
-
-        if (bll.load()) {
-            ArrayList<AnInventoryItem> aList = bll.getList();
-            initTableData(aList);
-        } else {
-            JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
-                    Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    /**
      * Pops the detail item dialog if an item is selected.
      */
     private void editAction() {
@@ -236,19 +220,28 @@ public class InventoryItemsPanel
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
     /**
+     * Refreshes the list of items that are displayed in the grid.
+     */
+    public final void refreshGrid() {
+        this.inventoryItems.clear();
+        for (int i = mainTableModel.getRowCount() - 1; i >= 0; i--) {
+            mainTableModel.removeRow(i);
+        }
+
+        if (bll.load()) {
+            ArrayList<AnInventoryItem> aList = bll.getList();
+            initTableData(aList);
+        } else {
+            JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
+                    Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    /**
      * Displays the frame.
      */
     public void display() {
         setVisible(true);
-    }
-
-    /**
-     * Gets the array of table column headers.
-     *
-     * @return The array of column headers.
-     */
-    public static String[] getColumnHeaders() {
-        return TABLE_LABELS.clone();
     }
     // </editor-fold>
 }

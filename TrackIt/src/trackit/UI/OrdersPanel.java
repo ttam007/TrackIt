@@ -174,42 +174,6 @@ public class OrdersPanel
     }
 
     /**
-     * Refreshes the grid with current data from the database.
-     */
-    public final void refreshGrid() {
-        //Clear the ArrayList and JTable, which should be done backwards.
-        this.orders.clear();
-        for (int i = mainTableModel.getRowCount() - 1; i >= 0; i--) {
-            mainTableModel.removeRow(i);
-        }
-
-        //Now load fresh data from database.
-        if (this.bllSuppliers.load()) {
-            ArrayList<ASupplier> listSuppliers = this.bllSuppliers.getList();
-            listSuppliers.forEach((aSupplier) -> {
-                this.suppliers.put(aSupplier.getPrimaryKey(), aSupplier);
-            });
-
-            if (listSuppliers.isEmpty()) {
-                btnCreate.setEnabled(false);
-            } else {
-                btnCreate.setEnabled(true);
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
-                    Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
-        }
-
-        if (this.bllOrders.load()) {
-            ArrayList<AnOrder> listOrders = this.bllOrders.getList();
-            initTableData(listOrders);
-        } else {
-            JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
-                    Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    /**
      * Pops the Order Details frame in create mode.
      */
     private void createAction() {
@@ -254,23 +218,50 @@ public class OrdersPanel
             }
         }
     }
+
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
+    /**
+     * Refreshes the grid with current data from the database.
+     */
+    public final void refreshGrid() {
+        //Clear the ArrayList and JTable, which should be done backwards.
+        this.orders.clear();
+        for (int i = mainTableModel.getRowCount() - 1; i >= 0; i--) {
+            mainTableModel.removeRow(i);
+        }
+
+        //Now load fresh data from database.
+        if (this.bllSuppliers.load()) {
+            ArrayList<ASupplier> listSuppliers = this.bllSuppliers.getList();
+            listSuppliers.forEach((aSupplier) -> {
+                this.suppliers.put(aSupplier.getPrimaryKey(), aSupplier);
+            });
+
+            if (listSuppliers.isEmpty()) {
+                btnCreate.setEnabled(false);
+            } else {
+                btnCreate.setEnabled(true);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
+                    Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+        }
+
+        if (this.bllOrders.load()) {
+            ArrayList<AnOrder> listOrders = this.bllOrders.getList();
+            initTableData(listOrders);
+        } else {
+            JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
+                    Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
     /**
      * Displays the frame.
      */
     public void display() {
         setVisible(true);
-    }
-
-    /**
-     * Gets the array of table column headers.
-     *
-     * @return The array of column headers.
-     */
-    public static String[] getColumnHeaders() {
-        return TABLE_LABELS.clone();
     }
     // </editor-fold>
 }

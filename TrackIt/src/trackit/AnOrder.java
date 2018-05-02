@@ -6,7 +6,7 @@ import trackit.DAL.SQLHelper;
 import trackit.DAL.SQLHelperOrder;
 
 /**
- * DAL Layer: Handles all aspects of a single Order.
+ * BLL Layer: Handles all aspects of a single Order.
  *
  * @author Bond
  */

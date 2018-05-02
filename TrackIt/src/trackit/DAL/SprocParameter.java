@@ -32,7 +32,7 @@ public abstract class SprocParameter {
      * @param aValueType The data type of the parameter as specified by the
      * Types class.
      */
-    protected SprocParameter(int aValueType) {
+    private SprocParameter(int aValueType) {
         if (aValueType != Types.VARCHAR
                 && aValueType != Types.INTEGER
                 && aValueType != Types.DOUBLE

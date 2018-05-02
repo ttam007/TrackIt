@@ -33,7 +33,6 @@ public class SQLHelperOrderItem
      *
      */
     public static final String COLUMN_QUANTITYORDERED = "quantityOrdered";
-
     /**
      *
      */
@@ -42,7 +41,6 @@ public class SQLHelperOrderItem
      *
      */
     public static final String COLUMN_PRICE = "price";
-
     /**
      *
      */
@@ -82,7 +80,6 @@ public class SQLHelperOrderItem
         ArrayList<AnOrderItem> results = new ArrayList<>();
 
         String sql = buildSprocSyntax(sprocName, parameters.size());
-        //System.out.println("execSproc's sql = " + sql);
 
         try (Connection myConn = sqlConn.getConnection();
                 CallableStatement stmt = myConn.prepareCall(sql)) {

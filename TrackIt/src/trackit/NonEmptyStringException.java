@@ -2,6 +2,8 @@ package trackit;
 
 /**
  * Handles negative amount exceptions.
+ *
+ * @author Bond
  */
 public class NonEmptyStringException extends RuntimeException {
 

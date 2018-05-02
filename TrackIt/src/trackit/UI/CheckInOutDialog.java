@@ -25,22 +25,21 @@ public class CheckInOutDialog
     private final Inventory bllInventory = new Inventory();
     private DialogResultType dialogResult = DialogResultType.NONE;
     private final static String CHECKOUT_MSG = "Check out quantity must be less than total quantity.";
+    private GridBagConstraints gbc;
 
     //private final InventoryItem testItem = new InventoryItem();
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
-    JPanel pnlMain;
-    JButton btnOK, btnCancel;
-    JRadioButton inButton, outButton;
-    JLabel itemNameLabel, qtyLabel;
-    JTextField itemTextField;
-    JFormattedTextField qtyTextField;
-    GridBagConstraints gbc;
+    private JButton btnOK, btnCancel;
+    private JRadioButton inButton, outButton;
+    private JLabel itemNameLabel, qtyLabel;
+    private JTextField itemTextField;
+    private JFormattedTextField qtyTextField;
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     /**
-     * Check In/Out UI
+     * Default Constructor.
      *
      * @param anInventoryItem The item to be checked in/out.
      */
@@ -164,6 +163,10 @@ public class CheckInOutDialog
         pack();
     }
 
+    private void populateComponents() {
+        this.itemTextField.setText(this.anInventoryItem.getDescription());
+    }
+
     /**
      * Handles the save action. If any errors, then display error message
      * instead.
@@ -189,10 +192,6 @@ public class CheckInOutDialog
         this.dialogResult = DialogResultType.CANCEL;
         this.setVisible(false);
         this.dispose();
-    }
-
-    private void populateComponents() {
-        this.itemTextField.setText(this.anInventoryItem.getDescription());
     }
 
     private boolean checkInItem() {

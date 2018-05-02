@@ -26,7 +26,7 @@ public class InventoryItemDetailsDialog
     private final AnInventoryItem anInventoryItem;
     private final Inventory bll = new Inventory();
     private DialogResultType dialogResult = DialogResultType.NONE;
-
+    private GridBagConstraints gbc;
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     private JComboBox<ItemStatusType> cboItemStatus;
@@ -34,7 +34,6 @@ public class InventoryItemDetailsDialog
     private JFormattedTextField tfQuantity;
     private JLabel sku, statusLabel, unit, expDateLbl, quantity, itemNameLabel;
     private JButton btnOK, btnCancel;
-    private GridBagConstraints gbc;
     private JDatePickerImpl expDatePicker;
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -118,7 +117,6 @@ public class InventoryItemDetailsDialog
 
         // Item Name Text Field
         tfDescription = new JTextField(25);
-
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.gridwidth = 5;
@@ -130,26 +128,27 @@ public class InventoryItemDetailsDialog
         gbc.gridy = 1;
         gbc.gridwidth = 1;
         add(sku, gbc);
-        tfSku = new JTextField(25);
 
+        tfSku = new JTextField(25);
         gbc.gridx = 1;
         gbc.gridy = 1;
         gbc.gridwidth = 5;
         add(tfSku, gbc);
+
         // Init Quantity
-        //Label
         quantity = new JLabel("Quantity: ");
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.gridwidth = 1;
         add(quantity, gbc);
-        // Field
+
         tfQuantity = new JFormattedTextField(Utilities.getIntegerFormatter());
         tfQuantity.setEditable(this.isCreateMode);
         gbc.gridx = 1;
         gbc.gridy = 2;
         gbc.gridwidth = 3;
         add(tfQuantity, gbc);
+
         // Init Exp Date Label and Field
         expDateLbl = new JLabel("Exp Date: ");
         gbc.gridx = 4;
@@ -162,16 +161,15 @@ public class InventoryItemDetailsDialog
         gbc.gridy = 2;
         gbc.gridwidth = 1;
         add(expDatePicker, gbc);
+
         // Unit
-        //Label
         unit = new JLabel("Unit: ");
         gbc.gridx = 0;
         gbc.gridy = 3;
         gbc.gridwidth = 1;
         add(unit, gbc);
-        // Field
-        tfSizeUnit = new JTextField(7);
 
+        tfSizeUnit = new JTextField(7);
         gbc.gridx = 1;
         gbc.gridy = 3;
         gbc.gridwidth = 3;
@@ -184,7 +182,6 @@ public class InventoryItemDetailsDialog
         gbc.gridwidth = 1;
         add(statusLabel, gbc);
 
-        //Text Field
         cboItemStatus = new JComboBox<>(ItemStatusType.values());
         gbc.gridx = 5;
         gbc.gridy = 3;
@@ -212,7 +209,9 @@ public class InventoryItemDetailsDialog
         });
 
         btnOK.setPreferredSize(btnCancel.getPreferredSize());
-        pack();
+
+        //Finalizations
+        this.pack();
     }
 
     /**
