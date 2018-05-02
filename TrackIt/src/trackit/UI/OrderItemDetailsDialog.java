@@ -9,6 +9,7 @@ import trackit.*;
 /**
  * UI Layer: Handles all aspects of the Add Item to Order and Edit Order Item
  * dialog.
+ * @author Douglas
  */
 public class OrderItemDetailsDialog
         extends JDialog {

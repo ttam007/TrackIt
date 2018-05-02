@@ -10,7 +10,7 @@ import trackit.*;
 /**
  * UI Layer: Handles all aspects of the Inventory panel.
  *
- * @author Brian Diaz
+ * @author Brian Diaz, DOuglas
  */
 public class InventoryItemsPanel
         extends JPanel {

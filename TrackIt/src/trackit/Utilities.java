@@ -12,7 +12,7 @@ import org.jdatepicker.impl.*;
  * This is a static class that only has global constants and "fire and forget"
  * static methods.
  *
- * @author Bond
+ * @author Bond, Douglas
  */
 public class Utilities {
 

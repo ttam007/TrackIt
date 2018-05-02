@@ -8,7 +8,7 @@ import trackit.*;
 /**
  * UI Layer: Handles all aspects of the Check In/Out dialog.
  *
- * @author Steven, Bond
+ * @author Steven, Bond, Douglas
  */
 public class CheckInOutDialog
         extends JDialog {
