@@ -22,22 +22,18 @@ public class SQLHelperOrder
      *
      */
     public static final String COLUMN_DESCRIPTION = "description";
-
     /**
      *
      */
     public static final String COLUMN_ORDEREDFROM = "orderedFrom";
-
     /**
      *
      */
     public static final String COLUMN_ORDERSTATUS = "orderStatus";
-
     /**
      *
      */
     public static final String COLUMN_DATEORDERED = "dateOrdered";
-
     /**
      *
      */
@@ -73,7 +69,6 @@ public class SQLHelperOrder
         ArrayList<AnOrder> results = new ArrayList<>();
 
         String sql = buildSprocSyntax(sprocName, parameters.size());
-        //System.out.println("execSproc's sql = " + sql);
 
         try (Connection myConn = sqlConn.getConnection();
                 CallableStatement stmt = myConn.prepareCall(sql)) {

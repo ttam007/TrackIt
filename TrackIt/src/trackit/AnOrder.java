@@ -6,7 +6,7 @@ import trackit.DAL.SQLHelper;
 import trackit.DAL.SQLHelperOrder;
 
 /**
- * DAL Layer: Handles all aspects of a single Order.
+ * BLL Layer: Handles all aspects of a single Order.
  *
  * @author Bond
  */
@@ -27,7 +27,7 @@ public class AnOrder
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
     /**
-     * An order
+     * Default Constructor.
      */
     public AnOrder() {
         this.primaryKey = SQLHelper.INVALID_PRIMARY_KEY;

@@ -4,7 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 /**
- * BAL Layer: Works with the Inventory tab.
+ * BLL Layer: Works with the Inventory tab.
  *
  * @author Bond
  */

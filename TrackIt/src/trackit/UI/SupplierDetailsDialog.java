@@ -25,13 +25,12 @@ public class SupplierDetailsDialog
     private final ASupplier aSupplier;
     private final Suppliers bll = new Suppliers();
     private DialogResultType dialogResult = DialogResultType.NONE;
+    private GridBagConstraints gbc;
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
-    JPanel pnlCenter;
-    JLabel lblName, lblAddress;
-    JTextField tfName, tfAddress;
-    JButton btnOK, btnCancel;
-    GridBagConstraints gbc;
+    private JLabel lblName, lblAddress;
+    private JTextField tfName, tfAddress;
+    private JButton btnOK, btnCancel;
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -52,7 +51,7 @@ public class SupplierDetailsDialog
         } else {
             this.aSupplier = aSupplier;
         }
-        
+
         initializeComponents();
         populateComponents();
     }
@@ -98,7 +97,7 @@ public class SupplierDetailsDialog
         this.addWindowListener(new CloseQuery());
         this.getRootPane().setDefaultButton(btnOK);
         this.setModal(true);
-        
+
         gbc = new GridBagConstraints();
         setLayout(new GridBagLayout());
         gbc.insets = new Insets(2, 2, 5, 0);
@@ -152,6 +151,7 @@ public class SupplierDetailsDialog
         });
 
         btnOK.setPreferredSize(btnCancel.getPreferredSize());
+
         //Finalizations
         pack();
     }
@@ -169,7 +169,6 @@ public class SupplierDetailsDialog
      */
     private boolean populateObject() {
         boolean returnValue = false;
-        //TODO:  sort this out so boolean return is used instead of try/catch block.
         try {
             this.aSupplier.setNickname(this.tfName.getText());
             this.aSupplier.setUrl(this.tfAddress.getText());
@@ -179,7 +178,7 @@ public class SupplierDetailsDialog
             JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
                     Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
         }
-        
+
         return returnValue;
     }
 
@@ -218,7 +217,6 @@ public class SupplierDetailsDialog
      * @return The DialogReturnType which tells how the dialog was closed.
      */
     public DialogResultType display() {
-        System.out.println(String.format("Displaying %s...", WINDOW_NAME));
         setVisible(true);
         return this.dialogResult;
     }
@@ -229,7 +227,7 @@ public class SupplierDetailsDialog
      * Handles all aspects of closing the program.
      */
     private class CloseQuery extends WindowAdapter {
-        
+
         @Override
         public void windowClosing(WindowEvent e) {
             JDialog frame = SupplierDetailsDialog.this;

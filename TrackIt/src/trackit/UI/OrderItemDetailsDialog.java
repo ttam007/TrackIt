@@ -27,17 +27,16 @@ public class OrderItemDetailsDialog
     private DialogResultType dialogResult = DialogResultType.NONE;
     private final Inventory bllInventory = new Inventory();
     private final OrderItems bllOrderItems;
+    private GridBagConstraints gbc;
     //private final HashMap<String, AnInventoryItem> inventory = new HashMap<>();
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     private JComboBox<ItemStatusType> cboItemStatus;
     private JComboBox<AnInventoryItem> cboItemName;
-    JPanel pnlCenter;
-    JLabel lblName, lblQuantity, lblPrice, lblStatus, lblExtPrice;
-    JFormattedTextField tfQuantityOrdered, tfPrice, tfExtPrice;
-    JButton btnOK, btnCancel;
-    GridBagConstraints gbc;
+    private JLabel lblName, lblQuantity, lblPrice, lblStatus, lblExtPrice;
+    private JFormattedTextField tfQuantityOrdered, tfPrice, tfExtPrice;
+    private JButton btnOK, btnCancel;
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -122,7 +121,6 @@ public class OrderItemDetailsDialog
         add(lblName, gbc);
 
         //Description
-        //TODO:  Implement this or something like it:  http://www.algosome.com/articles/java-jcombobox-autocomplete.html
         cboItemName = new JComboBox<>(getItemList());
         cboItemName.setEnabled(isCreateMode);
         gbc.gridx = 1;
@@ -215,6 +213,7 @@ public class OrderItemDetailsDialog
         });
 
         btnOK.setPreferredSize(btnCancel.getPreferredSize());
+
         //Finalizations
         pack();
     }
@@ -235,7 +234,6 @@ public class OrderItemDetailsDialog
      */
     private boolean populateObject() {
         boolean returnValue = false;
-        //TODO:  sort this out so boolean return is used instead of try/catch block.
         try {
             AnInventoryItem anInventoryItem = (AnInventoryItem) this.cboItemName.getModel().getSelectedItem();
             this.anOrderItem.setDescription(anInventoryItem.getDescription());

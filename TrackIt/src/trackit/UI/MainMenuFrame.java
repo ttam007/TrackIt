@@ -9,7 +9,7 @@ import trackit.*;
 /**
  * UI Layer: Handles all aspects of the Main Menu's UI.
  *
- * @author Douglas
+ * @author Douglas, Bond, Steven
  */
 public class MainMenuFrame
         extends JFrame {
@@ -19,16 +19,15 @@ public class MainMenuFrame
      * The name of the window.
      */
     private static final String WINDOW_NAME = "Main Menu";
-    private final MainMenu bll;
+    private final MainMenu bllMainMenu = new MainMenu();
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
-    SuppliersPanel suppliersTab = new SuppliersPanel();
-    DashboardPanel dashboardTab = new DashboardPanel();
-    OrdersPanel ordersTab = new OrdersPanel();
-    InventoryItemsPanel inventoryTab = new InventoryItemsPanel();
-    JTabbedPane tabpane;
-    JLabel title;
-    JButton btnLogout, btnExit;
+    private final SuppliersPanel suppliersTab = new SuppliersPanel();
+    private final DashboardPanel dashboardTab = new DashboardPanel();
+    private final OrdersPanel ordersTab = new OrdersPanel();
+    private final InventoryItemsPanel inventoryTab = new InventoryItemsPanel();
+    private JTabbedPane tabpane;
+    private JButton btnLogout, btnExit;
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -36,11 +35,9 @@ public class MainMenuFrame
      * Main menu
      */
     public MainMenuFrame() {
-        this.bll = new MainMenu();
         initializeComponents();
 
-        tabpane.setSelectedIndex(0);//dashboard index
-        //TODO:  Test if the above line works.  If not, then use dashboardTab.refresh();
+        tabpane.setSelectedIndex(0); //dashboard tab's index
     }
 
     // </editor-fold>
@@ -92,22 +89,23 @@ public class MainMenuFrame
             int tabIndex = TabbedPane.getSelectedIndex();
             refreshTab(tabIndex);
         });
-
         add(tabpane, BorderLayout.CENTER);
 
         JPanel pnlBottom = new JPanel();
         btnLogout = new JButton(Utilities.BUTTON_LOGOUT);
         btnLogout.addActionListener((ActionEvent e) -> {
-            setVisible(false);
-            LoginFrame login = new LoginFrame();
-            login.display();
+            this.bllMainMenu.logout();
+            this.setVisible(false);
+            this.dispose();
         });
+
         btnExit = new JButton(Utilities.BUTTON_EXIT);
         btnExit.addActionListener((ActionEvent e) -> {
             CloseQuery qry = new CloseQuery();
             qry.windowClosing(null);
         });
         btnExit.setPreferredSize(btnLogout.getPreferredSize());
+
         pnlBottom.add(btnLogout);
         pnlBottom.add(btnExit);
         add(pnlBottom, BorderLayout.SOUTH);
