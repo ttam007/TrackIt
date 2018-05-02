@@ -21,15 +21,13 @@ public class LoginFrame
     // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Private Fields">
     private final Login bll = new Login();
+    private GridBagConstraints gbc = new GridBagConstraints();
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
-    JLabel lblUsername, lblPassword, lblTitle, lblAccess;
-    JTextField tfUsername;
-    JPanel pnlNorth, pnlSouth, pnlCenter, pnlCentWest, pnlCentCenter, pnlCentSouth;
-    JPasswordField pfPassword;
-    JButton btnLogin;
-    String username, password;
-    GridBagConstraints gbc = new GridBagConstraints();
+    private JLabel lblUsername, lblPassword, lblTitle;
+    private JTextField tfUsername;
+    private JPasswordField pfPassword;
+    private JButton btnLogin;
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -105,7 +103,7 @@ public class LoginFrame
         gbc.gridx = 2;
         gbc.gridy = 0;
         add(lblTitle, gbc);
-        
+
         // Item Name Label Initialized
         lblUsername = new JLabel("Username:");
         gbc.gridx = 0;
@@ -125,14 +123,12 @@ public class LoginFrame
         gbc.gridy = 2;
         gbc.gridwidth = 1;
         add(lblPassword, gbc);
-        
+
         pfPassword = new JPasswordField(25);
         gbc.gridx = 1;
         gbc.gridy = 2;
         gbc.gridwidth = 5;
         add(pfPassword, gbc);
-        
-        
 
         // Init Ok Button
         btnLogin = new JButton(Utilities.BUTTON_LOGIN);

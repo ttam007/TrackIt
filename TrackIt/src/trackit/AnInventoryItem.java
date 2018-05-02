@@ -6,7 +6,7 @@ import trackit.DAL.SQLHelper;
 import trackit.DAL.SQLHelperInventoryItem;
 
 /**
- * DAL Layer: Handles all aspects of a single InventoryItem.
+ * BLL Layer: Handles all aspects of a single InventoryItem.
  *
  * @author Bond
  */

@@ -207,44 +207,6 @@ public abstract class SQLHelper<T>
     protected abstract ArrayList<T> execSproc(String sprocName, HashMap<Integer, SprocParameter> parameters)
             throws SQLException, Exception;
 
-    @Override
-    public ArrayList<Integer> insertAll(List<T> aList)
-            throws SQLException, Exception {
-        ArrayList<Integer> primaryKeys = new ArrayList<>();
-        for (T anObj : aList) {
-            primaryKeys.add(insert(anObj));
-        }
-        return primaryKeys;
-    }
-
-    @Override
-    public abstract Integer insert(T anObject)
-            throws SQLException, Exception;
-
-    @Override
-    public void updateAll(List<T> aList)
-            throws SQLException, Exception {
-        for (T anObj : aList) {
-            update(anObj);
-        }
-    }
-
-    @Override
-    public abstract void update(T anObject)
-            throws SQLException, Exception;
-
-    @Override
-    public void deleteAll(List<Integer> primaryKeys)
-            throws SQLException, Exception {
-        for (Integer aPK : primaryKeys) {
-            delete(aPK);
-        }
-    }
-
-    @Override
-    public abstract void delete(Integer primaryKey)
-            throws SQLException, Exception;
-
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
     /**

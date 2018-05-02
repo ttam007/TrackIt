@@ -22,7 +22,9 @@ public class OrderItemsFrame
      * The name of the window.
      */
     public static final String WINDOW_NAME = "Order Details";
-    private static final String[] TABLE_LABELS = {"Item Name", "Unit", "SKU", "Quantity", "Checked In", "Price", "Extended Price"};
+    private static final String[] TABLE_LABELS
+            = {"Item Name", "Unit", "SKU", "Quantity", "Checked In", "Price", "Extended Price"};
+    private final static String CHECKOUT_MSG = "Item has already been checked in.";
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Fields">
     //For editing the Order.
@@ -31,7 +33,6 @@ public class OrderItemsFrame
     private DialogResultType dialogResult = DialogResultType.NONE;
     private final Orders bllOrders = new Orders();
     private final Suppliers bllSuppliers = new Suppliers();
-    private final static String CHECKOUT_MSG = "Item has already been checked in.";
     private boolean isLoading;
 
     //For the grid.
@@ -48,7 +49,6 @@ public class OrderItemsFrame
     private JPanel pnlBtm;
     private JLabel lblDescription, lblSupplier, lblStatus, lblOrderDate, lblExpectedDate;
     private JTextField tfDescription;
-
     private JDatePickerImpl orderedDatePicker, expectedDatePicker;
     private JScrollPane scrollPane;
     private JComboBox<OrderStatusType> cboOrderStatus;
@@ -138,28 +138,24 @@ public class OrderItemsFrame
         gbc.insets = new Insets(1, 2, 5, 0);
         gbc.anchor = GridBagConstraints.LINE_START;
 
-        //topInnerBx = Box.createHorizontalBox();
         lblDescription = new JLabel("Order Description:");
         gbc.gridx = 0;
         gbc.gridy = 0;
         pnlTopBpx.add(lblDescription, gbc);
-        //topInnerBx.add(lblDescription);
         tfDescription = new JTextField(20);
         gbc.gridx = 1;
         gbc.gridy = 0;
         pnlTopBpx.add(tfDescription, gbc);
-        //topInnerBx.add(tfDescription);
-
+     
         lblSupplier = new JLabel("Supplier:");
         gbc.gridx = 2;
         gbc.gridy = 0;
         pnlTopBpx.add(lblSupplier, gbc);
-        //topInnerBx.add(lblSupplier);
+
         cboSuppliers = new JComboBox<>(getSupplierList());
         gbc.gridx = 3;
         gbc.gridy = 0;
         pnlTopBpx.add(cboSuppliers, gbc);
-        //pnlTopBpx.add(tfSupplier);
         cboSuppliers.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -243,7 +239,6 @@ public class OrderItemsFrame
 
         bottomBox = Box.createHorizontalBox();
 
-        //add data to suppliers arraylist
         mainTableModel = new DefaultTableModel(TABLE_LABELS, 0);
         mainTable = new JTable(mainTableModel);
         scrollPane = new JScrollPane(mainTable);
@@ -346,7 +341,6 @@ public class OrderItemsFrame
      */
     private boolean populateObject() {
         boolean returnValue = false;
-        //TODO:  sort this out so boolean return is used instead of try/catch block.
         try {
             this.anOrder.setDescription(this.tfDescription.getText());
             ASupplier aSupplier = (ASupplier) this.cboSuppliers.getModel().getSelectedItem();

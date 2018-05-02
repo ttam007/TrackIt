@@ -16,17 +16,14 @@ public class SQLHelperItem {
      *
      */
     public static final String COLUMN_DESCRIPTION = "description";
-
     /**
      *
      */
     public static final String COLUMN_SKU = "sku";
-
     /**
      *
      */
     public static final String COLUMN_SIZEUNIT = "sizeUnit";
-
     /**
      *
      */
@@ -42,7 +39,7 @@ public class SQLHelperItem {
     }
 
     // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Private Methods">
+    // <editor-fold defaultstate="collapsed" desc="Public Methods">
     /**
      * Checks to see if any column that is not nullable has a null value.
      *

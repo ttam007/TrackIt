@@ -22,15 +22,13 @@ public class SuppliersPanel
     public static final String TAB_NAME = "Suppliers";
     private static final String[] TABLE_LABELS = {"Supplier", "Web Address"};
     // </editor-fold>
-    // <editor-fold defaultstate="expanded" desc="Private Fields">
+    // <editor-fold defaultstate="collapsed" desc="Private Fields">
     private final HashMap<Integer, ASupplier> suppliers = new HashMap<>();
     private final Suppliers bll = new Suppliers();
     /**
      * Use this variable to toggle edit and remove buttons on and off.
      */
     private boolean makeButtonsEnabled = false;
-    //SupplierDetailsDialog details;
-
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     private JButton btnCreate, btnRemove, btnEdit;
@@ -41,7 +39,7 @@ public class SuppliersPanel
     // <editor-fold defaultstate="collapsed" desc="Constructors">
 
     /**
-     * Supplier UI
+     * Default Constructor.
      */
     public SuppliersPanel() {
         initializeComponents();
@@ -104,7 +102,6 @@ public class SuppliersPanel
         mainTable.setBounds(30, 40, 200, 200);
 
         sp = new JScrollPane(mainTable);
-
         add(sp, BorderLayout.CENTER);
 
         JPanel btmSup = new JPanel(new GridLayout(0, 8, 2, 0));
@@ -156,26 +153,6 @@ public class SuppliersPanel
     }
 
     /**
-     * Refreshes the grid with current data from the database.
-     */
-    public final void refreshGrid() {
-        //Clear the ArrayList and JTable, which should be done backwards.
-        this.suppliers.clear();
-        for (int i = mainTableModel.getRowCount() - 1; i >= 0; i--) {
-            mainTableModel.removeRow(i);
-        }
-
-        //Now load fresh data from database.
-        if (this.bll.load()) {
-            ArrayList<ASupplier> aList = this.bll.getList();
-            initTableData(aList);
-        } else {
-            JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
-                    Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    /**
      * Pops the detail item dialog if an item is selected.
      */
     private void editAction() {
@@ -215,20 +192,30 @@ public class SuppliersPanel
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
     /**
-     * Displays the frame.
-     *
+     * Refreshes the grid with current data from the database.
      */
-    public void display() {
-        setVisible(true);
+    public final void refreshGrid() {
+        //Clear the ArrayList and JTable, which should be done backwards.
+        this.suppliers.clear();
+        for (int i = mainTableModel.getRowCount() - 1; i >= 0; i--) {
+            mainTableModel.removeRow(i);
+        }
+
+        //Now load fresh data from database.
+        if (this.bll.load()) {
+            ArrayList<ASupplier> aList = this.bll.getList();
+            initTableData(aList);
+        } else {
+            JOptionPane.showMessageDialog(this, Utilities.getErrorMessage(),
+                    Utilities.ERROR_MSG_CAPTION, JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
-     * Gets the array of table column headers.
-     *
-     * @return The array of column headers.
+     * Displays the frame.
      */
-    public static String[] getColumnHeaders() {
-        return TABLE_LABELS.clone();
+    public void display() {
+        setVisible(true);
     }
     // </editor-fold>
 }
