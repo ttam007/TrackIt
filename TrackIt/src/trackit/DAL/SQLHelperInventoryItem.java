@@ -25,12 +25,10 @@ public class SQLHelperInventoryItem
      *
      */
     public static final String COLUMN_ITEMID = "itemId";
-
     /**
      *
      */
     public static final String COLUMN_QUANTITY = "quantity";
-
     /**
      *
      */
@@ -42,7 +40,6 @@ public class SQLHelperInventoryItem
      * Default constructor.
      */
     public SQLHelperInventoryItem() {
-
     }
 
     // </editor-fold>
@@ -68,7 +65,6 @@ public class SQLHelperInventoryItem
         ArrayList<AnInventoryItem> results = new ArrayList<>();
 
         String sql = buildSprocSyntax(sprocName, parameters.size());
-        //System.out.println("execSproc's sql = " + sql);
 
         try (Connection myConn = sqlConn.getConnection();
                 CallableStatement stmt = myConn.prepareCall(sql)) {
@@ -189,7 +185,7 @@ public class SQLHelperInventoryItem
     public java.sql.Date doNullCheck(String columnName, java.sql.Date aValue)
             throws SQLException {
         if (aValue == null && columnName.equalsIgnoreCase(SQLHelperInventoryItem.COLUMN_EXPIRATIONDATE)) {
-            return aValue;
+            return aValue; //Allow nulls for this column.
         } else {
             return aValue;
         }

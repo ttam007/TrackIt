@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package trackit;
 
 import java.text.ParseException;
@@ -11,10 +6,12 @@ import java.util.Calendar;
 import javax.swing.JFormattedTextField.AbstractFormatter;
 
 /**
+ * BLL Layer: Handles all aspects of formatting a date.
  *
  * @author Steven
  */
-public class DateLabelFormatter extends AbstractFormatter {
+public class DateLabelFormatter
+        extends AbstractFormatter {
 
     private final SimpleDateFormat dateFormatter = Utilities.getDateFormatter();
 

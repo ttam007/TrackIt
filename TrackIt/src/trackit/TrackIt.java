@@ -4,6 +4,8 @@ import trackit.DAL.*;
 
 /**
  * The TrackIt program starts here!
+ *
+ * @author Bond
  */
 public class TrackIt {
 

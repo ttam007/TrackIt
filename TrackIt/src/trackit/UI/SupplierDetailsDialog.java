@@ -25,13 +25,12 @@ public class SupplierDetailsDialog
     private final ASupplier aSupplier;
     private final Suppliers bll = new Suppliers();
     private DialogResultType dialogResult = DialogResultType.NONE;
+    private GridBagConstraints gbc;
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
-    JPanel pnlCenter;
-    JLabel lblName, lblAddress;
-    JTextField tfName, tfAddress;
-    JButton btnOK, btnCancel;
-    GridBagConstraints gbc;
+    private JLabel lblName, lblAddress;
+    private JTextField tfName, tfAddress;
+    private JButton btnOK, btnCancel;
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -152,6 +151,7 @@ public class SupplierDetailsDialog
         });
 
         btnOK.setPreferredSize(btnCancel.getPreferredSize());
+
         //Finalizations
         pack();
     }
@@ -217,7 +217,6 @@ public class SupplierDetailsDialog
      * @return The DialogReturnType which tells how the dialog was closed.
      */
     public DialogResultType display() {
-        System.out.println(String.format("Displaying %s...", WINDOW_NAME));
         setVisible(true);
         return this.dialogResult;
     }

@@ -17,6 +17,9 @@ public class DashboardPanel
      * The name of the panel.
      */
     public static final String TAB_NAME = "Dashboard";
+    /**
+     * All the dashboards that will appear on the panel.
+     */
     private final Dashboard[] dashboards = {
         new Dashboard_CountOutOfStockItems(),
         new Dashboard_NextExpiredItem(),
@@ -24,7 +27,7 @@ public class DashboardPanel
         new Dashboard_Last30DaysSpent()};
 
     // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Private Fields">
+    // <editor-fold defaultstate="collapsed" desc="Components">
     private JTextArea dashboardInfo;
 
     // </editor-fold>
@@ -72,8 +75,7 @@ public class DashboardPanel
     }
 
     /**
-     * populates the Text Area.
-     *
+     * Populates the Text Area.
      */
     private void initTextAreaData() {
         StringBuilder sb = new StringBuilder();

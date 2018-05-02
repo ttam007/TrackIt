@@ -1,8 +1,9 @@
 package trackit;
 
 /**
+ * All the types of dashboard widgets.
  *
- * @author Bryan
+ * @author Bryan, Bond
  */
 public enum DashboardType {
     // <editor-fold defaultstate="expanded" desc="Enumeration">
@@ -27,7 +28,12 @@ public enum DashboardType {
 
     // <editor-fold defaultstate="collapsed" desc="Private Fields">
     private final int value;
-    private static final String[] STATUS_TEXT;
+    private static final String[] STATUS_TEXT = new String[]{
+        "Count of Items Out of Stock",
+        "Date Next Item Expires",
+        "Date Next Order Arrives",
+        "Money Spent in the Last 30 Days"
+    };
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -38,6 +44,7 @@ public enum DashboardType {
 
     // <editor-fold defaultstate="collapsed" desc="Public Methods">
     /**
+     * Gets the Integer equivalent of the enumerated value.
      *
      * @return
      */
@@ -46,6 +53,7 @@ public enum DashboardType {
     }
 
     /**
+     * Gets the String equivalent of the enumerated value.
      *
      * @return
      */
@@ -54,12 +62,7 @@ public enum DashboardType {
     }
 
     static {
-        STATUS_TEXT = new String[]{
-            "Count of Items Out of Stock",
-            "Date Next Item Expires",
-            "Date Next Order Arrives",
-            "Money Spent in the Last 30 Days"
-        };
+
     }
     // </editor-fold>
 }

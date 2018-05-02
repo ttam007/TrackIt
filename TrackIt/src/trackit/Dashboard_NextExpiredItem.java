@@ -1,7 +1,6 @@
 package trackit;
 
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 
 /**
  * The dashboard widget for showing the next expired item.
@@ -28,6 +27,12 @@ public class Dashboard_NextExpiredItem
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
+    /**
+     * Calculates the next day an inventory item will expire from a list of
+     * inventory items.
+     *
+     * @param aList The list of inventory items.
+     */
     private void getDateNextExpires(ArrayList<AnInventoryItem> aList) {
         Date min = new Date(Long.MAX_VALUE);
         Date today = Utilities.getToday();
@@ -45,8 +50,6 @@ public class Dashboard_NextExpiredItem
         this.date = (min.getTime() == Long.MAX_VALUE ? null : min);
     }
 
-    // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Public Methods">
     @Override
     protected boolean refreshData() {
         boolean isSuccessful = false;
@@ -64,6 +67,8 @@ public class Dashboard_NextExpiredItem
         return isSuccessful;
     }
 
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Public Methods">
     @Override
     public String getData() {
         if (refreshData()) {

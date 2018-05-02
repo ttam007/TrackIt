@@ -5,7 +5,7 @@ import trackit.DAL.SQLHelper;
 import trackit.DAL.SQLHelperItem;
 
 /**
- * DAL Layer: Handles all aspects of a single Item.
+ * BLL Layer: Handles all aspects of a single Item.
  *
  * @author Bond
  */
@@ -38,7 +38,7 @@ public abstract class AnItem
     // <editor-fold defaultstate="expanded" desc="Constructors">
 
     /**
-     * establish an item
+     * Default constructor.
      */
     public AnItem() {
         this.primaryKey = SQLHelper.INVALID_PRIMARY_KEY;
@@ -50,7 +50,6 @@ public abstract class AnItem
     public void setPrimaryKey(Integer primaryKey)
             throws SQLException {
         throw new UnsupportedOperationException();
-        //this.primaryKey = HELPER.doNullCheck(SQLHelperItem.COLUMN_PK, primaryKey);
     }
 
     /**

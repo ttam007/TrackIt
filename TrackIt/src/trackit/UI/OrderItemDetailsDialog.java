@@ -27,17 +27,16 @@ public class OrderItemDetailsDialog
     private DialogResultType dialogResult = DialogResultType.NONE;
     private final Inventory bllInventory = new Inventory();
     private final OrderItems bllOrderItems;
+    private GridBagConstraints gbc;
     //private final HashMap<String, AnInventoryItem> inventory = new HashMap<>();
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Components">
     private JComboBox<ItemStatusType> cboItemStatus;
     private JComboBox<AnInventoryItem> cboItemName;
-    JPanel pnlCenter;
-    JLabel lblName, lblQuantity, lblPrice, lblStatus, lblExtPrice;
-    JFormattedTextField tfQuantityOrdered, tfPrice, tfExtPrice;
-    JButton btnOK, btnCancel;
-    GridBagConstraints gbc;
+    private JLabel lblName, lblQuantity, lblPrice, lblStatus, lblExtPrice;
+    private JFormattedTextField tfQuantityOrdered, tfPrice, tfExtPrice;
+    private JButton btnOK, btnCancel;
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Constructors">
@@ -214,6 +213,7 @@ public class OrderItemDetailsDialog
         });
 
         btnOK.setPreferredSize(btnCancel.getPreferredSize());
+
         //Finalizations
         pack();
     }

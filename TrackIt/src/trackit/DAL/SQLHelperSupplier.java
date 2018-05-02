@@ -22,7 +22,6 @@ public class SQLHelperSupplier
      *
      */
     public static final String COLUMN_NICKNAME = "nickname";
-
     /**
      *
      */
@@ -55,7 +54,6 @@ public class SQLHelperSupplier
         ArrayList<ASupplier> results = new ArrayList<>();
 
         String sql = buildSprocSyntax(sprocName, parameters.size());
-        //System.out.println("execSproc's sql = " + sql);
 
         try (Connection myConn = sqlConn.getConnection();
                 CallableStatement stmt = myConn.prepareCall(sql)) {

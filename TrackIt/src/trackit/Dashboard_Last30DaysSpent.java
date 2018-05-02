@@ -1,8 +1,6 @@
 package trackit;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
 
 /**
  * The dashboard widget for showing the money spent in the last 30 days.
@@ -53,6 +51,11 @@ public class Dashboard_Last30DaysSpent
         return moneyCount;
     }
 
+    /**
+     * Calculates the total amount of money spent from a list of orders.
+     *
+     * @param aList The list of Orders.
+     */
     private void countMoney(ArrayList<AnOrder> aList) {
         Double moneyCount = 0.00;
 
@@ -74,8 +77,6 @@ public class Dashboard_Last30DaysSpent
         this.money = moneyCount;
     }
 
-    // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Public Methods">
     @Override
     protected boolean refreshData() {
         boolean isSuccessful = false;
@@ -92,6 +93,8 @@ public class Dashboard_Last30DaysSpent
 
         return isSuccessful;
     }
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Public Methods">
 
     @Override
     public String getData() {

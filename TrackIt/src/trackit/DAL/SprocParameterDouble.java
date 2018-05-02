@@ -10,8 +10,6 @@ import java.sql.*;
 public class SprocParameterDouble
         extends SprocParameter {
 
-    // <editor-fold defaultstate="collapsed" desc="Private Fields">
-    // </editor-fold>
     // <editor-fold defaultstate="expanded" desc="Constructors">
     /**
      * Creates a new instance. Sets valueType to Types.DOUBLE.
@@ -24,9 +22,5 @@ public class SprocParameterDouble
     public SprocParameterDouble(String name, String value, ParameterDirection direction) {
         super(Types.DOUBLE, name, value, direction);
     }
-    // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Private Methods">
-    // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Public Methods">
     // </editor-fold>
 }

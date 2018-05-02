@@ -23,8 +23,4 @@ public class SprocParameterInteger
         super(Types.INTEGER, name, value, direction);
     }
     // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Private Methods">
-    // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Public Methods">
-    // </editor-fold>
 }

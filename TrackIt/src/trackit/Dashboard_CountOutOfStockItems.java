@@ -27,6 +27,12 @@ public class Dashboard_CountOutOfStockItems
 
     // </editor-fold>
     // <editor-fold defaultstate="collapsed" desc="Private Methods">
+    /**
+     * Calculates the number of inventory items that are out of stock from a
+     * list of inventory items.
+     *
+     * @param aList The list of Inventory Items.
+     */
     private void getNumOfItemsOutOfStock(ArrayList<AnInventoryItem> aList) {
         int counter = 0;
         for (AnInventoryItem item : aList) {
@@ -36,8 +42,6 @@ public class Dashboard_CountOutOfStockItems
         }
         this.count = counter;
     }
-    // </editor-fold>
-    // <editor-fold defaultstate="collapsed" desc="Public Methods">
 
     @Override
     protected boolean refreshData() {
@@ -56,6 +60,8 @@ public class Dashboard_CountOutOfStockItems
         return isSuccessful;
     }
 
+    // </editor-fold>
+    // <editor-fold defaultstate="collapsed" desc="Public Methods">
     @Override
     public String getData() {
         if (refreshData()) {

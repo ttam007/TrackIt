@@ -14,6 +14,11 @@ public class DALTestDriver {
 
     private final String password;
 
+    /**
+     * Creates the test driver with a default database connection.
+     *
+     * @param password = The password to the database.
+     */
     public DALTestDriver(String password) {
         this.password = password;
         setDefaultConnection();
@@ -51,10 +56,11 @@ public class DALTestDriver {
             Class.forName(myDriver);
             try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/TrackItDB", "root", password)) {
                 String query = "insert into lookups (listName, listValue) values (?, ?)";
-                PreparedStatement prepStat = conn.prepareStatement(query);
-                prepStat.setString(1, "toiletries");
-                prepStat.setString(2, "soap");
-                prepStat.execute();
+                try (PreparedStatement prepStat = conn.prepareStatement(query)) {
+                    prepStat.setString(1, "toiletries");
+                    prepStat.setString(2, "soap");
+                    prepStat.execute();
+                }
             }
         } catch (ClassNotFoundException exCNF) {
             System.err.println("Class Not Found Exception detected!");
@@ -62,6 +68,8 @@ public class DALTestDriver {
         } catch (SQLException exSQL) {
             System.err.println("SQL Exception detected!");
             System.err.println(exSQL.getMessage());
+        } finally {
+
         }
     }
 
@@ -145,18 +153,6 @@ public class DALTestDriver {
         }
     }
 
-    private void printItem(AnItem anItem) {
-        if (anItem == null) {
-            System.out.println("Order is null.");
-        } else {
-            System.out.println(String.format("Order:  PK = %d; Description = %s; "
-                    + "SKU = %s; Size Unit = %s; Item Status = %s;",
-                    anItem.getPrimaryKey(), anItem.getDescription(),
-                    anItem.getSku(), anItem.getSizeUnit(),
-                    anItem.getItemStatus()));
-        }
-    }
-
     private void printInventoryItem(AnInventoryItem anInventoryItem) {
         if (anInventoryItem == null) {
             System.out.println("Order is null.");
@@ -181,9 +177,9 @@ public class DALTestDriver {
         try {
             System.out.println("\nSelectAll");
             ArrayList<ASupplier> suppliers = helper.selectAll();
-            for (ASupplier anItem : suppliers) {
+            suppliers.forEach((anItem) -> {
                 printSupplier(anItem);
-            }
+            });
 
             System.out.println("\nSelectOne");
             aSupplier = helper.selectOne(3);
@@ -231,9 +227,9 @@ public class DALTestDriver {
         try {
             System.out.println("\nSelectAll");
             ArrayList<AnOrderItem> orderItems = helper.selectAll();
-            for (AnOrderItem anItem : orderItems) {
+            orderItems.forEach((anItem) -> {
                 printOrderItem(anItem);
-            }
+            });
 
             System.out.println("\nSelectOne");
             anOrderItem = helper.selectOne(2);

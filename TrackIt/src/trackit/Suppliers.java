@@ -6,7 +6,7 @@ import java.util.*;
 /**
  * BLL Layer: Works with the Suppliers Tab.
  *
- * @author
+ * @author Bond
  */
 public class Suppliers
         extends GridClass<ASupplier> {
